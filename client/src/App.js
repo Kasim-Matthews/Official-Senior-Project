@@ -4,7 +4,82 @@ import Axios from 'axios';
 
 
 function App() {
-  function handleSubmit(e){
+  const [formData, setFormData] = React.useState(
+    {
+      Partner: "",
+      date: "",
+      source: "",
+      totalItems: 0,
+      value: 0,
+      deliveryMethod: "",
+      comments: "",
+      state: true
+    }
+    )
+
+    function handleChange(event){
+      setFormData(prevFormData => {
+        return{
+          ...prevFormData,
+          [event.target.name]: event.target.value
+        }
+      })
+    }
+
+    function handleSubmit(e){
+      e.preventDefault();
+      console.log(formData.Partner)
+      console.log(formData.date)
+
+
+      Axios.post("http://localhost:4002/api/insert", {partner:formData.Partner, 
+      date:formData.date, 
+      source:formData.source, 
+      totalitems: formData.totalItems, 
+      value: formData.value, 
+      deliverymethod: formData.deliveryMethod, 
+      comments: formData.comments, 
+      state: formData.state}).then((res) => {
+      console.log('Axios:', res);
+      console.log('Axios data:', res.data);
+    })
+    }
+  return (
+    <form id="distribution" onSubmit={handleSubmit}>
+      <label htmlFor="partner">Partner</label>
+      <input type="text" name="Partner" value={formData.Partner} id="partner" required onChange={handleChange}/>
+      
+      <label htmlFor="date">Date</label>
+      <input type="date" name="date" id="date" value={formData.date} min="2023-09-01" required onChange={handleChange}/>
+
+      <label htmlFor="source">Source</label>
+      <input type="text" name="source" value={formData.source} id="source" required onChange={handleChange}/>
+
+      <label htmlFor="total-items">Total-Items</label>
+      <input type="number" name="totalItems" value={formData.totalItems} id="total-items" required onChange={handleChange}/>
+
+      <label htmlFor="value">Value</label>
+      <input type="number" id="value" value={formData.value} name="value" step=".01" onChange={handleChange}/>
+
+      <p>Delivery Method</p>
+
+      <label htmlFor="pickup">Pickup</label>
+      <input type="radio" id="pickup" name="deliveryMethod" value="Pickup" checked={formData.deliveryMethod === "Pickup"} onChange={handleChange}/>
+      <label htmlFor="delivery">Delivery</label>
+      <input type="radio" id="delivery" name="deliveryMethod" value="Delivery" checked={formData.deliveryMethod === "Delivery"} onChange={handleChange}/>
+
+      <textarea name="comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
+
+      <input type="submit" value="Submit"/>
+    </form>
+  );
+}
+
+export default App;
+
+
+
+/*function handleSubmit(e){
     e.preventDefault();
     let currentDate = new Date();
 
@@ -22,36 +97,4 @@ function App() {
     
 
     Axios.post("http://localhost:3001/api/insert", {partner:partner, date:date, source:source, totalitems: totalitems, value: value, deliverymethod: deliverymethod, comments: comments, state: state})
-  }
-  return (
-    <form id="distribution" method="POST" onSubmit={handleSubmit}>
-      <label for="partner">Partner</label>
-      <input type="text" id="partner" required/>
-      
-      <label for="date">Date</label>
-      <input type="date" id="date" min="2023-09-01" required/>
-
-      <label for="source">Source</label>
-      <input type="text" id="source" required/>
-
-      <label for="total-items">Total-Items</label>
-      <input type="number" id="total-items" required/>
-
-      <label for="value">Value</label>
-      <input type="number" id="value" step=".01"/>
-
-      <p>Delivery Method</p>
-
-      <label for="pickup">Pickup</label>
-      <input type="radio" id="pickup" name="delivery-method" value="Pickup"/>
-      <label for="delivery">Delivery</label>
-      <input type="radio" id="delivery" name="delivery-method" value="Delivery"/>
-
-      <textarea name="comments" rows="4" cols="50">Comments</textarea>
-
-      <input type="submit" value="Submit"/>
-    </form>
-  );
-}
-
-export default App;
+  }*/
