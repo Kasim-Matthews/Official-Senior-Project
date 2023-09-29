@@ -1,0 +1,7 @@
+{
+    "host": "localhost",
+    "user": "root",
+    "database": "test",
+    "password": "WebVoyage2023!",
+    "port": 3006
+}
