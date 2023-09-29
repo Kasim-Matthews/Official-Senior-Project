@@ -46,14 +46,6 @@ function App() {
       comments: formData.comments, 
       state: formData.state})
 
-      setDistributionsList([...distributionsList, {partner:formData.Partner, 
-        date:formData.date, 
-        source:formData.source, 
-        totalitems: formData.totalItems, 
-        value: formData.value, 
-        deliverymethod: formData.deliveryMethod, 
-        comments: formData.comments, 
-        state: formData.state}])
     }
   return (
     <div>
