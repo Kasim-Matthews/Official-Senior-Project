@@ -113,7 +113,7 @@ function Distribution() {
   );
 }
 
-export default App;
+export default Distribution;
 
 
 

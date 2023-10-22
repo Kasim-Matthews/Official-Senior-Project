@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Distribution from './App';
+import Distribution from './Distribution';
 
 ReactDOM.render(<Distribution />, document.getElementById("root"));
 
