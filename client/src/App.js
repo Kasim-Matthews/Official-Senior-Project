@@ -3,7 +3,7 @@ import './App.css';
 import Axios from 'axios';
 
 
-function App() {
+function Distribution() {
   const [formData, setFormData] = React.useState(
     {
       Partner: "",
