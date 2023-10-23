@@ -4,7 +4,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
 
-const db = mysql.createPool({
+const sb = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "WebVoyage2023!",
@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 
 app.get('/api/get', (req, res) =>{
     const sqlGet = "SELECT * FROM test.dis;"
-    db.query(sqlGet, (err, result) =>{
+    sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
 })
@@ -33,7 +33,7 @@ app.post('/api/insert', (req, res) =>{
     let state = req.body.state;
 
     const sqlInsert = "INSERT INTO test.dis (partner, date, source, totalitems, value, deliverymethod, comments, state) VALUES (?,?,?,?,?,?,?,?);"
-    db.query(sqlInsert, [partner, date, source, totalitems, value, deliverymethod, comments, state], (err, result) =>{
+    sb.query(sqlInsert, [partner, date, source, totalitems, value, deliverymethod, comments, state], (err, result) =>{
         console.log(err);
     })
 })
