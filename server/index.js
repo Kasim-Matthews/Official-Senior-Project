@@ -38,10 +38,10 @@ app.post('/api/insert', (req, res) =>{
     })
 })
 
-app.get("/", (req, res) => {
-    res.send("hello")
+app.get('/', (req, res) =>{
+    res.send('hello world');
 })
 
-app.listen('4002', () => {
-    console.log("running on port 4002");
+app.listen('3001', () => {
+    console.log("running on port 3001");
 })
