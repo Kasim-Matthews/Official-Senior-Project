@@ -38,6 +38,54 @@ app.post('/api/insert', (req, res) =>{
     })
 })
 
+const db = mysql.createPool({
+    host: "localhost",
+    user: "root",
+    password: "Lindsey1!",
+    database: "claire",
+    port: 3306
+})
+
+app.post("/register", (req, res) => {
+   
+    const username = req.body.username;
+    const password = req.body.password;
+
+    db.query(
+        "INSERT INTO login (username, password) VALUES (?,?)",
+        [username, password],
+        (err, result) => {
+            console.log(err);
+        }
+    )
+})
+
+app.post('/login', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    db.query(
+        "SELECT * FROM login WHERE username = ? AND password = ?",
+        [username, password],
+        (err, result) => {
+
+            if(err){
+                res.send({err: err})
+
+            }
+
+
+
+            if (result.length > 0) {
+                res.send(result)
+            }else {
+                res.send({message: "Wrong username/password combination!"})
+            }
+            
+        }
+    )
+})
+
 app.get('/', (req, res) =>{
     res.send('hello world');
 })
