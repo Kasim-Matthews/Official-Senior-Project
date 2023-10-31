@@ -21,6 +21,13 @@ app.get('/api/get', (req, res) =>{
     }) 
 })
 
+app.get('/partner', (req, res) =>{
+    const sqlGet = "SELECT * FROM test.partner;"
+    sb.query(sqlGet, (err, result) =>{
+        res.send(result);
+    }) 
+})
+
 app.post('/api/insert', (req, res) =>{
 
     let partner = req.body.partner;
@@ -35,6 +42,19 @@ app.post('/api/insert', (req, res) =>{
     const sqlInsert = "INSERT INTO test.dis (partner, date, source, totalitems, value, deliverymethod, comments, state) VALUES (?,?,?,?,?,?,?,?);"
     sb.query(sqlInsert, [partner, date, source, totalitems, value, deliverymethod, comments, state], (err, result) =>{
         console.log(err);
+    })
+})
+
+app.post('/addpartner', (req, res) =>{
+
+    let name = req.body.name;
+    let email = req.body.email;
+    let comments = req.body.comments;
+    let representative = req.body.representative;
+
+    const sqlInsert = "INSERT INTO test.partner (name, email, comments, representative) VALUES (?,?,?,?);"
+    sb.query(sqlInsert, [name, email, comments, representative], (err, result) =>{
+        console.log(result);
     })
 })
 
