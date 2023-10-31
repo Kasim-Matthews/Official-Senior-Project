@@ -18,7 +18,6 @@ function Distribution() {
 
   return (
     <div>
-      
       <table>
         <thead>
           <tr>
