@@ -9,17 +9,23 @@ function Distribution() {
   const navigate = useNavigate();
 
   const [distributionsList, setDistributionsList] = React.useState([])
+  const [records, setRecords] = React.useState([]);
 
 
 
   useEffect(() => {
     Axios.get("http://localhost:3001/api/get").then((response) => {
-      setDistributionsList(response.data)
+      setDistributionsList(response.data);
+      setRecords(response.data);
     })
   }, [])
 
+  const Filter = (event) => {
+    setRecords(distributionsList.filter(f => f.partner.toLowerCase().includes(event.target.value)))
+  }
   return (
     <div>
+      <input type="text" onChange={Filter} placeholder="Partner"/>
       <table>
         <thead>
           <tr>
@@ -34,7 +40,7 @@ function Distribution() {
           </tr>
         </thead>
         <tbody>
-          {distributionsList.map((val) => {
+          {records.map((val) => {
           return (
           <tr>
             <td>{val.partner}</td>
