@@ -1,20 +1,22 @@
 import React, { useEffect } from "react";
 import './Distribution.css';
 import Axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
 
 function Distribution() {
 
+  const navigate = useNavigate();
 
-    const [distributionsList, setDistributionsList] = React.useState([])
+  const [distributionsList, setDistributionsList] = React.useState([])
 
 
 
-    useEffect(() => {
-      Axios.get("http://localhost:4002/api/get").then((response) => {
-        setDistributionsList(response.data)
-      })
-    }, [])
+  useEffect(() => {
+    Axios.get("http://localhost:3001/api/get").then((response) => {
+      setDistributionsList(response.data)
+    })
+  }, [])
 
   return (
     <div>

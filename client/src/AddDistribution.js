@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import './Distribution.css';
 import Axios from 'axios';
+import {useNavigate} from "react-router-dom";
 
 function AddDistribution(){
+    const navigate = useNavigate();
+    
     const [formData, setFormData] = React.useState(
         {
           Partner: "",
@@ -28,14 +31,15 @@ function AddDistribution(){
         function handleSubmit(e){
             e.preventDefault();
             
-            Axios.post("http://localhost:4002/api/insert", {partner:formData.Partner, 
+            Axios.post("http://localhost:3001/api/insert", {partner:formData.Partner, 
             date:formData.date, 
             source:formData.source, 
             totalitems: formData.totalItems, 
             value: formData.value, 
             deliverymethod: formData.deliveryMethod, 
             comments: formData.comments, 
-            state: formData.state})
+            state: formData.state});
+            window.location.href = "/distribution";
       
           }
 
