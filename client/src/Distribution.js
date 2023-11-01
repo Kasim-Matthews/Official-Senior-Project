@@ -22,10 +22,41 @@ function Distribution() {
 
   const Filter = (event) => {
     setRecords(distributionsList.filter(f => f.partner.toLowerCase().includes(event.target.value)))
+  };
+
+  const FilterRadio = (event) =>{
+    setRecords(distributionsList.filter(f => f.deliverymethod.includes(event.target.value)))
+  };
+
+  const FilterRadioReset = (event) =>{
+    setRecords(distributionsList)
   }
+  const FilterSource = (event) => {
+    setRecords(distributionsList.filter(f => f.source.toLowerCase().includes(event.target.value)))
+  };
+
+  const FilterDate = (event) =>{
+    setRecords(distributionsList.filter(f => f.date > event.target.value))
+  }
+
   return (
     <div>
       <input type="text" onChange={Filter} placeholder="Partner"/>
+      <label>
+        <input type="radio" value="all" name="deliverymethod" onChange={FilterRadioReset}/>
+        All
+      </label>
+      <label>
+        <input type="radio" value="Pickup" name="deliverymethod" onChange={FilterRadio}/>
+        Pickup
+      </label>
+      <label>
+        <input type="radio" value="Delivery" name="deliverymethod" onChange={FilterRadio}/>
+        Delivery
+      </label>
+      <input type="text" onChange={FilterSource} placeholder="Source"/>
+      <input type="date" onChange={FilterDate}/>
+      <h2>Add all these filters into a form so it can filter the data by all the parameters at once instead of one or the other</h2>
       <table>
         <thead>
           <tr>
