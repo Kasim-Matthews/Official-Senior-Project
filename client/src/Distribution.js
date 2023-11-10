@@ -8,9 +8,50 @@ function Distribution() {
 
   const navigate = useNavigate();
 
+  const [filters, setFilters] = React.useState({
+    Partner:"",
+    deliverymethod:"",
+    source:"",
+    date:""
+    
+  })
   const [distributionsList, setDistributionsList] = React.useState([])
   const [records, setRecords] = React.useState([]);
 
+  function handleChange(event){
+    setFilters(prevFilters => {
+      return{
+        ...prevFilters,
+        [event.target.name] : event.target.value
+      }
+    })
+  }
+
+  function handleSubmit(e){
+    e.preventDefault();
+    var temp = distributionsList;
+    if(filters.Partner != ""){
+      temp = temp.filter(f => f.partner.toLowerCase().includes(filters.Partner.toLowerCase()));
+    }
+
+    if(filters.deliverymethod == "Pickup"){
+      temp = temp.filter(f => f.deliverymethod == filters.deliverymethod);
+    }
+
+    if(filters.deliverymethod == "Delivery"){
+      temp = temp.filter(f => f.deliverymethod == filters.deliverymethod);
+    }
+
+    if(filters.date != ""){
+      temp = temp.filter(f => f.date > filters.date)
+    }
+
+    if(filters.source != ""){
+      temp = temp.filter(f => f.source.toLowerCase().includes(filters.source.toLowerCase()))
+    }
+
+    setRecords(temp);
+  }
 
 
   useEffect(() => {
@@ -41,22 +82,26 @@ function Distribution() {
 
   return (
     <div>
-      <input type="text" onChange={Filter} placeholder="Partner"/>
-      <label>
-        <input type="radio" value="all" name="deliverymethod" onChange={FilterRadioReset}/>
-        All
-      </label>
-      <label>
-        <input type="radio" value="Pickup" name="deliverymethod" onChange={FilterRadio}/>
-        Pickup
-      </label>
-      <label>
-        <input type="radio" value="Delivery" name="deliverymethod" onChange={FilterRadio}/>
-        Delivery
-      </label>
-      <input type="text" onChange={FilterSource} placeholder="Source"/>
-      <input type="date" onChange={FilterDate}/>
-      <h2>Add all these filters into a form so it can filter the data by all the parameters at once instead of one or the other</h2>
+      <form onSubmit={handleSubmit}>
+        <input type="text" onChange={handleChange} placeholder="Partner" name="Partner" value={filters.Partner}/>
+        <label>
+          <input type="radio" value="All" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "All"}/>
+          All
+        </label>
+        <label>
+          <input type="radio" value="Pickup" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Pickup"}/>
+          Pickup
+        </label>
+        <label>
+          <input type="radio" value="Delivery" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Delivery"}/>
+          Delivery
+        </label>
+        <input type="text" onChange={handleChange} placeholder="Source" name="source" value={filters.source}/>
+        <input type="date" onChange={handleChange} value={filters.date} name="date"/>
+
+        <input type="submit" value="Submit"/>
+      </form>
+      <h2>Change ifs to == rather than include</h2>
       <table>
         <thead>
           <tr>

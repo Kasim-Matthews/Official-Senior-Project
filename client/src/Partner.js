@@ -36,7 +36,7 @@ function Partner(){
                     })}
                 </tbody>
             </table>
-            <p>Make sure when doing input validation you give an error if email is already and don't allow submit, can cause some weird errors</p>
+            <p>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
         </div>
     );
 }
