@@ -3,6 +3,8 @@ const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
+const distributionRoute = require('./routes/distribution');
+const partnerRoute = require('./routes/partner');
 
 const sb = mysql.createPool({
     host: "localhost",
@@ -10,53 +12,14 @@ const sb = mysql.createPool({
     password: "WebVoyage2023!",
     port: 3006
 });
-app.use(cors())
+app.use('/distribution', distributionRoute);
+app.use('/partner', partnerRoute);
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true}));
 
-app.get('/api/get', (req, res) =>{
-    const sqlGet = "SELECT * FROM test.dis;"
-    sb.query(sqlGet, (err, result) =>{
-        res.send(result);
-    }) 
-})
 
-app.get('/partner', (req, res) =>{
-    const sqlGet = "SELECT * FROM test.partner;"
-    sb.query(sqlGet, (err, result) =>{
-        res.send(result);
-    }) 
-})
 
-app.post('/api/insert', (req, res) =>{
-
-    let partner = req.body.partner;
-    let date = req.body.date;
-    let source = req.body.source;
-    let totalitems = req.body.totalitems;
-    let value = req.body.value;
-    let deliverymethod = req.body.deliverymethod;
-    let comments = req.body.comments;
-    let state = req.body.state;
-
-    const sqlInsert = "INSERT INTO test.dis (partner, date, source, totalitems, value, deliverymethod, comments, state) VALUES (?,?,?,?,?,?,?,?);"
-    sb.query(sqlInsert, [partner, date, source, totalitems, value, deliverymethod, comments, state], (err, result) =>{
-        console.log(err);
-    })
-})
-
-app.post('/addpartner', (req, res) =>{
-
-    let name = req.body.name;
-    let email = req.body.email;
-    let comments = req.body.comments;
-    let representative = req.body.representative;
-
-    const sqlInsert = "INSERT INTO test.partner (name, email, comments, representative) VALUES (?,?,?,?);"
-    sb.query(sqlInsert, [name, email, comments, representative], (err, result) =>{
-        console.log(result);
-    })
-})
 
 const db = mysql.createPool({
     host: "localhost",

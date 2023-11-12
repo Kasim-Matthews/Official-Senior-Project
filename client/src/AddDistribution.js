@@ -31,7 +31,7 @@ function AddDistribution(){
         function handleSubmit(e){
             e.preventDefault();
             
-            Axios.post("http://localhost:3001/api/insert", {partner:formData.Partner, 
+            Axios.post("http://localhost:3001/distribution/new", {partner:formData.Partner, 
             date:formData.date, 
             source:formData.source, 
             totalitems: formData.totalItems, 

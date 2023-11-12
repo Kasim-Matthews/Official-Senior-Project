@@ -55,7 +55,7 @@ function Distribution() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/api/get").then((response) => {
+    Axios.get("http://localhost:3001/distribution").then((response) => {
       setDistributionsList(response.data);
       setRecords(response.data);
     })

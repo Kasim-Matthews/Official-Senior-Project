@@ -25,7 +25,7 @@ function AddPartner(){
       function handleSubmit(e){
         e.preventDefault();
         
-        Axios.post("http://localhost:3001/addpartner", {name:formData.Name,
+        Axios.post("http://localhost:3001/partner/add", {name:formData.Name,
         email:formData.Email,
         comments:formData.Comments,
         representative:formData.Representative});
