@@ -29,7 +29,7 @@ function Distribution() {
     }
 
     useEffect(() => {
-      Axios.get("http://localhost:3001/api/get").then((response) => {
+      Axios.get("http://localhost:3000/api/get").then((response) => {
         setDistributionsList(response.data)
       })
     }, [])
@@ -37,7 +37,7 @@ function Distribution() {
     function handleSubmit(e){
       e.preventDefault();
       
-      Axios.post("http://localhost:3001/api/insert", {partner:formData.Partner, 
+      Axios.post("http://localhost:3000/api/insert", {partner:formData.Partner, 
       date:formData.date, 
       source:formData.source, 
       totalitems: formData.totalItems, 
