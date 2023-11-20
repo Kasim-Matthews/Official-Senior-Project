@@ -14,7 +14,6 @@ const sb = mysql.createPool({
 });
 app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
-app.use(cors(corsOptions))
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true}));
 
