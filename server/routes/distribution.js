@@ -6,7 +6,6 @@ router.use(cors())
 
 
 router.get('/', distributionController.distribution_index)
-
 router.post('/new', distributionController.distribution_creation)
 
 module.exports = router;
