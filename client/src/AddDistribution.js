@@ -38,7 +38,11 @@ function AddDistribution(){
             value: formData.value, 
             deliverymethod: formData.deliveryMethod, 
             comments: formData.comments, 
-            state: formData.state});
+            state: formData.state},{
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+          });
             window.location.href = "/distribution";
       
           }

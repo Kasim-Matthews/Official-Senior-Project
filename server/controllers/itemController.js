@@ -14,14 +14,14 @@ const item_index = (req, res) => {
 }
 
 const item_creation = (req, res) => {
-    
-    let Name = req.body.Name;
+    console.log(req.body.name)
+    let name = req.body.name;
     let marketValue = req.body.marketValue;
     let packageSize = req.body.packageSize;
     let active = req.body.active;
 
     const sqlInsert = "INSERT INTO test.item (Name, marketValue, packageSize, active) VALUES (?,?,?,?);"
-    sb.query(sqlInsert, [Name, marketValue, packageSize, active], (err, result) =>{
+    sb.query(sqlInsert, [name, marketValue, packageSize, active], (err, result) =>{
         console.log(err);
     })
 }

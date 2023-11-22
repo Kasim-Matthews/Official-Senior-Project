@@ -28,7 +28,7 @@ function Item(){
                         return(
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>{val.marketValue}</td>
+                                <td>${val.marketValue}</td>
                             </tr>
                         );
                     })}

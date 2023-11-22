@@ -28,7 +28,11 @@ function AddPartner(){
         Axios.post("http://localhost:3001/partner/new", {name:formData.Name,
         email:formData.Email,
         comments:formData.Comments,
-        representative:formData.Representative});
+        representative:formData.Representative},{
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+      });
         window.location.href = "/partner";
       }
 

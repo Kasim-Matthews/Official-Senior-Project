@@ -8,11 +8,13 @@ const partnerRoute = require('./routes/partner');
 const itemRoute = require('./routes/item');
 
 
+app.use(bodyParser.urlencoded({ extended: true}));
 app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
 app.use('/item', itemRoute);
+app.use(cors());
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true}));
+
 
 
 
