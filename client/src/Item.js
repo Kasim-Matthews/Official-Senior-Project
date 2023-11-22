@@ -14,14 +14,21 @@ function Item(){
         })
     })
 
+    const handleRemove = (id) =>{
+        Axios.delete(`http://localhost:3001/item/remove/${id}`);
+      }
+
     return(
         <div>
             <table>
                 <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Market Value</td>
-                    </tr>
+                    <th>
+                        <tr>
+                            <td>Name</td>
+                            <td>Market Value</td>
+                            <td>Actions</td>
+                        </tr>
+                    </th>
                 </thead>
                 <tbody>
                     {itemList.map((val) => {
@@ -29,6 +36,7 @@ function Item(){
                             <tr>
                                 <td>{val.Name}</td>
                                 <td>${val.marketValue}</td>
+                                <td><button onClick={() => handleRemove(val.iditem)}>Delete</button></td>
                             </tr>
                         );
                     })}

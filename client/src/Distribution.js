@@ -80,6 +80,10 @@ function Distribution() {
     setRecords(distributionsList.filter(f => f.date > event.target.value))
   }
 
+  const handleRemove = (id) =>{
+    Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -113,6 +117,7 @@ function Distribution() {
             <th>Delivery Method</th>
             <th>Comments</th>
             <th>State</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -127,6 +132,7 @@ function Distribution() {
             <td>{val.deliverymethod}</td>
             <td>{val.comments}</td>
             <td>{val.state == true ? "Complete":"Incomplete"}</td>
+            <td><button onClick={() => handleRemove(val.id)}>Delete</button></td>
           </tr>);
         })}
         </tbody>

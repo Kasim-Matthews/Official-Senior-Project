@@ -8,5 +8,6 @@ router.use(cors())
 
 router.get('/', distributionController.distribution_index)
 router.post('/new', distributionController.distribution_creation)
+router.delete('/remove/:id', distributionController.distribution_remove)
 
 module.exports = router;

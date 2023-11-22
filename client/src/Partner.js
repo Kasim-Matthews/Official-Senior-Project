@@ -14,15 +14,22 @@ function Partner(){
         })
     })
 
+    const handleRemove = (id) =>{
+        Axios.delete(`http://localhost:3001/partner/remove/${id}`);
+      }
+
     return(
         <div>
             <table>
                 <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Email</td>
-                        <td>Comments</td>
-                    </tr>
+                    <th>
+                        <tr>
+                            <td>Name</td>
+                            <td>Email</td>
+                            <td>Comments</td>
+                            <td>Actions</td>
+                        </tr>
+                    </th>
                 </thead>
                 <tbody>
                     {partnerList.map((val) => {
@@ -31,6 +38,8 @@ function Partner(){
                                 <td>{val.name}</td>
                                 <td>{val.email}</td>
                                 <td>{val.comments}</td>
+                                <td><button onClick={() => handleRemove(val.id)}>Delete</button></td>
+
                             </tr>
                         );
                     })}

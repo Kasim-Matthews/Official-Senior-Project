@@ -19,13 +19,38 @@ const partner_create = (req, res) => {
     let comments = req.body.comments;
     let representative = req.body.representative;
 
-    const sqlInsert = "INSERT INTO test.partner (name, email, comments, representative) VALUES (?,?,?,?);"
-    sb.query(sqlInsert, [name, email, comments, representative], (err, result) =>{
+    if(typeof name != "string" && typeof email != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(name && email){
+        const sqlInsert = "INSERT INTO test.partner (name, email, comments, representative) VALUES (?,?,?,?);"
+        sb.query(sqlInsert, [name, email, comments, representative], (err, result) =>{
         console.log(result);
     }) 
+    }
+}
+
+const partner_delete = (req, res) => {
+    let id = req.params.id;
+    if(typeof id != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(id){
+        const sqlDelete = 'DELETE FROM test.partner WHERE id = ?;'
+        sb.query(sqlDelete, [id], (err, result) => {
+        console.log(err);
+        })
+    }
 }
 
 module.exports = {
     partner_create,
-    partner_index
+    partner_index,
+    partner_delete
 }
