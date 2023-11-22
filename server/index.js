@@ -5,15 +5,12 @@ const bodyParser = require('body-parser')
 const mysql = require('mysql2')
 const distributionRoute = require('./routes/distribution');
 const partnerRoute = require('./routes/partner');
+const itemRoute = require('./routes/item');
 
-const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    port: 3006
-});
+
 app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
+app.use('/item', itemRoute);
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true}));
 

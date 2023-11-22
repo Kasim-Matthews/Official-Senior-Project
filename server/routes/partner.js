@@ -6,6 +6,6 @@ router.use(cors())
 
 
 router.get('/', partnerController.partner_index)
-router.post('/add', partnerController.partner_create)
+router.post('/new', partnerController.partner_create)
 
 module.exports = router;

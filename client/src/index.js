@@ -6,6 +6,8 @@ import Distribution from './Distribution';
 import AddDistribution from './AddDistribution';
 import AddPartner from './AddPartner';
 import Partner from './Partner';
+import Item from './Item';
+import AddItem from './AddItem';
 
 export class Application extends React.Component{
     render(){
@@ -17,6 +19,9 @@ export class Application extends React.Component{
                     <Route path="/distribution/new" element={<AddDistribution />} />
                     <Route path="/partner/new" element={<AddPartner />}/>
                     <Route path="/partner" element={<Partner />}/>
+                    <Route path='/item' element={<Item/>}/>
+                    <Route path='/item/new' element={<AddItem/>}/>
+
                 </Routes>
             </BrowserRouter>
         );
