@@ -8,5 +8,7 @@ router.use(cors())
 router.get('/', partnerController.partner_index)
 router.post('/new', partnerController.partner_create)
 router.delete('/remove/:id', partnerController.partner_delete)
+router.get('/:id/edit', partnerController.partner_edit)
+router.put('/:id/update', partnerController.partner_update)
 
 module.exports = router;

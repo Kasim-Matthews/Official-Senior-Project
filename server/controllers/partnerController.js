@@ -49,8 +49,50 @@ const partner_delete = (req, res) => {
     }
 }
 
+const partner_edit = (req, res) => {
+    let id = req.params.id
+
+    if(typeof id != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(id){
+        const sqlGet = 'SELECT * FROM test.dis WHERE id = ?;'
+        sb.query(sqlGet, [id], (err, result) => {
+        res.send(result);
+        })
+    }    
+}
+
+const partner_update = (req, res) => {
+    
+    let id = req.params.id
+    let name = req.body.name;
+    let email = req.body.email;
+    let comments = req.body.comments;
+    let representative = req.body.representative;
+
+
+    if(typeof id != "string" && typeof name != "string" && typeof email != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(name && email && id){
+        const sqlUpdate = "UPDATE test.dis SET name= ?, email= ?, comments= ?, representative= ? WHERE id = ?;"
+        sb.query(sqlUpdate, [name, email, comments, representative, id], (err, result) =>{
+        console.log(err);
+    })
+    }
+}
+
 module.exports = {
     partner_create,
     partner_index,
-    partner_delete
+    partner_delete,
+    partner_update,
+    partner_edit
 }

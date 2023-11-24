@@ -16,7 +16,11 @@ function Partner(){
 
     const handleRemove = (id) =>{
         Axios.delete(`http://localhost:3001/partner/remove/${id}`);
-      }
+    }
+
+    const handleEdit = (id) => {
+        navigate(`/partner/${id}/edit`)
+    }
 
     return(
         <div>
@@ -38,7 +42,10 @@ function Partner(){
                                 <td>{val.name}</td>
                                 <td>{val.email}</td>
                                 <td>{val.comments}</td>
-                                <td><button onClick={() => handleRemove(val.id)}>Delete</button></td>
+                                <td>
+                                    <button onClick={() => handleRemove(val.id)}>Delete</button>
+                                    <button onClick={() => handleEdit(val.id)}>Edit</button>
+                                </td>
 
                             </tr>
                         );

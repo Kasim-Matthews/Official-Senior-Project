@@ -16,7 +16,11 @@ function Item(){
 
     const handleRemove = (id) =>{
         Axios.delete(`http://localhost:3001/item/remove/${id}`);
-      }
+    }
+
+    const handleEdit = (id) => {
+        navigate(`/item/${id}/edit`)
+    }
 
     return(
         <div>
@@ -36,7 +40,10 @@ function Item(){
                             <tr>
                                 <td>{val.Name}</td>
                                 <td>${val.marketValue}</td>
-                                <td><button onClick={() => handleRemove(val.iditem)}>Delete</button></td>
+                                <td>
+                                    <button onClick={() => handleRemove(val.iditem)}>Delete</button>
+                                    <button onClick={() => handleEdit(val.id)}>Edit</button>
+                                </td>
                             </tr>
                         );
                     })}

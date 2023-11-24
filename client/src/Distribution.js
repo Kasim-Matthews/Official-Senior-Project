@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import './Distribution.css';
 import Axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 
 
 function Distribution() {
@@ -84,6 +84,13 @@ function Distribution() {
     Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
   }
 
+  const handleEdit = (id) => {
+    navigate(`/distribution/${id}/edit`)
+  }
+  const handleView = (id) => {
+    navigate(`/distribution/${id}`)
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -132,7 +139,11 @@ function Distribution() {
             <td>{val.deliverymethod}</td>
             <td>{val.comments}</td>
             <td>{val.state == true ? "Complete":"Incomplete"}</td>
-            <td><button onClick={() => handleRemove(val.id)}>Delete</button></td>
+            <td>
+              <button onClick={() => handleRemove(val.id)}>Delete</button>
+              <button onClick={() => handleEdit(val.id)}>Edit</button>
+              <button onClick={() => handleView(val.id)}>View</button>
+            </td>
           </tr>);
         })}
         </tbody>

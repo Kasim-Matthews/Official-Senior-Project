@@ -16,9 +16,6 @@ function AddItem(){
         }
         )
         
-        function handleChecked(event){
-            setIsActive(current => !current)
-        }
         
         function handleChange(event){
             setFormData(prevFormData => {

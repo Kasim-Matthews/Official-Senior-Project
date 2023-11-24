@@ -55,8 +55,53 @@ const distribution_remove = (req, res) => {
     }
 }
 
+const distribution_edit = (req, res) => {
+    let id = req.params.id
+
+    if(typeof id != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(id){
+        const sqlGet = 'SELECT * FROM test.dis WHERE id = ?;'
+        sb.query(sqlGet, [id], (err, result) => {
+        res.send(result);
+        })
+    }    
+}
+
+const distribution_update = (req, res) => {
+    
+    let id = req.params.id
+    let partner = req.body.partner;
+    let date = req.body.date;
+    let source = req.body.source;
+    let totalitems = req.body.totalitems;
+    let value = req.body.value;
+    let deliverymethod = req.body.deliverymethod;
+    let comments = req.body.comments;
+
+
+    if(typeof id != "string" && typeof partner != "string" && typeof date != "string" && typeof source != "string" && typeof totalitems != "number" && typeof value != "number" && typeof deliverymethod != "string" && typeof comments != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(partner && date && source && totalitems && value && deliverymethod && id){
+        const sqlUpdate = "UPDATE test.dis SET partner= ?, date= ?, source= ?, totalitems= ?, value= ?, deliverymethod= ?, comments= ? WHERE id = ?;"
+        sb.query(sqlUpdate, [partner, date, source, totalitems, value, deliverymethod, comments, id], (err, result) =>{
+        console.log(err);
+    })
+    }
+}
+
 module.exports = {
     distribution_index,
     distribution_creation,
-    distribution_remove
+    distribution_remove,
+    distribution_edit,
+    distribution_update
 }
