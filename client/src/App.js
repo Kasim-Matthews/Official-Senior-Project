@@ -13,7 +13,7 @@ function App() {
   const [loginStatus, setLoginStatus] = useState("")
 
   const register = () => {
-    Axios.post('http://localhost:3000/register', {
+    Axios.post('http://localhost:3001/register', {
       username: usernameReg, 
       password: passwordReg,
     }).then((response) => {
@@ -22,7 +22,7 @@ function App() {
   }
 
   const login = () => {
-    Axios.post('http://localhost:3000/login', {
+    Axios.post('http://localhost:3001/login', {
       username: username, 
       password: password,
     }).then((response) => {
