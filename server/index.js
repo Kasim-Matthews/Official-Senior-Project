@@ -2,6 +2,15 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
+const cors = require('cors')
+app.use(cors())
+app.use(express.json());
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+    });
 
 
 const db = mysql.createPool({
@@ -27,6 +36,7 @@ app.post("/register", (req, res) => {
 })
 
 app.post('/login', (req, res) => {
+    console.log(req.body)
     const username = req.body.username;
     const password = req.body.password;
 

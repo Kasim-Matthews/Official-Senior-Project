@@ -17,7 +17,7 @@ function App() {
       username: usernameReg, 
       password: passwordReg,
     }).then((response) => {
-
+      console.log(response)
     })
   }
 
@@ -29,8 +29,10 @@ function App() {
       
       if(response.data.message){
         setLoginStatus(response.data.message)
+        console.log('hi')
       }else{
         setLoginStatus(response.data[0].username)
+        console.log(loginStatus)
       }
 
     })
