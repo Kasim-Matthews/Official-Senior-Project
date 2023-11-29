@@ -13,9 +13,9 @@ function ViewPartner(){
 
           useEffect(() => {
             Axios.get(`http://localhost:3001/partner/${id}/edit`).then((response) => {
-            response.data.map((key, value) => {setFormData(key)});
+            response.data.map((key, value) => {setRecord(key)});
             })
-          }, [])
+          }, [id])
 
 
           return(

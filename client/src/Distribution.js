@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import './Distribution.css';
 import Axios from 'axios';
-import {useNavigate, Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 
 function Distribution() {
 
   const navigate = useNavigate();
-
+  const [partners, setPartners] = React.useState([])
   const [filters, setFilters] = React.useState({
     Partner:"",
     deliverymethod:"",
@@ -61,6 +61,12 @@ function Distribution() {
     })
   }, [])
 
+  useEffect(() => {
+    Axios.get("http:////localhost:3001/partner").then((response) =>{
+            setPartners(response.data);
+        })
+  }, [])
+
   const Filter = (event) => {
     setRecords(distributionsList.filter(f => f.partner.toLowerCase().includes(event.target.value)))
   };
@@ -94,7 +100,19 @@ function Distribution() {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <input type="text" onChange={handleChange} placeholder="Partner" name="Partner" value={filters.Partner}/>
+        <label htmlFor="Partner">
+        Partner
+        <select id="Partner" name="Partner" value={filters.Partner} onChange={handleChange}>
+          <option value="" disabled></option>
+          {partners.map((val) =>{
+            return(
+              <option value={val.name}>{val.name}</option>
+            )
+          })}
+          
+        </select>
+        
+        </label>
         <label>
           <input type="radio" value="All" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "All"}/>
           All

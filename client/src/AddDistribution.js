@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import './Distribution.css';
 import Axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
 function AddDistribution(){
     const navigate = useNavigate();
-    
+    const [partners, setPartners] = React.useState([])
     const [formData, setFormData] = React.useState(
         {
           Partner: "",
@@ -47,11 +47,24 @@ function AddDistribution(){
       
           }
 
+          useEffect(() => {
+            Axios.get("http:////localhost:3001/partner").then((response) =>{
+                    setPartners(response.data);
+                })
+          }, [])
+
           return(
             <form id="distribution" onSubmit={handleSubmit}>
                 <label htmlFor="partner">Partner</label>
-                <input type="text" name="Partner" value={formData.Partner} id="partner" required onChange={handleChange}/>
-                
+                <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
+                  <option value="">--Please choose an option--</option>
+                  {partners.map((val) =>{
+                    return(
+                      <option value={val.name}>{val.name}</option>
+                    )
+                  })}
+          
+                </select>
                 <label htmlFor="date">Date</label>
                 <input type="date" name="date" id="date" value={formData.date} min="2023-09-01" required onChange={handleChange}/>
 

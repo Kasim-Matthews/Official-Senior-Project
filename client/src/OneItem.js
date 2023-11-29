@@ -11,7 +11,7 @@ function ViewItem(){
     
           useEffect(() => {
             Axios.get(`http://localhost:3001/item/${id}/edit`).then((response) => {
-            response.data.map((key, value) => {setFormData(key)});
+            response.data.map((key, value) => {setRecord(key)});
             })
           }, [])
 
