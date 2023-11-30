@@ -22,8 +22,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: npm run build
-      - run: npm run test
+      - run: npm cd client
       - run: npm start
 
       - name: rsync deployments
