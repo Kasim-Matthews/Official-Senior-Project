@@ -26,7 +26,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - run: npm run build
-      - run: npm start
 
       - name: rsync deployments
         uses: burnett01/rsync-deployments@5.1
