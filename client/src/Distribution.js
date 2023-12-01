@@ -100,7 +100,7 @@ function Distribution() {
           <td>{val.value}</td>
           <td>{val.deliverymethod}</td>
           <td>{val.comments}</td>
-          <td>{val.state == true ? "Complete":"Incomplete"}</td>
+          <td>{val.state === true ? "Complete":"Incomplete"}</td>
         </tr>);
         })}
           </tbody>
