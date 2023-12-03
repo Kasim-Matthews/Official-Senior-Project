@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 
-function Vendor() {
+function Vendor(){
 
   const [vendorName, setVendorName] = React.useState("");
   const [organizationType, setOrganizationType] = React.useState(0);

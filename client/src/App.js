@@ -1,16 +1,11 @@
 import navbar from "./components/navbar";
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import purchase from "./pages/purchase";
+
 
 function App() {
   return (
   <div className="App">
-    <Router>
-      <navbar />
-      <Switch>
-        <Route path="/" exact component={purchase} />
-      </Switch>
-    </Router>
+    <h1>Hello</h1>
   </div>);
 }
 
