@@ -59,7 +59,7 @@ const partner_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM test.dis WHERE id = ?;'
+        const sqlGet = 'SELECT * FROM test.partner WHERE id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -82,7 +82,7 @@ const partner_update = (req, res) => {
     }
 
     if(name && email && id){
-        const sqlUpdate = "UPDATE test.dis SET name= ?, email= ?, comments= ?, representative= ? WHERE id = ?;"
+        const sqlUpdate = "UPDATE test.partner SET name= ?, email= ?, comments= ?, representative= ? WHERE id = ?;"
         sb.query(sqlUpdate, [name, email, comments, representative, id], (err, result) =>{
         console.log(err);
     })

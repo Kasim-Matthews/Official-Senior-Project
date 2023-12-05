@@ -14,6 +14,9 @@ import EditItem from './EditItem';
 import EditPartner from './EditPartner';
 import ViewItem from './OneItem';
 import ViewPartner from './OnePartner';
+import AddLocation from './AddLocation';
+import Location from './Location';
+import EditLocation from './EditLocation';
 
 
 export class Application extends React.Component{
@@ -34,6 +37,9 @@ export class Application extends React.Component{
                     <Route path='/item/:id' element={<ViewItem/>}/>
                     <Route path='/item/:id/edit' element={<EditItem/>}/>
                     <Route path='/item/new' element={<AddItem/>}/>
+                    <Route path='/location' element={<Location/>}/>
+                    <Route path='/location/:id/edit' element={<EditLocation/>}/>
+                    <Route path='/location/new' element={<AddLocation/>}/>
 
                 </Routes>
             </BrowserRouter>

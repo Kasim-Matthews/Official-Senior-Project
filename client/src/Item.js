@@ -22,6 +22,10 @@ function Item(){
         navigate(`/item/${id}/edit`)
     }
 
+    const handleView = (id) => {
+        navigate(`/item/${id}`)
+      }
+
     return(
         <div>
             <table>
@@ -42,7 +46,8 @@ function Item(){
                                 <td>${val.marketValue}</td>
                                 <td>
                                     <button onClick={() => handleRemove(val.iditem)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.id)}>Edit</button>
+                                    <button onClick={() => handleEdit(val.iditem)}>Edit</button>
+                                    <button onClick={() => handleView(val.iditem)}>View</button>
                                 </td>
                             </tr>
                         );

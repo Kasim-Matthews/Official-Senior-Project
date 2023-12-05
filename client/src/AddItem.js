@@ -30,7 +30,6 @@ function AddItem(){
             e.preventDefault();
             formData.active = isActive ? 1 : 0
             try{
-                console.log(formData.Name);
                 
                 Axios.post("http://localhost:3001/item/new", {name:formData.Name,
                 marketValue:formData.marketValue,
@@ -44,6 +43,8 @@ function AddItem(){
             catch(error){
                 console.log(error.response.data);
             }
+
+            window.location.href = "/item";
           }
 
           return(

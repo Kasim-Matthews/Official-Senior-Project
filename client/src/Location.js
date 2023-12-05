@@ -3,28 +3,24 @@ import './Distribution.css';
 import Axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
-function Partner(){
+function Location(){
     const navigate = useNavigate();
 
-    const [partnerList, setPartnerList] = React.useState([])
+    const [locationList, setLocationList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http:////localhost:3001/partner").then((response) =>{
-            setPartnerList(response.data);
+        Axios.get("http:////localhost:3001/location").then((response) =>{
+            setItemList(response.data);
         })
     })
 
     const handleRemove = (id) =>{
-        Axios.delete(`http://localhost:3001/partner/remove/${id}`);
+        Axios.delete(`http://localhost:3001/location/remove/${id}`);
     }
 
     const handleEdit = (id) => {
-        navigate(`/partner/${id}/edit`)
+        navigate(`/location/${id}/edit`)
     }
-
-    const handleView = (id) => {
-        navigate(`/partner/${id}`)
-      }
 
     return(
         <div>
@@ -33,33 +29,30 @@ function Partner(){
                     <th>
                         <tr>
                             <td>Name</td>
-                            <td>Email</td>
-                            <td>Comments</td>
+                            <td>Market Value</td>
                             <td>Actions</td>
                         </tr>
                     </th>
                 </thead>
                 <tbody>
-                    {partnerList.map((val) => {
+                    {locationList.map((val) => {
                         return(
                             <tr>
-                                <td>{val.name}</td>
-                                <td>{val.email}</td>
-                                <td>{val.comments}</td>
+                                <td>{val.Name}</td>
+                                <td>{val.Address}</td>
+                                <td>{val.totalInventory}</td>
+                                <td>${val.marketValue}</td>
                                 <td>
                                     <button onClick={() => handleRemove(val.id)}>Delete</button>
                                     <button onClick={() => handleEdit(val.id)}>Edit</button>
-                                    <button onClick={() => handleView(val.id)}>View</button>
                                 </td>
-
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
-            <p>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
         </div>
     );
 }
 
-export default Partner;
+export default Location;

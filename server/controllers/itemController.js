@@ -82,7 +82,7 @@ const item_update = (req, res) => {
     }
 
     if(name && marketValue && packageSize && id){
-        const sqlUpdate = "UPDATE test.dis SET name= ?, marketValue= ?, packageSize= ?, active= ? WHERE id = ?;"
+        const sqlUpdate = "UPDATE test.item SET Name= ?, marketValue= ?, packageSize= ?, active= ? WHERE id = ?;"
         sb.query(sqlUpdate, [name, marketValue, packageSize, active, id], (err, result) =>{
         console.log(err);
     })
