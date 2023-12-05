@@ -7,6 +7,7 @@ const distributionRoute = require('./routes/distribution');
 const partnerRoute = require('./routes/partner');
 const itemRoute = require('./routes/item');
 const locationRoute = require('./routes/location')
+const manufacturersRoute = require('./routes/manufacturers')
 
 
 app.use(bodyParser.urlencoded({ extended: true}));
@@ -14,6 +15,7 @@ app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
 app.use('/item', itemRoute);
 app.use('/location', locationRoute);
+app.use('/manufacturers', manufacturersRoute);
 app.use(cors());
 app.use(express.json())
 

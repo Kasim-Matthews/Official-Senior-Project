@@ -75,7 +75,7 @@ const item_update = (req, res) => {
     let active = req.body.active;
 
 
-    if(typeof id != "string" && typeof name != "string" && typeof marketValue != "number" && typeof packageSize != "number"){
+    if(typeof id != "string" && typeof name != "string" && typeof marketValue != "number" && typeof packageSize != "number" && typeof id != "string"){
         res.send("Invalid");
         res.end();
         return;

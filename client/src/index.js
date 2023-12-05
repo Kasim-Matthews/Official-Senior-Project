@@ -17,7 +17,9 @@ import ViewPartner from './OnePartner';
 import AddLocation from './AddLocation';
 import Location from './Location';
 import EditLocation from './EditLocation';
-
+import Manufacturers from './Manufacturers';
+import AddManufacturers from './AddManufacturers';
+import EditManufacturers from './EditManufacturers';
 
 export class Application extends React.Component{
     render(){
@@ -25,21 +27,29 @@ export class Application extends React.Component{
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<App />}/>
+
                     <Route path="/distribution" element={<Distribution />} />
                     <Route path='/distribution/:id' element={<ViewDistribution/>}/>
                     <Route path='/distribution/:id/edit' element={<EditDistribution/>}/>
                     <Route path="/distribution/new" element={<AddDistribution />} />
+
                     <Route path="/partner/new" element={<AddPartner />}/>
                     <Route path='/partner/:id/edit' element={<EditPartner/>}/>
                     <Route path='/partner/:id' element={<ViewPartner/>}/>
                     <Route path="/partner" element={<Partner />}/>
+
                     <Route path='/item' element={<Item/>}/>
                     <Route path='/item/:id' element={<ViewItem/>}/>
                     <Route path='/item/:id/edit' element={<EditItem/>}/>
                     <Route path='/item/new' element={<AddItem/>}/>
+
                     <Route path='/location' element={<Location/>}/>
                     <Route path='/location/:id/edit' element={<EditLocation/>}/>
                     <Route path='/location/new' element={<AddLocation/>}/>
+
+                    <Route path='/manufacturers' element={<Manufacturers/>}/>
+                    <Route path='/manufacturers/:id/edit' element={<EditManufacturers/>}/>
+                    <Route path='/manufacturers/new' element={<AddManufacturers/>}/>
 
                 </Routes>
             </BrowserRouter>

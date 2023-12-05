@@ -74,7 +74,7 @@ const location_update = (req, res) => {
     let marketValue = req.body.marketValue;
     let totalInventory = req.body.totalInventory;
 
-    if(typeof Name != "string" && typeof marketValue != "number" && typeof Adress != "string" && typeof totalInventory != "number"){
+    if(typeof Name != "string" && typeof marketValue != "number" && typeof Adress != "string" && typeof totalInventory != "number" && typeof id != "string"){
         res.send("Invalid");
         res.end();
         return;
@@ -82,7 +82,7 @@ const location_update = (req, res) => {
 
     if(Name && Adress && marketValue && totalInventory && id){
         const sqlUpdate = "UPDATE test.location SET Name= ?, Adress= ?, marketValue= ?, totalInventory= ? WHERE id = ?;"
-        sb.query(sqlUpdate, [Name, Adress, marketValue, totalInventory], (err, result) =>{
+        sb.query(sqlUpdate, [Name, Adress, marketValue, totalInventory, id], (err, result) =>{
         console.log(err);
     })
     }
