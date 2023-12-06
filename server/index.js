@@ -27,7 +27,7 @@ app.post("/register", (req, res) => {
     const password = req.body.password;
 
     db.query(
-        "INSERT INTO login (username, password) VALUES (?,?)",
+        "INSERT INTO register (usernameReg, passwordReg) VALUES (?,?)",
         [username, password],
         (err, result) => {
             console.log(err);
@@ -41,7 +41,7 @@ app.post('/login', (req, res) => {
     const password = req.body.password;
 
     db.query(
-        "SELECT * FROM login WHERE username = ? AND password = ?",
+        "SELECT * FROM register WHERE usernameReg = ? AND passwordReg = ?",
         [username, password],
         (err, result) => {
 

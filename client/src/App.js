@@ -22,7 +22,7 @@ function App() {
     }).then((response) => {
 
     })
-  };
+  }
 
   const login = () => {
     Axios.post('http://localhost:3001/login', {
@@ -38,11 +38,11 @@ function App() {
   };
 
   return (
-    <Router>
+
       <div className="App">
         {isLoggedIn ? <Navigate to="/Dashboard" /> : (
           <div>
-      <div className="registration">
+      <div className="register">
         <h1>Registration</h1>
         <label>Username</label>
         <input 
@@ -79,11 +79,7 @@ function App() {
     </div>
         )}
 
-        <Routes>
-          <Route path="/Dashboard" element={<Dashboard />} />
-        </Routes>
-      </div>
-    </Router>
+    </div>
   );
 }
 
