@@ -19,4 +19,4 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
-    workingDir: '/Official-Senior-Project/client'
+    workingDir: '$(Build.SourcesDirectory)/Official-Senior-Project/client'
