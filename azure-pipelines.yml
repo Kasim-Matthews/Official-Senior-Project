@@ -20,4 +20,4 @@ steps:
     npm install
     npm run build
   displayName: 'npm install and build'
-  workingDirectory: '/Kasim-Matthews/Official-Senior-Project/tree/main/client'
+  workingDirectory: 'https://github.com/Kasim-Matthews/Official-Senior-Project/tree/main/client'
