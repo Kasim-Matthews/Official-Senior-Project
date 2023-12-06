@@ -19,4 +19,4 @@ steps:
     npm install
     npm run build
   displayName: 'npm install and build'
-  workingDirectory: '$(Build.SourcesDirectory)/Official-Senior-Project/client'
+  workingDirectory: '$(Build.SourcesDirectory)/bin/Official-Senior-Project/client'
