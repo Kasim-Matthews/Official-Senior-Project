@@ -62,6 +62,23 @@ app.post('/login', (req, res) => {
     )
 })
 
+app.get('/item-location-data', (req, res) => {
+    const query = `
+        SELECT i.Name as itemName, l.Name as locationName, il.Quantity
+        FROM itemlocation il
+        JOIN item i ON il.Item_id = i.Item_id
+        JOIN location l ON il.Location_id = l.Location_id;
+    `;
+
+    db.query(query, (err, result) => {
+        if (err) {
+            res.send({ status: 'error', message: err.message });
+        } else {
+            res.send({ status: 'ok', data: result });
+        }
+    });
+});
+
 app.get('/', (req, res) =>{
     res.send('hello world');
 })
