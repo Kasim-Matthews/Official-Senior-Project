@@ -1,16 +1,19 @@
-import React, { useState } from "react"
-import Axios from 'axios'
+import React, { useState } from "react";
+import Axios from 'axios';
 import './App.css';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Dashboard from './Dashboard';
 
 function App() {
+  // Existing state declarations
+  const [usernameReg, setUsernameReg] = useState('');
+  const [passwordReg, setPasswordReg] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginStatus, setLoginStatus] = useState("");
 
-  const [usernameReg, setUsernameReg] = useState('')
-  const [passwordReg, setPasswordReg] = useState('')
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
-  const [loginStatus, setLoginStatus] = useState("")
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const register = () => {
     Axios.post('http://localhost:3001/register', {
@@ -26,20 +29,20 @@ function App() {
       username: username, 
       password: password,
     }).then((response) => {
-      
-      if(response.data.message){
-        setLoginStatus(response.data.message)
-      }else{
-        setLoginStatus(response.data[0].username)
+      if(response.data.status === 'ok') {
+        setIsLoggedIn(true); // Set the isLoggedIn state to true on successful login
+      } else {
+        setLoginStatus(response.data.message);
       }
-
-    })
-  }
-
+    });
+  };
 
   return (
-    <div className="App">
-      <div className="registration">
+
+      <div className="App">
+        {isLoggedIn ? <Navigate to="/Dashboard" /> : (
+          <div>
+      <div className="register">
         <h1>Registration</h1>
         <label>Username</label>
         <input 
@@ -57,10 +60,7 @@ function App() {
         <button onClick={register}> Register </button>
       </div>
 
-
-
-
-      <div className="login">
+            <div className="login">
         <h1>Login</h1>
         <input type="text" placeholder="Username..." 
           onChange={(e) => {
@@ -77,7 +77,11 @@ function App() {
 
       <h1>{loginStatus}</h1>
     </div>
+        )}
+
+    </div>
   );
 }
+
 
 export default App;
