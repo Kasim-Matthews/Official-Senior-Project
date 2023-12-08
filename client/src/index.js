@@ -21,6 +21,10 @@ import Manufacturers from './Manufacturers';
 import AddManufacturers from './AddManufacturers';
 import EditManufacturers from './EditManufacturers';
 import Dashboard from './Dashboard';
+import Purchase from "./purchase";
+import Product from "./product";
+import FairMarketValue from './fair-market-value';
+import Vendor from './vendor';
 
 export class Application extends React.Component{
     render(){
@@ -52,6 +56,11 @@ export class Application extends React.Component{
                     <Route path='/manufacturers' element={<Manufacturers/>}/>
                     <Route path='/manufacturers/:id/edit' element={<EditManufacturers/>}/>
                     <Route path='/manufacturers/new' element={<AddManufacturers/>}/>
+
+                    <Route path="/purchase" element={<Purchase/>} />
+                    <Route path="/product" element={<Product/>}/>
+                    <Route path='/fair-market-value' element={<FairMarketValue/>}/>
+                    <Route path="/vendor" element={<Vendor/>}/>
 
                 </Routes>
             </BrowserRouter>
