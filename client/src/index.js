@@ -21,7 +21,8 @@ import Manufacturers from './Manufacturers';
 import AddManufacturers from './AddManufacturers';
 import EditManufacturers from './EditManufacturers';
 import Dashboard from './Dashboard';
-import AddIntake from "./purchase";
+import AddIntake from "./AddIntake";
+import Intake from './Intake';
 
 
 export class Application extends React.Component{
@@ -55,7 +56,8 @@ export class Application extends React.Component{
                     <Route path='/manufacturers/:id/edit' element={<EditManufacturers/>}/>
                     <Route path='/manufacturers/new' element={<AddManufacturers/>}/>
 
-                    <Route path="/intake" element={<AddIntake/>} />
+                    <Route path="/intake" element={<Intake/>} />
+                    <Route path="/intake/new" element={<AddIntake/>} />
 
                 </Routes>
             </BrowserRouter>
