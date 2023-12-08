@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, Link} from "react-router-dom";
 
 function ViewDistribution(){
     
@@ -9,38 +9,41 @@ function ViewDistribution(){
     const [record, setRecord] = React.useState({})
 
           useEffect(() => {
-            Axios.get(`http://localhost:3001/distribution/${id}/edit`).then((response) => {
+            Axios.get(`http://localhost:3001/distribution/${id}/view`).then((response) => {
             response.data.map((key, value) => {setRecord(key)});
             })
           }, [])
 
     return(
-        <table>
+      <div>
+      <table>
         <thead>
           <tr>
             <th>Partner</th>
-            <th>Date</th>
-            <th>Source</th>
-            <th>Total Items</th>
-            <th>Value</th>
+            <th>Requested Date</th>
+            <th>Completed Date</th>
             <th>Delivery Method</th>
             <th>Comments</th>
-            <th>State</th>
+            <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
+          {record.map((val) => {
+          return (
           <tr>
-            <td>{record.partner}</td>
-            <td>{record.date}</td>
-            <td>{record.source}</td>
-            <td>{record.totalitems}</td>
-            <td>{record.value}</td>
-            <td>{record.deliverymethod}</td>
-            <td>{record.comments}</td>
-            <td>{record.state == true ? "Complete":"Incomplete"}</td>
-          </tr>
+            <td>{val.Partner_id}</td>
+            <td>{val.RequestDate}</td>
+            <td>{val.CompletedDate}</td>
+            <td>{val.DeliveryMethod}</td>
+            <td>{val.Comments}</td>
+            <td>{val.status}</td>
+          </tr>);
+        })}
         </tbody>
-      </table>
+      </table> 
+      <button><Link to="/Dashboard">Dasboard</Link></button>
+    </div>
     )
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 
 function Location(){
     const navigate = useNavigate();
@@ -25,13 +25,11 @@ function Location(){
         <div>
             <table>
                 <thead>
-                    <th>
-                        <tr>
-                            <td>Name</td>
-                            <td>Market Value</td>
-                            <td>Actions</td>
-                        </tr>
-                    </th>
+                    <tr>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {locationList.map((val) => {
@@ -39,17 +37,16 @@ function Location(){
                             <tr>
                                 <td>{val.Name}</td>
                                 <td>{val.Address}</td>
-                                <td>{val.totalInventory}</td>
-                                <td>${val.marketValue}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.id)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.id)}>Edit</button>
+                                    <button onClick={() => handleRemove(val.Location_id)}>Delete</button>
+                                    <button onClick={() => handleEdit(val.Location_id)}>Edit</button>
                                 </td>
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
+            <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }

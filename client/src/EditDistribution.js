@@ -21,7 +21,7 @@ function EditDistribution(){
           }
 
           useEffect(() => {
-            Axios.get(`http://localhost:3001/distribution/${id}/edit`).then((response) => {
+            Axios.get(`http://localhost:3001/distribution/${id}/view`).then((response) => {
             response.data.map((key, value) => {setFormData(key)});
             })
           }, [])

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 
 function Item(){
     const navigate = useNavigate();
@@ -29,30 +29,29 @@ function Item(){
         <div>
             <table>
                 <thead>
-                    <th>
-                        <tr>
-                            <td>Name</td>
-                            <td>Market Value</td>
-                            <td>Actions</td>
-                        </tr>
-                    </th>
+                    <tr>
+                        <th>Name</th>
+                        <th>FairMarketValue</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {itemList.map((val) => {
                         return(
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>${val.marketValue}</td>
+                                <td>${val.FairMarketValue}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.iditem)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.iditem)}>Edit</button>
-                                    <button onClick={() => handleView(val.iditem)}>View</button>
+                                    <button onClick={() => handleRemove(val.Item_id)}>Delete</button>
+                                    <button onClick={() => handleEdit(val.Item_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Item_id)}>View</button>
                                 </td>
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
+            <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }

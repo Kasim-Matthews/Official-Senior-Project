@@ -2,18 +2,18 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import {useNavigate, Link} from "react-router-dom";
 
-function Partner(){
+function Intake(){
     const navigate = useNavigate();
 
-    const [partnerList, setPartnerList] = React.useState([])
+    const [intakeList, setIntakeList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http:////localhost:3001/partner").then((response) =>{
-            setPartnerList(response.data);
+        Axios.get("http:////localhost:3001/intake").then((response) =>{
+            setIntakeList(response.data);
         })
     })
 
-    const handleRemove = (id) =>{
+    /*const handleRemove = (id) =>{
         Axios.delete(`http://localhost:3001/partner/remove/${id}`);
     }
 
@@ -23,15 +23,17 @@ function Partner(){
 
     const handleView = (id) => {
         navigate(`/partner/${id}`)
-      }
+      }*/
 
     return(
         <div>
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
+                        <th>Partner</th>
+                        <th>Value</th>
+                        <th>Recieved Date</th>
+                        <th>Comments</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -39,12 +41,14 @@ function Partner(){
                     {partnerList.map((val) => {
                         return(
                             <tr>
-                                <td>{val.Name}</td>
-                                <td>{val.Email}</td>
+                                <td>{val.Partner}</td>
+                                <td>{val.Value}</td>
+                                <td>{val.RecievedDate}</td>
+                                <td>{val.Comments}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.Partner_id)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
+                                    <button /*onClick={() => handleRemove(val.Partner_id)}*/>Delete</button>
+                                    <button /*onClick={() => handleEdit(val.Partner_id)}*/>Edit</button>
+                                    <button /*onClick={() => handleView(val.Partner_id)}*/>View</button>
                                 </td>
 
                             </tr>
@@ -52,10 +56,9 @@ function Partner(){
                     })}
                 </tbody>
             </table>
-            <p>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }
 
-export default Partner;
+export default Intake;

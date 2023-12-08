@@ -3,36 +3,34 @@ const sb = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "WebVoyage2023!",
+    database: 'claire',
     port: 3006
 });
 
 const distribution_index = (req, res) => {
-    const sqlGet = "SELECT * FROM test.dis;"
+    const sqlGet = "SELECT * FROM order;"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
 }
 
 const distribution_creation = (req, res) => {
-    
-    let partner = req.body.partner;
-    let date = req.body.date;
-    let source = req.body.source;
-    let totalitems = req.body.totalitems;
-    let value = req.body.value;
-    let deliverymethod = req.body.deliverymethod;
-    let comments = req.body.comments;
-    let state = req.body.state;
+    let Comments = req.body.Comments;
+    let Status = req.body.Status;
+    let DeliveryMethod = req.body.DeliveryMethod;
+    let RequestDate = req.body.RequestDate;
+    let CompletedDate = req.body.CompletedDate;
+    let Partner_id = req.body.Partner_id;
 
-    if(typeof partner != "string" && typeof date != "string" && typeof source != "string" && typeof totalitems != "number" && typeof value != "number" && typeof deliverymethod != "string" && typeof comments != "string"){
+    if(typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number'){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(partner && date && source && totalitems && value && deliverymethod){
-        const sqlInsert = "INSERT INTO test.dis (partner, date, source, totalitems, value, deliverymethod, comments, state) VALUES (?,?,?,?,?,?,?,?);"
-        sb.query(sqlInsert, [partner, date, source, totalitems, value, deliverymethod, comments, state], (err, result) =>{
+    if(DeliveryMethod && RequestDate && CompletedDate && Partner_id){
+        const sqlInsert = "INSERT INTO claire.order (Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id) VALUES (?,?,?,?,?,?);"
+        sb.query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id], (err, result) =>{
         console.log(err);
     })
     }
@@ -48,7 +46,7 @@ const distribution_remove = (req, res) => {
     }
 
     if(id){
-        const sqlDelete = 'DELETE FROM test.dis WHERE id = ?;'
+        const sqlDelete = 'DELETE FROM order WHERE Order_id = ?;'
         sb.query(sqlDelete, [id], (err, result) => {
         console.log(err);
         })
@@ -65,7 +63,7 @@ const distribution_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM test.dis WHERE id = ?;'
+        const sqlGet = 'SELECT * FROM order WHERE Order_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -75,33 +73,121 @@ const distribution_edit = (req, res) => {
 const distribution_update = (req, res) => {
     
     let id = req.params.id
-    let partner = req.body.partner;
-    let date = req.body.date;
-    let source = req.body.source;
-    let totalitems = req.body.totalitems;
-    let value = req.body.value;
-    let deliverymethod = req.body.deliverymethod;
-    let comments = req.body.comments;
+    let Comments = req.bod.Comments;
+    let Status = req.body.Status;
+    let DeliveryMethod = req.body.DeliveryMethod;
+    let RequestDate = req.body.RequestDate;
+    let CompletedDate = req.body.CompletedDate;
+    let Partner_id = req.body.Partner_id;
 
 
-    if(typeof id != "string" && typeof partner != "string" && typeof date != "string" && typeof source != "string" && typeof totalitems != "number" && typeof value != "number" && typeof deliverymethod != "string" && typeof comments != "string"){
+    if(typeof id != "string" && typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number'){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(partner && date && source && totalitems && value && deliverymethod && id){
-        const sqlUpdate = "UPDATE test.dis SET partner= ?, date= ?, source= ?, totalitems= ?, value= ?, deliverymethod= ?, comments= ? WHERE id = ?;"
-        sb.query(sqlUpdate, [partner, date, source, totalitems, value, deliverymethod, comments, id], (err, result) =>{
+    if(Comments && Status && DeliveryMethod && RequestDate && CompletedDate && Partner_id){
+        const sqlUpdate = "UPDATE claire.order SET Comments= ?, Status= ?, DeliveryMethod= ?, RequestDate= ?, CompletedDate= ?, Partner_id= ? WHERE Order_id = ?;"
+        sb.query(sqlUpdate, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id, id], (err, result) =>{
         console.log(err);
     })
     }
 }
+
+const distribution_find_ild  = (req, res) => {
+    let Item_id = req.body.Item_id;
+    let Location_id = req.body.Location_id;
+    
+    const sqlGet = "SELECT ItemLocation_id FROM itemlocation WHERE Item_id = ? AND Location_id = ?;"
+    sb.query(sqlGet, [Item_id, Location_id], (err, result) =>{
+        res.send(result);
+    }) 
+}
+
+const distribution_find_q  = (req, res) => {
+    let ItemLocationFK= req.body.ItemLocationFK;
+    
+    const sqlGet = "SELECT Quantity FROM itemlocation WHERE ItemLocation_id = ?"
+    sb.query(sqlGet, [ItemLocationFK], (err, result) =>{
+        res.send(result);
+    }) 
+}
+
+const distribution_find_value  = (req, res) => {
+    let Item_id = req.body.Item_id;
+    
+    const sqlGet = "SELECT FairMarketValue FROM item WHERE Item_id = ?;"
+    sb.query(sqlGet, [Item_id], (err, result) =>{
+        res.send(result);
+    }) 
+}
+
+const distribution_find_id= (req, res) => {
+    let RequestDate = req.body.RequestDate;
+    let CompletedDate = req.body.CompletedDate;
+    let Partner_id = req.body.Partner_id;
+    
+    const sqlGet = "SELECT Order_id FROM claire.order WHERE Partner_id = ? AND RequestDate = ? AND CompletedDate = ?;"
+    sb.query(sqlGet, [Partner_id, RequestDate, CompletedDate], (err, result) =>{
+        res.send(result);
+    }) 
+}
+
+const distribution_track = (req, res) => {
+    console.log(req.body)
+    let Order_id = req.body.Order_id;
+    let Quantity = req.body.Quantity;
+    let Value = req.body.Value;
+    let ItemLocationFK= req.body.ItemLocationFK;
+
+    if(typeof ItemLocationFK != 'number' && typeof Value != 'number' && typeof Quantity != 'number' && typeof Order_id != 'number'){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(Order_id && Quantity && Value && ItemLocationFK){
+        const sqlInsert = "INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES (?,?,?,?);"
+        sb.query(sqlInsert, [Order_id, Quantity, Value, ItemLocationFK], (err, result) =>{
+        console.log(err);
+    })
+    }
+}
+
+const distribution_update_item = (req, res) => {
+    
+    let ItemLocationFK= req.body.ItemLocationFK;
+    let Quantity = req.body.Quantity;
+    let CurrentQ = req.body.CurrentQ
+
+
+    if(typeof ItemLocationFK != "number" && typeof Quantity != "number" && typeof CurrentQ != "number"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(ItemLocationFK && Quantity && CurrentQ){
+        Quantity = CurrentQ - Quantity;
+        const sqlUpdate = "UPDATE itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+        sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) =>{
+        console.log(err);
+    })
+    }
+}
+
 
 module.exports = {
     distribution_index,
     distribution_creation,
     distribution_remove,
     distribution_edit,
-    distribution_update
+    distribution_update,
+    distribution_find_id,
+    distribution_find_ild,
+    distribution_find_value,
+    distribution_track,
+    distribution_find_q,
+    distribution_update_item
 }

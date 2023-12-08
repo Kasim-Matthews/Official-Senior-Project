@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, Link} from "react-router-dom";
 
 function ViewPartner(){
     
@@ -18,26 +18,24 @@ function ViewPartner(){
 
 
           return(
-            <table>
-                <thead>
-                    <th>
+            <div>
+                    <table>
+                    <thead>
                         <tr>
-                            <td>Name</td>
-                            <td>Email</td>
-                            <td>Comments</td>
-                            <td>Agency Representative</td>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Agency Representative</th>
                         </tr>
-                    </th>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{record.name}</td>
-                    <td>{record.email}</td>
-                    <td>{record.comments}</td>
-                    <td>{record.representative}</td>
-                </tr>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{record.name}</td>
+                        <td>{record.email}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
           )
 }
 

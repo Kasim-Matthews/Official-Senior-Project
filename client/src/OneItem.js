@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, Link} from "react-router-dom";
 
 function ViewItem(){
     
@@ -15,24 +15,23 @@ function ViewItem(){
           }, [])
 
           return(
-            <table>
-                <thead>
-                    <th>
+            <div>
+                    <table>
+                    <thead>
                         <tr>
-                            <td>Name</td>
-                            <td>Market Value</td>
-                            <td>Package Size</td>
+                            <th>Name</th>
+                            <th>Market Value</th>
                         </tr>
-                    </th>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>{record.Name}</td>
-                    <td>${record.marketValue}</td>
-                    <td>{record.packageSize}</td>
-                </tr>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>{record.Name}</td>
+                        <td>${record.marketValue}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
           )
 }
 

@@ -3,31 +3,30 @@ const sb = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "WebVoyage2023!",
+    database: 'claire',
     port: 3006
 });
 
 const item_index = (req, res) => {
-    const sqlGet = "SELECT * FROM test.item WHERE active = 1;"
+    const sqlGet = "SELECT * FROM item"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
 }
 
 const item_creation = (req, res) => {
-    let name = req.body.name;
-    let marketValue = req.body.marketValue;
-    let packageSize = req.body.packageSize;
-    let active = req.body.active;
+    let Name = req.body.name;
+    let FairMarketValue = req.body.FairMarketValue;
 
-    if(typeof name != "string" && typeof marketValue != "number" && typeof packageSize != "number"){
+    if(typeof Name != "string" && typeof FairMarketValue != "number"){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(name && marketValue && packageSize){
-        const sqlInsert = "INSERT INTO test.item (Name, marketValue, packageSize, active) VALUES (?,?,?,?);"
-        sb.query(sqlInsert, [name, marketValue, packageSize, active], (err, result) =>{
+    if(Name && FairMarketValue){
+        const sqlInsert = "INSERT INTO item (Name, FairMarketValue) VALUES (?,?);"
+        sb.query(sqlInsert, [Name, FairMarketValue], (err, result) =>{
         console.log(err);
     })
     }
@@ -42,7 +41,7 @@ const item_delete = (req, res) => {
     }
 
     if(id){
-        const sqlDelete = 'DELETE FROM test.item WHERE iditem = ?;'
+        const sqlDelete = 'DELETE FROM item WHERE Item_id = ?;'
         sb.query(sqlDelete, [id], (err, result) => {
         console.log(err);
         })
@@ -59,7 +58,7 @@ const item_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM test.item WHERE iditem = ?;'
+        const sqlGet = 'SELECT * FROM item WHERE Item_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -69,21 +68,19 @@ const item_edit = (req, res) => {
 const item_update = (req, res) => {
     
     let id = req.params.id
-    let name = req.body.name;
-    let marketValue = req.body.marketValue;
-    let packageSize = req.body.packageSize;
-    let active = req.body.active;
+    let Name = req.body.name;
+    let FairMarketValue = req.body.FairMarketValue;
 
 
-    if(typeof id != "string" && typeof name != "string" && typeof marketValue != "number" && typeof packageSize != "number" && typeof id != "string"){
+    if(typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number"){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(name && marketValue && packageSize && id){
-        const sqlUpdate = "UPDATE test.item SET Name= ?, marketValue= ?, packageSize= ?, active= ? WHERE id = ?;"
-        sb.query(sqlUpdate, [name, marketValue, packageSize, active, id], (err, result) =>{
+    if(Name && FairMarketValue && id){
+        const sqlUpdate = "UPDATE item SET Name= ?, FairMarketValue= ? WHERE Item_id = ?;"
+        sb.query(sqlUpdate, [Name, FairMarketValue, id], (err, result) =>{
         console.log(err);
     })
     }

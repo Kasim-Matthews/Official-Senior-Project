@@ -3,31 +3,30 @@ const sb = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "WebVoyage2023!",
+    database: 'claire',
     port: 3006
 });
 
 const partner_index = (req, res) => {
-    const sqlGet = "SELECT * FROM test.partner;"
+    const sqlGet = "SELECT * FROM partner;"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     })
 }
 
 const partner_create = (req, res) => {
-    let name = req.body.name;
-    let email = req.body.email;
-    let comments = req.body.comments;
-    let representative = req.body.representative;
+    let Name = req.body.name;
+    let Email = req.body.email;
 
-    if(typeof name != "string" && typeof email != "string"){
+    if(typeof Name != "string" && typeof Email != "string"){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(name && email){
-        const sqlInsert = "INSERT INTO test.partner (name, email, comments, representative) VALUES (?,?,?,?);"
-        sb.query(sqlInsert, [name, email, comments, representative], (err, result) =>{
+    if(Name && Email){
+        const sqlInsert = "INSERT INTO partner (name, email) VALUES (?,?);"
+        sb.query(sqlInsert, [Name, Email], (err, result) =>{
         console.log(result);
     }) 
     }
@@ -42,7 +41,7 @@ const partner_delete = (req, res) => {
     }
 
     if(id){
-        const sqlDelete = 'DELETE FROM test.partner WHERE id = ?;'
+        const sqlDelete = 'DELETE FROM partner WHERE Partner_id = ?;'
         sb.query(sqlDelete, [id], (err, result) => {
         console.log(err);
         })
@@ -59,7 +58,7 @@ const partner_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM test.partner WHERE id = ?;'
+        const sqlGet = 'SELECT * FROM partner WHERE Partner_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -69,21 +68,20 @@ const partner_edit = (req, res) => {
 const partner_update = (req, res) => {
     
     let id = req.params.id
-    let name = req.body.name;
-    let email = req.body.email;
-    let comments = req.body.comments;
-    let representative = req.body.representative;
+    let Name = req.body.name;
+    let Email = req.body.email;
 
 
-    if(typeof id != "string" && typeof name != "string" && typeof email != "string"){
+
+    if(typeof id != "string" && typeof Name != "string" && typeof Email != "string"){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(name && email && id){
-        const sqlUpdate = "UPDATE test.partner SET name= ?, email= ?, comments= ?, representative= ? WHERE id = ?;"
-        sb.query(sqlUpdate, [name, email, comments, representative, id], (err, result) =>{
+    if(Name && Email && id){
+        const sqlUpdate = "UPDATE partner SET Name= ?, Email= ? WHERE Partner_id = ?;"
+        sb.query(sqlUpdate, [Name, Email, id], (err, result) =>{
         console.log(err);
     })
     }

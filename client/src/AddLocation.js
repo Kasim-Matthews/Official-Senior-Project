@@ -8,9 +8,7 @@ function AddLocation(){
     const [formData, setFormData] = React.useState(
         {
           Name: "",
-          Adress: "",
-          totalInventory: 0,
-          marketValue: 0.00,
+          Address: "",
         }
         )
         
@@ -28,9 +26,7 @@ function AddLocation(){
             e.preventDefault();
             try{
                 Axios.post("http://localhost:3001/location/new", {name:formData.Name,
-                Adress:formData.Adress,
-                totalInventory:formData.totalInventory,
-                marketValue:formData.marketValue},{
+                Address:formData.Address,},{
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded'
                     }
@@ -47,8 +43,8 @@ function AddLocation(){
                 <label htmlFor="Name">Name</label>
                 <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
 
-                <label htmlFor="Adress">Adress</label>
-                <input type="text" name="Adress" value={formData.Adress} id="Adress" required onChange={handleChange}/>
+                <label htmlFor="Address">Address</label>
+                <input type="text" name="Address" value={formData.Address} id="Adress" required onChange={handleChange}/>
 
 
                 <input type="submit" value="Submit"/>

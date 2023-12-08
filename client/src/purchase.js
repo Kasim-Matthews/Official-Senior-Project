@@ -1,61 +1,61 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 
-function Purchase() {
+function AddIntake() {
 
-  const [vendorName, setVendorName] = React.useState("");
-  const [diaperQuantity, setDiaperQuantity] = React.useState(0);
-  const [diaperPrice, setDiaperPrice] = React.useState(0);
-  const [wipesQuantity, setWipesQuantity] = React.useState(0);
-  const [wipesPrice, setWipesPrice] = React.useState(0);
-  const [totalPrice, setTotalPrice] = React.useState(0);
-  const [purchaseDate, setPurchaseDate] = React.useState(0);
-  const [comment, setComment] = React.useState("");
+  const [formData, setFormData] = React.useState({
+    Comments: "",
+    RecievedDate: "",
+    Value: 0.00,
+    Partner: 0
+  })
 
+  const [partners, setPartners] = React.useState([])
 
-    const submitPurchase = () => {
-      Axios.post("http://localhost:3306/api/insert", {
-        vendorName: vendorName, 
-        purchaseDate: purchaseDate, 
-        diaperQuantity: diaperQuantity, 
-        diaperPrice: diaperPrice, 
-        wipesQuantity: wipesQuantity, 
-        wipesPrice: wipesPrice, 
-        totalPrice: totalPrice,
-        comment: comment
-      }).then(() => {
-        alert("success");
-      });
+  function handleChange(event){
+    setFormData(prevFormData => {
+      return{
+        ...prevFormData,
+        [event.target.name]: event.target.value
+      }
+    })
+  }
+
+    useEffect(() => { Axios.get("http:////localhost:3001/partner").then((response) =>{
+      setPartners(response.data);
+      })
+    }, [])
+
+    const submitPurchase = (e) => {
+      e.preventDefault()
+
+      Axios.post("http:////localhost:3001/intake/new", {Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner})
     }
 
   return (
     <div>
-      <h2>Purchases</h2>
-      <form id="purchase">
-        <label htmlFor="vendorName">Vendor Name</label>
-        <input type="text" name="Vendor Name" id="vendorName" required onChange={(e) => {setVendorName(e.target.value);}}/><br></br>
+      <h2>Intake</h2>
+      <form id="intake" onSubmit={submitPurchase}>
+        <label htmlFor="Partner">Partner</label>
+        <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
+          <option value="">--Please choose an option--</option>
+          {partners.map((val) =>{
+                    return(
+                      <option value={val.id}>{val.name}</option>
+                    )
+          })}
+        </select>
+        <br></br>
         
-        <label htmlFor="purchaseDate">Date of Purchase</label>
-        <input type="date" name="Date of Purchase" id="purchaseDate" min="2023-09-01" required onChange={(e) => {setPurchaseDate(e.target.value);}}/><br></br>
+        <label htmlFor="RecievedDate">Recieved Date</label>
+        <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange}/><br></br>
 
-        <label htmlFor="diaperQuantity">Number of Diapers</label>
-        <input type="number" name="Number of Diapers" id="diaperQuantity" onChange={(e) => {setDiaperQuantity(e.target.value);}}/><br></br>
+        <label htmlFor="Value">Value</label>
+        <input type="number" name="Value" id="Value" value={formData.Value} step="0.01" onChange={handleChange}/><br></br>
 
-        <label htmlFor="diaperPrice">Price of Diapers</label>
-        <input type="number" name="Price of Diapers" id="diaperPrice" step="any" onChange={(e) => {setDiaperPrice(e.target.value);}}/><br></br>
+        <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment"></textarea><br></br>
 
-        <label htmlFor="wipesQuantity">Number of Wipes</label>
-        <input type="number" name="Number of Wipes" id="wipesQuantity" onChange={(e) => {setWipesQuantity(e.target.value);}}/><br></br>
-
-        <label htmlFor="wipesPrice">Price of Wipes</label>
-        <input type="number" name="Price of Wipes" id="wipesPrice" step="any" onChange={(e) => {setWipesPrice(e.target.value);}}/><br></br>
-
-        <label htmlFor="totalPrice">Total Price</label>
-        <input type="number" name="Total Price" id="totalPrice" step="any" required onChange={(e) => {setTotalPrice(e.target.value);}}/><br></br>
-
-        <textarea name="comment" rows="4" cols="50" onChange={(e) => {setComment(e.target.value);}} placeholder="Comment"></textarea><br></br>
-
-        <button onClick={submitPurchase}>Submit</button>
+        <input type="submit" value="Submit"/>
 
       </form>
     </div>
@@ -63,4 +63,4 @@ function Purchase() {
   );
 }
 
-export default Purchase;
+export default AddIntake;

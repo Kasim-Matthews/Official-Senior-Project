@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 
 
 function Distribution() {
@@ -10,7 +10,6 @@ function Distribution() {
   const [filters, setFilters] = React.useState({
     Partner:"",
     deliverymethod:"",
-    source:"",
     date:""
   })
   const [distributionsList, setDistributionsList] = React.useState([])
@@ -76,12 +75,10 @@ function Distribution() {
   const FilterRadioReset = (event) =>{
     setRecords(distributionsList)
   }
-  const FilterSource = (event) => {
-    setRecords(distributionsList.filter(f => f.source.toLowerCase().includes(event.target.value)))
-  };
+
 
   const FilterDate = (event) =>{
-    setRecords(distributionsList.filter(f => f.date > event.target.value))
+    setRecords(distributionsList.filter(f => f.RequestDate > event.target.value))
   }
 
   const handleRemove = (id) =>{
@@ -104,7 +101,7 @@ function Distribution() {
           <option value="" disabled></option>
           {partners.map((val) =>{
             return(
-              <option value={val.name}>{val.name}</option>
+              <option value={val.name}>{val.Name}</option>
             )
           })}
           
@@ -116,14 +113,13 @@ function Distribution() {
           All
         </label>
         <label>
-          <input type="radio" value="Pickup" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Pickup"}/>
-          Pickup
+          <input type="radio" value="Drop-off" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Drop-off"}/>
+          Drop-off
         </label>
         <label>
-          <input type="radio" value="Delivery" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Delivery"}/>
-          Delivery
+          <input type="radio" value="Other" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Other"}/>
+          Other
         </label>
-        <input type="text" onChange={handleChange} placeholder="Source" name="source" value={filters.source}/>
         <input type="date" onChange={handleChange} value={filters.date} name="date"/>
 
         <input type="submit" value="Submit"/>
@@ -133,13 +129,11 @@ function Distribution() {
         <thead>
           <tr>
             <th>Partner</th>
-            <th>Date</th>
-            <th>Source</th>
-            <th>Total Items</th>
-            <th>Value</th>
+            <th>Requested Date</th>
+            <th>Completed Date</th>
             <th>Delivery Method</th>
             <th>Comments</th>
-            <th>State</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -147,23 +141,22 @@ function Distribution() {
           {records.map((val) => {
           return (
           <tr>
-            <td>{val.partner}</td>
-            <td>{val.date}</td>
-            <td>{val.source}</td>
-            <td>{val.totalitems}</td>
-            <td>{val.value}</td>
-            <td>{val.deliverymethod}</td>
-            <td>{val.comments}</td>
-            <td>{val.state == true ? "Complete":"Incomplete"}</td>
+            <td>{val.Partner_id}</td>
+            <td>{val.RequestDate}</td>
+            <td>{val.CompletedDate}</td>
+            <td>{val.DeliveryMethod}</td>
+            <td>{val.Comments}</td>
+            <td>{val.status}</td>
             <td>
-              <button onClick={() => handleRemove(val.id)}>Delete</button>
-              <button onClick={() => handleEdit(val.id)}>Edit</button>
-              <button onClick={() => handleView(val.id)}>View</button>
+              <button onClick={() => handleRemove(val.Order_id)}>Delete</button>
+              <button onClick={() => handleEdit(val.Order_id)}>Edit</button>
+              <button onClick={() => handleView(val.Order_id)}>View</button>
             </td>
           </tr>);
         })}
         </tbody>
       </table> 
+      <button><Link to="/Dashboard">Dasboard</Link></button>
     </div>
     
   );

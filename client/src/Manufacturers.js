@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, Link} from "react-router-dom";
 
 function Manufacturers(){
     const navigate = useNavigate();
@@ -25,13 +25,11 @@ function Manufacturers(){
         <div>
             <table>
                 <thead>
-                    <th>
-                        <tr>
-                            <td>Name</td>
-                            <td>Market Value</td>
-                            <td>Actions</td>
-                        </tr>
-                    </th>
+                    <tr>
+                        <th>Name</th>
+                        <th>Market Value</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
                     {manuList.map((val) => {
@@ -48,6 +46,7 @@ function Manufacturers(){
                     })}
                 </tbody>
             </table>
+            <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }

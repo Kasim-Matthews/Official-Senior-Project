@@ -3,11 +3,12 @@ const sb = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "WebVoyage2023!",
+    database: 'claire',
     port: 3006
 });
 
 const location_index = (req, res) => {
-    const sqlGet = "SELECT * FROM test.location;"
+    const sqlGet = "SELECT * FROM location;"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
@@ -15,19 +16,18 @@ const location_index = (req, res) => {
 
 const location_creation = (req, res) => {
     let Name = req.body.name;
-    let Adress = req.body.Adress;
-    let marketValue = req.body.marketValue;
-    let totalInventory = req.body.totalInventory;
+    let Address = req.body.Address;
 
-    if(typeof Name != "string" && typeof marketValue != "number" && typeof Adress != "string" && typeof totalInventory != "number"){
+
+    if(typeof Name != "string" && typeof Address != "string"){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(Name && Adress && marketValue && totalInventory){
-        const sqlInsert = "INSERT INTO test.location (Name, Adress, marketValue, totalInventory) VALUES (?,?,?,?);"
-        sb.query(sqlInsert, [Name, Adress, marketValue, totalInventory], (err, result) =>{
+    if(Name && Address){
+        const sqlInsert = "INSERT INTO location (Name, Address) VALUES (?,?);"
+        sb.query(sqlInsert, [Name, Address], (err, result) =>{
         console.log(err);
     })
     }
@@ -42,7 +42,7 @@ const location_delete = (req, res) => {
     }
 
     if(id){
-        const sqlDelete = 'DELETE FROM test.location WHERE id = ?;'
+        const sqlDelete = 'DELETE FROM location WHERE Location_id = ?;'
         sb.query(sqlDelete, [id], (err, result) => {
         console.log(err);
         })
@@ -59,7 +59,7 @@ const location_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM test.location WHERE id= ?;'
+        const sqlGet = 'SELECT * FROM location WHERE Location_id= ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -70,19 +70,18 @@ const location_update = (req, res) => {
     
     let id = req.params.id
     let Name = req.body.name;
-    let Adress = req.body.Adress;
-    let marketValue = req.body.marketValue;
-    let totalInventory = req.body.totalInventory;
+    let Address = req.body.Address;
 
-    if(typeof Name != "string" && typeof marketValue != "number" && typeof Adress != "string" && typeof totalInventory != "number" && typeof id != "string"){
+
+    if(typeof Name != "string" && typeof Address != "string" && typeof id != "string"){
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if(Name && Adress && marketValue && totalInventory && id){
-        const sqlUpdate = "UPDATE test.location SET Name= ?, Adress= ?, marketValue= ?, totalInventory= ? WHERE id = ?;"
-        sb.query(sqlUpdate, [Name, Adress, marketValue, totalInventory, id], (err, result) =>{
+    if(Name && Address && id){
+        const sqlUpdate = "UPDATE location SET Name= ?, Address= ? WHERE Location_id = ?;"
+        sb.query(sqlUpdate, [Name, Address, id], (err, result) =>{
         console.log(err);
     })
     }
