@@ -13,7 +13,6 @@ function Distribution() {
     deliverymethod:"",
     source:"",
     date:""
-    
   })
   const [distributionsList, setDistributionsList] = React.useState([])
   const [records, setRecords] = React.useState([]);
