@@ -39,7 +39,7 @@ app.post('/login', (req, res) => {
     console.log(req.body)
     const username = req.body.username;
     const password = req.body.password;
-
+    const userId = 
     db.query(
         "SELECT * FROM user WHERE Email = ? AND Password = ?",
         [username, password],
@@ -50,10 +50,12 @@ app.post('/login', (req, res) => {
 
             }
 
-
-
             if (result.length > 0) {
-                res.send({ status: 'ok', user: result[0] }); // Send user data and status
+                if (result[0].Name === null || result[0].Role === null) {
+                    res.send({ status: 'additional_info_required', message: "Finish Account Setup!", userId: result[0].User_id});
+                } else {
+                    res.send({ status: 'ok', user: result[0] });
+                }
             } else {
                 res.send({ status: 'error', message: "Wrong username/password combination!" });
             }
@@ -78,6 +80,23 @@ app.get('/item-location-data', (req, res) => {
         }
     });
 });
+
+
+
+app.post('/updateUserInfo', (req, res) => {
+    let userId = req.body.userId;
+    let name = req.body.name;
+    let role = req.body.role;
+    const sql = "UPDATE user SET Name = ?, Role = ? WHERE User_id = ?";
+    db.query(sql, [name, role, userId], (err, result) => {
+        if (err) {
+            res.send({ status: 'error', message: err.message });
+        } else {
+            res.send({ status: 'ok' });
+        }
+    });
+});
+
 
 app.get('/', (req, res) =>{
     res.send('hello world');
