@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import './Distribution.css';
 import Axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
@@ -10,7 +9,7 @@ function Manufacturers(){
 
     useEffect(() => {
         Axios.get("http:////localhost:3001/manufacturers").then((response) =>{
-            setItemList(response.data);
+            setManuList(response.data);
         })
     })
 
@@ -35,7 +34,7 @@ function Manufacturers(){
                     </th>
                 </thead>
                 <tbody>
-                    {locationList.map((val) => {
+                    {manuList.map((val) => {
                         return(
                             <tr>
                                 <td>{val.Name}</td>

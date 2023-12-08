@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import './Distribution.css';
 import Axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
@@ -10,7 +9,7 @@ function Location(){
 
     useEffect(() => {
         Axios.get("http:////localhost:3001/location").then((response) =>{
-            setItemList(response.data);
+            setLocationList(response.data);
         })
     })
 

@@ -1,5 +1,4 @@
 import React from "react";
-import './Distribution.css';
 import Axios from 'axios';
 
 function AddManufacturers(){
