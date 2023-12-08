@@ -77,6 +77,7 @@ app.post('/api/insert', (req, res) =>{
     db.query(sqlInsert, [productName, productType, source, description, price], (err, result) =>{
         console.log(err);
     })
+})
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
 const cors = require('cors')
@@ -90,7 +91,6 @@ app.use(function(req, res, next) {
     });
 
 
-const db = mysql.createPool({
 const distributionRoute = require('./routes/distribution');
 const partnerRoute = require('./routes/partner');
 const itemRoute = require('./routes/item');
@@ -111,7 +111,7 @@ app.use(express.json())
 
 
 
-const db = mysql.createPool({
+const cb = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "Lindsey1!",
@@ -124,64 +124,25 @@ app.post("/register", (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
 
-    db.query(
+    cb.query(
         "INSERT INTO register (usernameReg, passwordReg) VALUES (?,?)",
         [username, password],
         (err, result) => {
             console.log(err);
         }
     )
-    password: "Lindsey1!",
-    database: "claire",
-    port: 3306
 })
 
-app.post("/register", (req, res) => {
-   
-    const username = req.body.username;
-    const password = req.body.password;
-
-    db.query(
-        "INSERT INTO login (username, password) VALUES (?,?)",
-        [username, password],
-        (err, result) => {
-            console.log(err);
-        }
-    )
-})
-
-app.post('/login', (req, res) => {
-    const username = req.body.username;
-    const password = req.body.password;
-
-    db.query(
-        "SELECT * FROM login WHERE username = ? AND password = ?",
-        [username, password],
-        (err, result) => {
-
-            if(err){
-                res.send({err: err})
-
-            }
 
 
 
-            if (result.length > 0) {
-                res.send(result)
-            }else {
-                res.send({message: "Wrong username/password combination!"})
-            }
-            
-        }
-    )
-})
 
 app.post('/login', (req, res) => {
     console.log(req.body)
     const username = req.body.username;
     const password = req.body.password;
 
-    db.query(
+    cb.query(
         "SELECT * FROM register WHERE usernameReg = ? AND passwordReg = ?",
         [username, password],
         (err, result) => {
@@ -211,7 +172,7 @@ app.get('/item-location-data', (req, res) => {
         JOIN location l ON il.Location_id = l.Location_id;
     `;
 
-    db.query(query, (err, result) => {
+    cb.query(query, (err, result) => {
         if (err) {
             res.send({ status: 'error', message: err.message });
         } else {

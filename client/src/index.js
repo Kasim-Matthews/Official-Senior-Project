@@ -20,6 +20,7 @@ import EditLocation from './EditLocation';
 import Manufacturers from './Manufacturers';
 import AddManufacturers from './AddManufacturers';
 import EditManufacturers from './EditManufacturers';
+import Dashboard from './Dashboard';
 
 export class Application extends React.Component{
     render(){
@@ -27,6 +28,7 @@ export class Application extends React.Component{
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<App />}/>
+                    <Route path="/Dashboard" element={<Dashboard />}/>
 
                     <Route path="/distribution" element={<Distribution />} />
                     <Route path='/distribution/:id' element={<ViewDistribution/>}/>
@@ -57,13 +59,9 @@ export class Application extends React.Component{
     }
 }
 
-ReactDOM.render(<Application />, document.getElementById("root"));
-import ReactDOM from 'react-dom/client';
-import App from './App';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <App />
+    <Application />
 );
 
 
