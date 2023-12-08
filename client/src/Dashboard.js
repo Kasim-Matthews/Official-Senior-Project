@@ -43,7 +43,7 @@ function Dashboard() {
                 <ul>
                     <li><Link to="/Dashboard">Dasboard</Link></li>
                     <li><Link to="/distribution">Distributions</Link></li>
-                    <li><a href="#">Collections</a></li>
+                    <li><Link to="/intake">Collections</Link></li>
                     <li><a href="#">Inventory</a></li>
                     <li><Link to="/partner">Partner</Link></li>
                 </ul>

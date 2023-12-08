@@ -31,9 +31,7 @@ function EditLocation(){
             e.preventDefault();
             
             Axios.put(`http://localhost:3001/location/${id}/update`, {name:formData.Name,
-            Adress:formData.Adress,
-            totalInventory:formData.totalInventory,
-            marketValue:formData.marketValue},{
+            Address:formData.Address},{
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
               }
@@ -46,8 +44,8 @@ function EditLocation(){
                 <label htmlFor="Name">Name</label>
                 <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange}/>
 
-                <label htmlFor="Adress">Adress</label>
-                <input type="text" name="Adress" defaultValue={formData.Adress} id="Adress" required onChange={handleChange}/>
+                <label htmlFor="Adress">Address</label>
+                <input type="text" name="Address" defaultValue={formData.Address} id="Address" required onChange={handleChange}/>
     
                 <input type="submit" value="Submit"/>
             </form>

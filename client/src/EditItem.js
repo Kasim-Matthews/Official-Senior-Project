@@ -33,9 +33,7 @@ function EditItem(){
             e.preventDefault();
             
             Axios.put(`http://localhost:3001/item/${id}/update`, {name:formData.Name,
-            marketValue:formData.marketValue,
-            packageSize:formData.packageSize,
-            active:formData.active},{
+            FairMarketValue:formData.FairMarketValue},{
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
               }
@@ -45,18 +43,11 @@ function EditItem(){
           }
           return(
             <form id="edit item" onSubmit={handleSubmit}>
-                <label htmlFor="Name">Name</label>
+                 <label htmlFor="Name">Name</label>
                 <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange}/>
                 
-                <label htmlFor="marketValue">Fair Market Value</label>
-                <input type="number" name="marketValue" id="marketValue" defaultValue={formData.marketValue} step="0.01" required onChange={handleChange}/>
-
-                <label htmlFor="packageSize">Package Size</label>
-                <input type="number" name="packageSize" defaultValue={formData.packageSize} id="packageSize" required onChange={handleChange}/>
-
-                
-                <input type="checkbox" id="isActive" defaultChecked={isActive} name="isActive" onChange={() => setIsActive(!isActive)}/>
-                <label htmlFor="isActive">Is the item active</label>
+                <label htmlFor="FairMarketValue">Fair Market Value</label>
+                <input type="number" name="FairMarketValue" id="FairMarketValue" defaultValue={formData.FairMarketValue} step="0.01" required onChange={handleChange}/>
 
                 <input type="submit" value="Submit"/>
             </form>

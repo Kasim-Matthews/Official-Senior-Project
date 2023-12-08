@@ -38,7 +38,7 @@ function Intake(){
                     </tr>
                 </thead>
                 <tbody>
-                    {partnerList.map((val) => {
+                    {intakeList.map((val) => {
                         return(
                             <tr>
                                 <td>{val.Partner}</td>

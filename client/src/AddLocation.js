@@ -26,7 +26,7 @@ function AddLocation(){
             e.preventDefault();
             try{
                 Axios.post("http://localhost:3001/location/new", {name:formData.Name,
-                Address:formData.Address,},{
+                Address:formData.Address},{
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded'
                     }
@@ -44,7 +44,7 @@ function AddLocation(){
                 <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
 
                 <label htmlFor="Address">Address</label>
-                <input type="text" name="Address" value={formData.Address} id="Adress" required onChange={handleChange}/>
+                <input type="text" name="Address" value={formData.Address} id="Address" required onChange={handleChange}/>
 
 
                 <input type="submit" value="Submit"/>

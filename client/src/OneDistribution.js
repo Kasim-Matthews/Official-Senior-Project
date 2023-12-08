@@ -6,13 +6,13 @@ function ViewDistribution(){
     
     const navigate = useNavigate();
     const {id} = useParams();
-    const [record, setRecord] = React.useState({})
+    const [record, setRecord] = React.useState([])
 
           useEffect(() => {
             Axios.get(`http://localhost:3001/distribution/${id}/view`).then((response) => {
-            response.data.map((key, value) => {setRecord(key)});
-            })
-          }, [])
+            setRecord(response.data)});
+            }, [])
+
 
     return(
       <div>
@@ -30,14 +30,34 @@ function ViewDistribution(){
         </thead>
         <tbody>
           {record.map((val) => {
+          let q = new Date(val.RequestDate);
+          let monthRequestDate= ""
+          let dayRequestDate = ""
+          let yearRequestDate = ""
+          let concatRequestDate = ""
+          monthRequestDate = q.getMonth()+ 1
+          dayRequestDate = q.getDate() + 1
+          yearRequestDate = q.getFullYear()+1
+          concatRequestDate = yearRequestDate + "-" + monthRequestDate + "-" + dayRequestDate
+
+          let c = new Date(val.CompletedDate);
+          let monthCompletedDate= ""
+          let dayCompletedDate = ""
+          let yearCompletedDate = ""
+          let concatCompletedDate = ""
+          monthCompletedDate = c.getMonth()+ 1
+          dayCompletedDate = c.getDate() + 1
+          yearCompletedDate = c.getFullYear()+1
+          concatCompletedDate = yearCompletedDate + "-" + monthCompletedDate + "-" + dayCompletedDate
+          
           return (
           <tr>
             <td>{val.Partner_id}</td>
-            <td>{val.RequestDate}</td>
-            <td>{val.CompletedDate}</td>
+            <td>{concatRequestDate}</td>
+            <td>{concatCompletedDate}</td>
             <td>{val.DeliveryMethod}</td>
             <td>{val.Comments}</td>
-            <td>{val.status}</td>
+            <td>{val.Status}</td>
           </tr>);
         })}
         </tbody>

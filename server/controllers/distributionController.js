@@ -8,7 +8,7 @@ const sb = mysql.createPool({
 });
 
 const distribution_index = (req, res) => {
-    const sqlGet = "SELECT * FROM order;"
+    const sqlGet = "SELECT * FROM claire.order;"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
@@ -63,9 +63,9 @@ const distribution_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM order WHERE Order_id = ?;'
+        const sqlGet = 'SELECT * FROM claire.order WHERE Order_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
-        res.send(result);
+            res.send(result);
         })
     }    
 }
