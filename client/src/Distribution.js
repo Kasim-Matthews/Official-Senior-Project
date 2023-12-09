@@ -28,7 +28,7 @@ function Distribution() {
     e.preventDefault();
     var temp = distributionsList;
     if(filters.Partner != ""){
-      temp = temp.filter(f => f.partner.toLowerCase().includes(filters.Partner.toLowerCase()));
+      temp = temp.filter(f => f.partner.includes(filters.Partner.toLowerCase()));
     }
 
     if(filters.deliverymethod == "Pickup"){
@@ -43,9 +43,9 @@ function Distribution() {
       temp = temp.filter(f => f.date > filters.date)
     }
 
-    if(filters.source != ""){
-      temp = temp.filter(f => f.source.toLowerCase().includes(filters.source.toLowerCase()))
-    }
+    /*if(filters.source != ""){
+      temp = temp.filter(f => f.source.includes(filters.source.toLowerCase()))
+    }*/
 
     setRecords(temp);
   }
@@ -65,7 +65,7 @@ function Distribution() {
   }, [])
 
   const Filter = (event) => {
-    setRecords(distributionsList.filter(f => f.partner.toLowerCase().includes(event.target.value)))
+    setRecords(distributionsList.filter(f => f.partner.includes(event.target.value)))
   };
 
   const FilterRadio = (event) =>{
@@ -94,14 +94,14 @@ function Distribution() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form style={{display: 'none'}} onSubmit={handleSubmit}>
         <label htmlFor="Partner">
         Partner
         <select id="Partner" name="Partner" value={filters.Partner} onChange={handleChange}>
           <option value="" disabled></option>
           {partners.map((val) =>{
             return(
-              <option value={val.name}>{val.Name}</option>
+              <option value={val.Name}>{val.Name}</option>
             )
           })}
           
@@ -124,7 +124,8 @@ function Distribution() {
 
         <input type="submit" value="Submit"/>
       </form>
-      <h2>Change ifs to == rather than include</h2>
+      <h2 style={{display: 'none'}}>Change ifs to == rather than include</h2>
+      <button><Link to="/distribution/new">Add</Link></button>
       <table>
         <thead>
           <tr>

@@ -25,8 +25,15 @@ function Intake(){
         navigate(`/partner/${id}`)
       }*/
 
+    function getName(id){
+        let response = Axios.get(`http:////localhost:3001/partner/${id}/name`)
+        console.log(response);
+        return 0;
+    }
+
     return(
         <div>
+            <button><Link to="/intake/new">Add</Link></button>
             <table>
                 <thead>
                     <tr>
@@ -39,11 +46,22 @@ function Intake(){
                 </thead>
                 <tbody>
                     {intakeList.map((val) => {
+                        let q = new Date(val.RecievedDate);
+                        let monthRecievedDate= ""
+                        let dayRecievedDate = ""
+                        let yearRecievedDate = ""
+                        let concatRecievedDate = ""
+                        monthRecievedDate = q.getMonth()+ 1
+                        dayRecievedDate = q.getDate() + 1
+                        yearRecievedDate = q.getFullYear()+1
+                        concatRecievedDate = yearRecievedDate + "-" + monthRecievedDate + "-" + dayRecievedDate
+                        let name = getName(val.Partner)
                         return(
+                            
                             <tr>
-                                <td>{val.Partner}</td>
+                                <td>{name}</td>
                                 <td>{val.Value}</td>
-                                <td>{val.RecievedDate}</td>
+                                <td>{concatRecievedDate}</td>
                                 <td>{val.Comments}</td>
                                 <td>
                                     <button /*onClick={() => handleRemove(val.Partner_id)}*/>Delete</button>

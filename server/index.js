@@ -17,7 +17,7 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true}));
 
 app.get('/intake', (req, res) =>{
-    const sqlGet = "SELECT * FROM intake;"
+    const sqlGet = "SELECT * FROM claire.intake;"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
@@ -69,10 +69,10 @@ app.use('/', accountRoute);
 const cb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Lindsey1!",
-    database: "claire",
-    port: 3306
-})
+    password: "WebVoyage2023!",
+    database: 'claire',
+    port: 3006
+});
 
 app.post("/register", (req, res) => {
    
@@ -122,9 +122,9 @@ app.post('/login', (req, res) => {
 app.get('/item-location-data', (req, res) => {
     const query = `
         SELECT i.Name as itemName, l.Name as locationName, il.Quantity
-        FROM itemlocation il
-        JOIN item i ON il.Item_id = i.Item_id
-        JOIN location l ON il.Location_id = l.Location_id;
+        FROM claire.itemlocation il
+        JOIN claire.item i ON il.Item_id = i.Item_id
+        JOIN claire.location l ON il.Location_id = l.Location_id;
     `;
 
     cb.query(query, (err, result) => {
@@ -135,6 +135,8 @@ app.get('/item-location-data', (req, res) => {
         }
     });
 });
+
+
 
 app.get('/', (req, res) =>{
     res.send('hello world');

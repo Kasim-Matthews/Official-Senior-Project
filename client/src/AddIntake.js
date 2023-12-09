@@ -30,6 +30,7 @@ function AddIntake() {
       e.preventDefault()
 
       Axios.post("http:////localhost:3001/intake/new", {Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner})
+      window.location.href = "/intake";
     }
 
   return (
@@ -41,7 +42,7 @@ function AddIntake() {
           <option value="">--Please choose an option--</option>
           {partners.map((val) =>{
                     return(
-                      <option value={val.id}>{val.name}</option>
+                      <option value={val.Partner_id}>{val.Name}</option>
                     )
           })}
         </select>

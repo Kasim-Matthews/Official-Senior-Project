@@ -56,11 +56,11 @@ function AddDistribution(){
         const handleSubmit = async (e) => {
             e.preventDefault();
             
-            /*Axios.post("http://localhost:3001/distribution/new", {Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id:formData.Partner},{
+            Axios.post("http://localhost:3001/distribution/new", {Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id:formData.Partner},{
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
               }
-          });*/
+          });
           let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", {Item_id: formData.item, Location_id: formData.location})
           
           let OID_response = await Axios.post("http://localhost:3001/distribution/find_id", {RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner});
@@ -69,13 +69,13 @@ function AddDistribution(){
 
           Axios.post("http://localhost:3001/distribution/track", {Order_id: OID_response.data[0].Order_id, Quantity: formData.Quantity, Value: formData.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id});
           
-          let current = await await Axios.post("http://localhost:3001/distribution/find_q", {ItemLocationFK: IL_response.data[0].ItemLocation_id})
+          let current = await Axios.post("http://localhost:3001/distribution/find_q", {ItemLocationFK: IL_response.data[0].ItemLocation_id})
           console.log(current)
           Axios.put("http://localhost:3001/distribution/update_item", {Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity});
 
          
           
-            //window.location.href = "/distribution";
+            window.location.href = "/distribution";
       
           }
 

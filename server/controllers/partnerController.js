@@ -8,7 +8,7 @@ const sb = mysql.createPool({
 });
 
 const partner_index = (req, res) => {
-    const sqlGet = "SELECT * FROM partner;"
+    const sqlGet = "SELECT * FROM claire.partner;"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     })
@@ -87,10 +87,23 @@ const partner_update = (req, res) => {
     }
 }
 
+const partnerName = (req, res) => {
+    let id = req.params.id
+    const query = `
+    SELECT p.Name as partnerName
+    FROM partner p
+    JOIN order i ON p.Partner_id = i.Partner_id
+    `;
+    sb.query(query, [id], (err, result) => {
+        res.send(result);
+    })
+}
+
 module.exports = {
     partner_create,
     partner_index,
     partner_delete,
     partner_update,
-    partner_edit
+    partner_edit,
+    partnerName
 }

@@ -27,6 +27,7 @@ function Partner(){
 
     return(
         <div>
+            <button><Link to="/partner/new">Add</Link></button>
             <table>
                 <thead>
                     <tr>
@@ -52,7 +53,7 @@ function Partner(){
                     })}
                 </tbody>
             </table>
-            <p>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
+            <p style={{display: "none"}}>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
