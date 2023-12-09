@@ -91,8 +91,8 @@ const partnerName = (req, res) => {
     let id = req.params.id
     const query = `
     SELECT p.Name as partnerName
-    FROM partner p
-    JOIN order i ON p.Partner_id = i.Partner_id
+    FROM claire.partner p
+    JOIN claire.order i ON p.Partner_id = i.Partner_id
     `;
     sb.query(query, [id], (err, result) => {
         res.send(result);

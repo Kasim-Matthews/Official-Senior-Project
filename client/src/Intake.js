@@ -6,6 +6,7 @@ function Intake(){
     const navigate = useNavigate();
 
     const [intakeList, setIntakeList] = React.useState([])
+    const [names, setNames] = React.useState([])
 
     useEffect(() => {
         Axios.get("http:////localhost:3001/intake").then((response) =>{
@@ -27,8 +28,8 @@ function Intake(){
 
     function getName(id){
         let response = Axios.get(`http:////localhost:3001/partner/${id}/name`)
-        console.log(response);
-        return 0;
+        let n = response.data
+        return n;
     }
 
     return(
