@@ -17,7 +17,11 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true}));
 
 app.get('/intake', (req, res) =>{
-    const sqlGet = "SELECT * FROM claire.intake;"
+    const sqlGet = `
+    select p.Name, i.Comments as Comments, i.RecievedDate as RecievedDate, i.Value as Value
+    from claire.intake i
+    join claire.partner p on i.Partner = p.Partner_id
+    `;
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
@@ -37,6 +41,64 @@ app.post('/intake/new', (req, res) =>{
     })
 })
 
+app.post('/intake/location', (req, res) => {
+    let Item_id = req.body.Item_id;
+    let Location_id = req.body.Location_id;
+
+    const query = `
+    select il.ItemLocation_id
+    from itemlocation il
+    JOIN item i ON il.Item_id = i.Item_id
+    JOIN location l ON il.Location_id = l.Location_id
+    WHERE i.Item_id = ? AND l.Location_id = ?
+    `;
+
+    sb.query(query, [Item_id, Location_id], (err, result) => {
+        res.send(result);
+    })
+})
+
+app.get('/intake/find_id', (req, res) => {
+    const query = "SELECT MAX(Intake_id) as Intake_id FROM claire.intake;"
+
+    sb.query(query, (err, result) => {
+        res.send(result);
+    })
+})
+
+app.post('/intake/track', (req, res) => {
+    let Intake_id = req.body.Intake_id;
+    let Quantity = req.body.Quantity;
+    let Value = req.body.Value;
+    let FKItemLocation = req.body.FKItemLocation;
+
+    const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
+
+    sb.query(sqlInsert, [Intake_id, Quantity, Value, FKItemLocation], (err, result) =>{
+        console.log(err);
+    })
+})
+
+app.post('/intake/find_q', (req, res) => {
+    let ItemLocationFK= req.body.ItemLocationFK;
+    
+    const sqlGet = "SELECT Quantity FROM itemlocation WHERE ItemLocation_id = ?"
+    sb.query(sqlGet, [ItemLocationFK], (err, result) =>{
+        res.send(result);
+    }) 
+})
+
+app.put('/intake/update_item', (req, res) => {
+    let ItemLocationFK= req.body.ItemLocationFK;
+    let Quantity = req.body.Quantity;
+    let CurrentQ = req.body.CurrentQ;
+
+    Quantity = +CurrentQ + +Quantity;
+    const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+    sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) =>{
+        console.log(err);
+    })
+})
 
 
 app.use(function(req, res, next) {

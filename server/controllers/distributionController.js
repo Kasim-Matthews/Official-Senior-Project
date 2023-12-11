@@ -8,7 +8,11 @@ const sb = mysql.createPool({
 });
 
 const distribution_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.order;"
+    const sqlGet = `
+    select o.Comments, o.Status, o.DeliveryMethod, o.RequestDate, o.CompletedDate, o.Order_id, p.Name
+    from claire.order o
+    join claire.partner p on o.Partner_id = p.Partner_id 
+    `;
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     }) 
@@ -46,7 +50,7 @@ const distribution_remove = (req, res) => {
     }
 
     if(id){
-        const sqlDelete = 'DELETE FROM order WHERE Order_id = ?;'
+        const sqlDelete = 'DELETE FROM claire.order WHERE Order_id = ?;'
         sb.query(sqlDelete, [id], (err, result) => {
         console.log(err);
         })
@@ -99,7 +103,7 @@ const distribution_find_ild  = (req, res) => {
     let Item_id = req.body.Item_id;
     let Location_id = req.body.Location_id;
     
-    const sqlGet = "SELECT ItemLocation_id FROM itemlocation WHERE Item_id = ? AND Location_id = ?;"
+    const sqlGet = "SELECT ItemLocation_id FROM claire.itemlocation WHERE Item_id = ? AND Location_id = ?;"
     sb.query(sqlGet, [Item_id, Location_id], (err, result) =>{
         res.send(result);
     }) 
@@ -108,7 +112,7 @@ const distribution_find_ild  = (req, res) => {
 const distribution_find_q  = (req, res) => {
     let ItemLocationFK= req.body.ItemLocationFK;
     
-    const sqlGet = "SELECT Quantity FROM itemlocation WHERE ItemLocation_id = ?"
+    const sqlGet = "SELECT Quantity FROM claire.itemlocation WHERE ItemLocation_id = ?"
     sb.query(sqlGet, [ItemLocationFK], (err, result) =>{
         res.send(result);
     }) 
@@ -117,7 +121,7 @@ const distribution_find_q  = (req, res) => {
 const distribution_find_value  = (req, res) => {
     let Item_id = req.body.Item_id;
     
-    const sqlGet = "SELECT FairMarketValue FROM item WHERE Item_id = ?;"
+    const sqlGet = "SELECT FairMarketValue FROM claire.item WHERE Item_id = ?;"
     sb.query(sqlGet, [Item_id], (err, result) =>{
         res.send(result);
     }) 
@@ -159,7 +163,7 @@ const distribution_update_item = (req, res) => {
     
     let ItemLocationFK= req.body.ItemLocationFK;
     let Quantity = req.body.Quantity;
-    let CurrentQ = req.body.CurrentQ
+    let CurrentQ = req.body.CurrentQ;
 
 
     if(typeof ItemLocationFK != "number" && typeof Quantity != "number" && typeof CurrentQ != "number"){
@@ -170,7 +174,7 @@ const distribution_update_item = (req, res) => {
 
     if(ItemLocationFK && Quantity && CurrentQ){
         Quantity = CurrentQ - Quantity;
-        const sqlUpdate = "UPDATE itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+        const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
         sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) =>{
         console.log(err);
     })

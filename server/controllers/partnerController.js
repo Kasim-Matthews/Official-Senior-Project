@@ -25,7 +25,7 @@ const partner_create = (req, res) => {
     }
 
     if(Name && Email){
-        const sqlInsert = "INSERT INTO partner (name, email) VALUES (?,?);"
+        const sqlInsert = "INSERT INTO claire.partner (name, email) VALUES (?,?);"
         sb.query(sqlInsert, [Name, Email], (err, result) =>{
         console.log(result);
     }) 
@@ -41,7 +41,7 @@ const partner_delete = (req, res) => {
     }
 
     if(id){
-        const sqlDelete = 'DELETE FROM partner WHERE Partner_id = ?;'
+        const sqlDelete = 'DELETE FROM claire.partner WHERE Partner_id = ?;'
         sb.query(sqlDelete, [id], (err, result) => {
         console.log(err);
         })
@@ -58,7 +58,7 @@ const partner_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM partner WHERE Partner_id = ?;'
+        const sqlGet = 'SELECT * FROM claire.partner WHERE Partner_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -80,30 +80,18 @@ const partner_update = (req, res) => {
     }
 
     if(Name && Email && id){
-        const sqlUpdate = "UPDATE partner SET Name= ?, Email= ? WHERE Partner_id = ?;"
+        const sqlUpdate = "UPDATE claire.partner SET Name= ?, Email= ? WHERE Partner_id = ?;"
         sb.query(sqlUpdate, [Name, Email, id], (err, result) =>{
         console.log(err);
     })
     }
 }
 
-const partnerName = (req, res) => {
-    let id = req.params.id
-    const query = `
-    SELECT p.Name as partnerName
-    FROM claire.partner p
-    JOIN claire.order i ON p.Partner_id = i.Partner_id
-    `;
-    sb.query(query, [id], (err, result) => {
-        res.send(result);
-    })
-}
 
 module.exports = {
     partner_create,
     partner_index,
     partner_delete,
     partner_update,
-    partner_edit,
-    partnerName
+    partner_edit
 }

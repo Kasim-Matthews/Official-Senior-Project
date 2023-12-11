@@ -70,7 +70,6 @@ function AddDistribution(){
           Axios.post("http://localhost:3001/distribution/track", {Order_id: OID_response.data[0].Order_id, Quantity: formData.Quantity, Value: formData.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id});
           
           let current = await Axios.post("http://localhost:3001/distribution/find_q", {ItemLocationFK: IL_response.data[0].ItemLocation_id})
-          console.log(current)
           Axios.put("http://localhost:3001/distribution/update_item", {Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity});
 
          

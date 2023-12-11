@@ -24,13 +24,12 @@ function ViewPartner(){
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Agency Representative</th>
                         </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>{record.name}</td>
-                        <td>{record.email}</td>
+                        <td>{record.Name}</td>
+                        <td>{record.Email}</td>
                     </tr>
                     </tbody>
                 </table>

@@ -6,13 +6,15 @@ function Intake(){
     const navigate = useNavigate();
 
     const [intakeList, setIntakeList] = React.useState([])
-    const [names, setNames] = React.useState([])
 
     useEffect(() => {
         Axios.get("http:////localhost:3001/intake").then((response) =>{
             setIntakeList(response.data);
         })
-    })
+    }, [])
+
+
+
 
     /*const handleRemove = (id) =>{
         Axios.delete(`http://localhost:3001/partner/remove/${id}`);
@@ -26,11 +28,7 @@ function Intake(){
         navigate(`/partner/${id}`)
       }*/
 
-    function getName(id){
-        let response = Axios.get(`http:////localhost:3001/partner/${id}/name`)
-        let n = response.data
-        return n;
-    }
+
 
     return(
         <div>
@@ -56,11 +54,10 @@ function Intake(){
                         dayRecievedDate = q.getDate() + 1
                         yearRecievedDate = q.getFullYear()+1
                         concatRecievedDate = yearRecievedDate + "-" + monthRecievedDate + "-" + dayRecievedDate
-                        let name = getName(val.Partner)
                         return(
                             
                             <tr>
-                                <td>{name}</td>
+                                <td>{val.Name}</td>
                                 <td>{val.Value}</td>
                                 <td>{concatRecievedDate}</td>
                                 <td>{val.Comments}</td>

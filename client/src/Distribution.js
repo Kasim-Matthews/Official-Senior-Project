@@ -161,7 +161,7 @@ function Distribution() {
           concatCompletedDate = yearCompletedDate + "-" + monthCompletedDate + "-" + dayCompletedDate
           return (
           <tr>
-            <td>{val.Partner_id}</td>
+            <td>{val.Name}</td>
             <td>{concatRequestDate}</td>
             <td>{concatCompletedDate}</td>
             <td>{val.DeliveryMethod}</td>
