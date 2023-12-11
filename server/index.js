@@ -5,11 +5,11 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 
 const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    database: 'claire',
-    port: 3006
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
+    port: 3306
 });
 
 app.use(cors())
@@ -19,8 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.get('/intake', (req, res) =>{
     const sqlGet = `
     select p.Name, i.Comments as Comments, i.RecievedDate as RecievedDate, i.Value as Value
-    from claire.intake i
-    join claire.partner p on i.Partner = p.Partner_id
+    from sql5669328.intake i
+    join sql5669328.partner p on i.Partner = p.Partner_id
     `;
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
@@ -59,7 +59,7 @@ app.post('/intake/location', (req, res) => {
 })
 
 app.get('/intake/find_id', (req, res) => {
-    const query = "SELECT MAX(Intake_id) as Intake_id FROM claire.intake;"
+    const query = "SELECT MAX(Intake_id) as Intake_id FROM sql5669328.intake;"
 
     sb.query(query, (err, result) => {
         res.send(result);
@@ -72,7 +72,7 @@ app.post('/intake/track', (req, res) => {
     let Value = req.body.Value;
     let FKItemLocation = req.body.FKItemLocation;
 
-    const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
+    const sqlInsert = "INSERT INTO sql5669328.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
 
     sb.query(sqlInsert, [Intake_id, Quantity, Value, FKItemLocation], (err, result) =>{
         console.log(err);
@@ -94,7 +94,7 @@ app.put('/intake/update_item', (req, res) => {
     let CurrentQ = req.body.CurrentQ;
 
     Quantity = +CurrentQ + +Quantity;
-    const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+    const sqlUpdate = "UPDATE sql5669328.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
     sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) =>{
         console.log(err);
     })
@@ -129,11 +129,11 @@ app.use('/', accountRoute);
 
 
 const cb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    database: 'claire',
-    port: 3006
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
+    port: 3306
 });
 
 app.post("/register", (req, res) => {
@@ -184,9 +184,9 @@ app.post('/login', (req, res) => {
 app.get('/item-location-data', (req, res) => {
     const query = `
         SELECT i.Name as itemName, l.Name as locationName, il.Quantity
-        FROM claire.itemlocation il
-        JOIN claire.item i ON il.Item_id = i.Item_id
-        JOIN claire.location l ON il.Location_id = l.Location_id;
+        FROM sql5669328.itemlocation il
+        JOIN sql5669328.item i ON il.Item_id = i.Item_id
+        JOIN sql5669328.location l ON il.Location_id = l.Location_id;
     `;
 
     cb.query(query, (err, result) => {
