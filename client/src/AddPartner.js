@@ -22,7 +22,7 @@ function AddPartner(){
       function handleSubmit(e){
         e.preventDefault();
         
-        Axios.post("http://localhost:3001/partner/new", {name:formData.Name,
+        Axios.post("https://diaper-bank-inventory-management-system.onrender.com/partner/new", {name:formData.Name,
         email:formData.Email},{
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'

@@ -9,7 +9,7 @@ function ViewDistribution(){
     const [record, setRecord] = React.useState([])
 
           useEffect(() => {
-            Axios.get(`http://localhost:3001/distribution/${id}/view`).then((response) => {
+            Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/view`).then((response) => {
             setRecord(response.data)});
             }, [])
 

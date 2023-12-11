@@ -25,7 +25,7 @@ function AddLocation(){
         function handleSubmit(e){
             e.preventDefault();
             try{
-                Axios.post("http://localhost:3001/location/new", {name:formData.Name,
+                Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/new", {name:formData.Name,
                 Address:formData.Address},{
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded'

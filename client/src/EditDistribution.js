@@ -22,13 +22,13 @@ function EditDistribution(){
           }
 
           useEffect(() => {
-            Axios.get(`http://localhost:3001/distribution/${id}/view`).then((response) => {
+            Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/view`).then((response) => {
             response.data.map((key, value) => {setFormData(value)});
             })
           }, [])
 
           useEffect(() => {
-            Axios.get("http:////localhost:3001/partner").then((response) =>{
+            Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) =>{
                     setPartners(response.data);
                 })
           }, [])
@@ -38,7 +38,7 @@ function EditDistribution(){
           function handleSubmit(e){
             e.preventDefault();
             
-            Axios.put(`http://localhost:3001/distribution/${id}/update`, {Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id:formData.Partner},{
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/update`, {Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id:formData.Partner},{
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
               }

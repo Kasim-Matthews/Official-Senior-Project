@@ -9,7 +9,7 @@ function ViewItem(){
     const [record, setRecord] = React.useState({})
     
           useEffect(() => {
-            Axios.get(`http://localhost:3001/item/${id}/edit`).then((response) => {
+            Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/edit`).then((response) => {
             response.data.map((key, value) => {setRecord(key)});
             })
           }, [])

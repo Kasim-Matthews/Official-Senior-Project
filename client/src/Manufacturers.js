@@ -8,13 +8,13 @@ function Manufacturers(){
     const [manuList, setManuList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http:////localhost:3001/manufacturers").then((response) =>{
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/manufacturers").then((response) =>{
             setManuList(response.data);
         })
     })
 
     const handleRemove = (id) =>{
-        Axios.delete(`http://localhost:3001/manufacturers/remove/${id}`);
+        Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/remove/${id}`);
     }
 
     const handleEdit = (id) => {

@@ -8,13 +8,13 @@ function Partner(){
     const [partnerList, setPartnerList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http:////localhost:3001/partner").then((response) =>{
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) =>{
             setPartnerList(response.data);
         })
     })
 
     const handleRemove = (id) =>{
-        Axios.delete(`http://localhost:3001/partner/remove/${id}`);
+        Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/partner/remove/${id}`);
     }
 
     const handleEdit = (id) => {

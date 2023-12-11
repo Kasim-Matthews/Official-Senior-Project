@@ -22,7 +22,7 @@ function EditItem(){
           }
 
           useEffect(() => {
-            Axios.get(`http://localhost:3001/item/${id}/edit`).then((response) => {
+            Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/edit`).then((response) => {
             response.data.map((key, value) => {setFormData(key)});
             })
           }, [])
@@ -32,7 +32,7 @@ function EditItem(){
           function handleSubmit(e){
             e.preventDefault();
             
-            Axios.put(`http://localhost:3001/item/${id}/update`, {name:formData.Name,
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/update`, {name:formData.Name,
             FairMarketValue:formData.FairMarketValue},{
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

@@ -21,7 +21,7 @@ function EditPartner(){
           }
 
           useEffect(() => {
-            Axios.get(`http://localhost:3001/partner/${id}/edit`).then((response) => {
+            Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/edit`).then((response) => {
             response.data.map((key, value) => {setFormData(key)});
             })
           }, [])
