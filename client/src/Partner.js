@@ -37,7 +37,7 @@ function Partner(){
                     </tr>
                 </thead>
                 <tbody>
-                    {partnerList.map((val) => {
+                    {Object.values(partnerList.map((val) => {
                         return(
                             <tr>
                                 <td>{val.Name}</td>
@@ -50,7 +50,7 @@ function Partner(){
 
                             </tr>
                         );
-                    })}
+                    }))}
                 </tbody>
             </table>
             <p style={{display: "none"}}>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
