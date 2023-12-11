@@ -12,7 +12,7 @@ const register = (req, res) => {
     let password = req.body.password;
 
     sb.query(
-        "INSERT INTO register (usernameReg, passwordReg) VALUES (?,?)",
+        "INSERT INTO sql5669328.register (usernameReg, passwordReg) VALUES (?,?)",
         [username, password],
         (err, result) => {
             console.log(err);
@@ -27,7 +27,7 @@ const login = (req, res) => {
     let password = req.body.password;
 
     sb.query(
-        "SELECT * FROM register WHERE usernameReg = ? AND passwordReg = ?",
+        "SELECT * FROM sql5669328.register WHERE usernameReg = ? AND passwordReg = ?",
         [username, password],
         (err, result) => {
 
