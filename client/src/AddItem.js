@@ -27,7 +27,7 @@ function AddItem(){
             e.preventDefault();
             try{
                 
-                Axios.post("https://diaper-bank-inventory-management-system.onrender.com/item/new", {name:formData.Name,
+                Axios.post("http://localhost:3001/item/new", {name:formData.Name,
                 FairMarketValue:formData.FairMarketValue},{
                     headers: {
                       'Content-Type': 'application/x-www-form-urlencoded'

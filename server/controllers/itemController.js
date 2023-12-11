@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306
+    host: "localhost",
+    user: "root",
+    password: "WebVoyage2023!",
+    database: 'claire',
+    port: 3006
 });
 
 const item_index = (req, res) => {

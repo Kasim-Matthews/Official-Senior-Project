@@ -5,11 +5,11 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 
 const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306
+    host: "localhost",
+    user: "root",
+    password: "WebVoyage2023!",
+    database: 'claire',
+    port: 3006
 });
 
 app.use(cors())
@@ -129,11 +129,11 @@ app.use('/', accountRoute);
 
 
 const cb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306
+    host: "localhost",
+    user: "root",
+    password: "WebVoyage2023!",
+    database: 'claire',
+    port: 3006
 });
 
 app.post("/register", (req, res) => {

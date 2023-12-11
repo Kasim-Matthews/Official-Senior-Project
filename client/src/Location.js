@@ -8,13 +8,13 @@ function Location(){
     const [locationList, setLocationList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) =>{
+        Axios.get("http://localhost:3001/location").then((response) =>{
             setLocationList(response.data);
         })
     })
 
     const handleRemove = (id) =>{
-        Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/location/remove/${id}`);
+        Axios.delete(`http://localhost:3001/location/remove/${id}`);
     }
 
     const handleEdit = (id) => {

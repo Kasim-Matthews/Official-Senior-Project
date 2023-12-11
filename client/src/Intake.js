@@ -8,7 +8,7 @@ function Intake(){
     const [intakeList, setIntakeList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake").then((response) =>{
+        Axios.get("http://localhost:3001/intake").then((response) =>{
             setIntakeList(response.data);
         })
     }, [])

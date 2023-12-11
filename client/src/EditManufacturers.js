@@ -20,7 +20,7 @@ function EditManufacturers(){
           }
 
           useEffect(() => {
-            Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/edit`).then((response) => {
+            Axios.get(`http://localhost:3001/manufacturers/${id}/edit`).then((response) => {
             response.data.map((key, value) => {setFormData(key)});
             })
           }, [])
