@@ -16,7 +16,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const register = () => {
-    Axios.post('http://localhost:3001/register', {
+    Axios.post('https://diaper-bank-inventory-management-system.onrender.com/register', {
       username: usernameReg, 
       password: passwordReg,
     }).then((response) => {
@@ -25,7 +25,7 @@ function App() {
   }
 
   const login = () => {
-    Axios.post('http://localhost:3001/login', {
+    Axios.post('https://diaper-bank-inventory-management-system.onrender.com/login', {
       username: username, 
       password: password,
     }).then((response) => {
