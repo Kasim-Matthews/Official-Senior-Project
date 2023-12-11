@@ -8,7 +8,7 @@ const sb = mysql.createPool({
 });
 
 const partner_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.partner;"
+    const sqlGet = "SELECT * FROM sql5669328.partner;"
     sb.query(sqlGet, (err, result) =>{
         res.send(result);
     })
@@ -25,7 +25,7 @@ const partner_create = (req, res) => {
     }
 
     if(Name && Email){
-        const sqlInsert = "INSERT INTO claire.partner (name, email) VALUES (?,?);"
+        const sqlInsert = "INSERT INTO sql5669328.partner (name, email) VALUES (?,?);"
         sb.query(sqlInsert, [Name, Email], (err, result) =>{
         console.log(result);
     }) 
@@ -41,7 +41,7 @@ const partner_delete = (req, res) => {
     }
 
     if(id){
-        const sqlDelete = 'DELETE FROM claire.partner WHERE Partner_id = ?;'
+        const sqlDelete = 'DELETE FROM sql5669328.partner WHERE Partner_id = ?;'
         sb.query(sqlDelete, [id], (err, result) => {
         console.log(err);
         })
@@ -58,7 +58,7 @@ const partner_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM claire.partner WHERE Partner_id = ?;'
+        const sqlGet = 'SELECT * FROM sql5669328.partner WHERE Partner_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -80,7 +80,7 @@ const partner_update = (req, res) => {
     }
 
     if(Name && Email && id){
-        const sqlUpdate = "UPDATE claire.partner SET Name= ?, Email= ? WHERE Partner_id = ?;"
+        const sqlUpdate = "UPDATE sql5669328.partner SET Name= ?, Email= ? WHERE Partner_id = ?;"
         sb.query(sqlUpdate, [Name, Email, id], (err, result) =>{
         console.log(err);
     })
