@@ -25,14 +25,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - run: npm ci
       - run: npm run build
+      - run: npm install
+    
 
       - name: rsync deployments
         uses: burnett01/rsync-deployments@5.1
         with:
-          switches: -avzr --delete
+          switches: -avzr --exclude='node_modules/' --include='*/' --include='*.yaml' --exclude='*' --omit-dir-times --rsync-path="sudo rsync"
           path: ./*
-          remote_path: /var/www/my-app/Official-Senior-Project/client
+          remote_path: /var/www/my-app/Official-Senior-Project
           remote_host: ec2-44-194-180-55.compute-1.amazonaws.com
           remote_user: ubuntu
           remote_key: "${{ secrets.SSH_PRIVATE_KEY }}"
