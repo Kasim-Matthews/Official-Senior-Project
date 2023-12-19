@@ -14,6 +14,13 @@ const partner_index = (req, res) => {
     })
 }
 
+const partner_options = (req, res) => {
+    const sqlGet = "SELECT Partner_id as value, Name as label FROM claire.partner;"
+    sb.query(sqlGet, (err, result) =>{
+        res.send(result);
+    })
+}
+
 const partner_create = (req, res) => {
     let Name = req.body.name;
     let Email = req.body.email;
@@ -58,7 +65,7 @@ const partner_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM claire.partner WHERE Partner_id = ?;'
+        const sqlGet = 'SELECT Name, Email FROM claire.partner WHERE Partner_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
         res.send(result);
         })
@@ -93,5 +100,6 @@ module.exports = {
     partner_index,
     partner_delete,
     partner_update,
-    partner_edit
+    partner_edit,
+    partner_options
 }

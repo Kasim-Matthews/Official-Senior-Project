@@ -57,6 +57,28 @@ const distribution_remove = (req, res) => {
     }
 }
 
+const distribution_view = (req, res) => {
+    let id = req.params.id
+
+    if(typeof id != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(id){
+        const sqlGet = `
+    select o.Comments, o.Status, o.DeliveryMethod, o.RequestDate, o.CompletedDate, o.Order_id, p.Name
+    from claire.order o
+    join claire.partner p on o.Partner_id = p.Partner_id
+    where Order_id = ?; 
+    `;
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+        })
+    }    
+}
+
 const distribution_edit = (req, res) => {
     let id = req.params.id
 
@@ -67,7 +89,12 @@ const distribution_edit = (req, res) => {
     }
 
     if(id){
-        const sqlGet = 'SELECT * FROM claire.order WHERE Order_id = ?;'
+        const sqlGet = `
+    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, o.Partner_id, p.Name
+    from claire.order o
+    join claire.partner p on o.Partner_id = p.Partner_id
+    where Order_id = ?; 
+    `;
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -193,5 +220,6 @@ module.exports = {
     distribution_find_value,
     distribution_track,
     distribution_find_q,
-    distribution_update_item
+    distribution_update_item,
+    distribution_view
 }

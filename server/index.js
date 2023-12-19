@@ -184,9 +184,9 @@ app.post('/login', (req, res) => {
 app.get('/item-location-data', (req, res) => {
     const query = `
         SELECT i.Name as itemName, l.Name as locationName, il.Quantity
-        FROM sql5669328.itemlocation il
-        JOIN sql5669328.item i ON il.Item_id = i.Item_id
-        JOIN sql5669328.location l ON il.Location_id = l.Location_id;
+        FROM claire.itemlocation il
+        JOIN claire.item i ON il.Item_id = i.Item_id
+        JOIN claire.location l ON il.Location_id = l.Location_id;
     `;
 
     cb.query(query, (err, result) => {

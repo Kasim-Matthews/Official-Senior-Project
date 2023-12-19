@@ -6,15 +6,14 @@ function ViewPartner(){
     
     const navigate = useNavigate();
     const {id} = useParams();
-    const [record, setRecord] = React.useState({})
+    const [record, setRecord] = React.useState([])
     
 
 
           useEffect(() => {
             Axios.get(`http://localhost:3001/partner/${id}/edit`).then((response) => {
-            response.data.map((key, value) => {setRecord(key)});
-            })
-          }, [id])
+            setRecord(response.data[0])});
+            }, [])
 
 
           return(
