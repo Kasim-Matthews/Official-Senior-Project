@@ -9,7 +9,7 @@ function ViewItem(){
     const [record, setRecord] = React.useState({})
     
           useEffect(() => {
-            Axios.get(`http://localhost:3001/item/${id}/edit`).then((response) => {
+            Axios.get(`http://localhost:3001/item/${id}/view`).then((response) => {
             response.data.map((key, value) => {setRecord(key)});
             })
           }, [])
@@ -26,7 +26,7 @@ function ViewItem(){
                     <tbody>
                     <tr>
                         <td>{record.Name}</td>
-                        <td>${record.marketValue}</td>
+                        <td>${record.FairMarketValue}</td>
                     </tr>
                     </tbody>
                 </table>

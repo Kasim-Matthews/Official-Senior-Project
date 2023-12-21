@@ -48,22 +48,10 @@ function EditDistribution(){
       
           }
 
-          function findDefault_id(){
-            let v = partners.find(o => o.value === formData.Partner_id);
-            
-            return(v.value)
-          }
-
-          function findDefault_name(){
-            let v = partners.find(o => o.label === formData.Name);
-            
-            return(v.label)
-          }
-          
     return(
         <form id="edit distribution" onSubmit={handleSubmit}>
                 <label htmlFor="Partner">Partner</label>
-                <Select options={partners} name="Partner" id="Partner" defaultValue={{label: findDefault_name(), value: findDefault_id()}} onChange={handleChange}/>
+                <Select options={partners} name="Partner" id="Partner" defaultValue={partners.find(o => o.value == formData.Partner_id)} key={partners.find(o => o.value == formData.Partner_id)} onChange={handleChange}/>
 
                 <label htmlFor="RequestDate">RequestDate</label>
                 <input type="date" name="RequestDate" id="RequestDate" defaultValue={formData.RequestDate} min="2023-09-01" required onChange={handleChange}/>
