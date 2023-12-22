@@ -8,6 +8,7 @@ function EditDistribution(){
     const navigate = useNavigate();
     const {id} = useParams();
     const [formData, setFormData] = React.useState([])
+    const [Partner_id, setPartner_id] = React.useState()
     const [partners, setPartners] = React.useState([])
     
 
@@ -18,6 +19,15 @@ function EditDistribution(){
               return{
                 ...prevFormData,
                 [event.target.name]: event.target.value
+              }
+            })
+          }
+        
+          const handleSelect = (selectedOption) => {
+            setFormData(prevFormData => {
+              return{
+                ...prevFormData,
+                Partner_id: selectedOption.value
               }
             })
           }
@@ -38,20 +48,20 @@ function EditDistribution(){
 
           function handleSubmit(e){
             e.preventDefault();
-            
-            Axios.put(`http://localhost:3001/distribution/${id}/update`, {Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id:formData.Partner},{
+            console.log(formData);
+            Axios.put(`http://localhost:3001/distribution/${id}/update`, {Comments: formData.Comments, Status: formData.Status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id},{
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
               }
           });
-            window.location.href = "/distribution";
+
       
           }
 
     return(
         <form id="edit distribution" onSubmit={handleSubmit}>
                 <label htmlFor="Partner">Partner</label>
-                <Select options={partners} name="Partner" id="Partner" defaultValue={partners.find(o => o.value == formData.Partner_id)} key={partners.find(o => o.value == formData.Partner_id)} onChange={handleChange}/>
+                <Select options={partners} name="Partner_id" id="Partner_id" value={partners.find(o => o.value == formData.Partner_id)} onChange={handleSelect}/>
 
                 <label htmlFor="RequestDate">RequestDate</label>
                 <input type="date" name="RequestDate" id="RequestDate" defaultValue={formData.RequestDate} min="2023-09-01" required onChange={handleChange}/>

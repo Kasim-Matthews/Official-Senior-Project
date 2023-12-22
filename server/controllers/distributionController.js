@@ -104,7 +104,7 @@ const distribution_edit = (req, res) => {
 const distribution_update = (req, res) => {
     
     let id = req.params.id
-    let Comments = req.bod.Comments;
+    let Comments = req.body.Comments;
     let Status = req.body.Status;
     let DeliveryMethod = req.body.DeliveryMethod;
     let RequestDate = req.body.RequestDate;
@@ -114,11 +114,13 @@ const distribution_update = (req, res) => {
 
     if(typeof id != "string" && typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number'){
         res.send("Invalid");
+        console.log("err");
         res.end();
         return;
     }
 
-    if(Comments && Status && DeliveryMethod && RequestDate && CompletedDate && Partner_id){
+    if(Status && DeliveryMethod && RequestDate && CompletedDate && Partner_id){
+        console.log("err");
         const sqlUpdate = "UPDATE claire.order SET Comments= ?, Status= ?, DeliveryMethod= ?, RequestDate= ?, CompletedDate= ?, Partner_id= ? WHERE Order_id = ?;"
         sb.query(sqlUpdate, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id, id], (err, result) =>{
         console.log(err);
