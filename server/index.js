@@ -1,8 +1,13 @@
 const express = require('express')
-const app = express()
 const bodyParser = require('body-parser')
 const mysql = require('mysql2')
+const authRoutes = require('./routes/authRoutes')
+
+
 const cors = require('cors')
+
+const app = express()
+
 app.use(cors())
 app.use(express.json());
 
@@ -97,10 +102,10 @@ app.post('/updateUserInfo', (req, res) => {
     });
 });
 
-
-app.get('/', (req, res) =>{
-    res.send('hello world');
-})
+//routes
+app.get('/', (req, res) => res.render('home'));
+app.get('/Dashboard', (req, res) => res.render('Dashboard'));
+app.use(authRoutes);
 
 app.listen('3001', () => {
     console.log("running on port 3001");
