@@ -19,3 +19,7 @@ table, tr, td, th{
   padding: 10px;
   text-align: center;
 }
+
+p {
+  color:red;
+}

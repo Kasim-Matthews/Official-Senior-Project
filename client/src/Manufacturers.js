@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate, Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-function Manufacturers(){
+function Manufacturers() {
     const navigate = useNavigate();
 
     const [manuList, setManuList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/manufacturers").then((response) =>{
+        Axios.get("http://localhost:3001/manufacturers").then((response) => {
             setManuList(response.data);
         })
     })
 
-    const handleRemove = (id) =>{
+    const handleRemove = (id) => {
         Axios.delete(`http://localhost:3001/manufacturers/remove/${id}`);
     }
 
@@ -21,7 +21,7 @@ function Manufacturers(){
         navigate(`/manufacturers/${id}/edit`)
     }
 
-    return(
+    return (
         <div>
             <table>
                 <thead>
@@ -33,7 +33,7 @@ function Manufacturers(){
                 </thead>
                 <tbody>
                     {manuList.map((val) => {
-                        return(
+                        return (
                             <tr>
                                 <td>{val.Name}</td>
                                 <td>0</td>

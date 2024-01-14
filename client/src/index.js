@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Distribution from './Distribution';
 import AddDistribution from './AddDistribution';
 import AddPartner from './AddPartner';
@@ -23,41 +23,45 @@ import EditManufacturers from './EditManufacturers';
 import Dashboard from './Dashboard';
 import AddIntake from "./AddIntake";
 import Intake from './Intake';
+import ViewIntake from './OneIntake'
+import PartnerController from './controllers/PartnerController';
 
 
-export class Application extends React.Component{
-    render(){
-        return(
+export class Application extends React.Component {
+    render() {
+        return (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<App />}/>
-                    <Route path="/Dashboard" element={<Dashboard />}/>
+                    <Route path="/" element={<App />} />
+                    <Route path="/Dashboard" element={<Dashboard />} />
 
                     <Route path="/distribution" element={<Distribution />} />
-                    <Route path='/distribution/:id' element={<ViewDistribution/>}/>
-                    <Route path='/distribution/:id/edit' element={<EditDistribution/>}/>
+                    <Route path='/distribution/:id' element={<ViewDistribution />} />
+                    <Route path='/distribution/:id/edit' element={<EditDistribution />} />
                     <Route path="/distribution/new" element={<AddDistribution />} />
 
-                    <Route path="/partner/new" element={<AddPartner />}/>
-                    <Route path='/partner/:id/edit' element={<EditPartner/>}/>
-                    <Route path='/partner/:id' element={<ViewPartner/>}/>
-                    <Route path="/partner" element={<Partner />}/>
+                    <Route path="/partner/new" element={<AddPartner />} />
+                    <Route path='/partner/:id/edit' element={<EditPartner />} />
+                    <Route path='/partner/:id' element={<ViewPartner />} />
+                    <Route path="/partner" element={<Partner />} />
 
-                    <Route path='/item' element={<Item/>}/>
-                    <Route path='/item/:id' element={<ViewItem/>}/>
-                    <Route path='/item/:id/edit' element={<EditItem/>}/>
-                    <Route path='/item/new' element={<AddItem/>}/>
+                    <Route path='/item' element={<Item />} />
+                    <Route path='/item/:id' element={<ViewItem />} />
+                    <Route path='/item/:id/edit' element={<EditItem />} />
+                    <Route path='/item/new' element={<AddItem />} />
 
-                    <Route path='/location' element={<Location/>}/>
-                    <Route path='/location/:id/edit' element={<EditLocation/>}/>
-                    <Route path='/location/new' element={<AddLocation/>}/>
+                    <Route path='/location' element={<Location />} />
+                    <Route path='/location/:id/edit' element={<EditLocation />} />
+                    <Route path='/location/new' element={<AddLocation />} />
 
-                    <Route path='/manufacturers' element={<Manufacturers/>}/>
-                    <Route path='/manufacturers/:id/edit' element={<EditManufacturers/>}/>
-                    <Route path='/manufacturers/new' element={<AddManufacturers/>}/>
+                    <Route path='/manufacturers' element={<Manufacturers />} />
+                    <Route path='/manufacturers/:id/edit' element={<EditManufacturers />} />
+                    <Route path='/manufacturers/new' element={<AddManufacturers />} />
 
-                    <Route path="/intake" element={<Intake/>} />
-                    <Route path="/intake/new" element={<AddIntake/>} />
+                    <Route path="/intake" element={<Intake />} />
+                    <Route path="/intake/new" element={<AddIntake />} />
+                    <Route path="/intake/:id" element={<ViewIntake />} />
+
 
                 </Routes>
             </BrowserRouter>

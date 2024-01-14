@@ -18,4 +18,6 @@ router.get('/:id/view', distributionController.distribution_view)
 router.get('/:id/edit', distributionController.distribution_edit)
 router.put('/:id/update', distributionController.distribution_update)
 router.put('/update_item', distributionController.distribution_update_item)
+router.put('/:id/complete', distributionController.distribution_complete)
+router.put('/:id/incomplete', distributionController.distribution_incomplete)
 module.exports = router;

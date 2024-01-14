@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate, Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-function Location(){
+function Location() {
     const navigate = useNavigate();
 
     const [locationList, setLocationList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/location").then((response) =>{
+        Axios.get("http://localhost:3001/location").then((response) => {
             setLocationList(response.data);
         })
-    })
+    }, [])
 
-    const handleRemove = (id) =>{
+    const handleRemove = (id) => {
         Axios.delete(`http://localhost:3001/location/remove/${id}`);
     }
 
@@ -21,7 +21,7 @@ function Location(){
         navigate(`/location/${id}/edit`)
     }
 
-    return(
+    return (
         <div>
             <table>
                 <thead>
@@ -33,7 +33,7 @@ function Location(){
                 </thead>
                 <tbody>
                     {locationList.map((val) => {
-                        return(
+                        return (
                             <tr>
                                 <td>{val.Name}</td>
                                 <td>{val.Address}</td>

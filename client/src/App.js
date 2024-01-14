@@ -17,7 +17,7 @@ function App() {
 
   const register = () => {
     Axios.post('http://localhost:3001/register', {
-      username: usernameReg, 
+      username: usernameReg,
       password: passwordReg,
     }).then((response) => {
 
@@ -26,10 +26,10 @@ function App() {
 
   const login = () => {
     Axios.post('http://localhost:3001/login', {
-      username: username, 
+      username: username,
       password: password,
     }).then((response) => {
-      if(response.data.status === 'ok') {
+      if (response.data.status === 'ok') {
         setIsLoggedIn(true); // Set the isLoggedIn state to true on successful login
       } else {
         setLoginStatus(response.data.message);
@@ -39,45 +39,45 @@ function App() {
 
   return (
 
-      <div className="App">
-        {isLoggedIn ? <Navigate to="/Dashboard" /> : (
-          <div>
-      <div className="register">
-        <h1>Registration</h1>
-        <label>Username</label>
-        <input 
-          type="text" 
-          onChange={(e) => {
-            setUsernameReg(e.target.value);
-          }}
-        />
-        <label>Password</label>
-        <input type="text" 
-          onChange={(e) => {
-            setPasswordReg(e.target.value);
-           }}
-        />
-        <button onClick={register}> Register </button>
-      </div>
+    <div className="App">
+      {isLoggedIn ? <Navigate to="/Dashboard" /> : (
+        <div>
+          <div className="register">
+            <h1>Registration</h1>
+            <label>Username</label>
+            <input
+              type="text"
+              onChange={(e) => {
+                setUsernameReg(e.target.value);
+              }}
+            />
+            <label>Password</label>
+            <input type="text"
+              onChange={(e) => {
+                setPasswordReg(e.target.value);
+              }}
+            />
+            <button onClick={register}> Register </button>
+          </div>
 
-            <div className="login">
-        <h1>Login</h1>
-        <input type="text" placeholder="Username..." 
-          onChange={(e) => {
-          setUsername(e.target.value);
-         }} 
-        />
-        <input type="password" placeholder="Password..." 
-          onChange={(e) => {
-          setPassword(e.target.value);
-         }} 
-        />
-        <button onClick={login}> Login </button>
-      </div>
+          <div className="login">
+            <h1>Login</h1>
+            <input type="text" placeholder="Username..."
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+            />
+            <input type="password" placeholder="Password..."
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <button onClick={login}> Login </button>
+          </div>
 
-      <h1>{loginStatus}</h1>
-    </div>
-        )}
+          <h1>{loginStatus}</h1>
+        </div>
+      )}
 
     </div>
   );

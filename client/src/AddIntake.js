@@ -19,7 +19,7 @@ function AddIntake() {
   const [locations, setLocations] = React.useState([])
   const [itemLocation, setItemLocation] = React.useState([])
 
-  
+
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -37,31 +37,31 @@ function AddIntake() {
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/item").then((response) =>{
-            setItems(response.data);
-        })
+    Axios.get("http://localhost:3001/item").then((response) => {
+      setItems(response.data);
+    })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/location").then((response) =>{
-            setLocations(response.data);
-        })
+    Axios.get("http://localhost:3001/location").then((response) => {
+      setLocations(response.data);
+    })
   }, [])
 
   const submitPurchase = async (e) => {
     e.preventDefault()
 
-    Axios.post("http://localhost:3001/intake/new", {Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
-    
-    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", {Item_id: formData.item, Location_id: formData.location})
+    Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
+
+    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: formData.item, Location_id: formData.location })
 
     let IID_response = await Axios.get("http://localhost:3001/intake/find_id");
 
-    Axios.post("http://localhost:3001/intake/track", {Intake_id: IID_response.data[0].Intake_id, Quantity: formData.Quantity, Value: formData.Value, FKItemLocation: IL_response.data[0].ItemLocation_id});
+    Axios.post("http://localhost:3001/intake/track", { Intake_id: IID_response.data[0].Intake_id, Quantity: formData.Quantity, Value: formData.Value, FKItemLocation: IL_response.data[0].ItemLocation_id });
 
-    let current = await Axios.post("http://localhost:3001/intake/find_q", {ItemLocationFK: IL_response.data[0].ItemLocation_id})
+    let current = await Axios.post("http://localhost:3001/intake/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
 
-    Axios.put("http://localhost:3001/intake/update_item", {Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity});
+    Axios.put("http://localhost:3001/intake/update_item", { Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
 
     window.location.href = "/intake";
   }
@@ -85,7 +85,7 @@ function AddIntake() {
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange} /><br></br>
 
         <label htmlFor="Value">Value</label>
-        <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange}/>
+        <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment"></textarea><br></br>
 
         <h2>Items</h2>

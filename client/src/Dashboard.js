@@ -1,5 +1,5 @@
-import React, { useState, useEffect }  from 'react';
-import {Link} from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'
 import axios from 'axios';
 import './Dashboard.css';
 
@@ -28,9 +28,9 @@ function Dashboard() {
         setSelectedLocation(e.target.value);
     };
 
-    const filteredItems = selectedLocation 
-    ? items.filter(item => item.locationName === selectedLocation)
-    : items;
+    const filteredItems = selectedLocation
+        ? items.filter(item => item.locationName === selectedLocation)
+        : items;
 
     const totalQuantity = filteredItems.reduce((sum, item) => sum + item.Quantity, 0);
 
@@ -45,6 +45,7 @@ function Dashboard() {
                     <li><Link to="/distribution">Distributions</Link></li>
                     <li><Link to="/intake">Collections</Link></li>
                     <li><Link to="/item">Items</Link></li>
+                    <li><Link to="/location">Locations</Link></li>
                     <li><Link to="/partner">Partner</Link></li>
                 </ul>
             </nav>
@@ -61,11 +62,11 @@ function Dashboard() {
                         <option value="">All Locations</option>
                         {locations.map((location, index) => (
                             <option key={index} value={location}>{location}</option>
-                      ))}
+                        ))}
                     </select>
                 </div>
                 <div className="content">
-                <h2>Item Locations</h2>
+                    <h2>Item Locations</h2>
                     <table>
                         <thead>
                             <tr>
@@ -75,12 +76,12 @@ function Dashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                        {filteredItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.itemName}</td>
-                                <td>{item.locationName}</td>
-                                <td>{item.Quantity}</td>
-                            </tr>
+                            {filteredItems.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.itemName}</td>
+                                    <td>{item.locationName}</td>
+                                    <td>{item.Quantity}</td>
+                                </tr>
                             ))}
                         </tbody>
                         <tfoot>

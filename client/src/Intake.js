@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate, Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-function Intake(){
+function Intake() {
     const navigate = useNavigate();
 
     const [intakeList, setIntakeList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/intake").then((response) =>{
+        Axios.get("http://localhost:3001/intake").then((response) => {
             setIntakeList(response.data);
         })
     }, [])
@@ -22,15 +22,15 @@ function Intake(){
 
     const handleEdit = (id) => {
         navigate(`/partner/${id}/edit`)
-    }
+    }*/
 
     const handleView = (id) => {
-        navigate(`/partner/${id}`)
-      }*/
+        navigate(`/intake/${id}`)
+    }
 
 
 
-    return(
+    return (
         <div>
             <button><Link to="/intake/new">Add</Link></button>
             <table>
@@ -46,16 +46,16 @@ function Intake(){
                 <tbody>
                     {intakeList.map((val) => {
                         let q = new Date(val.RecievedDate);
-                        let monthRecievedDate= ""
+                        let monthRecievedDate = ""
                         let dayRecievedDate = ""
                         let yearRecievedDate = ""
                         let concatRecievedDate = ""
-                        monthRecievedDate = q.getMonth()+ 1
+                        monthRecievedDate = q.getMonth() + 1
                         dayRecievedDate = q.getDate() + 1
-                        yearRecievedDate = q.getFullYear()+1
+                        yearRecievedDate = q.getFullYear() + 1
                         concatRecievedDate = yearRecievedDate + "-" + monthRecievedDate + "-" + dayRecievedDate
-                        return(
-                            
+                        return (
+
                             <tr>
                                 <td>{val.Name}</td>
                                 <td>{val.Value}</td>
@@ -64,7 +64,7 @@ function Intake(){
                                 <td>
                                     <button /*onClick={() => handleRemove(val.Partner_id)}*/>Delete</button>
                                     <button /*onClick={() => handleEdit(val.Partner_id)}*/>Edit</button>
-                                    <button /*onClick={() => handleView(val.Partner_id)}*/>View</button>
+                                    <button onClick={() => handleView(val.Intake_id)}>View</button>
                                 </td>
 
                             </tr>
