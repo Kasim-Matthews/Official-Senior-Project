@@ -24,6 +24,7 @@ import Dashboard from './Dashboard';
 import AddIntake from "./AddIntake";
 import Intake from './Intake';
 import ViewIntake from './OneIntake'
+import Test from './test';
 import PartnerController from './controllers/PartnerController';
 
 
@@ -61,6 +62,8 @@ export class Application extends React.Component {
                     <Route path="/intake" element={<Intake />} />
                     <Route path="/intake/new" element={<AddIntake />} />
                     <Route path="/intake/:id" element={<ViewIntake />} />
+
+                    <Route path="/test" element={<Test/>}/>
 
 
                 </Routes>

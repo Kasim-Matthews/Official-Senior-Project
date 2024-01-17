@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 
-export default function ItemInput({objValue, handleItem, handleLocation, handleQuantity, index}) {
+export default function ItemInput({ objName, handleItem, handleLocation, handleQuantity, index, deleteField }) {
 
-    const {name, Item_id, Location_id, Quantity} = objValue
-    const [items, setItems] = React.useState([])
+    const [item, setItem] = React.useState([])
     const [locations, setLocations] = React.useState([])
 
     useEffect(() => {
         Axios.get("http://localhost:3001/item").then((response) => {
-            setItems(response.data);
+            setItem(response.data);
         })
     }, [])
 
@@ -21,16 +20,16 @@ export default function ItemInput({objValue, handleItem, handleLocation, handleQ
 
     return (
         <div style={{ display: "flex" }}>
-            <select name={name}>
+            <select name={objName} onChange={(e) => handleItem(e, index)}>
                 <option value="">--Please choose an option--</option>
-                {items.map((val) => {
+                {item.map((val) => {
                     return (
                         <option value={val.Item_id}>{val.Name}</option>
                     )
                 })}
             </select>
 
-            <select name={name}>
+            <select name={objName} onChange={(e) => handleLocation(e, index)}>
                 <option value="">--Please choose an option--</option>
                 {locations.map((val) => {
                     return (
@@ -39,7 +38,9 @@ export default function ItemInput({objValue, handleItem, handleLocation, handleQ
                 })}
             </select>
 
-            <input type="number" name={name} required onChange={handleChange} value={value} />
+            <input type="number" name={objName} required onChange={(e) => handleQuantity(e, index)} />
+
+            <div onClick={(e) => deleteField(e, index)}>X</div>
         </div>
     )
 }

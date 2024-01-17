@@ -7,21 +7,77 @@ function AddDistribution() {
   const navigate = useNavigate();
   const [partners, setPartners] = React.useState([])
   const [toggle, setToggle] = React.useState(false)
-  const [items, setItems] = React.useState([])
-  const [locations, setLocations] = React.useState([])
   const [formData, setFormData] = React.useState(
     {
       Partner: 0,
       RequestDate: "",
       CompletedDate: "",
-      item: 0,
-      location: 0,
-      Quantity: 0,
       DeliveryMethod: "",
       Comments: "",
       status: "Draft",
     }
   )
+
+  const [index, setIndex] = React.useState(0);
+  const [items, setItems] = React.useState([
+    {
+      name: `item [${index}]`,
+      Item_id: 0,
+      Location_id: 0,
+      Quantity: 0,
+
+    }
+  ])
+
+  const handleItem = (e, index) => {
+    const values = [...items];
+    values[index].Item_id = e.target.value;
+    setItems(values)
+  }
+  const handleLocation = (e, index) => {
+    const values = [...items];
+    values[index].Location_id = e.target.value;
+    setItems(values)
+  }
+  const handleQuantity = (e, index) => {
+    const values = [...items];
+    values[index].Quantity = e.target.value;
+    setItems(values)
+  }
+
+  const handleAddField = (e) => {
+    e.preventDefault();
+    setIndex(index + 1);
+    const values = [...items];
+    if (values.length === 0) {
+      values.push(
+        {
+          name: `item [${0}]`,
+          Item_id: 0,
+          Location_id: 0,
+          Quantity: 0,
+        }
+      );
+    }
+    else {
+      values.push(
+        {
+          name: `item [${index}]`,
+          Item_id: 0,
+          Location_id: 0,
+          Quantity: 0,
+        }
+      );
+    }
+
+    setItems(values);
+  }
+
+  const handleDeleteField = (e, index) => {
+    const values = [...items];
+    values.splice(index, 1);
+    setItems(values);
+  };
 
 
   function handleChange(event) {
@@ -33,21 +89,7 @@ function AddDistribution() {
     })
   }
 
-  const addBtnClick = (e) => {
-    e.preventDefault();
-    setToggle(true)
-  }
 
-  const handleAddField = (e) => {
-    e.preventDefault();
-    const values = [];
-    values.push({ item: itemRef.current.value, location: locationRef.current.value, Quantity: quantity.current.value })
-    console.log(values)
-  }
-
-  const itemRef = useRef();
-  const locationRef = useRef();
-  const quantity = useRef();
 
 
 
@@ -59,18 +101,19 @@ function AddDistribution() {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
-    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: formData.item, Location_id: formData.location })
 
-    let OID_response = await Axios.post("http://localhost:3001/distribution/find_id", { RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner });
+    for (const item of items){
+      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: item.Location_id })
 
-    let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Item_id: formData.item })
-
-    Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Quantity: formData.Quantity, Value: formData.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id });
-
-    let current = await Axios.post("http://localhost:3001/distribution/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
-    Axios.put("http://localhost:3001/distribution/update_item", { Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
-
-
+      let OID_response = await Axios.post("http://localhost:3001/distribution/find_id", { RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner });
+  
+      let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Item_id: item.Item_id })
+  
+      Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id });
+  
+      let current = await Axios.post("http://localhost:3001/distribution/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
+      Axios.put("http://localhost:3001/distribution/update_item", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
+    }
 
     window.location.href = "/distribution";
 
@@ -82,17 +125,6 @@ function AddDistribution() {
     })
   }, [])
 
-  useEffect(() => {
-    Axios.get("http://localhost:3001/item").then((response) => {
-      setItems(response.data);
-    })
-  }, [])
-
-  useEffect(() => {
-    Axios.get("http://localhost:3001/location").then((response) => {
-      setLocations(response.data);
-    })
-  }, [])
 
 
 
@@ -115,13 +147,7 @@ function AddDistribution() {
       <label htmlFor="CompletedDate">CompleteDate</label>
       <input type="date" name="CompletedDate" id="CompletedDate" value={formData.CompletedDate} min="2023-09-01" required onChange={handleChange} />
 
-      <select id="location" name="location" value={formData.location} onChange={handleChange}>
-        {locations.map((val) => {
-          return (
-            <option value={val.Location_id}>{val.Name}</option>
-          )
-        })}
-      </select>
+
 
 
       <h3>Delivery Method</h3>
@@ -135,22 +161,20 @@ function AddDistribution() {
 
 
       <h2>Items</h2>
-      {!toggle ? (<div><button onClick={addBtnClick}>Add</button></div>) : (
-        <div style={{ display: "flex" }}>
-          <select id="item" name="item" ref={itemRef}>
-            <option value="">--Please choose an option--</option>
-            {items.map((val) => {
-              return (
-                <option value={val.Item_id}>{val.Name}</option>
-              )
-            })}
-          </select>
-
-
-          <input type="number" name="Quantity" id="Quantity" required ref={quantity} />
-
-          <button onClick={handleAddField}>Add</button>
-        </div>)}
+      {items.map((obj, index) => (
+        <ItemInput
+          key={index}
+          objName={obj.name}
+          handleItem={handleItem}
+          handleLocation={handleLocation}
+          handleQuantity={handleQuantity}
+          index={index}
+          deleteField={handleDeleteField}
+        />
+      ))}
+      <button name="add-btn" onClick={handleAddField}>
+        Add
+      </button>
 
       <input type="submit" value="Submit" />
     </form>
