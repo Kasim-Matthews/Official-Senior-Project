@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Distribution from './Distribution';
-import AddDistribution from './AddDistribution';
+import Order from './Order';
+import AddOrder from './AddOrder';
 import AddPartner from './AddPartner';
 import Partner from './Partner';
 import Item from './Item';
 import AddItem from './AddItem';
-import EditDistribution from './EditDistribution';
-import ViewDistribution from './OneDistribution';
+import EditOrder from './EditOrder';
+import ViewOrder from './OneOrder';
 import EditItem from './EditItem';
 import EditPartner from './EditPartner';
 import ViewItem from './OneItem';
@@ -24,7 +24,6 @@ import Dashboard from './Dashboard';
 import AddIntake from "./AddIntake";
 import Intake from './Intake';
 import ViewIntake from './OneIntake'
-import Test from './test';
 import PartnerController from './controllers/PartnerController';
 
 
@@ -36,10 +35,10 @@ export class Application extends React.Component {
                     <Route path="/" element={<App />} />
                     <Route path="/Dashboard" element={<Dashboard />} />
 
-                    <Route path="/distribution" element={<Distribution />} />
-                    <Route path='/distribution/:id' element={<ViewDistribution />} />
-                    <Route path='/distribution/:id/edit' element={<EditDistribution />} />
-                    <Route path="/distribution/new" element={<AddDistribution />} />
+                    <Route path="/distribution" element={<Order />} />
+                    <Route path='/distribution/:id' element={<ViewOrder />} />
+                    <Route path='/distribution/:id/edit' element={<EditOrder />} />
+                    <Route path="/distribution/new" element={<AddOrder />} />
 
                     <Route path="/partner/new" element={<AddPartner />} />
                     <Route path='/partner/:id/edit' element={<EditPartner />} />
@@ -63,7 +62,6 @@ export class Application extends React.Component {
                     <Route path="/intake/new" element={<AddIntake />} />
                     <Route path="/intake/:id" element={<ViewIntake />} />
 
-                    <Route path="/test" element={<Test/>}/>
 
 
                 </Routes>

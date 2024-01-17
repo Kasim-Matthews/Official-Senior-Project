@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 
 
-function Distribution() {
+function Order() {
 
   const navigate = useNavigate();
   const [partners, setPartners] = React.useState([])
@@ -184,7 +184,7 @@ function Distribution() {
   );
 }
 
-export default Distribution;
+export default Order;
 
 
 

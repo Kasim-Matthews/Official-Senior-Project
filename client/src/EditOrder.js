@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import Select from 'react-select';
 
-function EditDistribution() {
+function EditOrder() {
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -83,4 +83,4 @@ function EditDistribution() {
   )
 }
 
-export default EditDistribution;
+export default EditOrder;

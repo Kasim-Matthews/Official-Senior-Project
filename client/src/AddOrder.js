@@ -3,7 +3,7 @@ import Axios from 'axios';
 import ItemInput from "./ItemInput";
 import { useNavigate } from "react-router-dom";
 
-function AddDistribution() {
+function AddOrder() {
   const navigate = useNavigate();
   const [partners, setPartners] = React.useState([])
   const [toggle, setToggle] = React.useState(false)
@@ -181,4 +181,4 @@ function AddDistribution() {
   )
 }
 
-export default AddDistribution;
+export default AddOrder;
