@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 
-export default function ItemInput({ value, handleChange }) {
+export default function ItemInput({objValue, handleItem, handleLocation, handleQuantity, index}) {
 
+    const {name, Item_id, Location_id, Quantity} = objValue
     const [items, setItems] = React.useState([])
     const [locations, setLocations] = React.useState([])
 
@@ -20,7 +21,7 @@ export default function ItemInput({ value, handleChange }) {
 
     return (
         <div style={{ display: "flex" }}>
-            <select id="item" name="item">
+            <select name={name}>
                 <option value="">--Please choose an option--</option>
                 {items.map((val) => {
                     return (
@@ -29,7 +30,7 @@ export default function ItemInput({ value, handleChange }) {
                 })}
             </select>
 
-            <select id="location" name="location">
+            <select name={name}>
                 <option value="">--Please choose an option--</option>
                 {locations.map((val) => {
                     return (
@@ -38,7 +39,7 @@ export default function ItemInput({ value, handleChange }) {
                 })}
             </select>
 
-            <input type="number" name="Quantity" required onChange={handleChange} value={value} />
+            <input type="number" name={name} required onChange={handleChange} value={value} />
         </div>
     )
 }
