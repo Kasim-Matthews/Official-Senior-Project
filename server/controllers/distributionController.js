@@ -90,9 +90,8 @@ const distribution_edit = (req, res) => {
 
     if (id) {
         const sqlGet = `
-    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, o.Partner_id, p.Name
+    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, o.Partner_id
     from claire.order o
-    join claire.partner p on o.Partner_id = p.Partner_id
     where Order_id = ?; 
     `;
         sb.query(sqlGet, [id], (err, result) => {
@@ -120,7 +119,6 @@ const distribution_update = (req, res) => {
     }
 
     if (Status && DeliveryMethod && RequestDate && CompletedDate && Partner_id) {
-        console.log("err");
         const sqlUpdate = "UPDATE claire.order SET Comments= ?, Status= ?, DeliveryMethod= ?, RequestDate= ?, CompletedDate= ?, Partner_id= ? WHERE Order_id = ?;"
         sb.query(sqlUpdate, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id, id], (err, result) => {
             console.log(err);

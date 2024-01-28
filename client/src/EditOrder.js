@@ -23,14 +23,7 @@ function EditOrder() {
     })
   }
 
-  const handleSelect = (selectedOption) => {
-    setFormData(prevFormData => {
-      return {
-        ...prevFormData,
-        Partner_id: selectedOption.value
-      }
-    })
-  }
+
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/distribution/${id}/edit`).then((response) => {
@@ -48,12 +41,13 @@ function EditOrder() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData);
     Axios.put(`http://localhost:3001/distribution/${id}/update`, { Comments: formData.Comments, Status: formData.Status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id }, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
+
+    navigate('/distribution')
 
 
   }
@@ -61,7 +55,23 @@ function EditOrder() {
   return (
     <form id="edit distribution" onSubmit={handleSubmit}>
       <label htmlFor="Partner">Partner</label>
-      <Select options={partners} name="Partner_id" id="Partner_id" value={partners.find(o => o.value == formData.Partner_id)} onChange={handleSelect} />
+      <select id="Partner_id" name="Partner_id" onChange={handleChange}>
+        <option value="">--Please choose an option--</option>
+        {partners.map((val) => {
+          if (val.value == formData.Partner_id) {
+
+            return (
+              <option value={val.value} selected>{val.label}</option>
+            )
+          }
+          else {
+            return (
+              <option value={val.value}>{val.label}</option>
+            )
+          }
+        })}
+
+      </select><br />
 
       <label htmlFor="RequestDate">RequestDate</label>
       <input type="date" name="RequestDate" id="RequestDate" defaultValue={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />

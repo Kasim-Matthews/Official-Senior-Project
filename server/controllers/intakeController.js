@@ -79,7 +79,7 @@ const find_q = (req, res) => {
     })
 }
 
-const update = (req, res) => {
+const update_item = (req, res) => {
     let ItemLocationFK = req.body.ItemLocationFK;
     let Quantity = req.body.Quantity;
     let CurrentQ = req.body.CurrentQ;
@@ -113,6 +113,50 @@ const intake_view = (req, res) => {
     }
 }
 
+const edit = (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `
+    select i.Comments, i.Value, Cast(i.RecievedDate as char(10)) AS RecievedDate, i.Intake_id, i.Partner
+    from claire.intake i
+    where Intake_id = ?; 
+    `;
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+        })
+    }
+}
+
+const update = (req, res) => {
+    let id = req.params.id
+    let Comments = req.body.Comments;
+    let RecievedDate = req.body.RecievedDate;
+    let Value = req.body.Value;
+    let Partner = req.body.Partner;
+
+
+    if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
+        res.send("Invalid");
+        console.log("err");
+        res.end();
+        return;
+    }
+
+    if (RecievedDate && Value && Partner) {
+        const sqlUpdate = "UPDATE claire.intake SET Comments= ?, RecievedDate= ?, Partner= ?, Value = ? WHERE Intake_id = ?;"
+        sb.query(sqlUpdate, [Comments, RecievedDate, Partner, Value, id], (err, result) => {
+            console.log(err);
+        })
+    }
+}
+
 
 module.exports = {
     data,
@@ -121,6 +165,8 @@ module.exports = {
     find_id,
     track,
     find_q,
-    update,
-    intake_view
+    update_item,
+    intake_view,
+    edit, 
+    update
 }
