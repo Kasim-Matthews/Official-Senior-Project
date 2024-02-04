@@ -2,27 +2,23 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 
-function Item() {
+function LocationView() {
     const navigate = useNavigate();
 
-    const [itemList, setItemList] = React.useState([])
+    const [locationList, setLocationList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/item").then((response) => {
-            setItemList(response.data);
+        Axios.get("http://localhost:3001/location").then((response) => {
+            setLocationList(response.data);
         })
     }, [])
 
     const handleRemove = (id) => {
-        Axios.delete(`http://localhost:3001/item/remove/${id}`);
+        Axios.delete(`http://localhost:3001/location/remove/${id}`);
     }
 
     const handleEdit = (id) => {
-        navigate(`/item/${id}/edit`)
-    }
-
-    const handleView = (id) => {
-        navigate(`/item/${id}`)
+        navigate(`/location/${id}/edit`)
     }
 
     return (
@@ -31,20 +27,19 @@ function Item() {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>FairMarketValue</th>
+                        <th>Address</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {itemList.map((val) => {
+                    {locationList.map((val) => {
                         return (
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>${val.FairMarketValue}</td>
+                                <td>{val.Address}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.Item_id)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.Item_id)}>Edit</button>
-                                    <button onClick={() => handleView(val.Item_id)}>View</button>
+                                    <button onClick={() => handleRemove(val.Location_id)}>Delete</button>
+                                    <button onClick={() => handleEdit(val.Location_id)}>Edit</button>
                                 </td>
                             </tr>
                         );
@@ -56,4 +51,4 @@ function Item() {
     );
 }
 
-export default Item;
+export default LocationView;

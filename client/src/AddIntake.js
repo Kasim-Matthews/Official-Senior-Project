@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
-import ItemInput from "./ItemInput";
+import ItemInput from "./components/ItemInput";
 
 function AddIntake() {
 
@@ -9,16 +9,17 @@ function AddIntake() {
     RecievedDate: "",
     Value: 0.00,
     Partner: 0,
+    Location: 0
   })
 
   const [partners, setPartners] = React.useState([])
+  const [locations, setLocations] = React.useState([])
 
   const [index, setIndex] = React.useState(0);
   const [items, setItems] = React.useState([
     {
       name: `item [${index}]`,
       Item_id: 0,
-      Location_id: 0,
       Quantity: 0,
 
     }
@@ -49,7 +50,6 @@ function AddIntake() {
         {
           name: `item [${0}]`,
           Item_id: 0,
-          Location_id: 0,
           Quantity: 0,
         }
       );
@@ -59,7 +59,6 @@ function AddIntake() {
         {
           name: `item [${index}]`,
           Item_id: 0,
-          Location_id: 0,
           Quantity: 0,
         }
       );
@@ -91,6 +90,12 @@ function AddIntake() {
     })
   }, [])
 
+  useEffect(() => {
+    Axios.get("http://localhost:3001/location").then((response) => {
+        setLocations(response.data);
+    })
+}, [])
+
 
   const submitPurchase = async (e) => {
     e.preventDefault()
@@ -98,7 +103,7 @@ function AddIntake() {
     Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
 
     for (const item of items) {
-      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: item.Location_id })
+      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: formData.Location })
 
       let IID_response = await Axios.get("http://localhost:3001/intake/find_id");
 
@@ -126,7 +131,18 @@ function AddIntake() {
             )
           })}
         </select>
-        <br></br>
+        <br/>
+
+        <label htmlFor="Location">Location</label>
+      <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+        <option value="">--Please choose an option--</option>
+        {locations.map((val) => {
+          return (
+            <option value={val.Location_id}>{val.Name}</option>
+          )
+        })}
+
+      </select><br/>
 
         <label htmlFor="RecievedDate">Recieved Date</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange} /><br></br>
@@ -141,7 +157,6 @@ function AddIntake() {
             key={index}
             objName={obj.name}
             handleItem={handleItem}
-            handleLocation={handleLocation}
             handleQuantity={handleQuantity}
             index={index}
             deleteField={handleDeleteField}

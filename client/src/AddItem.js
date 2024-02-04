@@ -1,17 +1,13 @@
 import React from "react";
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Item from "./models/Item";
 
 function AddItem() {
   const navigate = useNavigate();
 
   const [isActive, setIsActive] = React.useState(true)
-  const [formData, setFormData] = React.useState(
-    {
-      Name: "",
-      FairMarketValue: 0.00,
-    }
-  )
+  const [formData, setFormData] = React.useState(Item)
 
 
   function handleChange(event) {

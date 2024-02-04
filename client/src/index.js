@@ -5,8 +5,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Order from './Order';
 import AddOrder from './AddOrder';
 import AddPartner from './AddPartner';
-import Partner from './Partner';
-import Item from './Item';
+import PartnerView from './PartnerView';
+import ItemView from './ItemView';
 import AddItem from './AddItem';
 import EditOrder from './EditOrder';
 import ViewOrder from './OneOrder';
@@ -15,7 +15,7 @@ import EditPartner from './EditPartner';
 import ViewItem from './OneItem';
 import ViewPartner from './OnePartner';
 import AddLocation from './AddLocation';
-import Location from './Location';
+import LocationView from './LocationView';
 import EditLocation from './EditLocation';
 import Manufacturers from './Manufacturers';
 import AddManufacturers from './AddManufacturers';
@@ -25,6 +25,7 @@ import AddIntake from "./AddIntake";
 import Intake from './Intake';
 import ViewIntake from './OneIntake'
 import EditIntake from './EditIntake';
+import AddPurchase from './AddPurchase';
 
 
 export class Application extends React.Component {
@@ -43,14 +44,14 @@ export class Application extends React.Component {
                     <Route path="/partner/new" element={<AddPartner />} />
                     <Route path='/partner/:id/edit' element={<EditPartner />} />
                     <Route path='/partner/:id' element={<ViewPartner />} />
-                    <Route path="/partner" element={<Partner />} />
+                    <Route path="/partner" element={<PartnerView />} />
 
-                    <Route path='/item' element={<Item />} />
+                    <Route path='/item' element={<ItemView />} />
                     <Route path='/item/:id' element={<ViewItem />} />
                     <Route path='/item/:id/edit' element={<EditItem />} />
                     <Route path='/item/new' element={<AddItem />} />
 
-                    <Route path='/location' element={<Location />} />
+                    <Route path='/location' element={<LocationView />} />
                     <Route path='/location/:id/edit' element={<EditLocation />} />
                     <Route path='/location/new' element={<AddLocation />} />
 
@@ -62,6 +63,8 @@ export class Application extends React.Component {
                     <Route path="/intake/new" element={<AddIntake />} />
                     <Route path='/intake/:id/edit' element={<EditIntake/>}/>
                     <Route path="/intake/:id" element={<ViewIntake />} />
+
+                    <Route path="/purchase/new" element={<AddPurchase/>}/>
 
 
 

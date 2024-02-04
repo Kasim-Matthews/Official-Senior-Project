@@ -166,7 +166,6 @@ const distribution_find_id = (req, res) => {
 }
 
 const distribution_track = (req, res) => {
-    console.log(req.body)
     let Order_id = req.body.Order_id;
     let Quantity = req.body.Quantity;
     let Value = req.body.Value;

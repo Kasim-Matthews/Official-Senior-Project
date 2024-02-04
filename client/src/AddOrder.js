@@ -1,29 +1,22 @@
 import React, { useEffect, useRef } from "react";
 import Axios from 'axios';
-import ItemInput from "./ItemInput";
+import ItemInput from "./components/ItemInput";
+import Distribution from "./models/Distribution";
 import { useNavigate } from "react-router-dom";
 
 function AddOrder() {
   const navigate = useNavigate();
   const [partners, setPartners] = React.useState([])
+  const [locations, setLocations] = React.useState([])
   const [toggle, setToggle] = React.useState(false)
-  const [formData, setFormData] = React.useState(
-    {
-      Partner: 0,
-      RequestDate: "",
-      CompletedDate: "",
-      DeliveryMethod: "",
-      Comments: "",
-      status: "Draft",
-    }
-  )
+  const [formData, setFormData] = React.useState(Distribution)
 
   const [index, setIndex] = React.useState(0);
+  
   const [items, setItems] = React.useState([
     {
       name: `item [${index}]`,
       Item_id: 0,
-      Location_id: 0,
       Quantity: 0,
 
     }
@@ -54,7 +47,6 @@ function AddOrder() {
         {
           name: `item [${0}]`,
           Item_id: 0,
-          Location_id: 0,
           Quantity: 0,
         }
       );
@@ -64,7 +56,6 @@ function AddOrder() {
         {
           name: `item [${index}]`,
           Item_id: 0,
-          Location_id: 0,
           Quantity: 0,
         }
       );
@@ -103,7 +94,7 @@ function AddOrder() {
     });
 
     for (const item of items){
-      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: item.Location_id })
+      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: formData.Location })
 
       let OID_response = await Axios.post("http://localhost:3001/distribution/find_id", { RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner });
   
@@ -125,6 +116,12 @@ function AddOrder() {
     })
   }, [])
 
+  useEffect(() => {
+    Axios.get("http://localhost:3001/location").then((response) => {
+        setLocations(response.data);
+    })
+}, [])
+
 
 
 
@@ -137,6 +134,17 @@ function AddOrder() {
         {partners.map((val) => {
           return (
             <option value={val.Partner_id}>{val.Name}</option>
+          )
+        })}
+
+      </select><br />
+
+      <label htmlFor="Location">Location</label>
+      <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+        <option value="">--Please choose an option--</option>
+        {locations.map((val) => {
+          return (
+            <option value={val.Location_id}>{val.Name}</option>
           )
         })}
 
@@ -166,7 +174,6 @@ function AddOrder() {
           key={index}
           objName={obj.name}
           handleItem={handleItem}
-          handleLocation={handleLocation}
           handleQuantity={handleQuantity}
           index={index}
           deleteField={handleDeleteField}

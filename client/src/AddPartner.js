@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import Axios from 'axios';
+import Partner from './models/Partner'
 import { useNavigate } from "react-router-dom";
 
 function AddPartner() {
   const navigate = useNavigate();
 
   const [formErrors, setFormErrors] = useState({})
-  const [formData, setFormData] = React.useState({
-    Name: "",
-    Email: "",
-  })
+  const [formData, setFormData] = React.useState(Partner)
   const [isSubmit, setIsSubmit] = useState(false);
 
   function handleChange(e) {

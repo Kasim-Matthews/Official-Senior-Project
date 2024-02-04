@@ -3,7 +3,7 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 
 
-function Partner(){
+function PartnerView(){
 
     const [partnerList, setPartnerList] = useState([])
     const navigate = useNavigate();
@@ -60,4 +60,4 @@ function Partner(){
     );
 }
 
-export default Partner;
+export default PartnerView;
