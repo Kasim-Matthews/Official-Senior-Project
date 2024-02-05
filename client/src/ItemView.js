@@ -27,6 +27,7 @@ function ItemView() {
 
     return (
         <div>
+            <button><Link to="/item/new">Add</Link></button>
             <table>
                 <thead>
                     <tr>

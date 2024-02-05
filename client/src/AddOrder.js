@@ -11,7 +11,7 @@ function AddOrder() {
   const [toggle, setToggle] = React.useState(false)
   const [formData, setFormData] = React.useState(Distribution)
 
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState(1);
   
   const [items, setItems] = React.useState([
     {
@@ -27,11 +27,7 @@ function AddOrder() {
     values[index].Item_id = e.target.value;
     setItems(values)
   }
-  const handleLocation = (e, index) => {
-    const values = [...items];
-    values[index].Location_id = e.target.value;
-    setItems(values)
-  }
+
   const handleQuantity = (e, index) => {
     const values = [...items];
     values[index].Quantity = e.target.value;
@@ -103,7 +99,7 @@ function AddOrder() {
       Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id });
   
       let current = await Axios.post("http://localhost:3001/distribution/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
-      Axios.put("http://localhost:3001/distribution/update_item", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
+      Axios.put("http://localhost:3001/distribution/take", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
     }
 
     window.location.href = "/distribution";

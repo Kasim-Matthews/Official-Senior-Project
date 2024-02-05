@@ -23,6 +23,7 @@ function LocationView() {
 
     return (
         <div>
+            <button><Link to="/location/new">Add</Link></button>
             <table>
                 <thead>
                     <tr>

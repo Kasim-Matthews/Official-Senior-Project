@@ -9,7 +9,7 @@ const sb = mysql.createPool({
 
 const distribution_index = (req, res) => {
     const sqlGet = `
-    select o.Comments, o.Status, o.DeliveryMethod, o.RequestDate, o.CompletedDate, o.Order_id, p.Name
+    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name
     from claire.order o
     join claire.partner p on o.Partner_id = p.Partner_id 
     `;
@@ -68,11 +68,37 @@ const distribution_view = (req, res) => {
 
     if (id) {
         const sqlGet = `
-    select o.Comments, o.Status, o.DeliveryMethod, o.RequestDate, o.CompletedDate, o.Order_id, p.Name
-    from claire.order o
-    join claire.partner p on o.Partner_id = p.Partner_id
-    where Order_id = ?; 
+        select o.Order_id, o.DeliveryMethod, o.Status, l.Name as Location, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, p.Name
+        from claire.orderitems oi
+        join claire.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
+        join claire.order o on oi.Order_id = o.Order_id
+        join claire.partner p on o.Partner_id = p.Partner_id
+        join claire.location l on l.Location_id = il.Location_id
+        where oi.Order_id = ?;
     `;
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+        })
+    }
+}
+
+const distribution_itemlist = (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `
+        SELECT oi.Quantity, i.Name as Item, i.FairMarketValue
+        from claire.orderitems as oi
+        join claire.itemlocation il on oi.ItemLocationFK = il. ItemLocation_id
+        join claire.item i on i.Item_id = il.Item_id
+        where oi.Order_id = ?;
+        `;
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -90,9 +116,33 @@ const distribution_edit = (req, res) => {
 
     if (id) {
         const sqlGet = `
-    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, o.Partner_id
+    select o.Comments, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Partner_id, il.Location_id
     from claire.order o
-    where Order_id = ?; 
+    join claire.orderitems oi on o.Order_id = oi.Order_id
+    join claire.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
+    where o.Order_id = ?; 
+    `;
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+        })
+    }
+}
+
+const distribution_edit_items = (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `
+        SELECT oi.Quantity, il.Item_id as Item
+        from claire.orderitems as oi
+        join claire.itemlocation il on oi.ItemLocationFK = il. ItemLocation_id
+        where oi.Order_id = ?;
     `;
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
@@ -241,6 +291,47 @@ const distribution_incomplete = (req, res) => {
     }
 }
 
+const distribution_cleanup = (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != 'string') {
+        res.send('Invalid');
+        res.end();
+        return
+    }
+
+    if (id) {
+        const sqlUpdate = `SELECT oi.Quantity as Given, oi.ItemLocationFK, il.Quantity
+        from claire.orderitems as oi
+        join claire.itemlocation il on oi.ItemLocationFK = il. ItemLocation_id
+        where oi.Order_id = ?;`
+        sb.query(sqlUpdate, [id], (err, result) => {
+            res.send(result)
+            console.log(result);
+        })
+    }
+}
+
+const distribution_reclaim = (req, res) => {
+
+    let ItemLocationFK = req.body.ItemLocationFK;
+    let Quantity = req.body.Quantity;
+
+
+    if (typeof ItemLocationFK != "number" && typeof Quantity != "number") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (ItemLocationFK && Quantity) {
+        const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+        sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) => {
+            console.log(err);
+        })
+    }
+}
+
 
 module.exports = {
     distribution_index,
@@ -256,5 +347,9 @@ module.exports = {
     distribution_update_item,
     distribution_view,
     distribution_complete,
-    distribution_incomplete
+    distribution_incomplete,
+    distribution_cleanup,
+    distribution_reclaim,
+    distribution_itemlist,
+    distribution_edit_items
 }
