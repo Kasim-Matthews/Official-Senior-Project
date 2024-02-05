@@ -17,7 +17,7 @@ function Order() {
   const [distributionsList, setDistributionsList] = React.useState([])
   const [records, setRecords] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [postsPerPage] = React.useState(1);
+  const [postsPerPage] = React.useState(2);
 
   //Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
@@ -81,7 +81,20 @@ function Order() {
 
 
   const handleRemove = (id) => {
-    //Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
+    let GetData = function(id){
+      return Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
+        return response
+      });
+    }
+    let data = GetData(id)
+    data.then((response) => {
+      for(const record of response.data){
+        Axios.put("http://localhost:3001/distribution/reclaim", { Quantity: record.Quantity + record.Given, ItemLocationFK: record.ItemLocationFK})
+      }
+    })
+    
+    Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
+    
     window.location.reload(false);
   }
 
@@ -138,7 +151,7 @@ function Order() {
       </form>
       <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
       <button><Link to="/distribution/new">Add</Link></button>
-      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} />
+      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} />
       <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
       <button><Link to="/Dashboard">Dasboard</Link></button>
     </div>

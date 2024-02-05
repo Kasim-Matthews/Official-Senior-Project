@@ -7,6 +7,7 @@ function ViewOrder() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [record, setRecord] = React.useState([])
+  const [itemList, setItemList] = React.useState([])
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/distribution/${id}/view`).then((response) => {
@@ -14,25 +15,11 @@ function ViewOrder() {
     });
   }, [])
 
-  let q = new Date(record.RequestDate);
-  let monthRequestDate = ""
-  let dayRequestDate = ""
-  let yearRequestDate = ""
-  let concatRequestDate = ""
-  monthRequestDate = q.getMonth() + 1
-  dayRequestDate = q.getDate() + 1
-  yearRequestDate = q.getFullYear() + 1
-  concatRequestDate = yearRequestDate + "-" + monthRequestDate + "-" + dayRequestDate
-
-  let c = new Date(record.CompletedDate);
-  let monthCompletedDate = ""
-  let dayCompletedDate = ""
-  let yearCompletedDate = ""
-  let concatCompletedDate = ""
-  monthCompletedDate = c.getMonth() + 1
-  dayCompletedDate = c.getDate() + 1
-  yearCompletedDate = c.getFullYear() + 1
-  concatCompletedDate = yearCompletedDate + "-" + monthCompletedDate + "-" + dayCompletedDate
+  useEffect(() => {
+    Axios.get(`http://localhost:3001/distribution/${id}/itemlist`).then((response) => {
+      setItemList(response.data)
+    });
+  }, [])
 
 
   return (
@@ -44,19 +31,40 @@ function ViewOrder() {
             <th>Requested Date</th>
             <th>Completed Date</th>
             <th>Delivery Method</th>
-            <th>Comments</th>
+            <th>Location</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{record.Name}</td>
-            <td>{concatRequestDate}</td>
-            <td>{concatCompletedDate}</td>
+            <td>{record.RequestDate}</td>
+            <td>{record.CompletedDate}</td>
             <td>{record.DeliveryMethod}</td>
-            <td>{record.Comments}</td>
+            <td>{record.Location}</td>
             <td>{record.Status}</td>
           </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Item Name</th>
+            <th>Inkind Value</th>
+            <th>Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {itemList.map((val) => {
+            return(
+              <tr>
+                <td>{val.Item}</td>
+                <td>{val.FairMarketValue}</td>
+                <td>{val.Quantity}</td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
       <button><Link to="/Dashboard">Dasboard</Link></button>

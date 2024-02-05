@@ -1,6 +1,6 @@
 import React from "react";
 
-const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncomplete }) => {
+const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncomplete, handleRemove }) => {
     return (
         <div>
             <table>
@@ -17,36 +17,18 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                 </thead>
                 <tbody>
                     {posts.map((val) => {
-                        let q = new Date(val.RequestDate);
-                        let monthRequestDate = ""
-                        let dayRequestDate = ""
-                        let yearRequestDate = ""
-                        let concatRequestDate = ""
-                        monthRequestDate = q.getMonth() + 1
-                        dayRequestDate = q.getDate() + 1
-                        yearRequestDate = q.getFullYear() + 1
-                        concatRequestDate = yearRequestDate + "-" + monthRequestDate + "-" + dayRequestDate
 
-                        let c = new Date(val.CompletedDate);
-                        let monthCompletedDate = ""
-                        let dayCompletedDate = ""
-                        let yearCompletedDate = ""
-                        let concatCompletedDate = ""
-                        monthCompletedDate = c.getMonth() + 1
-                        dayCompletedDate = c.getDate() + 1
-                        yearCompletedDate = c.getFullYear() + 1
-                        concatCompletedDate = yearCompletedDate + "-" + monthCompletedDate + "-" + dayCompletedDate
                         return (
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>{concatRequestDate}</td>
-                                <td>{concatCompletedDate}</td>
+                                <td>{val.RequestDate}</td>
+                                <td>{val.CompletedDate}</td>
                                 <td>{val.DeliveryMethod}</td>
                                 <td>{val.Comments}</td>
                                 <td>{val.Status}</td>
 
                                 <td>
-                                    <button /*onClick={() => handleRemove(val.Order_id)}*/>Delete</button>
+                                    <button onClick={() => handleRemove(val.Order_id)}>Reclaim</button>
                                     {val.Status == 'Draft' ? (<button onClick={() => handleEdit(val.Order_id)}>Edit</button>) : null}
                                     <button onClick={() => handleView(val.Order_id)}>View</button>
                                     {val.Status == 'Draft' ? (<button onClick={() => handleComplete(val.Order_id)}>Complete</button>) : null}
