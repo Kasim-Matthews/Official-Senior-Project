@@ -1,16 +1,12 @@
 import React from "react";
 import Axios from 'axios';
+import Location from './models/Location'
 import { useNavigate } from "react-router-dom";
 
 function AddLocation() {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = React.useState(
-    {
-      Name: "",
-      Address: "",
-    }
-  )
+  const [formData, setFormData] = React.useState(Location)
 
 
   function handleChange(event) {

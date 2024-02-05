@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
 
-function ViewDistribution() {
+function ViewOrder() {
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -64,4 +64,4 @@ function ViewDistribution() {
   )
 }
 
-export default ViewDistribution;
+export default ViewOrder;

@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import Pagination from "./components/Pagination";
+import OrderPosts from "./components/OrderPosts";
 
 
-function Distribution() {
+function Order() {
 
   const navigate = useNavigate();
   const [partners, setPartners] = React.useState([])
@@ -14,6 +16,14 @@ function Distribution() {
   })
   const [distributionsList, setDistributionsList] = React.useState([])
   const [records, setRecords] = React.useState([]);
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [postsPerPage] = React.useState(1);
+
+  //Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
+
 
   function handleChange(event) {
     setFilters(prevFilters => {
@@ -23,6 +33,9 @@ function Distribution() {
       }
     })
   }
+
+  //Change page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -125,66 +138,15 @@ function Distribution() {
       </form>
       <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
       <button><Link to="/distribution/new">Add</Link></button>
-      <table>
-        <thead>
-          <tr>
-            <th>Partner</th>
-            <th>Requested Date</th>
-            <th>Completed Date</th>
-            <th>Delivery Method</th>
-            <th>Comments</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((val) => {
-            let q = new Date(val.RequestDate);
-            let monthRequestDate = ""
-            let dayRequestDate = ""
-            let yearRequestDate = ""
-            let concatRequestDate = ""
-            monthRequestDate = q.getMonth() + 1
-            dayRequestDate = q.getDate() + 1
-            yearRequestDate = q.getFullYear() + 1
-            concatRequestDate = yearRequestDate + "-" + monthRequestDate + "-" + dayRequestDate
-
-            let c = new Date(val.CompletedDate);
-            let monthCompletedDate = ""
-            let dayCompletedDate = ""
-            let yearCompletedDate = ""
-            let concatCompletedDate = ""
-            monthCompletedDate = c.getMonth() + 1
-            dayCompletedDate = c.getDate() + 1
-            yearCompletedDate = c.getFullYear() + 1
-            concatCompletedDate = yearCompletedDate + "-" + monthCompletedDate + "-" + dayCompletedDate
-            return (
-              <tr>
-                <td>{val.Name}</td>
-                <td>{concatRequestDate}</td>
-                <td>{concatCompletedDate}</td>
-                <td>{val.DeliveryMethod}</td>
-                <td>{val.Comments}</td>
-                <td>{val.Status}</td>
-                <td>
-                  <button /*onClick={() => handleRemove(val.Order_id)}*/>Delete</button>
-                  {val.Status == 'Draft' ? (<button onClick={() => handleEdit(val.Order_id)}>Edit</button>) : null}
-                  <button onClick={() => handleView(val.Order_id)}>View</button>
-                  {val.Status == 'Draft' ? (<button onClick={() => handleComplete(val.Order_id)}>Complete</button>) : null}
-                  {val.Status == 'Submitted' ? (<button onClick={() => handleIncomplete(val.Order_id)}>Uncomplete</button>) : null}
-
-                </td>
-              </tr>);
-          })}
-        </tbody>
-      </table>
+      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} />
+      <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
       <button><Link to="/Dashboard">Dasboard</Link></button>
     </div>
 
   );
 }
 
-export default Distribution;
+export default Order;
 
 
 

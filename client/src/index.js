@@ -2,20 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Distribution from './Distribution';
-import AddDistribution from './AddDistribution';
+import Order from './Order';
+import AddOrder from './AddOrder';
 import AddPartner from './AddPartner';
-import Partner from './Partner';
-import Item from './Item';
+import PartnerView from './PartnerView';
+import ItemView from './ItemView';
 import AddItem from './AddItem';
-import EditDistribution from './EditDistribution';
-import ViewDistribution from './OneDistribution';
+import EditOrder from './EditOrder';
+import ViewOrder from './OneOrder';
 import EditItem from './EditItem';
 import EditPartner from './EditPartner';
 import ViewItem from './OneItem';
 import ViewPartner from './OnePartner';
 import AddLocation from './AddLocation';
-import Location from './Location';
+import LocationView from './LocationView';
 import EditLocation from './EditLocation';
 import Manufacturers from './Manufacturers';
 import AddManufacturers from './AddManufacturers';
@@ -27,7 +27,8 @@ import ViewIntake from './OneIntake';
 import UserAddInfo from './UserAddInfo';
 import Login from './login';
 import Register from './register';
-import PartnerController from './controllers/PartnerController';
+import EditIntake from './EditIntake';
+import AddPurchase from './AddPurchase';
 
 
 export class Application extends React.Component {
@@ -40,23 +41,23 @@ export class Application extends React.Component {
                     <Route path='/UserAddInfo' element={<UserAddInfo />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
-
-                    <Route path="/distribution" element={<Distribution />} />
-                    <Route path='/distribution/:id' element={<ViewDistribution />} />
-                    <Route path='/distribution/:id/edit' element={<EditDistribution />} />
-                    <Route path="/distribution/new" element={<AddDistribution />} />
+                    
+                    <Route path="/distribution" element={<Order />} />
+                    <Route path='/distribution/:id' element={<ViewOrder />} />
+                    <Route path='/distribution/:id/edit' element={<EditOrder />} />
+                    <Route path="/distribution/new" element={<AddOrder />} />
 
                     <Route path="/partner/new" element={<AddPartner />} />
                     <Route path='/partner/:id/edit' element={<EditPartner />} />
                     <Route path='/partner/:id' element={<ViewPartner />} />
-                    <Route path="/partner" element={<Partner />} />
+                    <Route path="/partner" element={<PartnerView />} />
 
-                    <Route path='/item' element={<Item />} />
+                    <Route path='/item' element={<ItemView />} />
                     <Route path='/item/:id' element={<ViewItem />} />
                     <Route path='/item/:id/edit' element={<EditItem />} />
                     <Route path='/item/new' element={<AddItem />} />
 
-                    <Route path='/location' element={<Location />} />
+                    <Route path='/location' element={<LocationView />} />
                     <Route path='/location/:id/edit' element={<EditLocation />} />
                     <Route path='/location/new' element={<AddLocation />} />
 
@@ -66,7 +67,11 @@ export class Application extends React.Component {
 
                     <Route path="/intake" element={<Intake />} />
                     <Route path="/intake/new" element={<AddIntake />} />
+                    <Route path='/intake/:id/edit' element={<EditIntake/>}/>
                     <Route path="/intake/:id" element={<ViewIntake />} />
+
+                    <Route path="/purchase/new" element={<AddPurchase/>}/>
+
 
 
                 </Routes>

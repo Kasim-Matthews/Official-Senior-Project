@@ -1,28 +1,42 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import IntakePosts from "./components/IntakePosts";
+import Pagination from "./components/Pagination";
 
 function Intake() {
     const navigate = useNavigate();
 
     const [intakeList, setIntakeList] = React.useState([])
+    const [records, setRecords] = React.useState([])
+
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [postsPerPage] = React.useState(1);
+
+    //Get current posts
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
     useEffect(() => {
         Axios.get("http://localhost:3001/intake").then((response) => {
             setIntakeList(response.data);
+            setRecords(response.data)
         })
     }, [])
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
 
 
 
 
     /*const handleRemove = (id) =>{
         Axios.delete(`http://localhost:3001/partner/remove/${id}`);
-    }
+    }*/
 
     const handleEdit = (id) => {
-        navigate(`/partner/${id}/edit`)
-    }*/
+        navigate(`/intake/${id}/edit`)
+    }
 
     const handleView = (id) => {
         navigate(`/intake/${id}`)
@@ -33,45 +47,10 @@ function Intake() {
     return (
         <div>
             <button><Link to="/intake/new">Add</Link></button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Partner</th>
-                        <th>Value</th>
-                        <th>Recieved Date</th>
-                        <th>Comments</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {intakeList.map((val) => {
-                        let q = new Date(val.RecievedDate);
-                        let monthRecievedDate = ""
-                        let dayRecievedDate = ""
-                        let yearRecievedDate = ""
-                        let concatRecievedDate = ""
-                        monthRecievedDate = q.getMonth() + 1
-                        dayRecievedDate = q.getDate() + 1
-                        yearRecievedDate = q.getFullYear() + 1
-                        concatRecievedDate = yearRecievedDate + "-" + monthRecievedDate + "-" + dayRecievedDate
-                        return (
 
-                            <tr>
-                                <td>{val.Name}</td>
-                                <td>{val.Value}</td>
-                                <td>{concatRecievedDate}</td>
-                                <td>{val.Comments}</td>
-                                <td>
-                                    <button /*onClick={() => handleRemove(val.Partner_id)}*/>Delete</button>
-                                    <button /*onClick={() => handleEdit(val.Partner_id)}*/>Edit</button>
-                                    <button onClick={() => handleView(val.Intake_id)}>View</button>
-                                </td>
+            <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} />
+            <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
 
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );

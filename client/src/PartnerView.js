@@ -2,10 +2,23 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 
-function Partner(props) {
+
+function PartnerView(){
 
     const [partnerList, setPartnerList] = useState([])
+    const navigate = useNavigate();
+    
+    const handleRemove = (id) => {
+        Axios.delete(`http://localhost:3001/partner/remove/${id}`);
+    }
 
+    const handleEdit = (id) =>{
+        navigate(`/partner/${id}/edit`)
+    }
+    
+    const handleView =(id) => {
+        navigate(`/partner/${id}`)
+    }
 
     useEffect(() => {
         Axios.get("http://localhost:3001/partner").then((response) => {
@@ -31,9 +44,9 @@ function Partner(props) {
                                 <td>{val.Name}</td>
                                 <td>{val.Email}</td>
                                 <td>
-                                    <button onClick={() => this.props.handleRemove(val.Partner_id)}>Delete</button>
-                                    <button onClick={() => this.props.handleEdit(val.Partner_id)}>Edit</button>
-                                    <button onClick={() => this.props.handleView(val.Partner_id)}>View</button>
+                                    <button /*onClick={() => handleRemove(val.Partner_id)}*/>Delete</button>
+                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>
 
                             </tr>
@@ -47,4 +60,4 @@ function Partner(props) {
     );
 }
 
-export default Partner;
+export default PartnerView;
