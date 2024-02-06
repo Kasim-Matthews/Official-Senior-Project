@@ -47,20 +47,25 @@ function App() {
   return (
 
     <div className="App">
+      <header className="App-header">
+        <h1>Diaper Bank of Northeast Florida Inventory Management System</h1>
+      </header>
+      
       {isLoggedIn && !additionalInfoRequired ? <Navigate to="/Dashboard" /> : null}
       {additionalInfoRequired ? <UserAddInfo userId={userId} /> : null}
       <div>
+      <div className="form-container">
         <div className="register">
           <h1>Registration</h1>
           <label>Email</label>
           <input
-            type="text"
+            type="text" placeholder="Email..."
             onChange={(e) => {
               setUsernameReg(e.target.value);
             }}
           />
           <label>Password</label>
-          <input type="text"
+          <input type="text" placeholder="Password..."
             onChange={(e) => {
               setPasswordReg(e.target.value);
             }}
@@ -70,11 +75,13 @@ function App() {
 
         <div className="login">
           <h1>Login</h1>
+          <label>Email</label>
           <input type="text" placeholder="Email..."
             onChange={(e) => {
               setUsername(e.target.value);
             }}
           />
+          <label>Password</label>
           <input type="password" placeholder="Password..."
             onChange={(e) => {
               setPassword(e.target.value);
@@ -87,6 +94,7 @@ function App() {
       </div>
 
 
+    </div>
     </div>
   );
 }
