@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Axios from 'axios';
-import './App.css';
+import './Login.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import UserAddInfo from './UserAddInfo';
 
