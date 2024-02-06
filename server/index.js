@@ -64,8 +64,8 @@ app.listen('3001', () => {
 const db = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Lindsey1!",
-    database: "claire",
-    port: 3306
+    password: "WebVoyage2023!",
+    database: 'claire',
+    port: 3006
 })
 */

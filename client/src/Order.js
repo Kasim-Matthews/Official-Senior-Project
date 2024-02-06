@@ -81,21 +81,22 @@ function Order() {
 
 
   const handleRemove = (id) => {
-    let GetData = function(id){
+    let GetData = function (id) {
       return Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
         return response
       });
     }
     let data = GetData(id)
-    data.then((response) => {
-      for(const record of response.data){
-        Axios.put("http://localhost:3001/distribution/reclaim", { Quantity: record.Quantity + record.Given, ItemLocationFK: record.ItemLocationFK})
+    data.then(async (response) => {
+      for (const record of response.data) {
+        console.log(record)
+        await Axios.put("http://localhost:3001/distribution/reclaim", { Quantity: record.Quantity + record.Given, ItemLocationFK: record.ItemLocationFK })
       }
     })
-    
+
     Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
+
     
-    window.location.reload(false);
   }
 
   const handleEdit = (id) => {

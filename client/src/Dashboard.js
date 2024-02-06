@@ -40,11 +40,12 @@ function Dashboard() {
             <nav className="sidebar">
                 <h2>Inventory Management System</h2>
                 <ul>
-                    <li><a href="#">Dashboard</a></li>
-                    <li><a href="#">Distributions</a></li>
-                    <li><a href="#">Collections</a></li>
-                    <li><a href="#">Inventory</a></li>
-                    <li><a href="#">Partner Agencies</a></li>
+                    <li><a href="/Dashboard">Dashboard</a></li>
+                    <li><a href="/distribution">Distributions</a></li>
+                    <li><a href="/intake">Collections</a></li>
+                    <li><a href="/item">Items</a></li>
+                    <li><a href="/partner">Partner Agencies</a></li>
+                    <li><a href="/location">Locations</a></li>
                 </ul>
             </nav>
 
