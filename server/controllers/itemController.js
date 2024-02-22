@@ -103,6 +103,34 @@ const item_view = (req, res) => {
     }
 }
 
+const last = (req, res) => {
+    const sqlGet = `SELECT Item_id from claire.item
+    ORDER BY Item_id DESC
+    Limit 1;`
+    sb.query(sqlGet, (err,result) => {
+        res.send(result)
+    })
+}
+
+const pair = (req, res) => {
+    let Locations = req.body.Locations;
+    let Item_id = req.body.Item_id;
+    if(typeof Locations != "object" && typeof Item_id != "number"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+    if (Locations, Item_id) {
+        for (let location in Locations) {
+            const sqlInsert = `INSERT INTO claire.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
+            sb.query(sqlInsert, [Locations[location].Location_id, Item_id], (err, result) => {
+                console.log(err);
+            })
+        }
+    }
+    
+}
+
 
 module.exports = {
     item_index,
@@ -110,5 +138,7 @@ module.exports = {
     item_delete,
     item_update,
     item_edit,
-    item_view
+    item_view,
+    last,
+    pair
 }

@@ -8,7 +8,6 @@ function AddPartner() {
 
   const [formErrors, setFormErrors] = useState({})
   const [formData, setFormData] = React.useState(Partner)
-  const [isSubmit, setIsSubmit] = useState(false);
 
   function handleChange(e) {
 
@@ -35,11 +34,11 @@ function AddPartner() {
   function handleSubmit(e) {
     e.preventDefault();
     setFormErrors(validate(formData));
-    setIsSubmit(true);
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
+    if (Object.keys(formErrors).length === 0) {
       Axios.post("http://localhost:3001/partner/new", {
         name: formData.Name,
-        email: formData.Email
+        email: formData.Email,
+        type: formData.Type
       }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'

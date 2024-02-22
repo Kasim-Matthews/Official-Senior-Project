@@ -2,14 +2,12 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
-import Select from 'react-select';
 
 function EditOrder() {
 
   const navigate = useNavigate();
   const { id } = useParams();
   const [formData, setFormData] = React.useState([])
-  const [Partner_id, setPartner_id] = React.useState()
   const [partners, setPartners] = React.useState([])
   const [locations, setLocations] = React.useState([])
 
@@ -51,7 +49,6 @@ function EditOrder() {
     }
 
     setItems(values);
-    console.log(items)
   }
 
   const handleDeleteField = (e, index) => {
@@ -99,17 +96,37 @@ function EditOrder() {
 
 
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
+    console.log("ran")
     e.preventDefault();
+    console.log(formData)
+    let GetData = async function (id) {
+      return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
+        return response
+      });
+    }
+    console.log("1")
+    let data = GetData(id)
+    await data.then(async (response) => {
+      await Axios.put("http://localhost:3001/distribution/reclaim", { records: response.data })
+    })
+    console.log("2")
+    await Axios.delete(`http://localhost:3001/distribution/${id}/edit_delete`)
+    console.log("3")
+    await Axios.put(`http://localhost:3001/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id });
+    console.log("4")
+    for (const item of items) {
+      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item, Location_id: formData.Location_id })
 
-    console.log(items)
-    //Axios.put(`http://localhost:3001/distribution/${id}/update`, { Comments: formData.Comments, Status: formData.Status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id }, {
-    //  headers: {
-     //   'Content-Type': 'application/x-www-form-urlencoded'
-     // }
-    //});
+      let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Item_id: item.Item })
 
-    //navigate('/distribution')
+      await Axios.post("http://localhost:3001/distribution/track", { Order_id: id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id });
+
+      let current = await Axios.post("http://localhost:3001/distribution/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
+      await Axios.put("http://localhost:3001/distribution/take", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
+    }
+
+    navigate('/distribution')
 
 
   }
@@ -136,7 +153,7 @@ function EditOrder() {
       </select><br />
 
       <label htmlFor="Location">Location</label>
-      <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+      <select id="Location_id" name="Location_id" value={formData.Location_id} onChange={handleChange}>
         <option value="">--Please choose an option--</option>
         {locations.map((val) => {
           if (val.Location_id == formData.Location_id) {
@@ -173,13 +190,13 @@ function EditOrder() {
       {items.map((record, index) => (
         <div>
           <EditItemInput
-          key={index}
-          handleItem={handleItem}
-          handleQuantity={handleQuantity}
-          index={index}
-          record={record}
-          deleteField={handleDeleteField}
-        />
+            key={index}
+            handleItem={handleItem}
+            handleQuantity={handleQuantity}
+            index={index}
+            record={record}
+            deleteField={handleDeleteField}
+          />
         </div>
 
       ))}

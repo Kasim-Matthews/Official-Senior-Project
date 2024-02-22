@@ -87,11 +87,40 @@ const location_update = (req, res) => {
     }
 }
 
+const last = (req, res) => {
+    const sqlGet = `SELECT Location_id from claire.location
+    ORDER BY Location_id DESC
+    Limit 1;`
+    sb.query(sqlGet, (err, result) => {
+        res.send(result)
+    })
+}
+
+const pair = (req, res) => {
+    let Location_id = req.body.Location_id;
+    let Items = req.body.Items;
+    if (typeof Location_id != "number" && typeof Items != "object") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+    if (Location_id, Items) {
+        for (let item in Items) {
+            const sqlInsert = `INSERT INTO claire.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
+            sb.query(sqlInsert, [Location_id, Items[item].Item_id], (err, result) => {
+                console.log(err);
+            })
+        }
+    }
+}
+
 
 module.exports = {
     location_index,
     location_creation,
     location_delete,
     location_update,
-    location_edit
+    location_edit,
+    last,
+    pair
 }

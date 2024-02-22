@@ -24,6 +24,7 @@ const partner_options = (req, res) => {
 const partner_create = (req, res) => {
     let Name = req.body.name;
     let Email = req.body.email;
+    let Type = req.body.type;
 
     if (typeof Name != "string" && typeof Email != "string") {
         res.send("Invalid");
@@ -34,7 +35,10 @@ const partner_create = (req, res) => {
     if (Name && Email) {
         const sqlInsert = "INSERT INTO claire.partner (name, email) VALUES (?,?);"
         sb.query(sqlInsert, [Name, Email], (err, result) => {
-            console.log(result);
+            const sqlInsert = "INSERT INTO claire.partnertype (Partner_id, Type) VALUES (?,?);"
+            sb.query(sqlInsert, [result.insertId, Type], (err, result) => {
+                console.log(err)
+            })
         })
     }
 }

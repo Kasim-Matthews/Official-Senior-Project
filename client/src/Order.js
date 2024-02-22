@@ -80,20 +80,18 @@ function Order() {
 
 
 
-  const handleRemove = (id) => {
-    let GetData = function(id){
-      return Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
+  const handleRemove = async (id) => {
+    let GetData = async function(id){
+      return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
         return response
       });
     }
     let data = GetData(id)
-    data.then((response) => {
-      for(const record of response.data){
-        Axios.put("http://localhost:3001/distribution/reclaim", { Quantity: record.Quantity + record.Given, ItemLocationFK: record.ItemLocationFK})
-      }
+    data.then(async (response) => {
+      await Axios.put("http://localhost:3001/distribution/reclaim", {records:response.data})
     })
     
-    Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
+    await Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
     
     window.location.reload(false);
   }

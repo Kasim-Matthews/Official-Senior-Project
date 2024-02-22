@@ -7,6 +7,7 @@ function AddLocation() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = React.useState(Location)
+  const [items, setItems] = React.useState([])
 
 
   function handleChange(event) {
@@ -18,7 +19,7 @@ function AddLocation() {
     })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     try {
       Axios.post("http://localhost:3001/location/new", {
@@ -33,8 +34,21 @@ function AddLocation() {
     catch (error) {
       console.log(error.response.data);
     }
+
+    let Location_id = await Axios.get("http://localhost:3001/location/last")
+    
+    await Axios.post("http://localhost:3001/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items})
+
     window.location.href = "/location";
+
+    
   }
+
+  React.useEffect(() => {
+    Axios.get("http://localhost:3001/item").then((response) => {
+        setItems(response.data);
+    })
+}, [])
 
   return (
     <form id="locations" onSubmit={handleSubmit}>

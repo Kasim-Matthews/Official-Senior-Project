@@ -12,5 +12,6 @@ router.delete('/remove/:id', itemController.item_delete);
 router.get('/:id/edit', itemController.item_edit)
 router.get('/:id/view', itemController.item_view)
 router.put('/:id/update', itemController.item_update)
-
+router.get('/last', itemController.last)
+router.post('/pair', itemController.pair)
 module.exports = router;

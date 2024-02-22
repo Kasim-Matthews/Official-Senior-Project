@@ -12,7 +12,7 @@ function AddOrder() {
   const [formData, setFormData] = React.useState(Distribution)
 
   const [index, setIndex] = React.useState(1);
-  
+
   const [items, setItems] = React.useState([
     {
       name: `item [${index}]`,
@@ -89,15 +89,15 @@ function AddOrder() {
       }
     });
 
-    for (const item of items){
+    for (const item of items) {
       let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: formData.Location })
 
       let OID_response = await Axios.post("http://localhost:3001/distribution/find_id", { RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner });
-  
+
       let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Item_id: item.Item_id })
-  
+
       Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id });
-  
+
       let current = await Axios.post("http://localhost:3001/distribution/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
       Axios.put("http://localhost:3001/distribution/take", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
     }
@@ -114,9 +114,9 @@ function AddOrder() {
 
   useEffect(() => {
     Axios.get("http://localhost:3001/location").then((response) => {
-        setLocations(response.data);
+      setLocations(response.data);
     })
-}, [])
+  }, [])
 
 
 
@@ -149,7 +149,7 @@ function AddOrder() {
       <input type="date" name="RequestDate" id="RequestDate" value={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
 
       <label htmlFor="CompletedDate">CompleteDate</label>
-      <input type="date" name="CompletedDate" id="CompletedDate" value={formData.CompletedDate} min="2023-09-01" required onChange={handleChange} />
+      <input type="date" name="CompletedDate" id="CompletedDate" value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange} />
 
 
 

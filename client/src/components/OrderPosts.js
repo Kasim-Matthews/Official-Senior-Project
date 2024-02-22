@@ -9,6 +9,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                         <th>Partner</th>
                         <th>Requested Date</th>
                         <th>Completed Date</th>
+                        <th>Total Items</th>
                         <th>Delivery Method</th>
                         <th>Comments</th>
                         <th>Status</th>
@@ -23,6 +24,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                                 <td>{val.Name}</td>
                                 <td>{val.RequestDate}</td>
                                 <td>{val.CompletedDate}</td>
+                                <td>{val.Total}</td>
                                 <td>{val.DeliveryMethod}</td>
                                 <td>{val.Comments}</td>
                                 <td>{val.Status}</td>

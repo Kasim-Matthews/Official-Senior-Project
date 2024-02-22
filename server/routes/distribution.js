@@ -24,4 +24,5 @@ router.put('/:id/complete', distributionController.distribution_complete)
 router.put('/:id/incomplete', distributionController.distribution_incomplete)
 router.get('/:id/cleanup', distributionController.distribution_cleanup)
 router.put('/reclaim', distributionController.distribution_reclaim)
+router.delete('/:id/edit_delete', distributionController.distribution_update_delete)
 module.exports = router;

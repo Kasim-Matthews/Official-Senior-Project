@@ -9,9 +9,11 @@ const sb = mysql.createPool({
 
 const distribution_index = (req, res) => {
     const sqlGet = `
-    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name
+    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name, SUM(oi.Quantity) as Total
     from claire.order o
     join claire.partner p on o.Partner_id = p.Partner_id 
+    join claire.orderitems oi on o.Order_id = oi.Order_id
+    group by o.Order_id
     `;
     sb.query(sqlGet, (err, result) => {
         res.send(result);
@@ -154,24 +156,25 @@ const distribution_update = (req, res) => {
 
     let id = req.params.id
     let Comments = req.body.Comments;
-    let Status = req.body.Status;
     let DeliveryMethod = req.body.DeliveryMethod;
     let RequestDate = req.body.RequestDate;
     let CompletedDate = req.body.CompletedDate;
     let Partner_id = req.body.Partner_id;
 
 
-    if (typeof id != "string" && typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number') {
+    if (typeof id != "string" && typeof Comments != "string" && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number') {
         res.send("Invalid");
         console.log("err");
         res.end();
         return;
     }
 
-    if (Status && DeliveryMethod && RequestDate && CompletedDate && Partner_id) {
-        const sqlUpdate = "UPDATE claire.order SET Comments= ?, Status= ?, DeliveryMethod= ?, RequestDate= ?, CompletedDate= ?, Partner_id= ? WHERE Order_id = ?;"
-        sb.query(sqlUpdate, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id, id], (err, result) => {
-            console.log(err);
+    if (DeliveryMethod && RequestDate && CompletedDate && Partner_id && id) {
+        const sqlUpdate = "UPDATE claire.order SET Comments= ?, DeliveryMethod= ?, RequestDate= ?, CompletedDate= ?, Partner_id= ? WHERE Order_id = ?;"
+        sb.query(sqlUpdate, [Comments, DeliveryMethod, RequestDate, CompletedDate, Partner_id, id], (err, result) => {
+            console.log("done");
+            res.send()
+            res.end()
         })
     }
 }
@@ -306,28 +309,53 @@ const distribution_cleanup = (req, res) => {
         join claire.itemlocation il on oi.ItemLocationFK = il. ItemLocation_id
         where oi.Order_id = ?;`
         sb.query(sqlUpdate, [id], (err, result) => {
+            console.log("1")
             res.send(result)
-            console.log(result);
         })
     }
+    console.log("drop-off")
 }
 
 const distribution_reclaim = (req, res) => {
-
-    let ItemLocationFK = req.body.ItemLocationFK;
-    let Quantity = req.body.Quantity;
+    let records = req.body.records
 
 
-    if (typeof ItemLocationFK != "number" && typeof Quantity != "number") {
+    if (typeof records != "object") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (ItemLocationFK && Quantity) {
-        const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
-        sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) => {
+    if (records) {
+        for(let record in records){
+            Quantity = records[record].Quantity + records[record].Given
+            const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+            sb.query(sqlUpdate, [Quantity, records[record].ItemLocationFK], (err, result) => {
+                console.log("2")
+                console.log(err);
+                res.send()
+                res.end()
+            })
+        }
+        
+    }
+}
+
+const distribution_update_delete = (req, res) => {
+    let id = req.params.id
+
+    if(typeof id != "string"){
+        res.send("Invalid");
+        res.end();
+        return
+    }
+
+    if(id){
+        const sqlDelete = "DELETE FROM claire.orderitems WHERE Order_id = ?;"
+        sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
+            res.send()
+            res.end()
         })
     }
 }
@@ -351,5 +379,6 @@ module.exports = {
     distribution_cleanup,
     distribution_reclaim,
     distribution_itemlist,
-    distribution_edit_items
+    distribution_edit_items,
+    distribution_update_delete
 }
