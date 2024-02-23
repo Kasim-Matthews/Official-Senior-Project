@@ -7,7 +7,7 @@ const sb = mysql.createPool({
     port: 3006
 });
 
-const distribution_index = (req, res) => {
+const distribution_index = async (req, res) => {
     const sqlGet = `
     select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name, SUM(oi.Quantity) as Total
     from claire.order o
@@ -15,12 +15,14 @@ const distribution_index = (req, res) => {
     join claire.orderitems oi on o.Order_id = oi.Order_id
     group by o.Order_id
     `;
-    sb.query(sqlGet, (err, result) => {
+    await sb.query(sqlGet, (err, result) => {
         res.send(result);
+        res.end()
+        return;
     })
 }
 
-const distribution_creation = (req, res) => {
+const distribution_creation = async(req, res) => {
     let Comments = req.body.Comments;
     let Status = req.body.Status;
     let DeliveryMethod = req.body.DeliveryMethod;
@@ -36,13 +38,15 @@ const distribution_creation = (req, res) => {
 
     if (DeliveryMethod && RequestDate && CompletedDate && Partner_id) {
         const sqlInsert = "INSERT INTO claire.order (Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id) VALUES (?,?,?,?,?,?);"
-        sb.query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id], (err, result) => {
+        await sb.query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id], (err, result) => {
             console.log(err);
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_remove = (req, res) => {
+const distribution_remove = async(req, res) => {
 
     let id = req.params.id;
     if (typeof id != "string") {
@@ -53,13 +57,15 @@ const distribution_remove = (req, res) => {
 
     if (id) {
         const sqlDelete = 'DELETE FROM claire.order WHERE Order_id = ?;'
-        sb.query(sqlDelete, [id], (err, result) => {
+        await sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_view = (req, res) => {
+const distribution_view = async(req, res) => {
     let id = req.params.id
 
     if (typeof id != "string") {
@@ -78,13 +84,15 @@ const distribution_view = (req, res) => {
         join claire.location l on l.Location_id = il.Location_id
         where oi.Order_id = ?;
     `;
-        sb.query(sqlGet, [id], (err, result) => {
+    await sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_itemlist = (req, res) => {
+const distribution_itemlist = async(req, res) => {
     let id = req.params.id
 
     if (typeof id != "string") {
@@ -101,13 +109,15 @@ const distribution_itemlist = (req, res) => {
         join claire.item i on i.Item_id = il.Item_id
         where oi.Order_id = ?;
         `;
-        sb.query(sqlGet, [id], (err, result) => {
+        await sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_edit = (req, res) => {
+const distribution_edit = async(req, res) => {
     let id = req.params.id
 
     if (typeof id != "string") {
@@ -124,13 +134,15 @@ const distribution_edit = (req, res) => {
     join claire.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
     where o.Order_id = ?; 
     `;
-        sb.query(sqlGet, [id], (err, result) => {
+    await sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_edit_items = (req, res) => {
+const distribution_edit_items = async(req, res) => {
     let id = req.params.id
 
     if (typeof id != "string") {
@@ -146,13 +158,15 @@ const distribution_edit_items = (req, res) => {
         join claire.itemlocation il on oi.ItemLocationFK = il. ItemLocation_id
         where oi.Order_id = ?;
     `;
-        sb.query(sqlGet, [id], (err, result) => {
+    await sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_update = (req, res) => {
+const distribution_update = async(req, res) => {
 
     let id = req.params.id
     let Comments = req.body.Comments;
@@ -171,60 +185,108 @@ const distribution_update = (req, res) => {
 
     if (DeliveryMethod && RequestDate && CompletedDate && Partner_id && id) {
         const sqlUpdate = "UPDATE claire.order SET Comments= ?, DeliveryMethod= ?, RequestDate= ?, CompletedDate= ?, Partner_id= ? WHERE Order_id = ?;"
-        sb.query(sqlUpdate, [Comments, DeliveryMethod, RequestDate, CompletedDate, Partner_id, id], (err, result) => {
+        await sb.query(sqlUpdate, [Comments, DeliveryMethod, RequestDate, CompletedDate, Partner_id, id], (err, result) => {
             console.log("done");
             res.send()
             res.end()
+            return;
         })
     }
 }
 
-const distribution_find_ild = (req, res) => {
+const distribution_find_ild = async(req, res) => {
     let Item_id = req.body.Item_id;
     let Location_id = req.body.Location_id;
 
-    const sqlGet = "SELECT ItemLocation_id FROM claire.itemlocation WHERE Item_id = ? AND Location_id = ?;"
-    sb.query(sqlGet, [Item_id, Location_id], (err, result) => {
-        res.send(result);
-    })
+    if (typeof Item_id != "string" && typeof Location_id != "string") {
+        res.send("Invalid");
+        console.log("ild Invalid")
+        res.end();
+        return;
+    }
+
+
+    if (Item_id && Location_id) {
+        const sqlGet = "SELECT ItemLocation_id FROM claire.itemlocation WHERE Item_id = ? AND Location_id = ?;"
+        await sb.query(sqlGet, [Item_id, Location_id], (err, result) => {
+            res.send(result);
+            res.end()
+            return;
+        })
+    }
+
 }
 
-const distribution_find_q = (req, res) => {
+const distribution_find_q = async(req, res) => {
     let ItemLocationFK = req.body.ItemLocationFK;
 
-    const sqlGet = "SELECT Quantity FROM claire.itemlocation WHERE ItemLocation_id = ?"
-    sb.query(sqlGet, [ItemLocationFK], (err, result) => {
-        res.send(result);
-    })
+    if (typeof ItemLocationFK != "number") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+
+    if (ItemLocationFK) {
+        const sqlGet = "SELECT Quantity FROM claire.itemlocation WHERE ItemLocation_id = ?"
+        await sb.query(sqlGet, [ItemLocationFK], (err, result) => {
+            res.send(result);
+            res.end()
+            return;
+        })
+    }
+
 }
 
-const distribution_find_value = (req, res) => {
+const distribution_find_value = async(req, res) => {
     let Item_id = req.body.Item_id;
+    if (typeof Item_id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
 
-    const sqlGet = "SELECT FairMarketValue FROM claire.item WHERE Item_id = ?;"
-    sb.query(sqlGet, [Item_id], (err, result) => {
-        res.send(result);
-    })
+
+    if (Item_id) {
+        const sqlGet = "SELECT FairMarketValue FROM claire.item WHERE Item_id = ?;"
+        await sb.query(sqlGet, [Item_id], (err, result) => {
+            res.send(result);
+            res.end()
+            return;
+        })
+    }
+
 }
 
-const distribution_find_id = (req, res) => {
+const distribution_find_id = async(req, res) => {
     let RequestDate = req.body.RequestDate;
     let CompletedDate = req.body.CompletedDate;
     let Partner_id = req.body.Partner_id;
 
-    const sqlGet = "SELECT Order_id FROM claire.order WHERE Partner_id = ? AND RequestDate = ? AND CompletedDate = ?;"
-    sb.query(sqlGet, [Partner_id, RequestDate, CompletedDate], (err, result) => {
-        res.send(result);
-    })
+    if (typeof RequestDate != "string" && typeof CompletedDate != "string" && typeof Partner_id != "number") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (RequestDate && CompletedDate && Partner_id) {
+        const sqlGet = "SELECT Order_id FROM claire.order WHERE Partner_id = ? AND RequestDate = ? AND CompletedDate = ?;"
+        await sb.query(sqlGet, [Partner_id, RequestDate, CompletedDate], (err, result) => {
+            res.send(result);
+            res.end()
+            return;
+        })
+    }
+
 }
 
-const distribution_track = (req, res) => {
+const distribution_track = async(req, res) => {
     let Order_id = req.body.Order_id;
     let Quantity = req.body.Quantity;
     let Value = req.body.Value;
     let ItemLocationFK = req.body.ItemLocationFK;
 
-    if (typeof ItemLocationFK != 'number' && typeof Value != 'number' && typeof Quantity != 'number' && typeof Order_id != 'number') {
+    if (typeof ItemLocationFK != 'number' && typeof Value != 'number' && typeof Quantity != 'number' && typeof Order_id != 'string') {
         res.send("Invalid");
         res.end();
         return;
@@ -232,13 +294,16 @@ const distribution_track = (req, res) => {
 
     if (Order_id && Quantity && Value && ItemLocationFK) {
         const sqlInsert = "INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES (?,?,?,?);"
-        sb.query(sqlInsert, [Order_id, Quantity, Value, ItemLocationFK], (err, result) => {
+        await sb.query(sqlInsert, [Order_id, Quantity, Value, ItemLocationFK], (err, result) => {
             console.log(err);
+            res.send()
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_update_item = (req, res) => {
+const distribution_update_item = async(req, res) => {
 
     let ItemLocationFK = req.body.ItemLocationFK;
     let Quantity = req.body.Quantity;
@@ -254,13 +319,16 @@ const distribution_update_item = (req, res) => {
     if (ItemLocationFK && Quantity && CurrentQ) {
         Quantity = CurrentQ - Quantity;
         const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
-        sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) => {
+        await sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) => {
             console.log(err);
+            res.send()
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_complete = (req, res) => {
+const distribution_complete = async(req, res) => {
     let id = req.params.id
 
     if (typeof id != 'string') {
@@ -271,13 +339,16 @@ const distribution_complete = (req, res) => {
 
     if (id) {
         const sqlUpdate = "UPDATE claire.order SET Status = 'Submitted' WHERE Order_id = ?;"
-        sb.query(sqlUpdate, [id], (err, result) => {
+        await sb.query(sqlUpdate, [id], (err, result) => {
             console.log(err);
+            res.send()
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_incomplete = (req, res) => {
+const distribution_incomplete = async(req, res) => {
     let id = req.params.id
 
     if (typeof id != 'string') {
@@ -288,13 +359,16 @@ const distribution_incomplete = (req, res) => {
 
     if (id) {
         const sqlUpdate = "UPDATE claire.order SET Status = 'Draft' WHERE Order_id = ?;"
-        sb.query(sqlUpdate, [id], (err, result) => {
+        await sb.query(sqlUpdate, [id], (err, result) => {
             console.log(err);
+            res.send()
+            res.end()
+            return;
         })
     }
 }
 
-const distribution_cleanup = (req, res) => {
+const distribution_cleanup = async(req, res) => {
     let id = req.params.id
 
     if (typeof id != 'string') {
@@ -308,15 +382,15 @@ const distribution_cleanup = (req, res) => {
         from claire.orderitems as oi
         join claire.itemlocation il on oi.ItemLocationFK = il. ItemLocation_id
         where oi.Order_id = ?;`
-        sb.query(sqlUpdate, [id], (err, result) => {
-            console.log("1")
+        await sb.query(sqlUpdate, [id], (err, result) => {
             res.send(result)
+            res.end()
+            return;
         })
     }
-    console.log("drop-off")
 }
 
-const distribution_reclaim = (req, res) => {
+const distribution_reclaim = async(req, res) => {
     let records = req.body.records
 
 
@@ -327,35 +401,36 @@ const distribution_reclaim = (req, res) => {
     }
 
     if (records) {
-        for(let record in records){
+        for (let record in records) {
             Quantity = records[record].Quantity + records[record].Given
             const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
-            sb.query(sqlUpdate, [Quantity, records[record].ItemLocationFK], (err, result) => {
-                console.log("2")
+            await sb.query(sqlUpdate, [Quantity, records[record].ItemLocationFK], (err, result) => {
                 console.log(err);
                 res.send()
                 res.end()
+                return;
             })
         }
-        
+
     }
 }
 
-const distribution_update_delete = (req, res) => {
+const distribution_update_delete = async(req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.send("Invalid");
         res.end();
         return
     }
 
-    if(id){
+    if (id) {
         const sqlDelete = "DELETE FROM claire.orderitems WHERE Order_id = ?;"
-        sb.query(sqlDelete, [id], (err, result) => {
+        await sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
             res.send()
             res.end()
+            return;
         })
     }
 }
