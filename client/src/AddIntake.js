@@ -103,11 +103,13 @@ function AddIntake() {
     Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
 
     for (const item of items) {
-      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: formData.Location })
+      let IL_response = await Axios.post("http://localhost:3001/intake/location", { Item_id: item.Item_id, Location_id: formData.Location })
 
       let IID_response = await Axios.get("http://localhost:3001/intake/find_id");
 
-      Axios.post("http://localhost:3001/intake/track", { Intake_id: IID_response.data[0].Intake_id, Quantity: item.Quantity, Value: formData.Value, FKItemLocation: IL_response.data[0].ItemLocation_id });
+      let V_response = await Axios.post("http://localhost:3001/intake/find_value", { Item_id: item.Item_id })
+
+      Axios.post("http://localhost:3001/intake/track", { Intake_id: IID_response.data[0].Intake_id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, FKItemLocation: IL_response.data[0].ItemLocation_id });
 
       let current = await Axios.post("http://localhost:3001/intake/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
 

@@ -30,9 +30,23 @@ function Intake() {
 
 
 
-    /*const handleRemove = (id) =>{
-        Axios.delete(`http://localhost:3001/partner/remove/${id}`);
-    }*/
+    const handleRemove = async (id) => {
+        let GetData = async function (id) {
+            return await Axios.get(`http://localhost:3001/intake/${id}/cleanup`).then((response) => {
+                return response
+            });
+        }
+        let data = GetData(id)
+        data.then(async (response) => {
+            await Axios.put("http://localhost:3001/intake/reclaim", { records: response.data })
+        })
+
+        await Axios.delete(`http://localhost:3001/intake/remove/${id}`);
+
+        window.location.reload(false);
+
+
+    }
 
     const handleEdit = (id) => {
         navigate(`/intake/${id}/edit`)
@@ -48,7 +62,7 @@ function Intake() {
         <div>
             <button><Link to="/intake/new">Add</Link></button>
 
-            <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} />
+            <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
 
             <button><Link to="/Dashboard">Dasboard</Link></button>
