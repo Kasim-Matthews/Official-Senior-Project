@@ -8,7 +8,7 @@ const sb = mysql.createPool({
 });
 
 const location_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.location;"
+    const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS NULL;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
@@ -35,15 +35,16 @@ const location_creation = (req, res) => {
 
 const location_delete = (req, res) => {
     let id = req.params.id;
-    if (typeof id != "string") {
+    let date = req.body.date;
+    if (typeof id != "string" && typeof date != "string") {
         res.send("Invalid");
         res.end();
         return;
     }
 
     if (id) {
-        const sqlDelete = 'DELETE FROM claire.location WHERE Location_id = ?;'
-        sb.query(sqlDelete, [id], (err, result) => {
+        const sqlDelete = `UPDATE claire.location Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Location_id = ?;`
+        sb.query(sqlDelete, [date, id], (err, result) => {
             console.log(err);
         })
     }

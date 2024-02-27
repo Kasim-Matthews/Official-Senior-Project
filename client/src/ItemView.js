@@ -14,7 +14,9 @@ function ItemView() {
     }, [])
 
     const handleRemove = (id) => {
-        Axios.delete(`http://localhost:3001/item/remove/${id}`);
+        let date = new Date().toLocaleDateString();
+        Axios.put(`http://localhost:3001/item/remove/${id}`, {date: date});
+        window.location.reload(false);
     }
 
     const handleEdit = (id) => {

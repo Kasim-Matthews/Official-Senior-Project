@@ -9,7 +9,9 @@ function PartnerView(){
     const navigate = useNavigate();
     
     const handleRemove = (id) => {
-        Axios.delete(`http://localhost:3001/partner/remove/${id}`);
+        let date = new Date().toLocaleDateString();
+        Axios.put(`http://localhost:3001/partner/remove/${id}`, {date: date});
+        window.location.reload(false);
     }
 
     const handleEdit = (id) =>{
@@ -44,7 +46,7 @@ function PartnerView(){
                                 <td>{val.Name}</td>
                                 <td>{val.Email}</td>
                                 <td>
-                                    <button /*onClick={() => handleRemove(val.Partner_id)}*/>Delete</button>
+                                    <button onClick={() => handleRemove(val.Partner_id)}>Delete</button>
                                     <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
                                     <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>

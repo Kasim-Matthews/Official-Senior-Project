@@ -8,7 +8,7 @@ const sb = mysql.createPool({
 });
 
 const partner_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.partner;"
+    const sqlGet = "SELECT * FROM claire.partner WHERE DeletedAt IS NULL;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
@@ -45,15 +45,16 @@ const partner_create = (req, res) => {
 
 const partner_delete = (req, res) => {
     let id = req.params.id;
-    if (typeof id != "string") {
+    let date = req.body.date;
+    if (typeof id != "string" && typeof date != "string") {
         res.send("Invalid");
         res.end();
         return;
     }
 
     if (id) {
-        const sqlDelete = 'DELETE FROM claire.partner WHERE Partner_id = ?;'
-        sb.query(sqlDelete, [id], (err, result) => {
+        const sqlDelete = `UPDATE claire.partner Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Partner_id = ?;`
+        sb.query(sqlDelete, [date, id], (err, result) => {
             console.log(err);
         })
     }
