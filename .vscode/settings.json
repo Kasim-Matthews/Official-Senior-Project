@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/ed8a66fa-129e-4fa3-a2cd-3cc081ca2e9e/resourceGroups/Senior-Project-2024-CAK/providers/Microsoft.Web/sites/DiaperBank",
+    "appService.deploySubpath": "."
+}

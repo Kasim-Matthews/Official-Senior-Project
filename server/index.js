@@ -2,46 +2,38 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const mysql = require('mysql2')
+const distributionRoute = require('./routes/distribution');
+const partnerRoute = require('./routes/partner');
+const itemRoute = require('./routes/item');
+const locationRoute = require('./routes/location')
+const manufacturersRoute = require('./routes/manufacturers')
+const accountRoute = require('./routes/account')
+const intakeRoute = require('./routes/intake')
 
-const db = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    port: 3006
-});
+
 app.use(cors())
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
 
-app.get('/api/get', (req, res) =>{
-    const sqlGet = "SELECT * FROM test.dis;"
-    db.query(sqlGet, (err, result) =>{
-        res.send(result);
-    }) 
+app.use('/distribution', distributionRoute);
+app.use('/partner', partnerRoute);
+app.use('/item', itemRoute);
+app.use('/location', locationRoute);
+app.use('/manufacturers', manufacturersRoute);
+app.use('/', accountRoute);
+app.use('/intake', intakeRoute)
+
+
+
+app.get('/', (req, res) => {
+    res.send('hello world');
 })
 
-app.post('/api/insert', (req, res) =>{
-
-    let partner = req.body.partner;
-    let date = req.body.date;
-    let source = req.body.source;
-    let totalitems = req.body.totalitems;
-    let value = req.body.value;
-    let deliverymethod = req.body.deliverymethod;
-    let comments = req.body.comments;
-    let state = req.body.state;
-
-    const sqlInsert = "INSERT INTO test.dis (partner, date, source, totalitems, value, deliverymethod, comments, state) VALUES (?,?,?,?,?,?,?,?);"
-    db.query(sqlInsert, [partner, date, source, totalitems, value, deliverymethod, comments, state], (err, result) =>{
-        console.log(err);
-    })
-})
-
-app.get("/", (req, res) => {
-    res.send("hello")
-})
-
-app.listen('4002', () => {
-    console.log("running on port 4002");
+app.listen('3001', () => {
+    console.log("running on port 3001");
 })
