@@ -1,16 +1,18 @@
-const mysql = require('mysql2');
-const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    database: 'claire',
-    port: 3006
+const { Client } = require('pg');
+const sb = new Client({
+    user: 'claire_a2dn_user',
+    password:'TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf',
+    host: 'dpg-cnh1rs20si5c73bm4ptg-a.oregon-postgres.render.com',
+    port: '5432',
+    database: 'claire_a2dn',
+    ssl: true,
+    connectionString: 'postgres://claire_a2dn_user:TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf@dpg-cnh1rs20si5c73bm4ptg-a:5432/claire_a2dn'
 });
 
 const register = (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
-
+    sb.connect();
     sb.query(
         "INSERT INTO register (usernameReg, passwordReg) VALUES (?,?)",
         [username, password],
@@ -18,14 +20,16 @@ const register = (req, res) => {
             console.log(err);
         }
     )
-
+    sb.end()
 }
 
 const login = (req, res) => {
     console.log(req.body)
     let username = req.body.username;
     let password = req.body.password;
-
+    sb.connect().then(() => {
+        console.log('Connected')
+    });
     sb.query(
         "SELECT * FROM register WHERE usernameReg = ? AND passwordReg = ?",
         [username, password],
@@ -46,6 +50,7 @@ const login = (req, res) => {
 
         }
     )
+    sb.end()
 }
 
 const data = (req, res) => {
@@ -55,7 +60,7 @@ const data = (req, res) => {
         JOIN claire.item i ON il.Item_id = i.Item_id
         JOIN claire.location l ON il.Location_id = l.Location_id;
     `;
-
+    sb.connect();
     sb.query(query, (err, result) => {
         if (err) {
             res.send({ status: 'error', message: err.message });
@@ -63,6 +68,7 @@ const data = (req, res) => {
             res.send({ status: 'ok', data: result });
         }
     });
+    sb.end()
 }
 
 module.exports = {

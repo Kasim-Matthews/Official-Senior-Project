@@ -1,10 +1,12 @@
-const mysql = require('mysql2');
-const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    database: 'claire',
-    port: 3006
+const { Client } = require('pg');
+const sb = new Client({
+    user: 'claire_a2dn_user',
+    password: 'TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf',
+    host: 'dpg-cnh1rs20si5c73bm4ptg-a.oregon-postgres.render.com',
+    port: '5432',
+    database: 'claire_a2dn',
+    ssl: true,
+    connectionString: 'postgres://claire_a2dn_user:TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf@dpg-cnh1rs20si5c73bm4ptg-a:5432/claire_a2dn'
 });
 
 const data = (req, res) => {
@@ -15,11 +17,13 @@ const data = (req, res) => {
     join claire.intakeitems ii on i.Intake_id = ii.Intake_id
     group by i.Intake_id
     `;
+    sb.connect();
     sb.query(sqlGet, (err, result) => {
         res.send(result);
         res.end();
         return;
     })
+    sb.end();
 }
 
 const create = (req, res) => {
@@ -31,12 +35,14 @@ const create = (req, res) => {
 
 
     const sqlInsert = "INSERT INTO claire.intake (Comments, RecievedDate, Value, Partner) VALUES (?,?,?,?);"
+    sb.connect();
     sb.query(sqlInsert, [Comments, RecievedDate, Value, Partner], (err, result) => {
         console.log(err);
         res.send()
         res.end()
         return;
     })
+    sb.end();
 }
 
 const location = (req, res) => {
@@ -50,22 +56,24 @@ const location = (req, res) => {
     JOIN location l ON il.Location_id = l.Location_id
     WHERE i.Item_id = ? AND l.Location_id = ?
     `;
-
+    sb.connect();
     sb.query(query, [Item_id, Location_id], (err, result) => {
         res.send(result);
         res.end()
         return;
     })
+    sb.end();
 }
 
 const find_id = (req, res) => {
     const query = "SELECT MAX(Intake_id) as Intake_id FROM claire.intake;"
-
+    sb.connect();
     sb.query(query, (err, result) => {
         res.send(result);
         res.end()
         return;
     })
+    sb.end();
 }
 
 const track = (req, res) => {
@@ -75,25 +83,28 @@ const track = (req, res) => {
     let FKItemLocation = req.body.FKItemLocation;
 
     const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
-
+    sb.connect();
     sb.query(sqlInsert, [Intake_id, Quantity, Value, FKItemLocation], (err, result) => {
         console.log(err);
         res.send()
         res.end()
         return;
     })
+    sb.end();
 }
 
 const find_q = (req, res) => {
     let ItemLocationFK = req.body.ItemLocationFK;
 
     const sqlGet = "SELECT Quantity FROM claire.itemlocation WHERE ItemLocation_id = ?"
+    sb.connect();
     sb.query(sqlGet, [ItemLocationFK], (err, result) => {
         res.send(result);
 
         res.end()
         return;
     })
+    sb.end();
 }
 
 const update_item = (req, res) => {
@@ -103,12 +114,14 @@ const update_item = (req, res) => {
 
     Quantity = +CurrentQ + +Quantity;
     const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+    sb.connect();
     sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) => {
         console.log(err);
         res.send()
         res.end()
         return;
     })
+    sb.end();
 }
 
 const intake_view = (req, res) => {
@@ -122,20 +135,22 @@ const intake_view = (req, res) => {
 
     if (id) {
         const sqlGet = `
-    select Cast(i.RecievedDate as char(10)) as RecievedDate, p.Name as Partner, it.Name as Item, it.FairMarketValue, l.Name as Location, ii.Quantity
-    from claire.intakeitems ii
-    join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-    join claire.intake i on ii.Intake_id = i.Intake_id
-    join claire.item it on it.Item_id = il.Item_id
-    join claire.location l on l.Location_id = il.Location_id
-    join claire.partner p on i.Partner = p.Partner_id
-    where ii.Intake_id = ?; 
-    `;
+        select Cast(i.RecievedDate as char(10)) as RecievedDate, p.Name as Partner, it.Name as Item, it.FairMarketValue, l.Name as Location, ii.Quantity
+        from claire.intakeitems ii
+        join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+        join claire.intake i on ii.Intake_id = i.Intake_id
+        join claire.item it on it.Item_id = il.Item_id
+        join claire.location l on l.Location_id = il.Location_id
+        join claire.partner p on i.Partner = p.Partner_id
+        where ii.Intake_id = ?; 
+        `;
+        sb.connect();
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
             res.end();
             return
         })
+        sb.end();
     }
 }
 
@@ -150,17 +165,19 @@ const edit = (req, res) => {
 
     if (id) {
         const sqlGet = `
-    select i.Comments, i.Value, Cast(i.RecievedDate as char(10)) AS RecievedDate, i.Partner, il.Location_id
-    from claire.intake i
-    join claire.intakeitems ii on i.Intake_id = ii.Intake_id
-    join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-    where i.Intake_id = ?; 
-    `;
+        select i.Comments, i.Value, Cast(i.RecievedDate as char(10)) AS RecievedDate, i.Partner, il.Location_id
+        from claire.intake i
+        join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+        join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+        where i.Intake_id = ?; 
+        `;
+        sb.connect();
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
             res.end()
             return;
         })
+        sb.end();
     }
 }
 
@@ -181,12 +198,14 @@ const update = (req, res) => {
 
     if (RecievedDate && Value && Partner) {
         const sqlUpdate = "UPDATE claire.intake SET Comments= ?, RecievedDate= ?, Partner= ?, Value = ? WHERE Intake_id = ?;"
+        sb.connect();
         sb.query(sqlUpdate, [Comments, RecievedDate, Partner, Value, id], (err, result) => {
             console.log(err);
             res.send()
             res.end()
             return;
         })
+        sb.end();
     }
 }
 
@@ -201,11 +220,13 @@ const intake_find_value = (req, res) => {
 
     if (Item_id) {
         const sqlGet = "SELECT FairMarketValue FROM claire.item WHERE Item_id = ?;"
+        sb.connect();
         sb.query(sqlGet, [Item_id], (err, result) => {
             res.send(result);
             res.end()
             return;
         })
+        sb.end();
     }
 
 }
@@ -223,12 +244,14 @@ const intake_cleanup = (req, res) => {
         const sqlUpdate = `SELECT ii.Quantity as Given, ii.FKItemLocation, il.Quantity
         from claire.intakeitems as ii
         join claire.itemlocation il on ii.FKItemLocation = il. ItemLocation_id
-        where ii.Intake_id = ?;`
+        where ii.Intake_id = ?;`;
+        sb.connect();
         sb.query(sqlUpdate, [id], (err, result) => {
             res.send(result)
             res.end()
             return;
         })
+        sb.end();
     }
 }
 
@@ -243,6 +266,7 @@ const intake_reclaim = (req, res) => {
     }
 
     if (records) {
+        sb.connect();
         for (let record in records) {
             Quantity = records[record].Quantity - records[record].Given
             const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
@@ -253,6 +277,7 @@ const intake_reclaim = (req, res) => {
                 return;
             })
         }
+        sb.end();
 
     }
 }
@@ -268,12 +293,14 @@ const intake_remove = (req, res) => {
 
     if (id) {
         const sqlDelete = 'DELETE FROM claire.intake WHERE Intake_id = ?;'
+        sb.connect();
         sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
             res.send()
             res.end()
             return;
         })
+        sb.end();
     }
 }
 
@@ -292,12 +319,14 @@ const intake_edit_items = (req, res) => {
         from claire.intakeitems as ii
         join claire.itemlocation il on ii.FKItemLocation= il.ItemLocation_id
         where ii.Intake_id = ?;
-    `;
+        `;
+        sb.connect();
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
             res.end()
             return;
         })
+        sb.end();
     }
 }
 
@@ -312,12 +341,14 @@ const intake_update_delete = (req, res) => {
 
     if (id) {
         const sqlDelete = "DELETE FROM claire.intakeitems WHERE Intake_id = ?;"
+        sb.connect();
         sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
             res.send()
             res.end()
             return;
         })
+        sb.end();
     }
 }
 
