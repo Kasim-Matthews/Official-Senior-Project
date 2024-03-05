@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
-import Select from 'react-select';
 
 function EditIntake() {
 

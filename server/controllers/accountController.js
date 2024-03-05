@@ -4,7 +4,7 @@ const sb = mysql.createPool({
     user: "root",
     password: "WebVoyage2023!",
     database: 'claire',
-    port: 3006
+    port: 3306
 });
 
 const register = (req, res) => {
