@@ -9,7 +9,6 @@ const locationRoute = require('./routes/location')
 const manufacturersRoute = require('./routes/manufacturers')
 const accountRoute = require('./routes/account')
 const intakeRoute = require('./routes/intake')
-const authRoutes = require('./routes/authRoutes')
 const updateUserInfoRoutes = require('./routes/updateUserInfo')
 
 
@@ -30,7 +29,6 @@ app.use('/manufacturers', manufacturersRoute);
 app.use('/', accountRoute);
 app.use('/updateUserInfo', updateUserInfoRoutes)
 app.use('/intake', intakeRoute)
-app.use('/auth', authRoutes);
 
 app.post('/updateUserInfo', (req, res) => {
     let userId = req.body.userId;

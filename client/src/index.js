@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Order from './Order';
 import AddOrder from './AddOrder';
@@ -36,7 +35,7 @@ export class Application extends React.Component {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<App />} />
+                    <Route path="/" element={<Login />} />
                     <Route path="/Dashboard" element={<Dashboard />} />
                     <Route path='/UserAddInfo' element={<UserAddInfo />} />
                     <Route path='/login' element={<Login />} />

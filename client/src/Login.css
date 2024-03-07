@@ -1,16 +1,16 @@
-/* Apply a basic reset */
+/* Apply a basic reset 
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
   }
-  
+  */
   body, html {
     height: 100%;
     font-family: Arial, sans-serif;
   }
   
-  .App {
+.App {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,7 +44,7 @@
     box-sizing: border-box;
   }
   
-  button {
+  /*button {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -53,7 +53,7 @@
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
-  }
+  }*/
   
   button:hover {
     background-color: #0056b3;
