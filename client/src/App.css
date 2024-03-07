@@ -1,23 +1,5 @@
 input{
-    display: block;
-  }
-  
-  table, tr, td, th{
-    margin-top: 50px;
-    border: 1px solid black;
-    border-collapse: collapse;
-    padding: 10px;
-    text-align: center;
-  }input{
   display: block;
-}
-
-table, tr, td, th{
-  margin-top: 50px;
-  border: 1px solid black;
-  border-collapse: collapse;
-  padding: 10px;
-  text-align: center;
 }
 
 p {
