@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
 import axios from 'axios';
 import './Dashboard.css';
 
@@ -41,12 +40,12 @@ function Dashboard() {
             <nav className="sidebar">
                 <h2>Inventory Management System</h2>
                 <ul>
-                    <li><Link to="/Dashboard">Dasboard</Link></li>
-                    <li><Link to="/distribution">Distributions</Link></li>
-                    <li><Link to="/intake">Collections</Link></li>
-                    <li><Link to="/item">Items</Link></li>
-                    <li><Link to="/location">Locations</Link></li>
-                    <li><Link to="/partner">Partner</Link></li>
+                    <li><a href="/Dashboard">Dashboard</a></li>
+                    <li><a href="/distribution">Distributions</a></li>
+                    <li><a href="/intake">Collections</a></li>
+                    <li><a href="/item">Items</a></li>
+                    <li><a href="/partner">Partner Agencies</a></li>
+                    <li><a href="/location">Locations</a></li>
                 </ul>
             </nav>
 
