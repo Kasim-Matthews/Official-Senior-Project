@@ -113,6 +113,10 @@ function Order() {
     window.location.reload(false);
   }
 
+  const handleprint = (id) => {
+    navigate(`/distribution/${id}/print.pdf`)
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -149,7 +153,7 @@ function Order() {
       </form>
       <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
       <button><Link to="/distribution/new">Add</Link></button>
-      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} />
+      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
       <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
       <button><Link to="/Dashboard">Dasboard</Link></button>
     </div>

@@ -51,7 +51,8 @@ function ViewOrder() {
         <thead>
           <tr>
             <th>Item Name</th>
-            <th>Inkind Value</th>
+            <th>Value/item</th>
+            <th>In-kind Value</th>
             <th>Quantity</th>
           </tr>
         </thead>
@@ -61,6 +62,7 @@ function ViewOrder() {
               <tr>
                 <td>{val.Item}</td>
                 <td>{val.FairMarketValue}</td>
+                <td>{val.FairMarketValue * val.Quantity}</td>
                 <td>{val.Quantity}</td>
               </tr>
             )

@@ -1,6 +1,6 @@
 import React from "react";
 
-const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncomplete, handleRemove }) => {
+const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncomplete, handleRemove, handleprint }) => {
     return (
         <div>
             <table>
@@ -31,6 +31,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
 
                                 <td>
                                     <button onClick={() => handleRemove(val.Order_id)}>Reclaim</button>
+                                    <button onClick={() => handleprint(val.Order_id)}>Print</button>
                                     {val.Status == 'Draft' ? (<button onClick={() => handleEdit(val.Order_id)}>Edit</button>) : null}
                                     <button onClick={() => handleView(val.Order_id)}>View</button>
                                     {val.Status == 'Draft' ? (<button onClick={() => handleComplete(val.Order_id)}>Complete</button>) : null}

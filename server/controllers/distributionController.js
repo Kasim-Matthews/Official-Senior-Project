@@ -435,6 +435,31 @@ const distribution_update_delete = (req, res) => {
     }
 }
 
+const distribution_print = (req, res) => {
+    let id = req.params.id
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return
+    }
+
+    if (id) {
+        const sqlGet = `SELECT o.Comments, CAST(o.CompletedDate as char(10))AS CompletedDate, p.Name AS Partner, SUM(oi.Quantity) AS Total, SUM(oi.Value) AS TotalValue
+        from claire.order o
+        join claire.partner p on o.Partner_id = p.Partner_id
+        join claire.orderitems oi on o.Order_id = oi.Order_id
+        where o.Order_id = ?;`
+
+        sb.query(sqlGet, [id], (err, result) => {
+            console.log(err);
+            res.send(result)
+            res.end()
+            return;
+        })
+    }
+
+}
+
 
 module.exports = {
     distribution_index,
@@ -455,5 +480,6 @@ module.exports = {
     distribution_reclaim,
     distribution_itemlist,
     distribution_edit_items,
-    distribution_update_delete
+    distribution_update_delete,
+    distribution_print
 }

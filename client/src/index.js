@@ -26,6 +26,7 @@ import Intake from './Intake';
 import ViewIntake from './OneIntake'
 import EditIntake from './EditIntake';
 import AddPurchase from './AddPurchase';
+import PDFView from './PDFView';
 
 
 export class Application extends React.Component {
@@ -40,6 +41,7 @@ export class Application extends React.Component {
                     <Route path='/distribution/:id' element={<ViewOrder />} />
                     <Route path='/distribution/:id/edit' element={<EditOrder />} />
                     <Route path="/distribution/new" element={<AddOrder />} />
+                    <Route path='/distribution/:id/print.pdf' element={<PDFView />}/>
 
                     <Route path="/partner/new" element={<AddPartner />} />
                     <Route path='/partner/:id/edit' element={<EditPartner />} />
