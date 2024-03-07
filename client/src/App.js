@@ -1,125 +1,106 @@
-import React, { useState, useEffect }  from 'react';
-import {Link} from 'react-router-dom'
-import axios from 'axios';
-import './Dashboard.css';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import { TableFooter } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
-function Dashboard() {
-
-    const [items, setItems] = useState([]);
-    const [locations, setLocations] = useState([]);
-    const [selectedLocation, setSelectedLocation] = useState('');
-
-    useEffect(() => {
-        axios.get('http://localhost:3306/item-location-data')
-            .then(response => {
-                if (response.data.status === 'ok') {
-                    setItems(response.data.data);
-                    setLocations([...new Set(response.data.data.map(item => item.locationName))]);
-                } else {
-                    console.error('Failed to fetch data');
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching data', error);
-            });
-    }, []);
-
-    const handleLocationChange = (e) => {
-        setSelectedLocation(e.target.value);
-    };
-
-    const filteredItems = selectedLocation 
-    ? items.filter(item => item.locationName === selectedLocation)
-    : items;
-
-    const totalQuantity = filteredItems.reduce((sum, item) => sum + item.Quantity, 0);
 
 
-    return (
-        <div className="dashboard-container">
-            <div className="header">
-                <nav className="navbar">
-                    <ul>
-                        <li><Link to="/Dashboard">Dasboard</Link></li>
-                        <li><Link to="/distribution">Distributions</Link></li>
-                        <li><Link to="/intake">Collections</Link></li>
-                        <li><a href="#">Inventory</a></li>
-                        <li><Link to="/partner">Partner</Link></li>
-                        <li><a href="#">User Profile</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div className="main-content">
-                    <h1>Welcome, DBNF Admin!</h1>
-                    <Box height={275}
-                         width={500}
-                         my={4}
-                         display="flex"
-                         alignItems="center"
-                         gap={4}
-                         p={2}
-                         borderRadius={2}
-                         sx={{ border: '1px solid grey' }}>
-                        <div className="content">
-                        <h2>Item Locations</h2>
-                            <div className="filter-section">
-                                <FormControl fullWidth>
-                                 <InputLabel id="selectedLocation">Location</InputLabel>
-                                    <Select labelId="selectedLocation" id="selectedLocation" value={selectedLocation} label="Location" onChange={handleLocationChange}>
-                                        <MenuItem value={''}>All Locations</MenuItem>
-                                        {locations.map((location, index) => (
-                                        <MenuItem key={index} value={location}>{location}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                                <div className="item-table">
-                                <TableContainer component={Paper}>
-                                    <Table sx={{ minWidth: 450 }} aria-label="a simple table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell align="right">Item Name</TableCell>
-                                                <TableCell align="right">Location Name</TableCell>
-                                                <TableCell align="right">Quantity</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {filteredItems.map((item, index) => (
-                                            <TableRow key={index}
-                                                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                                <TableCell>{item.itemName}</TableCell>
-                                                <TableCell>{item.locationName}</TableCell>
-                                                <TableCell>{item.Quantity}</TableCell>
-                                            </TableRow>
-                                            ))}
-                                        </TableBody>
-                                        <TableFooter>
-                                            <TableRow>
-                                                <TableCell colSpan="2">Total Number of Items</TableCell>
-                                                <TableCell>{totalQuantity}</TableCell>
-                                            </TableRow>
-                                        </TableFooter>
-                                    </Table>
-                                </TableContainer>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
-                </div>
-            </div>
-    );
+
+/*import React, { useState } from "react";
+import Axios from 'axios';
+import './Login.css';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import UserAddInfo from './UserAddInfo';
+
+function App() {
+  // Existing state declarations
+  const [usernameReg, setUsernameReg] = useState('');
+  const [passwordReg, setPasswordReg] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [loginStatus, setLoginStatus] = useState("");
+  const [additionalInfoRequired, setAdditionalInfoRequired] = useState(false);
+  const [userId, setUserId] = useState(null);
+
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const register = () => {
+    Axios.post('http://localhost:3001/register', {
+      username: usernameReg,
+      password: passwordReg,
+    }).then((response) => {
+
+    })
+  }
+
+  const login = () => {
+    Axios.post('http://localhost:3001/login', {
+      username: username,
+      password: password,
+    }).then((response) => {
+      if (response.data.status === 'ok') {
+        setIsLoggedIn(true); // Set the isLoggedIn state to true on successful login
+      } else if (response.data.status === 'additional_info_required') {
+        setAdditionalInfoRequired(true);
+        setLoginStatus(response.data.message);
+        setUserId(response.data.userId);
+        console.log(response.data.userId)
+      } else {
+        setLoginStatus(response.data.message);
+      }
+    });
+  };
+
+  return (
+
+    <div className="App">
+      <header className="App-header">
+        <h1>Diaper Bank of Northeast Florida Inventory Management System</h1>
+      </header>
+      
+      {isLoggedIn && !additionalInfoRequired ? <Navigate to="/Dashboard" /> : null}
+      {additionalInfoRequired ? <UserAddInfo userId={userId} /> : null}
+      <div>
+      <div className="form-container">
+        <div className="register">
+          <h1>Registration</h1>
+          <label>Email</label>
+          <input
+            type="text" placeholder="Email..."
+            onChange={(e) => {
+              setUsernameReg(e.target.value);
+            }}
+          />
+          <label>Password</label>
+          <input type="text" placeholder="Password..."
+            onChange={(e) => {
+              setPasswordReg(e.target.value);
+            }}
+          />
+          <button onClick={register}> Register </button>
+        </div>
+
+        <div className="login">
+          <h1>Login</h1>
+          <label>Email</label>
+          <input type="text" placeholder="Email..."
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
+          <label>Password</label>
+          <input type="password" placeholder="Password..."
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <button onClick={login}> Login </button>
+        </div>
+
+        <h1>{loginStatus}</h1>
+      </div>
+
+
+    </div>
+    </div>
+  );
 }
 
-export default Dashboard;
+
+export default App;*/

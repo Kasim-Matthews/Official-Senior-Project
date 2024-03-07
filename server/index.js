@@ -9,9 +9,6 @@ const locationRoute = require('./routes/location')
 const manufacturersRoute = require('./routes/manufacturers')
 const accountRoute = require('./routes/account')
 const intakeRoute = require('./routes/intake')
-const authRoutes = require('./routes/authRoutes')
-const updateUserInfoRoutes = require('./routes/updateUserInfo')
-
 
 app.use(cors())
 app.use(express.json())
@@ -28,23 +25,8 @@ app.use('/item', itemRoute);
 app.use('/location', locationRoute);
 app.use('/manufacturers', manufacturersRoute);
 app.use('/', accountRoute);
-app.use('/updateUserInfo', updateUserInfoRoutes)
 app.use('/intake', intakeRoute)
-app.use('/auth', authRoutes);
 
-app.post('/updateUserInfo', (req, res) => {
-    let userId = req.body.userId;
-    let name = req.body.name;
-    let role = req.body.role;
-    const sql = "UPDATE user SET Name = ?, Role = ? WHERE User_id = ?";
-    db.query(sql, [name, role, userId], (err, result) => {
-        if (err) {
-            res.send({ status: 'error', message: err.message });
-        } else {
-            res.send({ status: 'ok' });
-        }
-    });
-});
 
 
 
