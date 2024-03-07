@@ -9,18 +9,30 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
 import { TableFooter } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Switch from '@mui/material/Switch';
 
 function Dashboard() {
 
     const [items, setItems] = useState([]);
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState('');
+    const [auth, setAuth] = React.useState(true);
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
         axios.get('http://localhost:3306/item-location-data')
@@ -37,6 +49,18 @@ function Dashboard() {
             });
     }, []);
 
+    const handleChange = (event) => {
+        setAuth(event.target.checked);
+      };
+    
+      const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+    
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
+
     const handleLocationChange = (e) => {
         setSelectedLocation(e.target.value);
     };
@@ -50,20 +74,69 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container">
-            <div className="header">
-                <nav className="navbar">
-                    <ul>
-                        <li><Link to="/Dashboard">Dasboard</Link></li>
-                        <li><Link to="/distribution">Distributions</Link></li>
-                        <li><Link to="/intake">Collections</Link></li>
-                        <li><a href="#">Inventory</a></li>
-                        <li><Link to="/partner">Partner</Link></li>
-                        <li><a href="#">User Profile</a></li>
-                    </ul>
-                </nav>
-            </div>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static">
+                    <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link href="/Dashboard" underline="none">Dasboard</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/distribution" underline="none">Distributions</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/intake" underline="none">Collections</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <a href="#" underline="none">Inventory</a>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/partner" underline="none">Partner</Link>
+                    </Typography>
+                        <div>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        <Menu
+                            id="menu-appbar"
+                            anchorEl={anchorEl}
+                            anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                            }}
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={handleClose}>Profile</MenuItem>
+                            <MenuItem onClick={handleClose}>My account</MenuItem>
+                        </Menu>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                </Box>
             <div className="main-content">
                     <h1>Welcome, DBNF Admin!</h1>
+                <div className="boxes">
+                    <div className="box">
                     <Box height={275}
                          width={500}
                          my={4}
@@ -117,8 +190,21 @@ function Dashboard() {
                             </div>
                         </div>
                     </Box>
+                    </div>
+                    <div className="box2">
+                    <Box height={275}
+                         width={500}
+                         my={4}
+                         alignItems="center"
+                         gap={4}
+                         p={2}
+                         borderRadius={2}
+                         sx={{ border: '1px solid grey' }}>
+                    </Box>
+                    </div>
                 </div>
             </div>
+        </div>
     );
 }
 
