@@ -1,68 +1,69 @@
 /* General Styles */
 .dashboard-container {
-  margin: 0;
-  font-family: 'Open Sans', sans-serif;
-}
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+  }
 
 .header{
-background-color: white;
-width: 120%;
-padding: 10px;
-font-family: 'Open Sans', sans-serif;
-font-size: 15px;
+  background-color: white;
+  width: 120%;
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
 }
-
+  
 .navbar{
-background-color: white;
-color: #373a41;
-margin-left: 600px;
+  background-color: white;
+  color: #373a41;
+  margin-left: 600px;
 }
 
 .navbar ul {
-list-style-type: none;
-margin: 0;
-padding: 0;
-overflow: hidden;
-background-color: white;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
 }
 
 .navbar ul li {
-float: left;
+  float: left;
 }
 
 .navbar ul li a {
-display: block;
-color: #373a41;
-text-align: center;
-padding: 14px 16px;
-text-decoration: none;
+  display: block;
+  color: #373a41;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
 }
 
 .navbar ul li a:hover {
-color: black;
+  color: black;
 }
 
 h1{
-text-align: center;
-padding: 70px;
-color: #373a41;
-font-family: 'Open Sans', sans-serif;
+  text-align: center;
+  padding: 70px;
+  color: #373a41;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .content{
-width: 500px;
-padding: 10px;
+  width: 500px;
+  padding: 10px;
 }
 
 h2{
-text-align: center;
-color: #373a41;
+  text-align: center;
+  color: #373a41;
 }
 
 Select{
-padding: 10px 10px 10px 10px;
+  padding: 10px 10px 10px 10px;
 }
 
 .item-table{
-padding: 10px 0px 10px 0px;
+  padding: 10px 0px 10px 0px;
 }
+  
