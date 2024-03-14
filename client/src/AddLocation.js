@@ -37,9 +37,8 @@ function AddLocation() {
 
     let Location_id = await Axios.get("http://localhost:3001/location/last")
     
-    await Axios.post("http://localhost:3001/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items})
+    await Axios.post("http://localhost:3001/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items}).then(window.location.href ="/location")
 
-    window.location.href = "/location";
 
     
   }

@@ -6,7 +6,6 @@ import Item from "./models/Item";
 function AddItem() {
   const navigate = useNavigate();
 
-  const [isActive, setIsActive] = React.useState(true)
   const [formData, setFormData] = React.useState(Item)
   const [locations, setLocations] = React.useState([])
 
@@ -24,9 +23,10 @@ function AddItem() {
     e.preventDefault();
     try {
 
-      Axios.post("http://localhost:3001/item/new", {
+      await Axios.post("http://localhost:3001/item/new", {
         name: formData.Name,
-        FairMarketValue: formData.FairMarketValue
+        FairMarketValue: formData.FairMarketValue,
+        PackageCount: formData.PackageCount
       }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -39,10 +39,10 @@ function AddItem() {
 
     let Item_id = await Axios.get("http://localhost:3001/item/last")
     
-    await Axios.post("http://localhost:3001/item/pair", {Locations: locations, Item_id: Item_id.data[0].Item_id + 1}) 
+    await Axios.post("http://localhost:3001/item/pair", {Locations: locations, Item_id: Item_id.data[0].Item_id}).then(window.location.href ="/item")
 
     
-    window.location.href = "/item";
+
   }
 
   useEffect(() => {
@@ -59,9 +59,14 @@ function AddItem() {
       <label htmlFor="FairMarketValue">Fair Market Value</label>
       <input type="number" name="FairMarketValue" id="FairMarketValue" value={formData.FairMarketValue} step="0.01" required onChange={handleChange} />
 
+      <label htmlFor="PackageCount">Package Count</label>
+      <input type="number" name="PackageCount" id="PackageCount" value={formData.PackageCount} step="1" onChange={handleChange} />
+
 
       <input type="submit" value="Submit" />
+      
     </form>
+    
   )
 }
 

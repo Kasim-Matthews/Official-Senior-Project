@@ -6,9 +6,11 @@ const distributionRoute = require('./routes/distribution');
 const partnerRoute = require('./routes/partner');
 const itemRoute = require('./routes/item');
 const locationRoute = require('./routes/location')
-const manufacturersRoute = require('./routes/manufacturers')
 const accountRoute = require('./routes/account')
 const intakeRoute = require('./routes/intake')
+const donationSiteRoute = require('./routes/donationsite')
+const manufacturerRoute = require('./routes/manufacturers')
+const vendorRoute = require('./routes/vendor')
 
 
 app.use(cors())
@@ -24,9 +26,11 @@ app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
 app.use('/item', itemRoute);
 app.use('/location', locationRoute);
-app.use('/manufacturers', manufacturersRoute);
 app.use('/', accountRoute);
 app.use('/intake', intakeRoute)
+app.use('/donationsite', donationSiteRoute)
+app.use('/manufacturers', manufacturerRoute)
+app.use('/vendor', vendorRoute)
 
 
 

@@ -6,10 +6,10 @@ const cors = require('cors')
 router.use(cors())
 
 
-router.get('/', manufacturersController.manufacturers_index)
-router.post('/new', manufacturersController.manufacturers_creation);
-router.delete('/remove/:id', manufacturersController.manufacturers_delete);
-router.get('/:id/edit', manufacturersController.manufacturers_edit)
-router.put('/:id/update', manufacturersController.manufacturers_update)
+router.get('/', manufacturersController.manu_index)
+router.post('/new', manufacturersController.manu_create);
+router.delete('/remove/:id', manufacturersController.manu_delete);
+router.get('/:id/edit', manufacturersController.manu_edit)
+router.put('/:id/update', manufacturersController.manu_update)
 
 module.exports = router;

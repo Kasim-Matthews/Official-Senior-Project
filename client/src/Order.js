@@ -81,19 +81,22 @@ function Order() {
 
 
   const handleRemove = async (id) => {
-    let GetData = async function(id){
-      return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
-        return response
-      });
+    if(window.confirm("Are you sure you want to reclaim this distribution?") == true){
+      let GetData = async function(id){
+        return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
+          return response
+        });
+      }
+      let data = GetData(id)
+      data.then(async (response) => {
+        await Axios.put("http://localhost:3001/distribution/reclaim", {records:response.data})
+      })
+      
+      await Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
+      
+      window.location.reload(false);
     }
-    let data = GetData(id)
-    data.then(async (response) => {
-      await Axios.put("http://localhost:3001/distribution/reclaim", {records:response.data})
-    })
     
-    await Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
-    
-    window.location.reload(false);
   }
 
   const handleEdit = (id) => {
@@ -149,7 +152,7 @@ function Order() {
         <input type="date" name="date" value={filters.date} onChange={handleChange} />
 
 
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Filter" />
       </form>
       <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
       <button><Link to="/distribution/new">Add</Link></button>

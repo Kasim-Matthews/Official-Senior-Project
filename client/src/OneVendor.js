@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
 
-function ViewPartner() {
+function ViewVendor() {
 
     const navigate = useNavigate();
     const { id } = useParams();
@@ -34,13 +34,17 @@ function ViewPartner() {
             <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Business Name</th>
+                        <th>Contact Name</th>
+                        <th>Phone Number</th>
                         <th>Email</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{record.Name}</td>
+                        <td>{record.BusinessName}</td>
+                        <td>{record.ContactName}</td>
+                        <td>{record.Phone}</td>
                         <td>{record.Email}</td>
                     </tr>
                 </tbody>
@@ -50,7 +54,6 @@ function ViewPartner() {
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Source Location</th>
                         <th>Total Items</th>
                     </tr>
                 </thead>
@@ -74,5 +77,6 @@ function ViewPartner() {
         </div>
     )
 }
+/*Cannot edit till the purchase functionality is a thing*/
 
-export default ViewPartner;
+export default ViewVendor;

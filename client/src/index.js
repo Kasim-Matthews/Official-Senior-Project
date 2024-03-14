@@ -27,6 +27,9 @@ import ViewIntake from './OneIntake'
 import EditIntake from './EditIntake';
 import AddPurchase from './AddPurchase';
 import PDFView from './PDFView';
+import VendorView from './VendorView';
+import AddVendor from './AddVendor';
+import EditVendor from './EditVendor';
 
 
 export class Application extends React.Component {
@@ -67,6 +70,10 @@ export class Application extends React.Component {
                     <Route path="/intake/:id" element={<ViewIntake />} />
 
                     <Route path="/purchase/new" element={<AddPurchase/>}/>
+
+                    <Route path='/vendor' element={<VendorView/>}/>
+                    <Route path='/vendor/new' element={<AddVendor/>}/>
+                    <Route path='/partner/:id/edit' element={<EditVendor/>}/>
 
 
 

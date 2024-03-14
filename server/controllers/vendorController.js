@@ -7,45 +7,40 @@ const sb = mysql.createPool({
     port: 3006
 });
 
-const partner_index = (req, res) => {
-    const sqlGet = `SELECT Name, Email, Partner_id FROM claire.partner 
+const vendor_index = (req, res) => {
+    const sqlGet = `SELECT Name, Email, PhoneNumber as Phone, ContactName as Contact, Partner_id FROM claire.partner 
     join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-    WHERE DeletedAt IS NULL AND partnertype.Type = "Partner";`
+    WHERE DeletedAt IS NULL AND partnertype.Type = "Vendor";`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
 }
 
-const partner_list = (req, res) => {
+const vendor_list = (req, res) => {
     const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
     join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-    WHERE DeletedAt IS NULL AND partnertype.Type = "Partner";`
+    WHERE DeletedAt IS NULL AND partnertype.Type = "Vendor";`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
 }
 
-const partner_options = (req, res) => {
-    const sqlGet = "SELECT Partner_id as value, Name as label FROM claire.partner;"
-    sb.query(sqlGet, (err, result) => {
-        res.send(result);
-    })
-}
-
-const partner_create = (req, res) => {
+const vendor_create = (req, res) => {
     let Name = req.body.name;
+    let Phone = req.body.phone;
     let Email = req.body.email;
+    let Contact = req.body.contact;
     let Type = req.body.type;
 
-    if (typeof Name != "string" && typeof Email != "string" && typeof Type != "number") {
+    if (typeof Name != "string" && typeof Type != "number" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (Name && Email && Type) {
-        const sqlInsert = "INSERT INTO claire.partner (Name, Email, Type) VALUES (?,?,?);"
-        sb.query(sqlInsert, [Name, Email, Type], (err, result) => {
+    if (Name && Type) {
+        const sqlInsert = "INSERT INTO claire.partner (Name, Email, PhoneNumber, ContactName, Type) VALUES (?,?,?,?,?);"
+        sb.query(sqlInsert, [Name, Email, Phone, Contact, Type], (err, result) => {
             console.log(err);
         })
         res.end();
@@ -53,7 +48,7 @@ const partner_create = (req, res) => {
     }
 }
 
-const partner_delete = (req, res) => {
+const vendor_delete = (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
     if (typeof id != "string" && typeof date != "string") {
@@ -70,7 +65,7 @@ const partner_delete = (req, res) => {
     }
 }
 
-const partner_edit = (req, res) => {
+const vendor_edit = (req, res) => {
     let id = req.params.id
 
     if (typeof id != "string") {
@@ -80,36 +75,37 @@ const partner_edit = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT Name, Email FROM claire.partner WHERE Partner_id = ?;'
+        const sqlGet = 'SELECT Name as BusinessName, Email, PhoneNumber as Phone, ContactName FROM claire.partner WHERE Partner_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
     }
 }
 
-const partner_update = (req, res) => {
+const vendor_update = (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
+    let Phone = req.body.phone;
     let Email = req.body.email;
+    let Contact = req.body.contact;
 
 
-
-    if (typeof id != "string" && typeof Name != "string" && typeof Email != "string") {
+    if (typeof Name != "string" && typeof Type != "number" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (Name && Email && id) {
-        const sqlUpdate = "UPDATE claire.partner SET Name= ?, Email= ? WHERE Partner_id = ?;"
-        sb.query(sqlUpdate, [Name, Email, id], (err, result) => {
+    if (Name && id) {
+        const sqlUpdate = "UPDATE claire.partner SET Name= ?, Email= ?, PhoneNumber= ?, ContactName= ? WHERE Partner_id = ?;"
+        sb.query(sqlUpdate, [Name, Email, Phone, Contact, id], (err, result) => {
             console.log(err);
         })
     }
 }
 
-const partner_view = (req, res) => {
+const vendor_view = (req, res) => {
     let id = req.params.id;
 
     if (typeof id != "string") {
@@ -132,14 +128,12 @@ const partner_view = (req, res) => {
     }
 }
 
-
 module.exports = {
-    partner_create,
-    partner_index,
-    partner_delete,
-    partner_update,
-    partner_edit,
-    partner_options,
-    partner_list,
-    partner_view
+    vendor_index,
+    vendor_create,
+    vendor_delete,
+    vendor_list,
+    vendor_edit,
+    vendor_update,
+    vendor_view
 }

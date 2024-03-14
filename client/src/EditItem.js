@@ -4,9 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function EditItem() {
 
-  const navigate = useNavigate();
   const { id } = useParams();
-  const [isActive, setIsActive] = React.useState(true)
   const [formData, setFormData] = React.useState({})
 
 
@@ -34,7 +32,8 @@ function EditItem() {
 
     Axios.put(`http://localhost:3001/item/${id}/update`, {
       name: formData.Name,
-      FairMarketValue: formData.FairMarketValue
+      FairMarketValue: formData.FairMarketValue,
+      PackageCount: formData.PackageCount
     }, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -50,6 +49,9 @@ function EditItem() {
 
       <label htmlFor="FairMarketValue">Fair Market Value</label>
       <input type="number" name="FairMarketValue" id="FairMarketValue" defaultValue={formData.FairMarketValue} step="0.01" required onChange={handleChange} />
+
+      <label htmlFor="PackageCount">Package Count</label>
+      <input type="number" name="PackageCount" id="PackageCount" defaultValue={formData.PackageCount == null ? 0 : formData.PackageCount} step="1" onChange={handleChange} />
 
       <input type="submit" value="Submit" />
     </form>

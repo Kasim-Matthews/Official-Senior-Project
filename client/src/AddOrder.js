@@ -77,7 +77,11 @@ function AddOrder() {
   }
 
 
-
+  function handleCancel(){
+    if(window.confirm("Are you sure you want to cancel") == true){
+      window.location.href = "/distribution";
+    }
+  }
 
 
   const handleSubmit = async (e) => {
@@ -107,7 +111,7 @@ function AddOrder() {
   }
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/partner").then((response) => {
+    Axios.get("http://localhost:3001/partner/list").then((response) => {
       setPartners(response.data);
     })
   }, [])
@@ -180,6 +184,7 @@ function AddOrder() {
       </button>
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

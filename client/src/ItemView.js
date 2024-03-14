@@ -13,10 +13,12 @@ function ItemView() {
         })
     }, [])
 
-    const handleRemove = (id) => {
-        let date = new Date().toLocaleDateString();
-        Axios.put(`http://localhost:3001/item/remove/${id}`, {date: date});
-        window.location.reload(false);
+    const handleRemove = (id, Name) => {
+        if (window.confirm(`Are you sure you want to delete ${Name} from the item list?`) == true) {
+            let date = new Date().toLocaleDateString();
+            Axios.put(`http://localhost:3001/item/remove/${id}`, {date: date});
+            window.location.reload(false);
+        }
     }
 
     const handleEdit = (id) => {
@@ -45,7 +47,7 @@ function ItemView() {
                                 <td>{val.Name}</td>
                                 <td>${val.FairMarketValue}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.Item_id)}>Delete</button>
+                                    <button onClick={() => handleRemove(val.Item_id, val.Name)}>Delete</button>
                                     <button onClick={() => handleEdit(val.Item_id)}>Edit</button>
                                     <button onClick={() => handleView(val.Item_id)}>View</button>
                                 </td>

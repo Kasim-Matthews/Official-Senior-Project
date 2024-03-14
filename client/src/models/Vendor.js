@@ -3,7 +3,7 @@ const Vendor = {
     ContactName:"",
     Phone:"",
     Email:"",
-    Address:""
+    Type: 3
 }
 
 export default Vendor
