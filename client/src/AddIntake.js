@@ -30,11 +30,7 @@ function AddIntake() {
     values[index].Item_id = e.target.value;
     setItems(values)
   }
-  const handleLocation = (e, index) => {
-    const values = [...items];
-    values[index].Location_id = e.target.value;
-    setItems(values)
-  }
+
   const handleQuantity = (e, index) => {
     const values = [...items];
     values[index].Quantity = e.target.value;
@@ -85,7 +81,7 @@ function AddIntake() {
   }
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/partner").then((response) => {
+    Axios.get("http://localhost:3001/partner/list").then((response) => {
       setPartners(response.data);
     })
   }, [])

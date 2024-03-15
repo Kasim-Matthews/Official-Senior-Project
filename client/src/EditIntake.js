@@ -72,12 +72,14 @@ function EditIntake() {
     Axios.get(`http://localhost:3001/intake/${id}/edit`).then((response) => {
       setFormData(response.data[0]);
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     Axios.get(`http://localhost:3001/intake/${id}/edititems`).then((response) => {
       setItems(response.data);
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -127,9 +129,6 @@ function EditIntake() {
 
     }
     navigate('/intake')
-
-    navigate('/intake')
-
 
   }
 
