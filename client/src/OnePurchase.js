@@ -2,14 +2,14 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useParams, Link } from "react-router-dom";
 
-function ViewIntake() {
+function ViewPurchase() {
 
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
     const [itemList, setItemList] = React.useState([])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/intake/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/purchase/${id}/view`).then((response) => {
             setRecord(response.data[0])
             setItemList(response.data)
         });
@@ -20,15 +20,15 @@ function ViewIntake() {
             <table>
                 <thead>
                     <tr>
-                        <th>Partner</th>
+                        <th>Vendor</th>
                         <th>Received Date</th>
                         <th>Storage Location</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{record.Partner}</td>
-                        <td>{record.RecievedDate}</td>
+                        <td>{record.Vendor}</td>
+                        <td>{record.PurchaseDate}</td>
                         <td>{record.Location}</td>
                     </tr>
                 </tbody>
@@ -37,7 +37,6 @@ function ViewIntake() {
                 <thead>
                     <tr>
                         <th>Item Name</th>
-                        <th>Inkind Value</th>
                         <th>Quantity</th>
                     </tr>
                 </thead>
@@ -46,7 +45,6 @@ function ViewIntake() {
                         return (
                             <tr>
                                 <td>{val.Item}</td>
-                                <td>{Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
                                 <td>{val.Quantity}</td>
                             </tr>
                         )
@@ -58,4 +56,4 @@ function ViewIntake() {
     )
 }
 
-export default ViewIntake;
+export default ViewPurchase;

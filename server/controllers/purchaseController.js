@@ -96,14 +96,12 @@ const track = (req, res) => {
 
     if (typeof Intake_id != "number" && typeof Quantity != "number" && typeof Value != "number" && typeof FKItemLocation != "number") {
         res.send("Invalid")
-        console.log("I'm in here")
         res.end();
         return
     }
 
     if (Intake_id && Quantity && Value && FKItemLocation) {
         const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
-
         sb.query(sqlInsert, [Intake_id, Quantity, Value, FKItemLocation], (err, result) => {
             console.log(err);
             console.log("3")
@@ -169,7 +167,7 @@ const purchase_view = (req, res) => {
 
     if (id) {
         const sqlGet = `
-    select Cast(i.RecievedDate as char(10)) as PurchaseDate, p.Name as Partner, it.Name as Item, it.FairMarketValue, l.Name as Location, ii.Quantity
+    select Cast(i.RecievedDate as char(10)) as PurchaseDate, p.Name as Vendor, it.Name as Item, l.Name as Location, ii.Quantity
     from claire.intakeitems ii
     join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
     join claire.intake i on ii.Intake_id = i.Intake_id
@@ -197,7 +195,7 @@ const edit = (req, res) => {
 
     if (id) {
         const sqlGet = `
-    select i.Comments, i.TotalValue, Cast(i.RecievedDate as char(10)) AS PurchaseDate, i.Partner, il.Location_id
+    select i.Comments, i.TotalValue, Cast(i.RecievedDate as char(10)) AS PurchaseDate, i.Partner as Vendor, il.Location_id as Location
     from claire.intake i
     join claire.intakeitems ii on i.Intake_id = ii.Intake_id
     join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
@@ -221,13 +219,12 @@ const update = (req, res) => {
 
     if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
         res.send("Invalid");
-        console.log("err");
         res.end();
         return;
     }
 
     if (RecievedDate && Value && Partner) {
-        const sqlUpdate = "UPDATE claire.intake SET Comments= ?, RecievedDate= ?, Partner= ?, Value = ? WHERE Intake_id = ?;"
+        const sqlUpdate = "UPDATE claire.intake SET Comments= ?, RecievedDate= ?, Partner= ?, TotalValue = ? WHERE Intake_id = ?;"
         sb.query(sqlUpdate, [Comments, RecievedDate, Partner, Value, id], (err, result) => {
             console.log(err);
             res.send()

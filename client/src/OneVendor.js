@@ -7,24 +7,22 @@ function ViewVendor() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState({})
-    const [distributionList, setDistributionList] = React.useState([])
+    const [intakeList, setIntakeList] = React.useState([])
 
     const handleView = (id) => {
-        navigate(`/distribution/${id}`)
-    }
-    const handleprint = (id) => {
-        navigate(`/distribution/${id}/print.pdf`)
+        navigate(`/purchase/${id}`)
     }
 
+
     useEffect(() => {
-        Axios.get(`http://localhost:3001/partner/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/vendor/${id}/edit`).then((response) => {
             setRecord(response.data[0])
         });
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/partner/${id}/view`).then((response) => {
-            setDistributionList(response.data)
+        Axios.get(`http://localhost:3001/vendor/${id}/view`).then((response) => {
+            setIntakeList(response.data)
         });
     }, [])
 
@@ -55,18 +53,17 @@ function ViewVendor() {
                     <tr>
                         <th>Date</th>
                         <th>Total Items</th>
+                        <th>Details</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {distributionList.map((val) => {
+                    {intakeList.map((val) => {
                         return (
                             <tr>
-                                <td>{val.CompletedDate}</td>
-                                <td>{val.Location}</td>
+                                <td>{val.PurchaseDate}</td>
                                 <td>{val.Total}</td>
                                 <td>
-                                    <button onClick={() => handleprint(val.Order_id)}>Print</button>
-                                    <button onClick={() => handleView(val.Order_id)}>View</button>
+                                    <button onClick={() => handleView(val.Intake_id)}>View Details</button>
                                 </td>
                             </tr>
                         )

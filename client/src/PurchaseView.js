@@ -49,11 +49,11 @@ function Purchase() {
     }
 
     const handleEdit = (id) => {
-        navigate(`/intake/${id}/edit`)
+        navigate(`/purchase/${id}/edit`)
     }
 
     const handleView = (id) => {
-        navigate(`/intake/${id}`)
+        navigate(`/purchase/${id}`)
     }
 
 

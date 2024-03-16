@@ -115,13 +115,13 @@ const vendor_view = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = `SELECT o.Order_id, Cast(o.CompletedDate as char(10)) AS CompletedDate, SUM(oi.Quantity) as Total, l.Name as Location 
-        from claire.order o 
-        join claire.orderitems oi on o.Order_id = oi.Order_id
-        join claire.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
-        join claire.location l on l.Location_id = il.Location_id
-        WHERE o.Partner_id = ?
-        GROUP by o.Order_id, l.Name;`
+        const sqlGet = `SELECT p.Name, p.ContactName, p.Email, i.Intake_id, Cast(i.RecievedDate as char(10)) AS PurchaseDate, SUM(ii.Quantity) as Total
+        from claire.intake i 
+        join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+        join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+        join claire.partner p on i.Partner = p.Partner_id
+        WHERE i.Partner = ?
+        GROUP by i.Intake_id;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })

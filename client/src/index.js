@@ -31,7 +31,9 @@ import VendorView from './VendorView';
 import AddVendor from './AddVendor';
 import EditVendor from './EditVendor';
 import Purchase from './PurchaseView';
-
+import ViewVendor from './OneVendor';
+import ViewPurchase from './OnePurchase';
+import EditPurchase from './EditPurchase';
 
 export class Application extends React.Component {
     render() {
@@ -72,10 +74,13 @@ export class Application extends React.Component {
                     
                     <Route path="/purchase" element={<Purchase/>}/>
                     <Route path="/purchase/new" element={<AddPurchase/>}/>
+                    <Route path="/purchase/:id" element={<ViewPurchase />} />
+                    <Route path="/purchase/:id/edit" element={<EditPurchase />} />
 
                     <Route path='/vendor' element={<VendorView/>}/>
                     <Route path='/vendor/new' element={<AddVendor/>}/>
-                    <Route path='/partner/:id/edit' element={<EditVendor/>}/>
+                    <Route path='/vendor/:id/edit' element={<EditVendor/>}/>
+                    <Route path='/vendor/:id' element={<ViewVendor/>}/>
 
 
 
