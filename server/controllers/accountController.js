@@ -3,10 +3,14 @@ const sb = new Client({
     user: 'claire_a2dn_user',
     password:'TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf',
     host: 'dpg-cnh1rs20si5c73bm4ptg-a.oregon-postgres.render.com',
-    port: '5432',
+    port: 5432,
     database: 'claire_a2dn',
     ssl: true,
-    connectionString: 'postgres://claire_a2dn_user:TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf@dpg-cnh1rs20si5c73bm4ptg-a:5432/claire_a2dn'
+    connectionString: 'postgres://claire_a2dn_user:TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf@dpg-cnh1rs20si5c73bm4ptg-a.oregon-postgres.render.com/claire_a2dn'
+});
+
+sb.connect().then(() => {
+    console.log('Connected')
 });
 
 const register = (req, res) => {
@@ -23,18 +27,14 @@ const register = (req, res) => {
     sb.end()
 }
 
-const login = (req, res) => {
+const login = async (req, res) => {
     console.log(req.body)
     let username = req.body.username;
     let password = req.body.password;
-    sb.connect().then(() => {
-        console.log('Connected')
-    });
-    sb.query(
-        "SELECT * FROM register WHERE usernameReg = ? AND passwordReg = ?",
-        [username, password],
+    await sb.query(
+        `SELECT * FROM public.register WHERE "usernameReg" = '{${username}}' AND "passwordReg" = '{${password}}'`,
         (err, result) => {
-
+            console.log(err)
             if (err) {
                 res.send({ err: err })
 
@@ -42,7 +42,7 @@ const login = (req, res) => {
 
 
 
-            if (result.length > 0) {
+            if (result.rowCount > 0) {
                 res.send({ status: 'ok', user: result[0] }); // Send user data and status
             } else {
                 res.send({ status: 'error', message: "Wrong username/password combination!" });
@@ -50,7 +50,7 @@ const login = (req, res) => {
 
         }
     )
-    sb.end()
+
 }
 
 const data = (req, res) => {

@@ -1,14 +1,13 @@
 const { Client } = require('pg');
 const sb = new Client({
     user: 'claire_a2dn_user',
-    password: 'TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf',
+    password:'TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf',
     host: 'dpg-cnh1rs20si5c73bm4ptg-a.oregon-postgres.render.com',
-    port: '5432',
+    port: 5432,
     database: 'claire_a2dn',
     ssl: true,
-    connectionString: 'postgres://claire_a2dn_user:TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf@dpg-cnh1rs20si5c73bm4ptg-a:5432/claire_a2dn'
+    connectionString: 'postgres://claire_a2dn_user:TaHQMaIFBkS5eYRJIzhj7uiCZd5Om5Kf@dpg-cnh1rs20si5c73bm4ptg-a.oregon-postgres.render.com/claire_a2dn'
 });
-
 const location_index = (req, res) => {
     const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS NULL;"
     sb.connect()
