@@ -20,7 +20,7 @@ function ViewIntake() {
             <table>
                 <thead>
                     <tr>
-                        <th>Partner</th>
+                        <th>Source</th>
                         <th>Received Date</th>
                         <th>Storage Location</th>
                     </tr>

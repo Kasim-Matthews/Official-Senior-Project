@@ -9,10 +9,12 @@ const sb = mysql.createPool({
 
 const data = (req, res) => {
     const sqlGet = `
-    select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, i.Value as Value, i.Intake_id, ROUND(SUM(ii.Value), 2) as Total
+    select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, i.Intake_id, ROUND(SUM(ii.Value), 2) as Total
     from claire.intake i
     join claire.partner p on i.Partner = p.Partner_id
+    join claire.partnertype pt on p.Type = pt.PartnerType_id
     join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+    WHERE pt.Type != "Vendor"
     group by i.Intake_id
     `;
     sb.query(sqlGet, (err, result) => {
@@ -36,9 +38,10 @@ const create = (req, res) => {
 
 
     if (Partner && RecievedDate) {
-        const sqlInsert = "INSERT INTO claire.intake (Comments, RecievedDate, Partner) VALUES (?,?,?,?);"
+        const sqlInsert = "INSERT INTO claire.intake (Comments, RecievedDate, Partner) VALUES (?,?,?);"
         sb.query(sqlInsert, [Comments, RecievedDate, Partner], (err, result) => {
             console.log(err);
+            console.log("1")
             res.send()
             res.end()
             return;
@@ -67,6 +70,7 @@ const location = (req, res) => {
     `;
 
         sb.query(query, [Item_id, Location_id], (err, result) => {
+            console.log("2")
             res.send(result);
             res.end()
             return;
@@ -78,6 +82,7 @@ const find_id = (req, res) => {
     const query = "SELECT MAX(Intake_id) as Intake_id FROM claire.intake;"
 
     sb.query(query, (err, result) => {
+        console.log("3")
         res.send(result);
         res.end()
         return;
@@ -90,8 +95,10 @@ const track = (req, res) => {
     let Value = req.body.Value;
     let FKItemLocation = req.body.FKItemLocation;
 
+
     if (typeof Intake_id != "number" && typeof Quantity != "number" && typeof Value != "number" && typeof FKItemLocation != "number") {
         res.send("Invalid")
+        console.log("where am I")
         res.end();
         return
     }
@@ -100,8 +107,9 @@ const track = (req, res) => {
         const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
 
         sb.query(sqlInsert, [Intake_id, Quantity, Value, FKItemLocation], (err, result) => {
-            console.log(err);
             res.send()
+            console.log("5")
+            console.log(err);
             res.end()
             return;
         })
@@ -121,7 +129,7 @@ const find_q = (req, res) => {
         const sqlGet = "SELECT Quantity FROM claire.itemlocation WHERE ItemLocation_id = ?"
         sb.query(sqlGet, [ItemLocationFK], (err, result) => {
             res.send(result);
-
+            console.log("6");
             res.end()
             return;
         })
@@ -143,8 +151,9 @@ const update_item = (req, res) => {
         Quantity = +CurrentQ + +Quantity;
         const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
         sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) => {
-            console.log(err);
             res.send()
+            console.log("7");
+            console.log(err);
             res.end()
             return;
         })
@@ -232,7 +241,7 @@ const update = (req, res) => {
 
 const intake_find_value = (req, res) => {
     let Item_id = req.body.Item_id;
-    if (typeof Item_id != "number") {
+    if (typeof Item_id != "string") {
         res.send("Invalid");
         res.end();
         return;
@@ -243,6 +252,7 @@ const intake_find_value = (req, res) => {
         const sqlGet = "SELECT FairMarketValue FROM claire.item WHERE Item_id = ?;"
         sb.query(sqlGet, [Item_id], (err, result) => {
             res.send(result);
+            console.log("4")
             res.end()
             return;
         })

@@ -53,20 +53,17 @@ function EditVendor() {
   }
 
   async function handleSubmit() {
-    if (!formErrors.Name && !formErrors.Email && !formErrors.Phone && !formErrors.ContactName) {
-      await Axios.post(`http://localhost:3001/vendor/${id}/update`, {
-        name: formData.BusinessName,
-        phone: formData.Phone,
-        email: formData.Email,
-        contact: formData.ContactName,
-        type: formData.Type
-      }, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
-      window.location.href = "/vendor";
-    }
+    await Axios.put(`http://localhost:3001/vendor/${id}/update`, {
+      name: formData.BusinessName,
+      phone: formData.Phone,
+      email: formData.Email,
+      contact: formData.ContactName,
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    window.location.href = "/vendor";
   }
 
   return (

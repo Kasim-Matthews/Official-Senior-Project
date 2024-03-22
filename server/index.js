@@ -12,6 +12,7 @@ const donationSiteRoute = require('./routes/donationsite')
 const manufacturerRoute = require('./routes/manufacturers')
 const vendorRoute = require('./routes/vendor')
 const purchaseRoute = require('./routes/purchase')
+const dirveRoute = require('./routes/productdrive')
 
 
 app.use(cors())
@@ -33,6 +34,7 @@ app.use('/donationsite', donationSiteRoute)
 app.use('/manufacturers', manufacturerRoute)
 app.use('/vendor', vendorRoute)
 app.use('/purchase', purchaseRoute)
+app.use('/productdrive', dirveRoute)
 
 
 

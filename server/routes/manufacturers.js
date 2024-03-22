@@ -7,6 +7,7 @@ router.use(cors())
 
 
 router.get('/', manufacturersController.manu_index)
+router.get('/list', manufacturersController.manu_list)
 router.post('/new', manufacturersController.manu_create);
 router.delete('/remove/:id', manufacturersController.manu_delete);
 router.get('/:id/edit', manufacturersController.manu_edit)

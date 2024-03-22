@@ -7,40 +7,37 @@ const sb = mysql.createPool({
     port: 3006
 });
 
-const vendor_index = (req, res) => {
+const drive_index = (req, res) => {
     const sqlGet = `SELECT Name, Email, PhoneNumber as Phone, ContactName as Contact, Partner_id FROM claire.partner 
     join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-    WHERE DeletedAt IS NULL AND partnertype.Type = "Vendor";`
+    WHERE DeletedAt IS NULL AND partnertype.Type = "ProductDrive";`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
 }
 
-const vendor_list = (req, res) => {
+const drive_list = (req, res) => {
     const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
     join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-    WHERE DeletedAt IS NULL AND partnertype.Type = "Vendor";`
+    WHERE DeletedAt IS NULL AND partnertype.Type = "Product Drive";`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
 }
 
-const vendor_create = (req, res) => {
+const drive_create = (req, res) => {
     let Name = req.body.name;
-    let Phone = req.body.phone;
-    let Email = req.body.email;
-    let Contact = req.body.contact;
     let Type = req.body.type;
 
-    if (typeof Name != "string" && typeof Type != "number" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
+    if (typeof Name != "string") {
         res.send("Invalid");
         res.end();
         return;
     }
 
     if (Name && Type) {
-        const sqlInsert = "INSERT INTO claire.partner (Name, Email, PhoneNumber, ContactName, Type) VALUES (?,?,?,?,?);"
-        sb.query(sqlInsert, [Name, Email, Phone, Contact, Type], (err, result) => {
+        const sqlInsert = "INSERT INTO claire.partner (Name, Type) VALUES (?,?);"
+        sb.query(sqlInsert, [Name, Type], (err, result) => {
             console.log(err);
         })
         res.end();
@@ -48,7 +45,7 @@ const vendor_create = (req, res) => {
     }
 }
 
-const vendor_delete = (req, res) => {
+const drive_delete = (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
     if (typeof id != "string" && typeof date != "string") {
@@ -65,7 +62,7 @@ const vendor_delete = (req, res) => {
     }
 }
 
-const vendor_edit = (req, res) => {
+const drive_edit = (req, res) => {
     let id = req.params.id
 
     if (typeof id != "string") {
@@ -75,37 +72,35 @@ const vendor_edit = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT Name as BusinessName, Email, PhoneNumber as Phone, ContactName FROM claire.partner WHERE Partner_id = ?;'
+        const sqlGet = 'SELECT Name FROM claire.partner WHERE Partner_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
     }
 }
 
-const vendor_update = (req, res) => {
+const drive_update = (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
-    let Phone = req.body.phone;
-    let Email = req.body.email;
-    let Contact = req.body.contact;
 
 
-    if (typeof Name != "string" && typeof Type != "number" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
+    if (typeof Name != "string") {
         res.send("Invalid");
+        console.log("Invalid")
         res.end();
         return;
     }
 
     if (Name && id) {
-        const sqlUpdate = "UPDATE claire.partner SET Name= ?, Email= ?, PhoneNumber= ?, ContactName= ? WHERE Partner_id = ?;"
-        sb.query(sqlUpdate, [Name, Email, Phone, Contact, id], (err, result) => {
+        const sqlUpdate = "UPDATE claire.partner SET Name= ? WHERE Partner_id = ?;"
+        sb.query(sqlUpdate, [Name, id], (err, result) => {
             console.log(err);
         })
     }
 }
 
-const vendor_view = (req, res) => {
+const drive_view = (req, res) => {
     let id = req.params.id;
 
     if (typeof id != "string") {
@@ -115,13 +110,14 @@ const vendor_view = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = `SELECT i.Intake_id, Cast(i.RecievedDate as char(10)) AS PurchaseDate, SUM(ii.Quantity) as Total
-        from claire.intake i 
-        join claire.intakeitems ii on i.Intake_id = ii.Intake_id
-        join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-        join claire.partner p on i.Partner = p.Partner_id
-        WHERE i.Partner = ?
-        GROUP by i.Intake_id;`
+        const sqlGet = `SELECT i.Intake_id, l.Name as Location, COUNT(ii.FKItemLocation) as Quantity, CAST(SUM(ii.Value) AS DECIMAL (5,2)) as TotalItems
+        from partner p
+        join intake i on i.Partner = p.Partner_id
+        join intakeitems ii on ii.Intake_id = i.Intake_id
+        join itemlocation il on il.ItemLocation_id = ii.FKItemLocation
+        join location l on il.Location_id = l.Location_id
+        WHERE p.Partner_id = ?
+        group by i.intake_id, l.Name;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -129,11 +125,11 @@ const vendor_view = (req, res) => {
 }
 
 module.exports = {
-    vendor_index,
-    vendor_create,
-    vendor_delete,
-    vendor_list,
-    vendor_edit,
-    vendor_update,
-    vendor_view
+    drive_index,
+    drive_create,
+    drive_delete,
+    drive_list,
+    drive_edit,
+    drive_update,
+    drive_view
 }

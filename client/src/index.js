@@ -34,6 +34,13 @@ import Purchase from './PurchaseView';
 import ViewVendor from './OneVendor';
 import ViewPurchase from './OnePurchase';
 import EditPurchase from './EditPurchase';
+import AddDrive from './AddDrive';
+import EditDrive from './EditDrive';
+import DonationSiteView from './DonationSiteView';
+import AddDonationSite from './AddDonationSite';
+import EditDonationSite from './EditDonationSite';
+import ViewDonationSite from './OneDonationSite';
+import ViewDrive from './OneDrive';
 
 export class Application extends React.Component {
     render() {
@@ -82,6 +89,14 @@ export class Application extends React.Component {
                     <Route path='/vendor/:id/edit' element={<EditVendor/>}/>
                     <Route path='/vendor/:id' element={<ViewVendor/>}/>
 
+                    <Route path='/productdrive/new' element={<AddDrive/>}/>
+                    <Route path='/productdrive/:id/edit' element={<EditDrive/>}/>
+                    <Route path='/productdrive/:id' element={<ViewDrive/>}/>
+
+                    <Route path='/donationsite' element={<DonationSiteView/>}/>
+                    <Route path='/donationsite/new' element={<AddDonationSite/>}/>
+                    <Route path='/donationsite/:id/edit' element={<EditDonationSite/>}/>
+                    <Route path='/donationsite/:id' element={<ViewDonationSite/>}/>
 
 
                 </Routes>

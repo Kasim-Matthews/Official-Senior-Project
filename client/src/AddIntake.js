@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
+import DriveList from "./components/DriveList";
+import ManufacturerList from "./components/ManufacturerList";
+import DonationSiteList from "./components/DonationSiteList";
 
 function AddIntake() {
 
@@ -11,7 +14,7 @@ function AddIntake() {
     Partner: 0,
     Location: 0
   })
-
+  const [sourceType, setSourceType] = React.useState("")
   const [partners, setPartners] = React.useState([])
   const [locations, setLocations] = React.useState([])
 
@@ -24,6 +27,26 @@ function AddIntake() {
 
     }
   ])
+
+  function listtype(){
+    if(sourceType == "Product Drive"){
+      return(
+        <DriveList handleChange={handleChange}/>
+      )
+    }
+
+    else if(sourceType == "Manufacturer"){
+      return(
+        <ManufacturerList handleChange={handleChange}/>
+      )
+    }
+
+    else if(sourceType == "Donation Site"){
+      return(
+        <DonationSiteList handleChange={handleChange}/>
+      )
+    }
+  }
 
   const handleItem = (e, index) => {
     const values = [...items];
@@ -80,17 +103,18 @@ function AddIntake() {
     })
   }
 
-  useEffect(() => {
-    Axios.get("http://localhost:3001/partner/list").then((response) => {
-      setPartners(response.data);
-    })
-  }, [])
+  function sourceChange(event) {
+    setSourceType(event.target.value)
+    listtype(event.target.value)
+  }
+
+
 
   useEffect(() => {
     Axios.get("http://localhost:3001/location").then((response) => {
-        setLocations(response.data);
+      setLocations(response.data);
     })
-}, [])
+  }, [])
 
 
   const submitPurchase = async (e) => {
@@ -116,31 +140,34 @@ function AddIntake() {
     window.location.href = "/intake";
   }
 
+  console.log(sourceType)
+
   return (
     <div>
       <h2>Intake</h2>
       <form id="intake" onSubmit={submitPurchase}>
-        <label htmlFor="Partner">Partner</label>
-        <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
-          <option value="">--Please choose an option--</option>
-          {partners.map((val) => {
-            return (
-              <option value={val.Partner_id}>{val.Name}</option>
-            )
-          })}
+
+        <label htmlFor="Source">Source</label>
+        <select id="Source" value={sourceType} onChange={sourceChange}>
+          <option value=""></option>
+          <option value="Product Drive">Product Drive</option>
+          <option value="Manufacturer">Manufacturer</option>
+          <option value="Donation Site">Donation Site</option>
+          <option value="Misc Donation">Misc Donation</option>
         </select>
-        <br/>
+        <br />
+        {sourceType != "" ? listtype() : null}
 
         <label htmlFor="Location">Location</label>
-      <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-        <option value="">--Please choose an option--</option>
-        {locations.map((val) => {
-          return (
-            <option value={val.Location_id}>{val.Name}</option>
-          )
-        })}
+        <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+          <option value="">--Please choose an option--</option>
+          {locations.map((val) => {
+            return (
+              <option value={val.Location_id}>{val.Name}</option>
+            )
+          })}
 
-      </select><br/>
+        </select><br />
 
         <label htmlFor="RecievedDate">Recieved Date</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange} /><br></br>

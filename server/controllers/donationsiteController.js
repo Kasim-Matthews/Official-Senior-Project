@@ -102,11 +102,36 @@ const dsite_update = (req, res) => {
     }
 }
 
+const dsite_view = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `SELECT l.Name as Location, i.Intake_id, SUM(ii.Quantity) as Total
+        from claire.intake i 
+        join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+        join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+        join claire.partner p on i.Partner = p.Partner_id
+        join claire.location l on l.Location_id = il.Location_id
+        WHERE i.Partner = ?
+        GROUP by i.Intake_id;`
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+        })
+    }
+}
+
 module.exports = {
     dsite_index,
     dsite_create,
     dsite_delete,
     dsite_list,
     dsite_edit,
-    dsite_update
+    dsite_update,
+    dsite_view
 }

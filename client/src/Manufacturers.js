@@ -27,7 +27,7 @@ function Manufacturers() {
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Market Value</th>
+                        <th>Total Items</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,10 +36,10 @@ function Manufacturers() {
                         return (
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>0</td>
+                                <td></td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.id)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.id)}>Edit</button>
+                                    <button onClick={() => handleRemove(val.Partner_id)}>Delete</button>
+                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
                                 </td>
                             </tr>
                         );
