@@ -118,7 +118,7 @@ function AddTransfer() {
         <form onSubmit={handleSubmit}>
             <label htmlFor="From">From storage location</label>
             <select id="From" name="From" onChange={handleFrom}>
-                <option value="" disabled>--Please choose an option--</option>
+                <option value="">--Please choose an option--</option>
                 {from.map((val, index) => {
                     return (
                         <option value={index}>{val.Name}</option>

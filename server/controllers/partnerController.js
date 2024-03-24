@@ -132,6 +132,18 @@ const partner_view = (req, res) => {
     }
 }
 
+const partner_types = (req, res) => {
+    const sqlGet = `SELECT *
+    from partnertype
+    WHERE Type NOT IN ("Vendor", "Adjustment", "Partner");`
+
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+        res.end();
+        return;
+    })
+}
+
 
 module.exports = {
     partner_create,
@@ -141,5 +153,6 @@ module.exports = {
     partner_edit,
     partner_options,
     partner_list,
-    partner_view
+    partner_view,
+    partner_types
 }

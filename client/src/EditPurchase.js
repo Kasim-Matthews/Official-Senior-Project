@@ -116,18 +116,9 @@ function EditPurchase() {
             }
         });
 
-
-        for (const item of items) {
-            let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Item_id: item.Item, Location_id: String(formData.Location) })
-
-            await Axios.post("http://localhost:3001/purchase/track", { Intake_id: id, Quantity: item.Quantity, Total: parseFloat(formData.TotalValue), FKItemLocation: IL_response.data[0].ItemLocation_id });
-
-            let current = await Axios.post("http://localhost:3001/purchase/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
-
-            await Axios.put("http://localhost:3001/purchase/update_item", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
-
-        }
-
+        let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Items: items, Location_id: formData.Location })
+        await Axios.post("http://localhost:3001/purchase/track", { Intake_id: id, Items: items, Total: parseFloat(formData.TotalValue), FKItemLocation: IL_response.data });
+        await Axios.put("http://localhost:3001/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
         window.location.href = "/purchase";
     }
 

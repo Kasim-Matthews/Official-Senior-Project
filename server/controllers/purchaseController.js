@@ -9,13 +9,15 @@ const sb = mysql.createPool({
 
 const data = (req, res) => {
     const sqlGet = `
-    select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, i.TotalValue as Total, i.Intake_id, SUM(ii.Quantity) as TotalItems
+    select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, i.TotalValue as Total, i.Intake_id, SUM(ii.Quantity) as TotalItems, l.Name as Location
     from claire.intake i
     join claire.partner p on i.Partner = p.Partner_id
     join claire.partnerType pt on p.Type = pt.PartnerType_id
     join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+    join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+    join claire.location l on il.Location_id = l.Location_id
     WHERE pt.Type = "Vendor"
-    group by i.Intake_id
+    group by i.Intake_id, l.Name
     `;
     sb.query(sqlGet, (err, result) => {
         res.send(result);
@@ -49,31 +51,33 @@ const create = (req, res) => {
 }
 
 const location = (req, res) => {
-    let Item_id = req.body.Item_id;
-    let Location_id = req.body.Location_id;
+    let Items = req.body.Items
+    let Location = req.body.Location_id
 
-    if (typeof Item_id != "number" && typeof Location_id != "string") {
+
+    if (typeof Items != "object" && typeof Location != "string") {
         res.send("Invalid");
-        console.log("Invalid")
         res.end();
         return;
     }
 
-    if (Item_id && Location_id) {
-        const query = `
-    select il.ItemLocation_id
-    from itemlocation il
-    JOIN item i ON il.Item_id = i.Item_id
-    JOIN location l ON il.Location_id = l.Location_id
-    WHERE i.Item_id = ? AND l.Location_id = ?
-    `;
+    if (Items && Location) {
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
 
-        sb.query(query, [Item_id, Location_id], (err, result) => {
+        const sqlGet = `SELECT il.ItemLocation_id
+        from claire.itemlocation il
+        WHERE il.Item_id IN (?) AND il.Location_id = ?;`
+
+        sb.query(sqlGet, [ids, Location], (err, result) => {
+            console.log(err);
             res.send(result);
-            console.log("1")
-            res.end()
+            res.end();
             return;
         })
+
     }
 }
 
@@ -90,25 +94,29 @@ const find_id = (req, res) => {
 
 const track = (req, res) => {
     let Intake_id = req.body.Intake_id;
-    let Quantity = req.body.Quantity;
+    let Items = req.body.Items;
     let Value = req.body.Total;
     let FKItemLocation = req.body.FKItemLocation;
 
-    if (typeof Intake_id != "number" && typeof Quantity != "number" && typeof Value != "number" && typeof FKItemLocation != "number") {
+    if (typeof Intake_id != "number" && typeof Items != "object" && typeof Value != "number" && typeof FKItemLocation != "object") {
         res.send("Invalid")
         res.end();
         return
     }
 
-    if (Intake_id && Quantity && Value && FKItemLocation) {
+    if (Intake_id && Items && Value && FKItemLocation) {
         const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
-        sb.query(sqlInsert, [Intake_id, Quantity, Value, FKItemLocation], (err, result) => {
-            console.log(err);
-            console.log("3")
-            res.send()
-            res.end()
-            return;
-        })
+        for (var i = 0; i < Items.length; i++) {
+            sb.query(sqlInsert, [Intake_id, Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
+                console.log(err);
+
+            })
+        }
+        console.log("3")
+        res.send()
+        res.end()
+        return;
+
     }
 }
 
@@ -134,25 +142,25 @@ const find_q = (req, res) => {
 
 const update_item = (req, res) => {
     let ItemLocationFK = req.body.ItemLocationFK;
-    let Quantity = req.body.Quantity;
-    let CurrentQ = req.body.CurrentQ;
+    let Items = req.body.Items;
 
-    if (typeof ItemLocationFK != "number" && typeof Quantity != "number" && typeof CurrentQ != "number") {
+    if (typeof ItemLocationFK != "object" && typeof Quantity != "object") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (ItemLocationFK && Quantity && CurrentQ) {
-        Quantity = +CurrentQ + +Quantity;
-        const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
-        sb.query(sqlUpdate, [Quantity, ItemLocationFK], (err, result) => {
-            console.log(err);
-            console.log("5")
-            res.send()
-            res.end()
-            return;
-        })
+    if (ItemLocationFK && Items) {
+        const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= Quantity + ? WHERE ItemLocation_id = ?;"
+        for (var i = 0; i < Items.length; i++) {
+            sb.query(sqlUpdate, [Items[i].Quantity, ItemLocationFK[i].ItemLocation_id], (err, result) => {
+                console.log(err);
+            })
+        }
+        console.log("7");
+        res.send()
+        res.end()
+        return;
     }
 }
 

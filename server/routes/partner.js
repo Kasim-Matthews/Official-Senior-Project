@@ -13,5 +13,6 @@ router.put('/remove/:id', partnerController.partner_delete)
 router.get('/:id/edit', partnerController.partner_edit)
 router.put('/:id/update', partnerController.partner_update)
 router.get('/:id/view', partnerController.partner_view)
+router.get('/types', partnerController.partner_types)
 
 module.exports = router;

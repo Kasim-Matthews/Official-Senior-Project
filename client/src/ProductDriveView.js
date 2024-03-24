@@ -2,14 +2,21 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 
-function ProductDriveView(){
+function ProductDriveView() {
     const navigate = useNavigate();
 
+    const [partners, setPartners] = React.useState([])
     const [driveList, setDriveList] = React.useState([])
+    const [records, setRecords] = React.useState([])
+    const [filters, setFilters] = React.useState({
+        Drive: "",
+    })
+
 
     useEffect(() => {
         Axios.get("http://localhost:3001/productdrive").then((response) => {
             setDriveList(response.data);
+            setRecords(response.data);
         })
     }, [])
 
@@ -21,8 +28,53 @@ function ProductDriveView(){
         navigate(`/productdrive/${id}/edit`)
     }
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        var temp = driveList;
+
+        if (filters.Drive != "") {
+            temp = temp.filter(f => f.Drive == filters.Drive);
+        }
+
+
+
+        setRecords(temp);
+    }
+
+    function handleChange(event) {
+        setFilters(prevFilters => {
+            return {
+                ...prevFilters,
+                [event.target.name]: event.target.value
+            }
+        })
+    }
+
+    useEffect(() => {
+        Axios.get("http://localhost:3001/productdrive/list").then((response) => {
+          setPartners(response.data);
+        })
+      }, [])
+
     return (
         <div>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="Drive">
+                Drive
+                    <select id="Drive" name="Drive" value={filters.Drive} onChange={handleChange}>
+                        <option value=""></option>
+                        {partners.map((val) => {
+                            return (
+                                <option value={val.Name}>{val.Name}</option>
+                            )
+                        })}
+
+                    </select>
+
+                </label>
+                <input type="submit" value="Filter" />
+            </form>
+
             <table>
                 <thead>
                     <tr>
@@ -34,7 +86,7 @@ function ProductDriveView(){
                     </tr>
                 </thead>
                 <tbody>
-                    {driveList.map((val) => {
+                    {records.map((val) => {
                         return (
                             <tr>
                                 <td>{val.Drive}</td>

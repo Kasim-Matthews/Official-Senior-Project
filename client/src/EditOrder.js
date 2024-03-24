@@ -115,19 +115,10 @@ function EditOrder() {
 
     await Axios.put(`http://localhost:3001/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id });
 
-    for (const item of items) {
-
-      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: String(item.Item), Location_id: String(formData.Location_id) })
-
-      let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Item_id: String(item.Item) })
-
-      await Axios.post("http://localhost:3001/distribution/track", { Order_id: id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id });
-
-      let current = await Axios.post("http://localhost:3001/distribution/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
-
-      await Axios.put("http://localhost:3001/distribution/take", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
-
-    }
+    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Items: items, Location_id: formData.Location  })
+    let V_response = await Axios.post("http://localhost:3001/distribution/find_value", {Items: items })
+    await Axios.post("http://localhost:3001/distribution/track", { Order_id: id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
+    await Axios.put("http://localhost:3001/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
     navigate('/distribution')
 
 

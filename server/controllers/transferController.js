@@ -86,7 +86,7 @@ const find_value = (req, res) => {
         from claire.item i
         WHERE i.Item_id IN (?);`
 
-        sb.query(sqlGet, [ids.toString()], (err, result) => {
+        sb.query(sqlGet, [ids], (err, result) => {
             console.log(err);
             res.send(result);
             res.end();

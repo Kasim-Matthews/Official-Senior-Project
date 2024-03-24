@@ -86,21 +86,14 @@ function AddPurchase() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         await Axios.post("http://localhost:3001/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
-
-        for (const item of items) {
-            let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Item_id: item.Item_id, Location_id: formData.Location })
-
-            let IID_response = await Axios.get("http://localhost:3001/purchase/find_id");
-
-            await Axios.post("http://localhost:3001/purchase/track", { Intake_id: IID_response.data[0].Intake_id, Quantity: item.Quantity, Total: formData.Total, FKItemLocation: IL_response.data[0].ItemLocation_id });
-
-            let current = await Axios.post("http://localhost:3001/purchase/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
-
-            await Axios.put("http://localhost:3001/purchase/update_item", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
-
-        }
-
+        let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Items: items, Location_id: formData.Location })
+        let IID_response = await Axios.get("http://localhost:3001/purchase/find_id");
+        await Axios.post("http://localhost:3001/purchase/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
+        await Axios.put("http://localhost:3001/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
         window.location.href = "/purchase";
+
+
+        
     }
 
     return (
