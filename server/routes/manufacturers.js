@@ -12,5 +12,6 @@ router.post('/new', manufacturersController.manu_create);
 router.delete('/remove/:id', manufacturersController.manu_delete);
 router.get('/:id/edit', manufacturersController.manu_edit)
 router.put('/:id/update', manufacturersController.manu_update)
+router.get('/:id/view', manufacturersController.manu_view)
 
 module.exports = router;

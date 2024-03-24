@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 
-export default function DonationSiteList({handleChange}) {
+export default function EditDonationSiteList({handleChange , id}) {
     const [dsites, setDSites] = React.useState([])
 
     useEffect(() => {
@@ -15,9 +15,16 @@ export default function DonationSiteList({handleChange}) {
             <select id="Partner" name="Partner" onChange={handleChange}>
                 <option value="">--Please choose an option--</option>
                 {dsites.map((val) => {
-                    return (
-                        <option value={val.Partner_id}>{val.Name}</option>
-                    )
+                    if(val.Partner_id == id){
+                        return(
+                            <option value={val.Partner_id} selected>{val.Name}</option>
+                        )
+                    }
+                    else{
+                        return (
+                            <option value={val.Partner_id}>{val.Name}</option>
+                        )
+                    }
                 })}
             </select>
             <br /></div>

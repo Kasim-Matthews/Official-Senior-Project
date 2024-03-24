@@ -8,11 +8,17 @@ const sb = mysql.createPool({
 });
 
 const drive_index = (req, res) => {
-    const sqlGet = `SELECT Name, Email, PhoneNumber as Phone, ContactName as Contact, Partner_id FROM claire.partner 
-    join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-    WHERE DeletedAt IS NULL AND partnertype.Type = "ProductDrive";`
+    const sqlGet = `SELECT p.Name as Drive, COUNT(ii.FKItemLocation) as Variety, SUM(ii.Value) as Total, SUM(ii.Quantity) as Quantity, p.Partner_id
+    from claire.partner p
+    join claire.intake i on i.Partner = p.Partner_id
+    join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+    join claire.partnertype pt on pt.PartnerType_id = p.Type
+    WHERE pt.Type = "Product Drive"
+    group by p.Name, p.Partner_id;`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
+        res.end();
+        return
     })
 }
 

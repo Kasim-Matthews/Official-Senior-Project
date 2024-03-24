@@ -8,9 +8,14 @@ const sb = mysql.createPool({
 });
 
 const manu_index = (req, res) => {
-    const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
-    join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-    WHERE DeletedAt IS NULL AND partnertype.Type = "Manufacturer";`
+    const sqlGet = `SELECT p.Name, p.Partner_id, COUNT(ii.FKItemLocation) as TotalItems 
+    FROM claire.partner p 
+    join claire.partnertype pt on p.Type = pt.PartnerType_id
+    join intake i on i.Partner = p.Partner_id
+    join intakeitems ii on ii.Intake_id = i.Intake_id
+    join itemlocation il on il.ItemLocation_id = ii.FKItemLocation 
+    WHERE DeletedAt IS NULL AND pt.Type = "Manufacturer"
+    group by p.Name, p.Partner_id;`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
@@ -100,11 +105,37 @@ const manu_update = (req, res) => {
     }
 }
 
+const manu_view = (req, res) => {
+    let id = req.params.id
+
+    if(typeof id != "string"){
+        res.send("Invalid");
+        res.end();
+        return
+    }
+
+    if(id){
+        const sqlGet = `SELECT p.Name as Manufacturer, CAST(i.RecievedDate as char(10)) as Date, SUM(ii.Quantity) as Volume, i.Intake_id
+        from claire.intake i
+        join claire.intakeitems ii on ii.Intake_id = i.Intake_id
+        join claire.partner p on p.Partner_id = i.Partner
+        WHERE p.Partner_id = ?
+        group by i.RecievedDate, i.Intake_id`
+
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+            res.end();
+            return
+        })
+    }
+}
+
 module.exports = {
     manu_index,
     manu_create,
     manu_delete,
     manu_list,
     manu_edit,
-    manu_update
+    manu_update,
+    manu_view
 }

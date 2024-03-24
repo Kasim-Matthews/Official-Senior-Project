@@ -119,7 +119,7 @@ const dsite_view = (req, res) => {
         join claire.partner p on i.Partner = p.Partner_id
         join claire.location l on l.Location_id = il.Location_id
         WHERE i.Partner = ?
-        GROUP by i.Intake_id;`
+        GROUP by i.Intake_id, l.Name;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })

@@ -41,6 +41,11 @@ import AddDonationSite from './AddDonationSite';
 import EditDonationSite from './EditDonationSite';
 import ViewDonationSite from './OneDonationSite';
 import ViewDrive from './OneDrive';
+import AddTransfer from './AddTransfer';
+import TransferView from './TransferView';
+import ViewTransfer from './OneTransfer';
+import ViewManufacturer from './OneManufacturer';
+import ProductDriveView from './ProductDriveView';
 
 export class Application extends React.Component {
     render() {
@@ -73,6 +78,7 @@ export class Application extends React.Component {
                     <Route path='/manufacturers' element={<Manufacturers />} />
                     <Route path='/manufacturers/:id/edit' element={<EditManufacturers />} />
                     <Route path='/manufacturers/new' element={<AddManufacturers />} />
+                    <Route path='/manufacturers/:id' element={<ViewManufacturer />} />
 
                     <Route path="/intake" element={<Intake />} />
                     <Route path="/intake/new" element={<AddIntake />} />
@@ -89,6 +95,7 @@ export class Application extends React.Component {
                     <Route path='/vendor/:id/edit' element={<EditVendor/>}/>
                     <Route path='/vendor/:id' element={<ViewVendor/>}/>
 
+                    <Route path='/productdrive' element={<ProductDriveView/>}/>
                     <Route path='/productdrive/new' element={<AddDrive/>}/>
                     <Route path='/productdrive/:id/edit' element={<EditDrive/>}/>
                     <Route path='/productdrive/:id' element={<ViewDrive/>}/>
@@ -97,6 +104,10 @@ export class Application extends React.Component {
                     <Route path='/donationsite/new' element={<AddDonationSite/>}/>
                     <Route path='/donationsite/:id/edit' element={<EditDonationSite/>}/>
                     <Route path='/donationsite/:id' element={<ViewDonationSite/>}/>
+
+                    <Route path='/transfer' element={<TransferView/>}/>
+                    <Route path='/transfer/new' element={<AddTransfer/>}/>
+                    <Route path='/transfer/:id' element={<ViewTransfer/>}/>
 
 
                 </Routes>

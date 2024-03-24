@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import {useParams} from "react-router-dom";
 import Axios from 'axios';
 
-export default function ItemInput({ record, handleItem, handleQuantity, index, deleteField }) {
+export default function EditItemInput({ record, handleItem, handleQuantity, index, deleteField }) {
 
     const { id } = useParams();
     const [item, setItem] = React.useState([])

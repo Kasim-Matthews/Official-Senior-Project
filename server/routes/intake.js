@@ -21,5 +21,6 @@ router.get('/:id/cleanup', intakeController.intake_cleanup)
 router.put('/reclaim', intakeController.intake_reclaim)
 router.get('/:id/edititems', intakeController.intake_edit_items)
 router.delete('/:id/edit_delete', intakeController.intake_update_delete)
+router.get('/misc', intakeController.intake_misc)
 
 module.exports = router

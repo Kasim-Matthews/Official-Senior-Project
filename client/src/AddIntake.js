@@ -15,8 +15,9 @@ function AddIntake() {
     Location: 0
   })
   const [sourceType, setSourceType] = React.useState("")
-  const [partners, setPartners] = React.useState([])
   const [locations, setLocations] = React.useState([])
+
+  const Types = ["Product Drive", "Donation Site", "Manufacturer", "Misc Donation"]
 
   const [index, setIndex] = React.useState(0);
   const [items, setItems] = React.useState([
@@ -116,12 +117,23 @@ function AddIntake() {
     })
   }, [])
 
-
+  async function typechecker(){
+    if(sourceType == "Misc Donation"){
+      await Axios.get("http://localhost:3001/intake/misc").then((response) => {
+        setFormData(prevFormData => {
+          return {
+            ...prevFormData,
+            Partner: response.data[0].Partner_id
+          }
+        })
+      })
+    }
+  }
   const submitPurchase = async (e) => {
     e.preventDefault()
+    typechecker();
 
-    Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
-
+    await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner })
     for (const item of items) {
       let IL_response = await Axios.post("http://localhost:3001/intake/location", { Item_id: item.Item_id, Location_id: formData.Location })
 
@@ -140,7 +152,6 @@ function AddIntake() {
     window.location.href = "/intake";
   }
 
-  console.log(sourceType)
 
   return (
     <div>
@@ -149,11 +160,12 @@ function AddIntake() {
 
         <label htmlFor="Source">Source</label>
         <select id="Source" value={sourceType} onChange={sourceChange}>
-          <option value=""></option>
-          <option value="Product Drive">Product Drive</option>
-          <option value="Manufacturer">Manufacturer</option>
-          <option value="Donation Site">Donation Site</option>
-          <option value="Misc Donation">Misc Donation</option>
+          <option value="" disabled></option>
+          {Types.map((type) => {
+            return(
+              <option value={type}>{type}</option>
+            )
+          })}
         </select>
         <br />
         {sourceType != "" ? listtype() : null}

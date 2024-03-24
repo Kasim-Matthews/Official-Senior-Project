@@ -11,14 +11,15 @@ function Manufacturers() {
         Axios.get("http://localhost:3001/manufacturers").then((response) => {
             setManuList(response.data);
         })
-    })
+    }, [])
 
-    const handleRemove = (id) => {
-        Axios.delete(`http://localhost:3001/manufacturers/remove/${id}`);
-    }
 
     const handleEdit = (id) => {
         navigate(`/manufacturers/${id}/edit`)
+    }
+
+    const handleView = (id) => {
+        navigate(`/manufacturers/${id}`)
     }
 
     return (
@@ -36,10 +37,10 @@ function Manufacturers() {
                         return (
                             <tr>
                                 <td>{val.Name}</td>
-                                <td></td>
+                                <td>{val.TotalItems}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.Partner_id)}>Delete</button>
                                     <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>
                             </tr>
                         );

@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
+import EditDriveList from "./components/EditDriveList";
+import EditDonationSiteList from './components/EditDonationSiteList';
+import EditManufacturerList from './components/EditManufacturerList'
 
 function EditIntake() {
 
@@ -10,10 +13,35 @@ function EditIntake() {
   const [formData, setFormData] = React.useState([])
   const [partners, setPartners] = React.useState([])
   const [locations, setLocations] = React.useState([])
+  const [sourceType, setSourceType] = React.useState()
 
   const [index, setIndex] = React.useState(0);
 
   const [items, setItems] = React.useState([])
+
+  const Types = ["Product Drive", "Donation Site", "Manufacturer", "Misc Donation"]
+
+
+  function listtype(){
+    if(sourceType == "Product Drive"){
+      return(
+        <EditDriveList handleChange={handleChange} id={formData.Partner} />
+      )
+    }
+
+    else if(sourceType == "Manufacturer"){
+      return(
+        <EditManufacturerList handleChange={handleChange} id={formData.Partner} />
+      )
+    }
+
+    else if(sourceType == "Donation Site"){
+      return(
+        <EditDonationSiteList handleChange={handleChange} id={formData.Partner} />
+      )
+    }
+  }
+
 
   const handleItem = (e, index) => {
     const values = [...items];
@@ -71,6 +99,7 @@ function EditIntake() {
   useEffect(() => {
     Axios.get(`http://localhost:3001/intake/${id}/edit`).then((response) => {
       setFormData(response.data[0]);
+      setSourceType(response.data[0].Type)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -82,17 +111,25 @@ function EditIntake() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => {
-    Axios.get("http://localhost:3001/partner/options").then((response) => {
-      setPartners(response.data);
-    })
-  }, [])
 
   useEffect(() => {
     Axios.get("http://localhost:3001/location").then((response) => {
       setLocations(response.data);
     })
   }, [])
+
+  async function typechecker(){
+    if(sourceType == "Misc Donation"){
+      await Axios.get("http://localhost:3001/intake/misc").then((response) => {
+        setFormData(prevFormData => {
+          return {
+            ...prevFormData,
+            Partner: response.data[0].Partner_id
+          }
+        })
+      })
+    }
+  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -109,7 +146,9 @@ function EditIntake() {
 
     await Axios.delete(`http://localhost:3001/intake/${id}/edit_delete`)
     
-    await Axios.put(`http://localhost:3001/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value }, {
+    typechecker();
+
+    await Axios.put(`http://localhost:3001/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner}, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
@@ -132,29 +171,39 @@ function EditIntake() {
 
   }
 
+  function sourceChange(event) {
+    setSourceType(event.target.value)
+    listtype(event.target.value)
+  }
+  console.log(sourceType)
+
   return (
     <div>
       <h2>Intake</h2>
       <form id="intake" onSubmit={handleSubmit}>
-        <label htmlFor="Partner">Partner</label>
-        <select id="Partner" name="Partner" onChange={handleChange}>
-          <option value="">--Please choose an option--</option>
-          {partners.map((val) => {
-            if (val.value == formData.Partner) {
 
-              return (
-                <option value={val.value} selected>{val.label}</option>
+      <label htmlFor="Source">Source</label>
+        <select id="Source" onChange={sourceChange}>
+          <option value="" disabled></option>
+          {Types.map((type) => {
+            if(formData.Type == type){
+              return(
+                <option value={type} selected>{type}</option>
               )
             }
-            else {
-              return (
-                <option value={val.value}>{val.label}</option>
+            else{
+              return(
+                <option value={type}>{type}</option>
               )
             }
           })}
-
         </select>
-        <br></br>
+        <br />
+
+        {sourceType != "" ? listtype() : null}
+
+
+
         <label htmlFor="Location">Location</label>
         <select id="Location_id" name="Location_id" value={formData.Location_id} onChange={handleChange}>
           <option value="">--Please choose an option--</option>
@@ -178,7 +227,7 @@ function EditIntake() {
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
 
         <label htmlFor="Value">Value</label>
-        <input type="number" name="Value" id="Value" step="0.01" defaultValue={formData.Value} onChange={handleChange} />
+        <input type="number" name="Value" id="Value" step="0.01" defaultValue={formData.Value == null ? 0.00 : formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
 
         <h2>Items</h2>
