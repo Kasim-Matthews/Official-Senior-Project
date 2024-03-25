@@ -8,6 +8,7 @@ function EditPurchase() {
     const [formData, setFormData] = useState([])
     const [vendor, setVendors] = React.useState([])
     const [locations, setLocations] = React.useState([])
+    const [formErrors, setFormErrors] = useState({})
 
     const [index, setIndex] = React.useState(0);
     const [items, setItems] = React.useState([])
@@ -91,11 +92,25 @@ function EditPurchase() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const validate = (e) => {
+        e.preventDefault();
+        const errors = {};
+        const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+    
+    
+        if (!regex_comments.test(formData.Comments)) {
+          errors.Comments = "The comments contains an SQL keyword !"
+        }
+        setFormErrors(errors)
+        if (!errors.Comments) {
+            handleSubmit()
+        }
+        return;
+    }
 
-        console.log(parseFloat(formData.TotalValue))
-        console.log(items)
+   
+    const handleSubmit = async () => {
+
 
         let GetData = async function (id) {
             return await Axios.get(`http://localhost:3001/purchase/${id}/cleanup`).then((response) => {
@@ -125,7 +140,7 @@ function EditPurchase() {
     return (
         <div>
             <h2>Purchase</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={validate}>
                 <label htmlFor="Vendor">Vendor</label>
                 <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
                     <option value="">--Please choose an option--</option>
@@ -177,6 +192,7 @@ function EditPurchase() {
                 <div>
                     <label htmlFor="Comments">Comments</label><br />
                     <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
+                    {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
                 </div>
 
                 <h2>Items</h2>

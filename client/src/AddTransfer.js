@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +25,7 @@ function AddTransfer() {
 
         }
     ])
+    const [formErrors, setFormErrors] = useState({})
 
     const handleItem = (e, index) => {
         const values = [...items];
@@ -101,8 +102,24 @@ function AddTransfer() {
         })
     }, [])
 
-    const handleSubmit = async (e) => {
+    const validate = (e) => {
         e.preventDefault();
+        const errors = {};
+        const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+    
+    
+        if (!regex_comments.test(formData.Comments)) {
+          errors.Comments = "The comments contains an SQL keyword !"
+        }
+        setFormErrors(errors)
+        if (!errors.Comments) {
+            handleSubmit()
+        }
+        return;
+    }
+
+
+    const handleSubmit = async () => {
         await Axios.put('http://localhost:3001/transfer/give', {Location:formData.To, Items: items})
         await Axios.put('http://localhost:3001/transfer/take', {Location:formData.From.Location, Items: items})
         await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
@@ -115,7 +132,7 @@ function AddTransfer() {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={validate}>
             <label htmlFor="From">From storage location</label>
             <select id="From" name="From" onChange={handleFrom}>
                 <option value="">--Please choose an option--</option>
@@ -132,7 +149,7 @@ function AddTransfer() {
                 <option value="" >--Please choose an option--</option>
                 {to.map((val) => {
                     if(val.Location_id == formData.From.Location){
-
+                        return(null);
                     }
                     else{
                         return (
@@ -144,6 +161,7 @@ function AddTransfer() {
             </select><br />
 
             <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
+            {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
             <h2>Items</h2>
             {items.map((obj, index) => (

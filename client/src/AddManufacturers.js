@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 
 function AddManufacturers() {
@@ -8,6 +8,7 @@ function AddManufacturers() {
       Name: "",
     }
   )
+  const [formErrors, setFormErrors] = useState({})
 
 
   function handleChange(event) {
@@ -19,8 +20,23 @@ function AddManufacturers() {
     })
   }
 
-  function handleSubmit(e) {
+  const validate = (e) => {
     e.preventDefault();
+    const errors = {};
+    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+
+
+    if (!regex_name.test(formData.Name)) {
+      errors.Name = "The name contains an SQL keyword !"
+    }
+    setFormErrors(errors)
+    if (!errors.Name) {
+        handleSubmit()
+    }
+    return;
+}
+
+  function handleSubmit() {
     try {
       Axios.post("http://localhost:3001/manufacturers/new", { name: formData.Name, }, {
         headers: {
@@ -35,9 +51,10 @@ function AddManufacturers() {
   }
 
   return (
-    <form id="locations" onSubmit={handleSubmit}>
+    <form id="locations" onSubmit={validate}>
       <label htmlFor="Name">Name</label>
       <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange} />
+      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
       <input type="submit" value="Submit" />
     </form>
   )

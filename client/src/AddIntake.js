@@ -29,6 +29,8 @@ function AddIntake() {
     }
   ])
 
+  const [formErrors, setFormErrors] = useState({})
+
   function listtype() {
     if (sourceType == "Product Drive") {
       return (
@@ -129,8 +131,24 @@ function AddIntake() {
         })
       })
     }
-    submitDonation()
+    validate();
+    return
   }
+
+  const validate = () => {
+    const errors = {};
+    const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+
+
+    if (!regex_comments.test(formData.Comments)) {
+      errors.Comments = "The comments contains an SQL keyword !"
+    }
+    setFormErrors(errors)
+    if (!errors.Comments) {
+      submitDonation()
+    }
+    return;
+}
   const submitDonation = async () => {
     await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
 
@@ -178,6 +196,7 @@ function AddIntake() {
         <label htmlFor="Value">Money Raised</label>
         <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment"></textarea><br></br>
+        {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
         <h2>Items</h2>
         {items.map((obj, index) => (

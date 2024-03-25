@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
 import Distribution from "./models/Distribution";
@@ -9,6 +9,7 @@ function AddOrder() {
   const [partners, setPartners] = React.useState([])
   const [locations, setLocations] = React.useState([])
   const [formData, setFormData] = React.useState(Distribution)
+  const [formErrors, setFormErrors] = useState({})
 
   const [index, setIndex] = React.useState(1);
 
@@ -82,9 +83,24 @@ function AddOrder() {
     }
   }
 
-
-  const handleSubmit = async (e) => {
+  const validate = (e) => {
     e.preventDefault();
+    const errors = {};
+    const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+
+
+    if (!regex_comments.test(formData.Comments)) {
+      errors.Comments = "The comments contains an SQL keyword !"
+    }
+    setFormErrors(errors)
+    if (!errors.Comments) {
+        handleSubmit()
+    }
+    return;
+}
+
+
+  const handleSubmit = async () => {
 
     Axios.post("http://localhost:3001/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner }, {
       headers: {
@@ -118,7 +134,7 @@ function AddOrder() {
 
 
   return (
-    <form id="distribution" onSubmit={handleSubmit}>
+    <form id="distribution" onSubmit={validate}>
       <label htmlFor="Partner">Partner</label>
       <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
         <option value="">--Please choose an option--</option>
@@ -157,7 +173,7 @@ function AddOrder() {
       <input type="radio" id="Other" name="DeliveryMethod" value="Other" checked={formData.DeliveryMethod === "Other"} onChange={handleChange} />
 
       <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
-
+      {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
       <h2>Items</h2>
       {items.map((obj, index) => (

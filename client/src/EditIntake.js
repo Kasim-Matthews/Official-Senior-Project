@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
@@ -13,6 +13,7 @@ function EditIntake() {
   const [formData, setFormData] = React.useState([])
   const [locations, setLocations] = React.useState([])
   const [sourceType, setSourceType] = React.useState()
+  const [formErrors, setFormErrors] = useState({})
 
   const [index, setIndex] = React.useState(0);
 
@@ -129,8 +130,24 @@ function EditIntake() {
         })
       })
     }
-    handleSubmit()
+    validate();
+    return
   }
+
+  const validate = () => {
+    const errors = {};
+    const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+
+
+    if (!regex_comments.test(formData.Comments)) {
+      errors.Comments = "The comments contains an SQL keyword !"
+    }
+    setFormErrors(errors)
+    if (!errors.Comments) {
+      handleSubmit()
+    }
+    return;
+}
 
   async function handleSubmit() {
 
@@ -220,7 +237,7 @@ function EditIntake() {
         <label htmlFor="Value">Money Raised</label>
         <input type="number" name="Value" id="Value" step="0.01" defaultValue={formData.Value == null ? 0.00 : formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
-
+        {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
         <h2>Items</h2>
         {items.map((record, index) => (
           <div>

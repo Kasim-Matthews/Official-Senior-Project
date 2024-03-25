@@ -7,6 +7,7 @@ function AddPurchase() {
     const [formData, setFormData] = useState(Purchase)
     const [vendor, setVendors] = React.useState([])
     const [locations, setLocations] = React.useState([])
+    const [formErrors, setFormErrors] = useState({})
 
     const [index, setIndex] = React.useState(0);
     const [items, setItems] = React.useState([
@@ -83,8 +84,24 @@ function AddPurchase() {
         })
     }, [])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+
+    const validate = (e) => {
+        e.preventDefault();
+        const errors = {};
+        const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+    
+    
+        if (!regex_comments.test(formData.Comments)) {
+          errors.Comments = "The comments contains an SQL keyword !"
+        }
+        setFormErrors(errors)
+        if (!errors.Comments) {
+            handleSubmit()
+        }
+        return;
+    }
+
+    const handleSubmit = async () => {
         await Axios.post("http://localhost:3001/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
         let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Items: items, Location_id: formData.Location })
         let IID_response = await Axios.get("http://localhost:3001/purchase/find_id");
@@ -99,7 +116,7 @@ function AddPurchase() {
     return (
         <div>
             <h2>Purchase</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={validate}>
                 <label htmlFor="Vendor">Vendor</label>
                 <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
                     <option value="">--Please choose an option--</option>
@@ -135,6 +152,7 @@ function AddPurchase() {
                 <div>
                     <label htmlFor="Comments">Comments</label><br />
                     <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
+                    {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
                 </div>
 
                 <h2>Items</h2>
