@@ -44,6 +44,6 @@ function ViewTransfer() {
         </div>
     )
 }
-/*Cannot edit till the purchase functionality is a thing*/
+
 
 export default ViewTransfer;

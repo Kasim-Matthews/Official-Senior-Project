@@ -14,6 +14,7 @@ const vendorRoute = require('./routes/vendor')
 const purchaseRoute = require('./routes/purchase')
 const dirveRoute = require('./routes/productdrive')
 const transferRoute = require('./routes/transfer')
+const auditRoute = require('./routes/audit')
 
 
 app.use(cors())
@@ -37,6 +38,7 @@ app.use('/vendor', vendorRoute)
 app.use('/purchase', purchaseRoute)
 app.use('/productdrive', dirveRoute)
 app.use('/transfer', transferRoute)
+app.use('/audit', auditRoute)
 
 
 

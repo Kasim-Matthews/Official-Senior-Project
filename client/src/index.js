@@ -46,6 +46,9 @@ import TransferView from './TransferView';
 import ViewTransfer from './OneTransfer';
 import ViewManufacturer from './OneManufacturer';
 import ProductDriveView from './ProductDriveView';
+import AddAudit from './AddAudit';
+import AuditView from './AuditView';
+import ViewAudit from './OneAudit';
 
 export class Application extends React.Component {
     render() {
@@ -108,6 +111,11 @@ export class Application extends React.Component {
                     <Route path='/transfer' element={<TransferView/>}/>
                     <Route path='/transfer/new' element={<AddTransfer/>}/>
                     <Route path='/transfer/:id' element={<ViewTransfer/>}/>
+
+                    <Route path='/audit' element={<AuditView/>}/>
+                    <Route path='/audit/new' element={<AddAudit/>}/>
+                    <Route path='/audit/:id' element={<ViewAudit />}/>
+
 
 
                 </Routes>
