@@ -64,6 +64,26 @@ const register = async (req, res) => {
         }
     )
 }
+
+const data = (req, res) => {
+    const query = `
+        SELECT i.Name as itemName, l.Name as locationName, il.Quantity
+        FROM claire.itemlocation il 
+        JOIN claire.item i ON il.Item_id = i.Item_id
+        JOIN claire.location l ON il.Location_id = l.Location_i`;
+
+    sb.query(query, (err, result) => {
+
+        console.log(result)
+
+        if (err) {
+            res.send({ status: 'error', message: err.message });
+        } else {
+            res.send({ status: 'ok', data: result });
+        }
+    });
+}
+
 /* 
 const sb = mysql.createPool({
     host: "sql5.freesqldatabase.com",
