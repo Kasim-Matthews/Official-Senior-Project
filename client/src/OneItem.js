@@ -9,7 +9,7 @@ function ViewItem() {
     const [record, setRecord] = React.useState({})
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/item/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3306/item/${id}/view`).then((response) => {
             response.data.map((key, value) => { setRecord(key) });
         })
     }, [])

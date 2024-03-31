@@ -36,7 +36,7 @@ function AddPartner() {
   }
 
   async function handleSubmit() {
-    await Axios.post("http://localhost:3001/partner/new", {
+    await Axios.post("http://localhost:3306/partner/new", {
       name: formData.Name,
       email: formData.Email,
       type: formData.Type

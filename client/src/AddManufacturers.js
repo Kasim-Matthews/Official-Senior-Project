@@ -38,7 +38,7 @@ function AddManufacturers() {
 
   function handleSubmit() {
     try {
-      Axios.post("http://localhost:3001/manufacturers/new", { name: formData.Name, }, {
+      Axios.post("http://localhost:3306/manufacturers/new", { name: formData.Name, }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

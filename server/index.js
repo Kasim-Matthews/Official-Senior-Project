@@ -49,8 +49,8 @@ app.get('/', (req, res) => {
 app.get('/', (req, res) => res.render('home'));
 app.get('/Dashboard', (req, res) => res.render('Dashboard'));
 
-app.listen('3001', () => {
-    console.log("running on port 3001");
+app.listen('3306', () => {
+    console.log("running on port 3306");
 })
 
 

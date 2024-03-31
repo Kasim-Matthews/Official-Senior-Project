@@ -10,7 +10,7 @@ function ViewManufacturer() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/manufacturers/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3306/manufacturers/${id}/view`).then((response) => {
             setRecord(response.data)
         });
     }, [])

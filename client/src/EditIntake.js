@@ -97,7 +97,7 @@ function EditIntake() {
   }
 
   useEffect(() => {
-    Axios.get(`http://localhost:3001/intake/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3306/intake/${id}/edit`).then((response) => {
       setFormData(response.data[0]);
       setSourceType(response.data[0].Type)
     })
@@ -105,7 +105,7 @@ function EditIntake() {
   }, [])
 
   useEffect(() => {
-    Axios.get(`http://localhost:3001/intake/${id}/edititems`).then((response) => {
+    Axios.get(`http://localhost:3306/intake/${id}/edititems`).then((response) => {
       setItems(response.data);
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -113,7 +113,7 @@ function EditIntake() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/location").then((response) => {
+    Axios.get("http://localhost:3306/location").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -121,7 +121,7 @@ function EditIntake() {
   const typechecker = async (e) => {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
-      await Axios.get("http://localhost:3001/intake/misc").then((response) => {
+      await Axios.get("http://localhost:3306/intake/misc").then((response) => {
         setFormData(prevFormData => {
           return {
             ...prevFormData,
@@ -152,29 +152,29 @@ function EditIntake() {
   async function handleSubmit() {
 
     let GetData = async function (id) {
-      return await Axios.get(`http://localhost:3001/intake/${id}/cleanup`).then((response) => {
+      return await Axios.get(`http://localhost:3306/intake/${id}/cleanup`).then((response) => {
         return response
       });
     }
     let data = GetData(id)
     data.then(async (response) => {
-      await Axios.put("http://localhost:3001/intake/reclaim", { records: response.data })
+      await Axios.put("http://localhost:3306/intake/reclaim", { records: response.data })
     })
 
 
-    await Axios.delete(`http://localhost:3001/intake/${id}/edit_delete`)
+    await Axios.delete(`http://localhost:3306/intake/${id}/edit_delete`)
 
 
-    await Axios.put(`http://localhost:3001/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value }, {
+    await Axios.put(`http://localhost:3306/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value }, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
-    let V_response = await Axios.post("http://localhost:3001/intake/find_value", { Items: items })
-    let IL_response = await Axios.post("http://localhost:3001/intake/location", { Items: items, Location_id: formData.Location })
+    let V_response = await Axios.post("http://localhost:3306/intake/find_value", { Items: items })
+    let IL_response = await Axios.post("http://localhost:3306/intake/location", { Items: items, Location_id: formData.Location })
 
-    await Axios.post("http://localhost:3001/intake/track", { Intake_id: id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
-    await Axios.put("http://localhost:3001/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
+    await Axios.post("http://localhost:3306/intake/track", { Intake_id: id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
+    await Axios.put("http://localhost:3306/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
     navigate('/intake')
 
   }

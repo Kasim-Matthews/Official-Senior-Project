@@ -5,7 +5,7 @@ export default function ManufacturerList({handleChange}) {
     const [manulist, setManuList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/manufacturers/list").then((response) => {
+        Axios.get("http://localhost:3306/manufacturers/list").then((response) => {
           setManuList(response.data);
         })
       }, [])

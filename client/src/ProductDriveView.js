@@ -14,7 +14,7 @@ function ProductDriveView() {
 
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/productdrive").then((response) => {
+        Axios.get("http://localhost:3306/productdrive").then((response) => {
             setDriveList(response.data);
             setRecords(response.data);
         })
@@ -51,7 +51,7 @@ function ProductDriveView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/productdrive/list").then((response) => {
+        Axios.get("http://localhost:3306/productdrive/list").then((response) => {
           setPartners(response.data);
         })
       }, [])
