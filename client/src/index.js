@@ -23,7 +23,6 @@ import Dashboard from './Dashboard';
 import AddIntake from "./AddIntake";
 import Intake from './Intake';
 import ViewIntake from './OneIntake';
-import UserAddInfo from './UserAddInfo';
 import Login from './login';
 import Register from './register';
 import EditIntake from './EditIntake';
@@ -59,7 +58,6 @@ export class Application extends React.Component {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/Dashboard" element={<Dashboard />} />
-                    <Route path='/UserAddInfo' element={<UserAddInfo />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
                     

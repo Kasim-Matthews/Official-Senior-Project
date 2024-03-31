@@ -58,7 +58,7 @@ function AddItem() {
     await Axios.post("http://localhost:3001/item/pair", {Locations: locations, Item_id: Item_id.data[0].Item_id}).then(window.location.href ="/item")
 
     
-
+    navigate("/item");
   }
 
   useEffect(() => {

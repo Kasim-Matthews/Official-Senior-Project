@@ -23,7 +23,7 @@ function Dashboard() {
     const [selectedLocation, setSelectedLocation] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:3306/item-location-data')
+        axios.get('http://localhost:3001/item-location-data')
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);
@@ -47,6 +47,7 @@ function Dashboard() {
 
     const totalQuantity = filteredItems.reduce((sum, item) => sum + item.Quantity, 0);
 
+    console.log(locations)
 
     return (
         <div className="dashboard-container">
@@ -59,6 +60,8 @@ function Dashboard() {
                         <li><a href="#">Inventory</a></li>
                         <li><Link to="/partner">Partner</Link></li>
                         <li><a href="#">User Profile</a></li>
+                        <li><Link to="/item">Items</Link></li>
+                        <li><Link to="/location">Locations</Link></li>
                     </ul>
                 </nav>
             </div>
