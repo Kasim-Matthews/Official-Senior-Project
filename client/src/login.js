@@ -23,7 +23,6 @@ const Login = () => {
       setLoginStatus(message);
     });
 
-    navigate("/dashboard")
   };
 
   return (
