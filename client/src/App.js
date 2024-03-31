@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+
+
+
+/*import React, { useState } from "react";
 import Axios from 'axios';
-import './App.css';
+import './Login.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Dashboard from './Dashboard';
+import UserAddInfo from './UserAddInfo';
 
 function App() {
   // Existing state declarations
@@ -11,13 +14,15 @@ function App() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginStatus, setLoginStatus] = useState("");
+  const [additionalInfoRequired, setAdditionalInfoRequired] = useState(false);
+  const [userId, setUserId] = useState(null);
 
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const register = () => {
-    Axios.post('https://diaper-bank-inventory-management-system.onrender.com/register', {
-      username: usernameReg, 
+    Axios.post('http://localhost:3306/register', {
+      username: usernameReg,
       password: passwordReg,
     }).then((response) => {
 
@@ -25,12 +30,17 @@ function App() {
   }
 
   const login = () => {
-    Axios.post('https://diaper-bank-inventory-management-system.onrender.com/login', {
-      username: username, 
+    Axios.post('http://localhost:3306/login', {
+      username: username,
       password: password,
     }).then((response) => {
-      if(response.data.status === 'ok') {
+      if (response.data.status === 'ok') {
         setIsLoggedIn(true); // Set the isLoggedIn state to true on successful login
+      } else if (response.data.status === 'additional_info_required') {
+        setAdditionalInfoRequired(true);
+        setLoginStatus(response.data.message);
+        setUserId(response.data.userId);
+        console.log(response.data.userId)
       } else {
         setLoginStatus(response.data.message);
       }
@@ -39,50 +49,58 @@ function App() {
 
   return (
 
-      <div className="App">
-        {isLoggedIn ? <Navigate to="/Dashboard" /> : (
-          <div>
-      <div className="register">
-        <h1>Registration</h1>
-        <label>Username</label>
-        <input 
-          type="text" 
-          onChange={(e) => {
-            setUsernameReg(e.target.value);
-          }}
-        />
-        <label>Password</label>
-        <input type="text" 
-          onChange={(e) => {
-            setPasswordReg(e.target.value);
-           }}
-        />
-        <button onClick={register}> Register </button>
+    <div className="App">
+      <header className="App-header">
+        <h1>Diaper Bank of Northeast Florida Inventory Management System</h1>
+      </header>
+      
+      {isLoggedIn && !additionalInfoRequired ? <Navigate to="/Dashboard" /> : null}
+      {additionalInfoRequired ? <UserAddInfo userId={userId} /> : null}
+      <div>
+      <div className="form-container">
+        <div className="register">
+          <h1>Registration</h1>
+          <label>Email</label>
+          <input
+            type="text" placeholder="Email..."
+            onChange={(e) => {
+              setUsernameReg(e.target.value);
+            }}
+          />
+          <label>Password</label>
+          <input type="text" placeholder="Password..."
+            onChange={(e) => {
+              setPasswordReg(e.target.value);
+            }}
+          />
+          <button onClick={register}> Register </button>
+        </div>
+
+        <div className="login">
+          <h1>Login</h1>
+          <label>Email</label>
+          <input type="text" placeholder="Email..."
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
+          <label>Password</label>
+          <input type="password" placeholder="Password..."
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+          />
+          <button onClick={login}> Login </button>
+        </div>
+
+        <h1>{loginStatus}</h1>
       </div>
 
-            <div className="login">
-        <h1>Login</h1>
-        <input type="text" placeholder="Username..." 
-          onChange={(e) => {
-          setUsername(e.target.value);
-         }} 
-        />
-        <input type="password" placeholder="Password..." 
-          onChange={(e) => {
-          setPassword(e.target.value);
-         }} 
-        />
-        <button onClick={login}> Login </button>
-      </div>
 
-      <h1>{loginStatus}</h1>
     </div>
-        )}
-
     </div>
   );
-
 }
 
 
-export default App;
+export default App;*/

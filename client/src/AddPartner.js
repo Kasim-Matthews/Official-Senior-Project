@@ -1,47 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import Axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import Partner from './models/Partner'
+import { useNavigate } from "react-router-dom";
 
-function AddPartner(){
-    const navigate = useNavigate();
+function AddPartner() {
+  const navigate = useNavigate();
 
-    const [formData, setFormData] = React.useState({
-        Name:"",
-        Email:"",
-    })
+  const [formErrors, setFormErrors] = useState({})
+  const [formData, setFormData] = React.useState(Partner)
 
-    function handleChange(event){
-        setFormData(prevFormData => {
-          return{
-            ...prevFormData,
-            [event.target.name]: event.target.value
-          }
-        })
+  function handleChange(e) {
+
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  }
+
+  const validate = (e) => {
+    e.preventDefault();
+    const errors = {};
+    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+    const regex_email = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+    if (!regex_name.test(formData.Name) && formData.Name != "") {
+      errors.Name = "The name contains an SQL keyword !"
+    }
+
+    if (!regex_email.test(formData.Email) && formData.Email != "") {
+      errors.Email = "This is not a valid email format!";
+    }
+
+    setFormErrors(errors);
+    if (!errors.Name && !errors.Email) {
+      handleSubmit()
+    }
+  }
+
+  async function handleSubmit() {
+    await Axios.post("http://localhost:3306/partner/new", {
+      name: formData.Name,
+      email: formData.Email,
+      type: formData.Type
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
+    });
+    window.location.href = "/partner";
+  }
 
-      function handleSubmit(e){
-        e.preventDefault();
-        
-        Axios.post("https://diaper-bank-inventory-management-system.onrender.com/partner/new", {name:formData.Name,
-        email:formData.Email},{
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-      });
-        window.location.href = "/partner";
-      }
 
-      return(
-        <form id="partnerForm" onSubmit={handleSubmit}>
-            <label htmlFor="Name">Name</label>
-            <input type="text" name="Name" id="Name" value={formData.Name} onChange={handleChange} required/>
+  return (
+    <form id="partnerForm" onSubmit={validate}>
+      <div>
+        <label htmlFor="Name">Name</label>
+        <input type="text" name="Name" id="Name" value={formData.Name} onChange={handleChange} required />
 
-            <label htmlFor="Email">Email</label>
-            <input type="text" name="Email" value={formData.Email} id="Email" onChange={handleChange} required/>
+      </div>
+      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+      <div>
+        <label htmlFor="Email">Email</label>
+        <input type="text" name="Email" value={formData.Email} id="Email" onChange={handleChange} required />
+      </div>
+      {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
-            <input type="submit" value="Submit"/>
-        </form>
-      );
+      <button type="submit">Submit</button>
+    </form>
+  );
 }
 
 export default AddPartner;

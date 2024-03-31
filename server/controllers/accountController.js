@@ -1,45 +1,62 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
+    host: "localhost",
+    user: "root",
+    password: "Lindsey1!",
+    database: "claire",
     port: 3306
 });
 
-const register = (req, res) => {
-    let username = req.body.username;
-    let password = req.body.password;
 
-    sb.query(
-        "INSERT INTO sql5669328.register (usernameReg, passwordReg) VALUES (?,?)",
-        [username, password],
-        (err, result) => {
-            console.log(err);
-        }
-    )
 
-}
+const promisePool = sb.promise();
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken');
 
-const login = (req, res) => {
-    console.log(req.body)
-    let username = req.body.username;
-    let password = req.body.password;
 
-    sb.query(
-        "SELECT * FROM sql5669328.register WHERE usernameReg = ? AND passwordReg = ?",
-        [username, password],
-        (err, result) => {
 
-            if(err){
-                res.send({err: err})
+const register = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const sqlInsert = 'INSERT INTO claire.user (Email, Password) VALUES (?, ?)';
 
+    sb.query(sqlInsert, [email, hashedPassword], (err, result) => {
+        console.log(err);
+        //res.send(result);
+        res.status(201).json({ success: true, message: "User registered successfully", data: result });
+    });
+  
+
+      
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Error registering user", error: error.message });
+    }
+  }
+
+  const login = (req, res) => {
+    const { email, password } = req.body;
+    const sqlSelect = 'SELECT * FROM claire.user WHERE Email = ?';
+
+    sb.query(sqlSelect, [email], async (err, users) => {
+
+            if (err) {
+                return res.status(500).json({ success: false, message: "Error logging in", error: err.message });
             }
 
+            if (users.length > 0) {
+                const user = users[0];
+                if (await bcrypt.compare(password, user.Password)) {
+                    const token = jwt.sign(
+                        { userId: user.User_id },
+                        'yourSecretKey',
+                        { expiresIn: '1h' }
+                    );
 
-
-            if (result.length > 0) {
-                res.send({ status: 'ok', user: result[0] }); // Send user data and status
+                    res.json({ success: true, token });
+                } else {
+                    res.status(401).json({ success: false, message: "Invalid credentials" });
+                }
             } else {
                 res.send({ status: 'error', message: "Wrong username/password combination!" });
             }
@@ -60,5 +77,6 @@ https://diaper-bank-inventory-management-system.onrender.com
 
 module.exports = {
     login,
-    register
+    register,
+    data
 }

@@ -1,45 +1,46 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import {useNavigate, Link} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
-function Manufacturers(){
+function Manufacturers() {
     const navigate = useNavigate();
 
     const [manuList, setManuList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/manufacturers").then((response) =>{
+        Axios.get("http://localhost:3306/manufacturers").then((response) => {
             setManuList(response.data);
         })
-    })
+    }, [])
 
-    const handleRemove = (id) =>{
-        Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/remove/${id}`);
-    }
 
     const handleEdit = (id) => {
         navigate(`/manufacturers/${id}/edit`)
     }
 
-    return(
+    const handleView = (id) => {
+        navigate(`/manufacturers/${id}`)
+    }
+
+    return (
         <div>
             <table>
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Market Value</th>
+                        <th>Total Items</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {manuList.map((val) => {
-                        return(
+                        return (
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>0</td>
+                                <td>{val.TotalItems}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.id)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.id)}>Edit</button>
+                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>
                             </tr>
                         );
