@@ -1,9 +1,9 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "Lindsey1!",
-    database: "claire",
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
     port: 3306
 });
 
@@ -19,7 +19,7 @@ const register = async (req, res) => {
     const { email, password } = req.body;
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const sqlInsert = 'INSERT INTO claire.user (Email, Password) VALUES (?, ?)';
+      const sqlInsert = 'INSERT INTO sql5669328.user (Email, Password) VALUES (?, ?)';
 
     sb.query(sqlInsert, [email, hashedPassword], (err, result) => {
         console.log(err);
@@ -36,7 +36,7 @@ const register = async (req, res) => {
 
   const login = (req, res) => {
     const { email, password } = req.body;
-    const sqlSelect = 'SELECT * FROM claire.user WHERE Email = ?';
+    const sqlSelect = 'SELECT * FROM sql5669328.user WHERE Email = ?';
 
     sb.query(sqlSelect, [email], async (err, users) => {
 

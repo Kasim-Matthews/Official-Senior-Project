@@ -8,7 +8,7 @@ function EditDonationSite(){
     const [formErrors, setFormErrors] = useState({})
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/donationsite/${id}/edit`).then((response) => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/${id}/edit`).then((response) => {
           response.data.map((key, value) => { setFormData(key) });
         })
       }, [])
@@ -44,7 +44,7 @@ function EditDonationSite(){
     }
 
     async function handleSubmit() {
-        await Axios.put(`http://localhost:3306/donationsite/${id}/update`, {
+        await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/${id}/update`, {
           name: formData.Name,
           address: formData.Address
         }, {

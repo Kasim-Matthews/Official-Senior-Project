@@ -5,7 +5,7 @@ export default function DonationSiteList({handleChange}) {
     const [dsites, setDSites] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/donationsite/list").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/donationsite/list").then((response) => {
             setDSites(response.data);
         })
       }, [])

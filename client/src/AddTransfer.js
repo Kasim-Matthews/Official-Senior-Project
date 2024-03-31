@@ -91,13 +91,13 @@ function AddTransfer() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
             setTo(response.data);
         })
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/transfer/adjustment").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/transfer/adjustment").then((response) => {
             setFrom(response.data);
         })
     }, [])
@@ -120,14 +120,14 @@ function AddTransfer() {
 
 
     const handleSubmit = async () => {
-        await Axios.put('http://localhost:3306/transfer/give', {Location:formData.To, Items: items})
-        await Axios.put('http://localhost:3306/transfer/take', {Location:formData.From.Location, Items: items})
-        await Axios.post("http://localhost:3306/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
-        let id = await Axios.get("http://localhost:3306/intake/find_id");
-        let ild = await Axios.post("http://localhost:3306/transfer/ild", {Items: items, Location: formData.To});
-        let Values = await Axios.post('http://localhost:3306/transfer/values', {Items: items});
+        await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/give', {Location:formData.To, Items: items})
+        await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/take', {Location:formData.From.Location, Items: items})
+        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
+        let id = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/find_id");
+        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/ild", {Items: items, Location: formData.To});
+        let Values = await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/values', {Items: items});
 
-        await Axios.post('http://localhost:3306/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data});
+        await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data});
 
     }
 

@@ -1,14 +1,14 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "Lindsey1!",
-    database: "claire",
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
     port: 3306
 });
 
 const location_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS NULL;"
+    const sqlGet = "SELECT * FROM sql5669328.location WHERE DeletedAt IS NULL;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
         res.end();
@@ -28,7 +28,7 @@ const location_creation = (req, res) => {
     }
 
     if (Name && Address) {
-        const sqlInsert = "INSERT INTO claire.location (Name, Address) VALUES (?,?);"
+        const sqlInsert = "INSERT INTO sql5669328.location (Name, Address) VALUES (?,?);"
         sb.query(sqlInsert, [Name, Address], (err, result) => {
             console.log(err);
             res.send();
@@ -48,7 +48,7 @@ const location_delete = (req, res) => {
     }
 
     if (id) {
-        const sqlDelete = `UPDATE claire.location Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Location_id = ?;`
+        const sqlDelete = `UPDATE sql5669328.location Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Location_id = ?;`
         sb.query(sqlDelete, [date, id], (err, result) => {
             console.log(err);
             res.send()
@@ -68,7 +68,7 @@ const location_edit = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT * FROM claire.location WHERE Location_id= ?;'
+        const sqlGet = 'SELECT * FROM sql5669328.location WHERE Location_id= ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
             res.end();
@@ -91,7 +91,7 @@ const location_update = (req, res) => {
     }
 
     if (Name && Address && id) {
-        const sqlUpdate = "UPDATE claire.location SET Name= ?, Address= ? WHERE Location_id = ?;"
+        const sqlUpdate = "UPDATE sql5669328.location SET Name= ?, Address= ? WHERE Location_id = ?;"
         sb.query(sqlUpdate, [Name, Address, id], (err, result) => {
             console.log(err);
         })
@@ -99,7 +99,7 @@ const location_update = (req, res) => {
 }
 
 const last = (req, res) => {
-    const sqlGet = `SELECT Location_id from claire.location
+    const sqlGet = `SELECT Location_id from sql5669328.location
     ORDER BY Location_id DESC
     Limit 1;`
     sb.query(sqlGet, (err, result) => {
@@ -119,7 +119,7 @@ const pair = (req, res) => {
     }
     if (Location_id, Items) {
         for (let item in Items) {
-            const sqlInsert = `INSERT INTO claire.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
+            const sqlInsert = `INSERT INTO sql5669328.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
             sb.query(sqlInsert, [Location_id, Items[item].Item_id], (err, result) => {
                 console.log(err);
 
@@ -133,7 +133,7 @@ const pair = (req, res) => {
 
 const adjustment = (req, res) => {
     const sqlGet = `SELECT pt.PartnerType_id
-    FROM claire.partnertype pt
+    FROM sql5669328.partnertype pt
     WHERE pt.Type = "Adjustment";`
 
     sb.query(sqlGet, (err, result) => {
@@ -156,7 +156,7 @@ const partner = (req, res) => {
     }
 
     if(name && address && type && Location){
-        const sqlInsert = `INSERT INTO claire.partner (Name, Address, Type, Location) VALUES (?,?,?,?);`
+        const sqlInsert = `INSERT INTO sql5669328.partner (Name, Address, Type, Location) VALUES (?,?,?,?);`
         sb.query(sqlInsert, [name, address, type, Location], (err, result) =>{
             console.log(err)
             res.send();

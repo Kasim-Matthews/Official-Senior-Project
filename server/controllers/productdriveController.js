@@ -1,18 +1,18 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    database: 'claire',
-    port: 3006
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
+    port: 3306
 });
 
 const drive_index = (req, res) => {
     const sqlGet = `SELECT p.Name as Drive, COUNT(ii.FKItemLocation) as Variety, SUM(ii.Value) as Total, SUM(ii.Quantity) as Quantity, p.Partner_id
-    from claire.partner p
-    join claire.intake i on i.Partner = p.Partner_id
-    join claire.intakeitems ii on i.Intake_id = ii.Intake_id
-    join claire.partnertype pt on pt.PartnerType_id = p.Type
+    from sql5669328.partner p
+    join sql5669328.intake i on i.Partner = p.Partner_id
+    join sql5669328.intakeitems ii on i.Intake_id = ii.Intake_id
+    join sql5669328.partnertype pt on pt.PartnerType_id = p.Type
     WHERE pt.Type = "Product Drive"
     group by p.Name, p.Partner_id;`
     sb.query(sqlGet, (err, result) => {
@@ -23,8 +23,8 @@ const drive_index = (req, res) => {
 }
 
 const drive_list = (req, res) => {
-    const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
-    join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
+    const sqlGet = `SELECT Name, Partner_id FROM sql5669328.partner 
+    join sql5669328.partnertype on sql5669328.partner.Type = sql5669328.partnertype.PartnerType_id 
     WHERE DeletedAt IS NULL AND partnertype.Type = "Product Drive";`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
@@ -42,7 +42,7 @@ const drive_create = (req, res) => {
     }
 
     if (Name && Type) {
-        const sqlInsert = "INSERT INTO claire.partner (Name, Type) VALUES (?,?);"
+        const sqlInsert = "INSERT INTO sql5669328.partner (Name, Type) VALUES (?,?);"
         sb.query(sqlInsert, [Name, Type], (err, result) => {
             console.log(err);
         })
@@ -61,7 +61,7 @@ const drive_delete = (req, res) => {
     }
 
     if (id) {
-        const sqlDelete = `UPDATE claire.partner Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Partner_id = ?;`
+        const sqlDelete = `UPDATE sql5669328.partner Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Partner_id = ?;`
         sb.query(sqlDelete, [date, id], (err, result) => {
             console.log(err);
         })
@@ -78,7 +78,7 @@ const drive_edit = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT Name FROM claire.partner WHERE Partner_id = ?;'
+        const sqlGet = 'SELECT Name FROM sql5669328.partner WHERE Partner_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -99,7 +99,7 @@ const drive_update = (req, res) => {
     }
 
     if (Name && id) {
-        const sqlUpdate = "UPDATE claire.partner SET Name= ? WHERE Partner_id = ?;"
+        const sqlUpdate = "UPDATE sql5669328.partner SET Name= ? WHERE Partner_id = ?;"
         sb.query(sqlUpdate, [Name, id], (err, result) => {
             console.log(err);
         })

@@ -114,7 +114,7 @@ function AddIntake() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -122,7 +122,7 @@ function AddIntake() {
  const typechecker = async (e) => {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
-      await Axios.get("http://localhost:3306/intake/misc").then((response) => {
+      await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/misc").then((response) => {
         setFormData(prevFormData => {
           return {
             ...prevFormData,
@@ -150,14 +150,14 @@ function AddIntake() {
     return;
 }
   const submitDonation = async () => {
-    await Axios.post("http://localhost:3306/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
 
-    let IID_response = await Axios.get("http://localhost:3306/intake/find_id");
-    let V_response = await Axios.post("http://localhost:3306/intake/find_value", { Items: items })
-    let IL_response = await Axios.post("http://localhost:3306/intake/location", { Items: items, Location_id: formData.Location })
+    let IID_response = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/find_id");
+    let V_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/find_value", { Items: items })
+    let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/location", { Items: items, Location_id: formData.Location })
 
-    await Axios.post("http://localhost:3306/intake/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
-    await Axios.put("http://localhost:3306/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
+    await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
     window.location.href = "/intake";
   }
 

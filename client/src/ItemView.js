@@ -8,7 +8,7 @@ function ItemView() {
     const [itemList, setItemList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/item").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
             setItemList(response.data);
         })
     }, [])
@@ -16,7 +16,7 @@ function ItemView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the item list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3306/item/remove/${id}`, {date: date});
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/remove/${id}`, {date: date});
             window.location.reload(false);
         }
     }

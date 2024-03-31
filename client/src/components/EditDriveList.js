@@ -5,7 +5,7 @@ export default function EditDriveList({handleChange, id}) {
     const [drives, setDrives] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/productdrive/list").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/productdrive/list").then((response) => {
             setDrives(response.data);
         })
     }, [])

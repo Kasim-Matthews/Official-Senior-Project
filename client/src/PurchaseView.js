@@ -38,7 +38,7 @@ function Purchase() {
     const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/purchase").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/purchase").then((response) => {
             setIntakeList(response.data);
             setRecords(response.data)
         })
@@ -51,16 +51,16 @@ function Purchase() {
 
     const handleRemove = async (id) => {
         let GetData = async function (id) {
-            return await Axios.get(`http://localhost:3306/purchase/${id}/cleanup`).then((response) => {
+            return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/cleanup`).then((response) => {
                 return response
             });
         }
         let data = GetData(id)
         data.then(async (response) => {
-            await Axios.put("http://localhost:3306/purchase/reclaim", { records: response.data })
+            await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { records: response.data })
         })
 
-        await Axios.delete(`http://localhost:3306/purchase/remove/${id}`);
+        await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/purchase/remove/${id}`);
 
         window.location.reload(false);
 
@@ -76,13 +76,13 @@ function Purchase() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/vendor/list").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor/list").then((response) => {
           setPartners(response.data);
         })
       }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
             setLocations(response.data);
         })
     }, [])

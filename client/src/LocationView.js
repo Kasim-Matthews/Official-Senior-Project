@@ -8,14 +8,14 @@ function LocationView() {
     const [locationList, setLocationList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
             setLocationList(response.data);
         })
     }, [])
 
     const handleRemove = (id) => {
         let date = new Date().toLocaleDateString()
-        Axios.put(`http://localhost:3306/location/remove/${id}`, {date: date});
+        Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/remove/${id}`, {date: date});
         window.location.reload(false);
     }
 

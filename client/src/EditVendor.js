@@ -9,7 +9,7 @@ function EditVendor() {
   const [formErrors, setFormErrors] = useState({})
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/vendor/${id}/edit`).then((response) => {
+    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/vendor/${id}/edit`).then((response) => {
       response.data.map((key, value) => { setFormData(key) });
     })
   }, [])
@@ -53,7 +53,7 @@ function EditVendor() {
   }
 
   async function handleSubmit() {
-    await Axios.put(`http://localhost:3306/vendor/${id}/update`, {
+    await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/${id}/update`, {
       name: formData.BusinessName,
       phone: formData.Phone,
       email: formData.Email,

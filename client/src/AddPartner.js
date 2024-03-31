@@ -36,7 +36,7 @@ function AddPartner() {
   }
 
   async function handleSubmit() {
-    await Axios.post("http://localhost:3306/partner/new", {
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/partner/new", {
       name: formData.Name,
       email: formData.Email,
       type: formData.Type

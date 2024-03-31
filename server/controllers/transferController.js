@@ -1,10 +1,10 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    database: 'claire',
-    port: 3006
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
+    port: 3306
 });
 
 
@@ -31,7 +31,7 @@ const takeaway = (req, res) => {
 
     if (Location && Items) {
         for (item in Items) {
-            const sqlUpdate = `UPDATE claire.itemlocation set Quantity = Quantity - ? WHERE Location_id = ? AND Item_id = ?;`
+            const sqlUpdate = `UPDATE sql5669328.itemlocation set Quantity = Quantity - ? WHERE Location_id = ? AND Item_id = ?;`
             sb.query(sqlUpdate, [Items[item].Quantity, Location, Items[item].Item_id], (err, result) => {
                 console.log(err);
             })
@@ -55,7 +55,7 @@ const give = (req, res) => {
 
     if (Location && Items) {
         for (item in Items) {
-            const sqlUpdate = `UPDATE claire.itemlocation set Quantity = Quantity + ? WHERE Location_id = ? AND Item_id = ?;`
+            const sqlUpdate = `UPDATE sql5669328.itemlocation set Quantity = Quantity + ? WHERE Location_id = ? AND Item_id = ?;`
             sb.query(sqlUpdate, [Items[item].Quantity, Location, Items[item].Item_id], (err, result) => {
                 console.log(err);
 
@@ -83,7 +83,7 @@ const find_value = (req, res) => {
         });
 
         const sqlGet = `SELECT i.FairMarketValue
-        from claire.item i
+        from sql5669328.item i
         WHERE i.Item_id IN (?);`
 
         sb.query(sqlGet, [ids], (err, result) => {
@@ -113,7 +113,7 @@ const find_ild = (req, res) => {
         });
 
         const sqlGet = `SELECT il.ItemLocation_id
-        from claire.itemlocation il
+        from sql5669328.itemlocation il
         WHERE il.Item_id IN (?) AND il.Location_id = ?;`
 
         sb.query(sqlGet, [ids.toString(), Location], (err, result) => {
@@ -142,7 +142,7 @@ const track_intake = (req, res) => {
     }
 
     if (Items && Values && Intake_id && FKItemLocation) {
-        const sqlInsert = `INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);`
+        const sqlInsert = `INSERT INTO sql5669328.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);`
         for (var i = 0; i < Items.length; i++) {
             let Value = Items[i].Quantity * Values[i].FairMarketValue
             sb.query(sqlInsert, [Intake_id.Intake_id, Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
@@ -158,12 +158,12 @@ const track_intake = (req, res) => {
 
 const transfer = (req, res) => {
     const sqlGet = `SELECT p.Name as Taken, l.Name as Given, Cast(i.RecievedDate as char(10)) as Date, i.Intake_id, SUM(ii.Quantity) as TotalMoved, i.Comments, p.Location
-    from claire.intake i
-    join claire.partner p on p.Partner_id = i.Partner
-    join claire.partnertype pt on p.Type = pt.PartnerType_id
-    join claire.intakeitems ii on ii.Intake_id = i.Intake_id
-    join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-    join claire.location l on il.Location_id = l.Location_id
+    from sql5669328.intake i
+    join sql5669328.partner p on p.Partner_id = i.Partner
+    join sql5669328.partnertype pt on p.Type = pt.PartnerType_id
+    join sql5669328.intakeitems ii on ii.Intake_id = i.Intake_id
+    join sql5669328.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+    join sql5669328.location l on il.Location_id = l.Location_id
     WHERE pt.Type = "Adjustment"
     group by p.Name, l.Name, i.RecievedDate, i.Intake_id;`
 
@@ -185,12 +185,12 @@ const transfer_view = (req, res) => {
 
     if(id){
         const sqlGet = `SELECT p.Name as Taken, l.Name as Given, CAST(i.RecievedDate as char(10)) as Date, it.Name as Item, ii.Quantity
-        from claire.intake i
-        join claire.partner p on p.Partner_id = i.Partner
-        join claire.intakeitems ii on ii.Intake_id = i.Intake_id
-        join claire.itemlocation il on il.ItemLocation_id = ii.FKItemLocation
-        join claire.item it on it.Item_id = il.Item_id
-        join claire.location l on l.Location_id = il.Location_id
+        from sql5669328.intake i
+        join sql5669328.partner p on p.Partner_id = i.Partner
+        join sql5669328.intakeitems ii on ii.Intake_id = i.Intake_id
+        join sql5669328.itemlocation il on il.ItemLocation_id = ii.FKItemLocation
+        join sql5669328.item it on it.Item_id = il.Item_id
+        join sql5669328.location l on l.Location_id = il.Location_id
         WHERE i.Intake_id = ?
         group by p.Name, l.Name, i.RecievedDate, it.Name, ii.Quantity;`
 
@@ -214,8 +214,8 @@ const transfer_cleanup = (req, res) => {
 
     if (id) {
         const sqlGet = `SELECT ii.Quantity as Given, ii.FKItemLocation, il.Item_id
-        from claire.intakeitems as ii
-        join claire.itemlocation il on ii.FKItemLocation = il. ItemLocation_id
+        from sql5669328.intakeitems as ii
+        join sql5669328.itemlocation il on ii.FKItemLocation = il. ItemLocation_id
         where ii.Intake_id = ?;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result)
@@ -237,7 +237,7 @@ const transfer_reclaim = (req, res) => {
 
     if (records) {
         for (let record in records) {
-            const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= Quantity - ? WHERE ItemLocation_id = ?;"
+            const sqlUpdate = "UPDATE sql5669328.itemlocation SET Quantity= Quantity - ? WHERE ItemLocation_id = ?;"
             sb.query(sqlUpdate, [records[record].Given, records[record].FKItemLocation], (err, result) => {
                 console.log(err);
                 res.send()
@@ -262,7 +262,7 @@ const transfer_renounce = (req, res) => {
 
     if (records && Location) {
         for (let record in records) {
-            const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= Quantity + ? WHERE Location_id = ? AND Item_id = ?;"
+            const sqlUpdate = "UPDATE sql5669328.itemlocation SET Quantity= Quantity + ? WHERE Location_id = ? AND Item_id = ?;"
             sb.query(sqlUpdate, [records[record].Given, Location, records[record].Item_id], (err, result) => {
                 console.log(err);
                 res.send()

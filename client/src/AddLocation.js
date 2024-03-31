@@ -43,7 +43,7 @@ function AddLocation() {
   
   async function handleSubmit() {
     try {
-      Axios.post("http://localhost:3306/location/new", {
+      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/new", {
         name: formData.Name,
         Address: formData.Address
       }, {
@@ -57,18 +57,18 @@ function AddLocation() {
     }
 
     
-    let Location_id = await Axios.get("http://localhost:3306/location/last")
-    let ptype = await Axios.get("http://localhost:3306/location/adjustment");
+    let Location_id = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/last")
+    let ptype = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/adjustment");
 
-    await Axios.post("http://localhost:3306/location/partner", {name: formData.Name, address: formData.Address, Type: ptype.data[0].PartnerType_id, Location: Location_id.data[0].Location_id})
-    await Axios.post("http://localhost:3306/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items}).then(window.location.href ="/location")
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/partner", {name: formData.Name, address: formData.Address, Type: ptype.data[0].PartnerType_id, Location: Location_id.data[0].Location_id})
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items}).then(window.location.href ="/location")
 
 
     
   }
 
   React.useEffect(() => {
-    Axios.get("http://localhost:3306/item").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
         setItems(response.data);
     })
 }, [])

@@ -23,7 +23,7 @@ function Dashboard() {
     const [selectedLocation, setSelectedLocation] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:3306/item-location-data')
+        axios.get('https://diaper-bank-inventory-management-system.onrender.com/item-location-data')
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);

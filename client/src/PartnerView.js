@@ -11,7 +11,7 @@ function PartnerView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the partner list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3306/partner/remove/${id}`, { date: date });
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/remove/${id}`, { date: date });
             window.location.reload(false);
         }
 
@@ -26,7 +26,7 @@ function PartnerView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/partner").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
             setPartnerList(response.data)
         })
     }, [])

@@ -76,20 +76,20 @@ function Order() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/distribution").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/distribution").then((response) => {
       setDistributionsList(response.data);
       setRecords(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
       setPartners(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -99,16 +99,16 @@ function Order() {
   const handleRemove = async (id) => {
     if (window.confirm("Are you sure you want to reclaim this distribution?") == true) {
       let GetData = async function (id) {
-        return await Axios.get(`http://localhost:3306/distribution/${id}/cleanup`).then((response) => {
+        return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/cleanup`).then((response) => {
           return response
         });
       }
       let data = GetData(id)
       data.then(async (response) => {
-        await Axios.put("http://localhost:3306/distribution/reclaim", { records: response.data })
+        await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/reclaim", { records: response.data })
       })
 
-      await Axios.delete(`http://localhost:3306/distribution/remove/${id}`);
+      await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/distribution/remove/${id}`);
 
       window.location.reload(false);
     }
@@ -123,12 +123,12 @@ function Order() {
   }
 
   const handleComplete = (id) => {
-    Axios.put(`http://localhost:3306/distribution/${id}/complete`);
+    Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/complete`);
     window.location.reload(false);
   }
 
   const handleIncomplete = (id) => {
-    Axios.put(`http://localhost:3306/distribution/${id}/incomplete`);
+    Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/incomplete`);
     window.location.reload(false);
   }
 

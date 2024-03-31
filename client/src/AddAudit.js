@@ -16,14 +16,14 @@ function AddAudit() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //await Axios.post("http://localhost:3306/audit/log", {date: date});
-        //let id = await Axios.get("http://localhost:3306/audit/last")
-        //await Axios.post("http://localhost:3306/audit/new", {Audits: inventory, audit: id.data[0].Audit_id});
-        await Axios.put("http://localhost:3306/audit/update", {Audits: inventory});
+        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/audit/log", {date: date});
+        let id = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/audit/last")
+        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/audit/new", {Audits: inventory, audit: id.data[0].Audit_id});
+        await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/audit/update", {Audits: inventory});
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/audit/inventory").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/audit/inventory").then((response) => {
             setInventory(response.data)
         })
     }, [])

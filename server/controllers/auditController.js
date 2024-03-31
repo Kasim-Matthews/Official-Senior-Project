@@ -1,16 +1,16 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "WebVoyage2023!",
-    database: 'claire',
-    port: 3006
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
+    port: 3306
 });
 
 const index = (req, res) => {
     const sqlGet = `SELECT a.Audit_id, CAST(a.Date as char(10)) as Date, COUNT(IF(ai.Changed IS null, 1, NULL)) as Affected
-    from claire.audit a
-    join claire.audititems ai on a.Audit_id = ai.Audit
+    from sql5669328.audit a
+    join sql5669328.audititems ai on a.Audit_id = ai.Audit
     group by a.date, a.Audit_id;`
 
     sb.query(sqlGet, (err, result) => {
@@ -22,9 +22,9 @@ const index = (req, res) => {
 
 const inventory = (req, res) => {
     const sqlGet = `SELECT il.ItemLocation_id, i.Name as Item, l.Name as Location, il.Quantity as Past
-    from claire.itemlocation il
-    join claire.item i on i.Item_id = il.Item_id
-    join claire.location l on l.Location_id = il.Location_id;`
+    from sql5669328.itemlocation il
+    join sql5669328.item i on i.Item_id = il.Item_id
+    join sql5669328.location l on l.Location_id = il.Location_id;`
 
     sb.query(sqlGet, (err, result) => {
         res.send(result);
@@ -43,7 +43,7 @@ const log = (req, res) => {
     }
 
     if (date) {
-        const sqlInsert = `INSERT INTO claire.audit (Date) VALUES (?);`
+        const sqlInsert = `INSERT INTO sql5669328.audit (Date) VALUES (?);`
         sb.query(sqlInsert, [date], (err, result) => {
             console.log(err);
             res.send();
@@ -66,7 +66,7 @@ const create = (req, res) => {
     }
 
     if (Audits && audit) {
-        const sqlInsert = `INSERT INTO claire.audititems (ItemLocation, Past, Changed, Audit) VALUES (?,?,?,?)`
+        const sqlInsert = `INSERT INTO sql5669328.audititems (ItemLocation, Past, Changed, Audit) VALUES (?,?,?,?)`
 
         for (var i = 0; i < Audits.length; i++) {
             if (Audits[i].Changed) {
@@ -76,7 +76,7 @@ const create = (req, res) => {
             }
 
             else {
-                const sqlInsert = `INSERT INTO claire.audititems (ItemLocation, Past, Audit) VALUES (?,?,?)`
+                const sqlInsert = `INSERT INTO sql5669328.audititems (ItemLocation, Past, Audit) VALUES (?,?,?)`
                 sb.query(sqlInsert, [Audits[i].ItemLocation_id, Audits[i].Past, audit], (err, result) => {
                     console.log(err);
                 })
@@ -99,7 +99,7 @@ const update = (req, res) => {
     }
 
     if (Audits) {
-        const sqlUpdate = `UPDATE claire.itemlocation set Quantity = ? WHERE ItemLocation_id = ?;`
+        const sqlUpdate = `UPDATE sql5669328.itemlocation set Quantity = ? WHERE ItemLocation_id = ?;`
         for (var i = 0; i < Audits.length; i++) {
             if (Audits[i].Changed) {
                 sb.query(sqlUpdate, [Audits[i].Changed, Audits[i].ItemLocation_id], (err, result) => {
@@ -116,7 +116,7 @@ const update = (req, res) => {
 }
 
 const last = (req, res) => {
-    const sqlGet = `SELECT Audit_id from claire.audit
+    const sqlGet = `SELECT Audit_id from sql5669328.audit
     ORDER BY Audit_id DESC
     Limit 1;`
     sb.query(sqlGet, (err, result) => {
@@ -136,11 +136,11 @@ const view = (req, res) => {
     }
     if (id) {
         const sqlGet = `SELECT  Cast(a.Date as char(10)) as Date, l.Name as Location, ai.Past, ai.Changed, i.Name as Item 
-    from claire.audit a
-    join claire.audititems ai on a.Audit_id = ai.Audit
-    join claire.itemlocation il on ai.ItemLocation = il.ItemLocation_id
-    join claire.location l on il.Location_id = l.Location_id
-    join claire.item i on i.Item_id = il.Item_id
+    from sql5669328.audit a
+    join sql5669328.audititems ai on a.Audit_id = ai.Audit
+    join sql5669328.itemlocation il on ai.ItemLocation = il.ItemLocation_id
+    join sql5669328.location l on il.Location_id = l.Location_id
+    join sql5669328.item i on i.Item_id = il.Item_id
     WHERE a.Audit_id = ?
     group by l.Name, i.Name, ai.Past, ai.Changed;`
 

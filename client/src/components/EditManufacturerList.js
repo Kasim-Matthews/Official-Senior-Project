@@ -5,7 +5,7 @@ export default function EditManufacturerList({handleChange, id}) {
     const [manulist, setManuList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/manufacturers/list").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/list").then((response) => {
           setManuList(response.data);
         })
       }, [])

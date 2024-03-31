@@ -45,7 +45,7 @@ function AddVendor() {
       }
     
       async function handleSubmit() {
-          await Axios.post("http://localhost:3306/vendor/new", {
+          await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/vendor/new", {
             name: formData.BusinessName,
             phone: formData.Phone,
             email: formData.Email,

@@ -15,13 +15,13 @@ function ViewDrive() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/productdrive/${id}/edit`).then((response) => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/productdrive/${id}/edit`).then((response) => {
             setRecord(response.data[0])
         });
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/productdrive/${id}/view`).then((response) => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/productdrive/${id}/view`).then((response) => {
             setIntakeList(response.data)
         });
     }, [])

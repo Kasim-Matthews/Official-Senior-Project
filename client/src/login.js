@@ -9,7 +9,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const login = () => {
-    Axios.post('http://localhost:3306/login', {
+    Axios.post('https://diaper-bank-inventory-management-system.onrender.com/login', {
       email: emailLog,
       password: passwordLog,
     }).then((response) => {

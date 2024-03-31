@@ -1,14 +1,14 @@
 const mysql = require('mysql2');
 const sb = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "Lindsey1!",
-    database: "claire",
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
     port: 3306
 });
 
 const item_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.item WHERE DeletedAt IS NULL;"
+    const sqlGet = "SELECT * FROM sql5669328.item WHERE DeletedAt IS NULL;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
         res.end();
@@ -29,7 +29,7 @@ const item_creation = (req, res) => {
 
     if (Name && FairMarketValue && PackageCount) {
         if (PackageCount > 0) {
-            const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue, PackageCount) VALUES (?,?,?);"
+            const sqlInsert = "INSERT INTO sql5669328.item (Name, FairMarketValue, PackageCount) VALUES (?,?,?);"
             sb.query(sqlInsert, [Name, FairMarketValue, PackageCount], (err, result) => {
                 console.log(err);
                 res.end();
@@ -37,7 +37,7 @@ const item_creation = (req, res) => {
             })
         }
         else {
-            const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue) VALUES (?,?);"
+            const sqlInsert = "INSERT INTO sql5669328.item (Name, FairMarketValue) VALUES (?,?);"
             sb.query(sqlInsert, [Name, FairMarketValue], (err, result) => {
                 console.log(err);
                 res.end();
@@ -57,7 +57,7 @@ const item_delete = (req, res) => {
     }
 
     if (id) {
-        const sqlDelete = `UPDATE claire.item Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Item_id = ?;`
+        const sqlDelete = `UPDATE sql5669328.item Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Item_id = ?;`
         sb.query(sqlDelete, [date, id], (err, result) => {
             console.log(err);
         })
@@ -74,7 +74,7 @@ const item_edit = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT Name, FairMarketValue, Item_id, PackageCount FROM claire.item WHERE Item_id = ?;'
+        const sqlGet = 'SELECT Name, FairMarketValue, Item_id, PackageCount FROM sql5669328.item WHERE Item_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -97,7 +97,7 @@ const item_update = (req, res) => {
 
     if (Name && FairMarketValue && id && PackageCount) {
         if (PackageCount > 0) {
-            const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ?, PackageCount= ? WHERE Item_id = ?;"
+            const sqlUpdate = "UPDATE sql5669328.item SET Name= ?, FairMarketValue= ?, PackageCount= ? WHERE Item_id = ?;"
             sb.query(sqlUpdate, [Name, FairMarketValue, PackageCount, id], (err, result) => {
                 console.log(err);
 
@@ -106,7 +106,7 @@ const item_update = (req, res) => {
             return
         }
         else {
-            const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ? WHERE Item_id = ?;"
+            const sqlUpdate = "UPDATE sql5669328.item SET Name= ?, FairMarketValue= ? WHERE Item_id = ?;"
             sb.query(sqlUpdate, [Name, FairMarketValue, id], (err, result) => {
                 console.log(err);
 
@@ -128,7 +128,7 @@ const item_view = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT * FROM claire.item WHERE Item_id = ?;'
+        const sqlGet = 'SELECT * FROM sql5669328.item WHERE Item_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -136,7 +136,7 @@ const item_view = (req, res) => {
 }
 
 const last = (req, res) => {
-    const sqlGet = `SELECT Item_id from claire.item
+    const sqlGet = `SELECT Item_id from sql5669328.item
     ORDER BY Item_id DESC
     Limit 1;`
     sb.query(sqlGet, (err, result) => {
@@ -154,7 +154,7 @@ const pair = (req, res) => {
     }
     if (Locations, Item_id) {
         for (let location in Locations) {
-            const sqlInsert = `INSERT INTO claire.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
+            const sqlInsert = `INSERT INTO sql5669328.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
             sb.query(sqlInsert, [Locations[location].Location_id, Item_id], (err, result) => {
                 console.log(err);
             })

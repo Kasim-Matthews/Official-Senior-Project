@@ -32,7 +32,7 @@ const Register = () => {
         return;
     }
 
-    Axios.post('http://localhost:3306/register', {
+    Axios.post('https://diaper-bank-inventory-management-system.onrender.com/register', {
       email: emailReg,
       password: passwordReg,
     }).then((response) => {

@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
 app.get('/', (req, res) => res.render('home'));
 app.get('/Dashboard', (req, res) => res.render('Dashboard'));
 
-app.listen('3306', () => {
+app.listen('3006', () => {
     console.log("running on port 3306");
 })
 
@@ -59,7 +59,7 @@ const db = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "WebVoyage2023!",
-    database: 'claire',
+    database: 'sql5669328',
     port: 3006
 })
 */
