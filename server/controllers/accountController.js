@@ -47,6 +47,16 @@ const login = (req, res) => {
         }
     )
 }
+/* 
+const sb = mysql.createPool({
+    host: "sql5.freesqldatabase.com",
+    user: "sql5669328",
+    password: "xJdIL1M3qI",
+    database: 'sql5669328',
+    port: 3306
+});
+https://diaper-bank-inventory-management-system.onrender.com
+*/
 
 module.exports = {
     login,
