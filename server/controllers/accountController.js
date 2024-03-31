@@ -68,9 +68,9 @@ const register = async (req, res) => {
 const data = (req, res) => {
     const query = `
         SELECT i.Name as itemName, l.Name as locationName, il.Quantity
-        FROM claire.itemlocation il 
-        JOIN claire.item i ON il.Item_id = i.Item_id
-        JOIN claire.location l ON il.Location_id = l.Location_i`;
+        FROM sql5669328.itemlocation il 
+        JOIN sql5669328.item i ON il.Item_id = i.Item_id
+        JOIN sql5669328.location l ON il.Location_id = l.Location_id`;
 
     sb.query(query, (err, result) => {
 
