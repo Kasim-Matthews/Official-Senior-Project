@@ -47,7 +47,7 @@ const register = async (req, res) => {
             if (users.length > 0) {
                 const user = users[0];
                 await bcrypt.compare(password, user.Password, (err, result) => {
-                    if(err){
+                    if(err || !result){
                         res.status(401).json({ success: false, message: "Invalid credentials" });
                     }
 
