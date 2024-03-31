@@ -57,7 +57,7 @@ export class Application extends React.Component {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<Login />} />
-                    <Route path="/Dashboard" element={<Dashboard />} />
+                    <Route path="https://diaper-bank-inventory-management-system-3ktm.onrender.com/dashboard" element={<Dashboard />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
                     
