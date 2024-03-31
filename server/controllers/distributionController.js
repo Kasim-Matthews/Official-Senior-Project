@@ -105,7 +105,7 @@ const distribution_itemlist = (req, res) => {
 
     if (id) {
         const sqlGet = `
-        SELECT oi.Quantity, i.Name as Item, i.FairMarketValue
+        SELECT oi.Quantity, i.Name as Item, i.FairMarketValue, i.PackageCount
         from claire.orderitems as oi
         join claire.itemlocation il on oi.ItemLocationFK = il. ItemLocation_id
         join claire.item i on i.Item_id = il.Item_id

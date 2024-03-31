@@ -40,16 +40,32 @@ const styles = StyleSheet.create({
     },
 });
 
-const PDFTableRow = ({itemList}) => {
-    const rows = itemList.map( item =>
-      <View style={styles.row}>
-        <Text style={styles.item}>{item.Item}</Text>
-        <Text style={styles.value}>{item.FairMarketValue}</Text>
-        <Text style={styles.qty}>{item.Quantity}</Text>
-        <Text style={styles.inkindValue}>{item.FairMarketValue * item.Quantity}</Text>
-      </View>  
-    );
-    return(<Fragment>{rows}</Fragment>);
+const PDFTableRow = ({ itemList }) => {
+    const rows = itemList.map(item => {
+        if (item.PackageCount != null) {
+            return (
+                <View style={styles.row}>
+                    <Text style={styles.item}>{item.Item}</Text>
+                    <Text style={styles.value}>{item.FairMarketValue}</Text>
+                    <Text style={styles.qty}>{item.Quantity}</Text>
+                    <Text style={styles.inkindValue}>{Math.round((item.FairMarketValue * item.Quantity) * 10) / 10}</Text>
+                    <Text style={styles.inkindValue}>{item.Quantity / item.PackageCount}</Text>
+                </View>
+            )
+        }
+        else {
+            return (
+                <View style={styles.row}>
+                    <Text style={styles.item}>{item.Item}</Text>
+                    <Text style={styles.value}>{item.FairMarketValue}</Text>
+                    <Text style={styles.qty}>{item.Quantity}</Text>
+                    <Text style={styles.inkindValue}>{Math.round((item.FairMarketValue * item.Quantity) * 10) / 10}</Text>
+                    <Text style={styles.inkindValue}></Text>
+                </View>
+            )
+        }
+    });
+    return (<Fragment>{rows}</Fragment>);
 }
 
 export default PDFTableRow;
