@@ -12,7 +12,6 @@ router.post('/location', intakeController.location);
 router.get('/:id/edit', intakeController.edit);
 router.get('/find_id', intakeController.find_id);
 router.post('/track', intakeController.track);
-router.post('/find_q', intakeController.find_q);
 router.put('/update_item', intakeController.update_item);
 router.get('/:id/view', intakeController.intake_view);
 router.put('/:id/update', intakeController.update)
@@ -21,5 +20,6 @@ router.get('/:id/cleanup', intakeController.intake_cleanup)
 router.put('/reclaim', intakeController.intake_reclaim)
 router.get('/:id/edititems', intakeController.intake_edit_items)
 router.delete('/:id/edit_delete', intakeController.intake_update_delete)
+router.get('/misc', intakeController.intake_misc)
 
 module.exports = router

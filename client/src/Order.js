@@ -3,17 +3,29 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import Pagination from "./components/Pagination";
 import OrderPosts from "./components/OrderPosts";
+import { DateRangePicker } from 'react-date-range'
+import { addDays } from 'date-fns';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 
 function Order() {
 
   const navigate = useNavigate();
   const [partners, setPartners] = React.useState([])
+  const [locations, setLocations] = React.useState([])
   const [filters, setFilters] = React.useState({
     Partner: "",
-    deliverymethod: "",
-    date: ""
+    Location: "",
+    Status: "",
   })
+
+  const [state, setState] = React.useState([{
+    startDate: new Date(),
+    endDate: addDays(new Date(), 30),
+    key: 'selection'
+  }])
+
   const [distributionsList, setDistributionsList] = React.useState([])
   const [records, setRecords] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -34,6 +46,7 @@ function Order() {
     })
   }
 
+
   //Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
@@ -45,21 +58,18 @@ function Order() {
       temp = temp.filter(f => f.Name == filters.Partner);
     }
 
-    if (filters.deliverymethod == "Other") {
-      temp = temp.filter(f => f.DeliveryMethod == filters.deliverymethod);
+    if (filters.Location != "") {
+      temp = temp.filter(f => f.Location == filters.Location);
     }
 
-    if (filters.deliverymethod == "Drop-off") {
-      temp = temp.filter(f => f.DeliveryMethod == filters.deliverymethod);
+
+    if (state != null) {
+      temp = temp.filter(f => new Date(f.CompletedDate) >= state[0].startDate && new Date(f.CompletedDate) <= state[0].endDate)
     }
 
-    if (filters.date != "") {
-      temp = temp.filter(f => f.CompletedDate > filters.date)
+    if (filters.Status != "") {
+      temp = temp.filter(f => f.Status == filters.Status);
     }
-
-    /*if(filters.source != ""){
-      temp = temp.filter(f => f.source.includes(filters.source.toLowerCase()))
-    }*/
 
     setRecords(temp);
   }
@@ -78,22 +88,31 @@ function Order() {
     })
   }, [])
 
+  useEffect(() => {
+    Axios.get("http://localhost:3001/location").then((response) => {
+      setLocations(response.data);
+    })
+  }, [])
+
 
 
   const handleRemove = async (id) => {
-    let GetData = async function(id){
-      return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
-        return response
-      });
+    if (window.confirm("Are you sure you want to reclaim this distribution?") == true) {
+      let GetData = async function (id) {
+        return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
+          return response
+        });
+      }
+      let data = GetData(id)
+      data.then(async (response) => {
+        await Axios.put("http://localhost:3001/distribution/reclaim", { records: response.data })
+      })
+
+      await Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
+
+      window.location.reload(false);
     }
-    let data = GetData(id)
-    data.then(async (response) => {
-      await Axios.put("http://localhost:3001/distribution/reclaim", {records:response.data})
-    })
-    
-    await Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
-    
-    window.location.reload(false);
+
   }
 
   const handleEdit = (id) => {
@@ -133,25 +152,36 @@ function Order() {
           </select>
 
         </label>
-        <label>
-          <input type="radio" value="All" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "All"} />
-          All
-        </label>
-        <label>
-          <input type="radio" value="Drop-off" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Drop-off"} />
-          Drop-off
-        </label>
-        <label>
-          <input type="radio" value="Other" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Other"} />
-          Other
+
+        <label htmlFor="Location">
+          Location
+          <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
+            <option value=""></option>
+            {locations.map((val) => {
+              return (
+                <option value={val.Name}>{val.Name}</option>
+              )
+            })}
+
+          </select>
+
         </label>
 
-        <input type="date" name="date" value={filters.date} onChange={handleChange} />
+        <label htmlFor="Status">
+          Status
+          <select id="Status" name="Status" value={filters.Status} onChange={handleChange}>
+            <option value=""></option>
+            <option value="Draft">Draft</option>
+            <option value="Submitted">Submitted</option>
+          </select>
+        </label>
+
+        <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
 
 
-        <input type="submit" value="Submit" />
+
+        <input type="submit" value="Filter" />
       </form>
-      <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
       <button><Link to="/distribution/new">Add</Link></button>
       <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
       <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />

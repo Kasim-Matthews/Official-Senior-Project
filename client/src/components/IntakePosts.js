@@ -6,8 +6,8 @@ const IntakePosts = ({posts, handleView, handleEdit, handleRemove}) => {
             <thead>
                 <tr>
                     <th>Partner</th>
-                    <th>Value</th>
-                    <th>Recieved Date</th>
+                    <th>Money Raised</th>
+                    <th>Issued on</th>
                     <th>Comments</th>
                     <th>Actions</th>
                 </tr>

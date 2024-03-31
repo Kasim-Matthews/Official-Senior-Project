@@ -41,6 +41,7 @@ const PDFTableHeader = () => (
         <Text style={styles.value}>Value/item</Text>
         <Text style={styles.qty}>Quantity</Text>
         <Text style={styles.inkindValue}>In-Kind Value</Text>
+        <Text style={styles.inkindValue}>Package Count</Text>
     </View>
 );
 

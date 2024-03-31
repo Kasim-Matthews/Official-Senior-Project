@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
+import DriveList from "./components/DriveList";
+import ManufacturerList from "./components/ManufacturerList";
+import DonationSiteList from "./components/DonationSiteList";
 
 function AddIntake() {
 
@@ -11,11 +14,12 @@ function AddIntake() {
     Partner: 0,
     Location: 0
   })
-
-  const [partners, setPartners] = React.useState([])
+  const [sourceType, setSourceType] = React.useState("")
   const [locations, setLocations] = React.useState([])
 
-  const [index, setIndex] = React.useState(0);
+  const Types = ["Product Drive", "Donation Site", "Manufacturer", "Misc Donation"]
+
+  const [index, setIndex] = React.useState(1);
   const [items, setItems] = React.useState([
     {
       name: `item [${index}]`,
@@ -25,16 +29,34 @@ function AddIntake() {
     }
   ])
 
+  const [formErrors, setFormErrors] = useState({})
+
+  function listtype() {
+    if (sourceType == "Product Drive") {
+      return (
+        <DriveList handleChange={handleChange} />
+      )
+    }
+
+    else if (sourceType == "Manufacturer") {
+      return (
+        <ManufacturerList handleChange={handleChange} />
+      )
+    }
+
+    else if (sourceType == "Donation Site") {
+      return (
+        <DonationSiteList handleChange={handleChange} />
+      )
+    }
+  }
+
   const handleItem = (e, index) => {
     const values = [...items];
     values[index].Item_id = e.target.value;
     setItems(values)
   }
-  const handleLocation = (e, index) => {
-    const values = [...items];
-    values[index].Location_id = e.target.value;
-    setItems(values)
-  }
+
   const handleQuantity = (e, index) => {
     const values = [...items];
     values[index].Quantity = e.target.value;
@@ -84,74 +106,97 @@ function AddIntake() {
     })
   }
 
-  useEffect(() => {
-    Axios.get("http://localhost:3001/partner").then((response) => {
-      setPartners(response.data);
-    })
-  }, [])
+  function sourceChange(event) {
+    setSourceType(event.target.value)
+    listtype(event.target.value)
+  }
+
+
 
   useEffect(() => {
     Axios.get("http://localhost:3001/location").then((response) => {
-        setLocations(response.data);
+      setLocations(response.data);
     })
-}, [])
+  }, [])
 
-
-  const submitPurchase = async (e) => {
+ const typechecker = async (e) => {
     e.preventDefault()
-
-    Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
-
-    for (const item of items) {
-      let IL_response = await Axios.post("http://localhost:3001/intake/location", { Item_id: item.Item_id, Location_id: formData.Location })
-
-      let IID_response = await Axios.get("http://localhost:3001/intake/find_id");
-
-      let V_response = await Axios.post("http://localhost:3001/intake/find_value", { Item_id: item.Item_id })
-
-      Axios.post("http://localhost:3001/intake/track", { Intake_id: IID_response.data[0].Intake_id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, FKItemLocation: IL_response.data[0].ItemLocation_id });
-
-      let current = await Axios.post("http://localhost:3001/intake/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
-
-      Axios.put("http://localhost:3001/intake/update_item", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
-
+    if (sourceType == "Misc Donation") {
+      await Axios.get("http://localhost:3001/intake/misc").then((response) => {
+        setFormData(prevFormData => {
+          return {
+            ...prevFormData,
+            Partner: response.data[0].Partner_id
+          }
+        })
+      })
     }
+    validate();
+    return
+  }
 
+  const validate = () => {
+    const errors = {};
+    const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+
+
+    if (!regex_comments.test(formData.Comments)) {
+      errors.Comments = "The comments contains an SQL keyword !"
+    }
+    setFormErrors(errors)
+    if (!errors.Comments) {
+      submitDonation()
+    }
+    return;
+}
+  const submitDonation = async () => {
+    await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
+
+    let IID_response = await Axios.get("http://localhost:3001/intake/find_id");
+    let V_response = await Axios.post("http://localhost:3001/intake/find_value", { Items: items })
+    let IL_response = await Axios.post("http://localhost:3001/intake/location", { Items: items, Location_id: formData.Location })
+
+    await Axios.post("http://localhost:3001/intake/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
+    await Axios.put("http://localhost:3001/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
     window.location.href = "/intake";
   }
+
 
   return (
     <div>
       <h2>Intake</h2>
-      <form id="intake" onSubmit={submitPurchase}>
-        <label htmlFor="Partner">Partner</label>
-        <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
-          <option value="">--Please choose an option--</option>
-          {partners.map((val) => {
+      <form id="intake" onSubmit={typechecker}>
+
+        <label htmlFor="Source">Source</label>
+        <select id="Source" value={sourceType} onChange={sourceChange}>
+          <option value="" disabled></option>
+          {Types.map((type) => {
             return (
-              <option value={val.Partner_id}>{val.Name}</option>
+              <option value={type}>{type}</option>
             )
           })}
         </select>
-        <br/>
+        <br />
+        {sourceType != "" ? listtype() : null}
 
         <label htmlFor="Location">Location</label>
-      <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-        <option value="">--Please choose an option--</option>
-        {locations.map((val) => {
-          return (
-            <option value={val.Location_id}>{val.Name}</option>
-          )
-        })}
+        <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+          <option value="">--Please choose an option--</option>
+          {locations.map((val) => {
+            return (
+              <option value={val.Location_id}>{val.Name}</option>
+            )
+          })}
 
-      </select><br/>
+        </select><br />
 
-        <label htmlFor="RecievedDate">Recieved Date</label>
+        <label htmlFor="RecievedDate">Issued on</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange} /><br></br>
 
-        <label htmlFor="Value">Value</label>
+        <label htmlFor="Value">Money Raised</label>
         <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment"></textarea><br></br>
+        {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
         <h2>Items</h2>
         {items.map((obj, index) => (

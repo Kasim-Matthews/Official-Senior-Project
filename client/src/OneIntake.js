@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 function ViewIntake() {
 
-    const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
     const [itemList, setItemList] = React.useState([])
@@ -21,7 +20,7 @@ function ViewIntake() {
             <table>
                 <thead>
                     <tr>
-                        <th>Partner</th>
+                        <th>Source</th>
                         <th>Received Date</th>
                         <th>Storage Location</th>
                     </tr>

@@ -7,7 +7,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                 <thead>
                     <tr>
                         <th>Partner</th>
-                        <th>Requested Date</th>
+                        <th>Source Location</th>
                         <th>Completed Date</th>
                         <th>Total Items</th>
                         <th>Delivery Method</th>
@@ -22,7 +22,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                         return (
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>{val.RequestDate}</td>
+                                <td>{val.Location}</td>
                                 <td>{val.CompletedDate}</td>
                                 <td>{val.Total}</td>
                                 <td>{val.DeliveryMethod}</td>

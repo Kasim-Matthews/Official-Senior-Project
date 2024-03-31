@@ -11,24 +11,39 @@ const item_index = (req, res) => {
     const sqlGet = "SELECT * FROM claire.item WHERE DeletedAt IS NULL;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
+        res.end();
+        return;
     })
 }
 
 const item_creation = (req, res) => {
     let Name = req.body.name;
     let FairMarketValue = req.body.FairMarketValue;
+    let PackageCount = req.body.PackageCount
 
-    if (typeof Name != "string" && typeof FairMarketValue != "number") {
+    if (typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (Name && FairMarketValue) {
-        const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue) VALUES (?,?);"
-        sb.query(sqlInsert, [Name, FairMarketValue], (err, result) => {
-            console.log(err);
-        })
+    if (Name && FairMarketValue && PackageCount) {
+        if (PackageCount > 0) {
+            const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue, PackageCount) VALUES (?,?,?);"
+            sb.query(sqlInsert, [Name, FairMarketValue, PackageCount], (err, result) => {
+                console.log(err);
+                res.end();
+                return
+            })
+        }
+        else {
+            const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue) VALUES (?,?);"
+            sb.query(sqlInsert, [Name, FairMarketValue], (err, result) => {
+                console.log(err);
+                res.end();
+                return;
+            })
+        }
     }
 }
 
@@ -59,7 +74,7 @@ const item_edit = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT * FROM claire.item WHERE Item_id = ?;'
+        const sqlGet = 'SELECT Name, FairMarketValue, Item_id, PackageCount FROM claire.item WHERE Item_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -71,19 +86,35 @@ const item_update = (req, res) => {
     let id = req.params.id
     let Name = req.body.name;
     let FairMarketValue = req.body.FairMarketValue;
+    let PackageCount = req.body.PackageCount
 
 
-    if (typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number") {
+    if (typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (Name && FairMarketValue && id) {
-        const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ? WHERE Item_id = ?;"
-        sb.query(sqlUpdate, [Name, FairMarketValue, id], (err, result) => {
-            console.log(err);
-        })
+    if (Name && FairMarketValue && id && PackageCount) {
+        if (PackageCount > 0) {
+            const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ?, PackageCount= ? WHERE Item_id = ?;"
+            sb.query(sqlUpdate, [Name, FairMarketValue, PackageCount, id], (err, result) => {
+                console.log(err);
+
+            })
+            res.end();
+            return
+        }
+        else {
+            const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ? WHERE Item_id = ?;"
+            sb.query(sqlUpdate, [Name, FairMarketValue, id], (err, result) => {
+                console.log(err);
+
+            })
+            res.end();
+            return
+        }
+
     }
 }
 
@@ -108,7 +139,7 @@ const last = (req, res) => {
     const sqlGet = `SELECT Item_id from claire.item
     ORDER BY Item_id DESC
     Limit 1;`
-    sb.query(sqlGet, (err,result) => {
+    sb.query(sqlGet, (err, result) => {
         res.send(result)
     })
 }
@@ -116,7 +147,7 @@ const last = (req, res) => {
 const pair = (req, res) => {
     let Locations = req.body.Locations;
     let Item_id = req.body.Item_id;
-    if(typeof Locations != "object" && typeof Item_id != "number"){
+    if (typeof Locations != "object" && typeof Item_id != "number") {
         res.send("Invalid");
         res.end();
         return;
@@ -129,7 +160,7 @@ const pair = (req, res) => {
             })
         }
     }
-    
+
 }
 
 

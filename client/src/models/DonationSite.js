@@ -1,5 +1,6 @@
 const DonationSite = {
     Name:"",
-    Address:""
+    Address:"",
+    Type: 8
 }
 export default DonationSite;

@@ -3,22 +3,25 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 
 
-function PartnerView(){
+function PartnerView() {
 
     const [partnerList, setPartnerList] = useState([])
     const navigate = useNavigate();
-    
-    const handleRemove = (id) => {
-        let date = new Date().toLocaleDateString();
-        Axios.put(`http://localhost:3001/partner/remove/${id}`, {date: date});
-        window.location.reload(false);
+
+    const handleRemove = (id, Name) => {
+        if (window.confirm(`Are you sure you want to delete ${Name} from the partner list?`) == true) {
+            let date = new Date().toLocaleDateString();
+            Axios.put(`http://localhost:3001/partner/remove/${id}`, { date: date });
+            window.location.reload(false);
+        }
+
     }
 
-    const handleEdit = (id) =>{
+    const handleEdit = (id) => {
         navigate(`/partner/${id}/edit`)
     }
-    
-    const handleView =(id) => {
+
+    const handleView = (id) => {
         navigate(`/partner/${id}`)
     }
 
@@ -46,7 +49,7 @@ function PartnerView(){
                                 <td>{val.Name}</td>
                                 <td>{val.Email}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.Partner_id)}>Delete</button>
+                                    <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button>
                                     <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
                                     <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>

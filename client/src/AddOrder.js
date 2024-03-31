@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
 import Distribution from "./models/Distribution";
@@ -8,8 +8,8 @@ function AddOrder() {
   const navigate = useNavigate();
   const [partners, setPartners] = React.useState([])
   const [locations, setLocations] = React.useState([])
-  const [toggle, setToggle] = React.useState(false)
   const [formData, setFormData] = React.useState(Distribution)
+  const [formErrors, setFormErrors] = useState({})
 
   const [index, setIndex] = React.useState(1);
 
@@ -77,11 +77,30 @@ function AddOrder() {
   }
 
 
+  function handleCancel(){
+    if(window.confirm("Are you sure you want to cancel") == true){
+      window.location.href = "/distribution";
+    }
+  }
 
-
-
-  const handleSubmit = async (e) => {
+  const validate = (e) => {
     e.preventDefault();
+    const errors = {};
+    const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
+
+
+    if (!regex_comments.test(formData.Comments)) {
+      errors.Comments = "The comments contains an SQL keyword !"
+    }
+    setFormErrors(errors)
+    if (!errors.Comments) {
+        handleSubmit()
+    }
+    return;
+}
+
+
+  const handleSubmit = async () => {
 
     Axios.post("http://localhost:3001/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner }, {
       headers: {
@@ -89,25 +108,17 @@ function AddOrder() {
       }
     });
 
-    for (const item of items) {
-      let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: item.Item_id, Location_id: formData.Location })
-
-      let OID_response = await Axios.post("http://localhost:3001/distribution/find_id", { RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner });
-
-      let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Item_id: item.Item_id })
-
-      Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Quantity: item.Quantity, Value: item.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id });
-
-      let current = await Axios.post("http://localhost:3001/distribution/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
-      Axios.put("http://localhost:3001/distribution/take", { Quantity: item.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
-    }
-
+    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Items: items, Location_id: formData.Location  })
+    let OID_response = await Axios.get("http://localhost:3001/distribution/find_id");
+    let V_response = await Axios.post("http://localhost:3001/distribution/find_value", {Items: items })
+    await Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
+    await Axios.put("http://localhost:3001/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
     window.location.href = "/distribution";
 
   }
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/partner").then((response) => {
+    Axios.get("http://localhost:3001/partner/list").then((response) => {
       setPartners(response.data);
     })
   }, [])
@@ -123,7 +134,7 @@ function AddOrder() {
 
 
   return (
-    <form id="distribution" onSubmit={handleSubmit}>
+    <form id="distribution" onSubmit={validate}>
       <label htmlFor="Partner">Partner</label>
       <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
         <option value="">--Please choose an option--</option>
@@ -162,7 +173,7 @@ function AddOrder() {
       <input type="radio" id="Other" name="DeliveryMethod" value="Other" checked={formData.DeliveryMethod === "Other"} onChange={handleChange} />
 
       <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
-
+      {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
       <h2>Items</h2>
       {items.map((obj, index) => (
@@ -180,6 +191,7 @@ function AddOrder() {
       </button>
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }
