@@ -51,7 +51,7 @@ const register = async (req, res) => {
                         res.status(401).json({ success: false, message: "Invalid credentials" });
                     }
 
-                    else{
+                    else if (result){
                         const token = jwt.sign(
                             { userId: user.User_id },
                             'yourSecretKey',
