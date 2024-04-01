@@ -16,7 +16,8 @@ const Login = () => {
       if (response.data.success) {
         navigate("/dashboard"); // Redirect to dashboard on successful login
       } else {
-        setLoginStatus(response.data.message);
+        console.log(response.data.message)
+        //setLoginStatus(response.data.message);
       }
     }).catch((error) => {
       const message = error.response && error.response.data.message ? error.response.data.message : "An error occurred";
