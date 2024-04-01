@@ -45,24 +45,8 @@ const register = async (req, res) => {
             }
 
             if (users.length > 0) {
-                const user = users[0];
-                await bcrypt.compare(password, user.Password, (err, result) => {
-                    if(err || !result){
-                        res.status(401).json({ success: false, message: "Invalid credentials" });
-                    }
-
-                    else if (result){
-                        const token = jwt.sign(
-                            { userId: user.User_id },
-                            'yourSecretKey',
-                            { expiresIn: '1h' }
-                        );
-    
-                        res.json({ success: true, token });
-                    }
-                })
-                
-                /*if (await bcrypt.compare(password, user.Password)) {
+                const user = users[0];             
+                if (await bcrypt.compare(password, user.Password)) {
                     const token = jwt.sign(
                         { userId: user.User_id },
                         'yourSecretKey',
@@ -72,7 +56,7 @@ const register = async (req, res) => {
                     res.json({ success: true, token });
                 } else {
                     res.status(401).json({ success: false, message: "Invalid credentials" });
-                }*/
+                }
             } else {
                 res.send({ status: 'error', message: "Wrong username/password combination!" });
             }
