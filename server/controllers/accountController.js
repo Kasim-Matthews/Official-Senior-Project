@@ -46,7 +46,7 @@ const register = async (req, res) => {
 
             if (users.length > 0) {
                 const user = users[0];             
-                if (await bcrypt.compare(password, user.Password)) {
+                if (await bcrypt.compare(password, String(user.Password).trim())) {
                     const token = jwt.sign(
                         { userId: user.User_id },
                         'yourSecretKey',
