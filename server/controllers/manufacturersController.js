@@ -11,9 +11,9 @@ const manu_index = (req, res) => {
     const sqlGet = `SELECT p.Name, p.Partner_id, COUNT(ii.FKItemLocation) as TotalItems 
     FROM sql5669328.partner p 
     join sql5669328.partnertype pt on p.Type = pt.PartnerType_id
-    join intake i on i.Partner = p.Partner_id
-    join intakeitems ii on ii.Intake_id = i.Intake_id
-    join itemlocation il on il.ItemLocation_id = ii.FKItemLocation 
+    join sql5669328.intake i on i.Partner = p.Partner_id
+    join sql5669328.intakeitems ii on ii.Intake_id = i.Intake_id
+    join sql5669328.itemlocation il on il.ItemLocation_id = ii.FKItemLocation 
     WHERE DeletedAt IS NULL AND pt.Type = "Manufacturer"
     group by p.Name, p.Partner_id;`
     sb.query(sqlGet, (err, result) => {
