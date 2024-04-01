@@ -35,7 +35,7 @@ function Purchase() {
     //Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
+    const currentPosts = records.slice(0, indexOfLastPost)
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/purchase").then((response) => {
