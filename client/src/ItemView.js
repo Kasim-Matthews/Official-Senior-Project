@@ -109,12 +109,11 @@ function ItemView() {
                             {records.map((val) => {
                                 return (
                                     <tr>
-                                        <td>{val.Name}</td>
+                                        <td onClick={() => handleView(val.Item_id)}>{val.Name}</td>
                                         <td>${val.FairMarketValue}</td>
                                         <td>
                                             {typeof (val.DeletedAt) == "object" ? <button onClick={() => handleRemove(val.Item_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Item_id, val.Name)}>Reactivate</button>}
                                             <button onClick={() => handleEdit(val.Item_id)}>Edit</button>
-                                            <button onClick={() => handleView(val.Item_id)}>View</button>
                                         </td>
                                     </tr>
                                 );

@@ -49,6 +49,7 @@ import ProductDriveView from './ProductDriveView';
 import AddAudit from './AddAudit';
 import AuditView from './AuditView';
 import ViewAudit from './OneAudit';
+import ViewLocation from './OneLocation';
 
 export class Application extends React.Component {
     render() {
@@ -77,6 +78,7 @@ export class Application extends React.Component {
                     <Route path='/location' element={<LocationView />} />
                     <Route path='/location/:id/edit' element={<EditLocation />} />
                     <Route path='/location/new' element={<AddLocation />} />
+                    <Route path="/location/:id" element={<ViewLocation />} />
 
                     <Route path='/manufacturers' element={<Manufacturers />} />
                     <Route path='/manufacturers/:id/edit' element={<EditManufacturers />} />

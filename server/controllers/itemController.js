@@ -154,7 +154,12 @@ const item_view = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT * FROM claire.item WHERE Item_id = ?;'
+        const sqlGet = `SELECT l.Name as Location, il.Quantity
+        from claire.itemlocation il
+        join claire.item i on il.Item_id = i.Item_id
+        join claire.location l on il.Location_id = l.Location_id
+        WHERE il.Item_id = ?
+        order by il.Location_id;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })

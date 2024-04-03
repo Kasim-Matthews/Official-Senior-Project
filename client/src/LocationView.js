@@ -85,6 +85,7 @@ function LocationView() {
                                 <td>
                                 {typeof (val.DeletedAt) == "object" ? <button onClick={() => handleRemove(val.Location_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Location_id, val.Name)}>Reactivate</button>}
                                     <button onClick={() => handleEdit(val.Location_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Location_id)}>View</button>
                                 </td>
                             </tr>
                         );

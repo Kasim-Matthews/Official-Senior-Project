@@ -17,4 +17,7 @@ router.post('/pair', locationController.pair)
 router.get('/adjustment', locationController.adjustment)
 router.post('/partner', locationController.partner)
 router.put('/reactivate/:id', locationController.location_reactivate);
+router.get('/:id/tab1', locationController.tab_1)
+router.get('/:id/tab2', locationController.tab_2)
+router.get('/:id/tab3', locationController.tab_3)
 module.exports = router;
