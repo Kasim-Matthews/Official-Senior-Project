@@ -58,6 +58,7 @@ function ProductDriveView() {
 
     return (
         <div>
+            <button><Link to="/productdrive/new">Add</Link></button>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="Drive">
                 Drive

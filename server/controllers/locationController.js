@@ -8,7 +8,16 @@ const sb = mysql.createPool({
 });
 
 const location_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS NULL;"
+    const sqlGet = "SELECT * FROM claire.location;"
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+        res.end();
+        return
+    })
+}
+
+const anything_else = (req, res) => {
+    const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS null;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
         res.end();
@@ -54,6 +63,23 @@ const location_delete = (req, res) => {
             res.send()
             res.end();
             return;
+        })
+    }
+}
+
+const location_reactivate = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlDelete = `UPDATE claire.location Set DeletedAt= NULL WHERE Location_id = ?;`
+        sb.query(sqlDelete, [id], (err, result) => {
+            console.log(err);
         })
     }
 }
@@ -177,5 +203,7 @@ module.exports = {
     last,
     pair,
     adjustment,
-    partner
+    partner,
+    location_reactivate,
+    anything_else
 }
