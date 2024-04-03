@@ -15,6 +15,14 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Menu from '@mui/material/Menu';
 
 function Dashboard() {
 
@@ -49,76 +57,90 @@ function Dashboard() {
 
 
     return (
-        <div className="dashboard-container">
-            <div className="header">
-                <nav className="navbar">
-                    <ul>
-                        <li><Link to="/Dashboard">Dasboard</Link></li>
-                        <li><Link to="/distribution">Distributions</Link></li>
-                        <li><Link to="/intake">Collections</Link></li>
-                        <li><a href="#">Inventory</a></li>
-                        <li><Link to="/partner">Partner</Link></li>
-                        <li><a href="#">User Profile</a></li>
-                    </ul>
-                </nav>
-            </div>
-            <div className="main-content">
-                    <h1>Welcome, DBNF Admin!</h1>
-                    <Box height={275}
-                         width={500}
-                         my={4}
-                         display="flex"
-                         alignItems="center"
-                         gap={4}
-                         p={2}
-                         borderRadius={2}
-                         sx={{ border: '1px solid grey' }}>
+        <><Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Link href="/Dashboard" underline="none">
+                        {'Dashboard'}
+                    </Link><br></br>
+                    <Link href="/distribution" underline="none">{'Distributions'}</Link>
+                    <Link href="/intake" underline="none">{'Collections'}</Link>
+                    <Link href="#" underline="none">{'Inventory'}</Link>
+                    <Link href="/partner" underline="none">{'Partner'}</Link>
+                        <div>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                        </div>
+                </Toolbar>
+            </AppBar>
+        </Box><div className="main-content">
+                <h1>Welcome, DBNF Admin!</h1>
+                <Card
+                    padding={60}
+                    sx={{ maxWidth: 560 }}>
+                    <CardContent>
                         <div className="content">
-                        <h2>Item Locations</h2>
+                            <h2>Item Locations</h2>
                             <div className="filter-section">
                                 <FormControl fullWidth>
-                                 <InputLabel id="selectedLocation">Location</InputLabel>
+                                    <InputLabel id="selectedLocation">Location</InputLabel>
                                     <Select labelId="selectedLocation" id="selectedLocation" value={selectedLocation} label="Location" onChange={handleLocationChange}>
                                         <MenuItem value={''}>All Locations</MenuItem>
                                         {locations.map((location, index) => (
-                                        <MenuItem key={index} value={location}>{location}</MenuItem>
+                                            <MenuItem key={index} value={location}>{location}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                                 <div className="item-table">
-                                <TableContainer component={Paper}>
-                                    <Table sx={{ minWidth: 450 }} aria-label="a simple table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell align="right">Item Name</TableCell>
-                                                <TableCell align="right">Location Name</TableCell>
-                                                <TableCell align="right">Quantity</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {filteredItems.map((item, index) => (
-                                            <TableRow key={index}
-                                                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                                <TableCell>{item.itemName}</TableCell>
-                                                <TableCell>{item.locationName}</TableCell>
-                                                <TableCell>{item.Quantity}</TableCell>
-                                            </TableRow>
-                                            ))}
-                                        </TableBody>
-                                        <TableFooter>
-                                            <TableRow>
-                                                <TableCell colSpan="2">Total Number of Items</TableCell>
-                                                <TableCell>{totalQuantity}</TableCell>
-                                            </TableRow>
-                                        </TableFooter>
-                                    </Table>
-                                </TableContainer>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 450 }} aria-label="a simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell align="right">Item Name</TableCell>
+                                                    <TableCell align="right">Location Name</TableCell>
+                                                    <TableCell align="right">Quantity</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {filteredItems.map((item, index) => (
+                                                    <TableRow key={index}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                                        <TableCell>{item.itemName}</TableCell>
+                                                        <TableCell>{item.locationName}</TableCell>
+                                                        <TableCell>{item.Quantity}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                            <TableFooter>
+                                                <TableRow>
+                                                    <TableCell colSpan="2">Total Number of Items</TableCell>
+                                                    <TableCell>{totalQuantity}</TableCell>
+                                                </TableRow>
+                                            </TableFooter>
+                                        </Table>
+                                    </TableContainer>
                                 </div>
                             </div>
                         </div>
-                    </Box>
-                </div>
-            </div>
+                    </CardContent>
+                </Card>
+            </div></>
     );
 }
 

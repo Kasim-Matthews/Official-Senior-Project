@@ -2,10 +2,11 @@ const mysql = require('mysql2');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Lindsey1!",
-    database: "claire",
+    password: "Piano2601!",
+    database: 'claire',
     port: 3306
 });
+
 const manufacturers_index = (req, res) => {
     const sqlGet = "SELECT * FROM test.manufacturers;"
     sb.query(sqlGet, (err, result) => {
