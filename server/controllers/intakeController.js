@@ -20,6 +20,7 @@ const data = (req, res) => {
     group by i.Intake_id, l.Name
     `;
     sb.query(sqlGet, (err, result) => {
+        console.log(err)
         res.send(result);
         res.end();
         return;

@@ -3,11 +3,11 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import Pagination from "./components/Pagination";
 import OrderPosts from "./components/OrderPosts";
-import  Box  from '@mui/material/Box';
-import  AppBar  from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import  IconButton  from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,7 +23,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
-import './Order.css';import { DateRangePicker } from 'react-date-range'
+import './Order.css'; import { DateRangePicker } from 'react-date-range'
 import { addDays } from 'date-fns';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -92,6 +92,7 @@ function Order() {
     }
 
     setRecords(temp);
+    console.log(filters)
   }
 
 
@@ -159,42 +160,100 @@ function Order() {
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
-                    <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
-                    </Typography>
-                        <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                </Box>
+        <AppBar position="static" sx={{ bgcolor: '#065AB0' }}>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
+            </Typography>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
+            </Typography>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+            </Typography>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
+            </Typography>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
+            </Typography>
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </Box>
       <form onSubmit={handleSubmit}>
-      <h2>Distributions Table</h2>
-            <Card>
-              <CardContent>
-              <div className='partner'>
+        <h2>Distributions Table</h2>
+        <Card>
+          <CardContent>
+            <label htmlFor="Partner">
+              Partner
+              <select id="Partner" name="Partner" value={filters.Partner} onChange={handleChange}>
+                <option value=""></option>
+                {partners.map((val) => {
+                  return (
+                    <option value={val.Name}>{val.Name}</option>
+                  )
+                })}
+
+              </select>
+
+            </label>
+
+            <label htmlFor="Location">
+              Location
+              <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
+                <option value=""></option>
+                {locations.map((val) => {
+                  return (
+                    <option value={val.Name}>{val.Name}</option>
+                  )
+                })}
+
+              </select>
+
+            </label>
+
+            <label htmlFor="Status">
+              Status
+              <select id="Status" name="Status" value={filters.Status} onChange={handleChange}>
+                <option value=""></option>
+                <option value="Draft">Draft</option>
+                <option value="Submitted">Submitted</option>
+              </select>
+            </label>
+
+            <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+
+
+
+            <input type="submit" value="Filter" />
+          </CardContent>
+        </Card>
+      </form>
+      <button><Link to="/distribution/new">Add</Link></button>
+      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
+      <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
+    </div>
+
+  );
+}
+
+export default Order;
+
+
+
+/* 
+<div className='partner'>
             <TextField
               id="outlined-select-partner"
               select
@@ -202,9 +261,11 @@ function Order() {
               defaultValue="Partner"
               helperText="Please select a partner"
             >
+              <MenuItem value="">
+                </MenuItem>
               {partners.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+                <MenuItem value={option.Name}>
+                  {option.Name}
                 </MenuItem>
               ))}
             </TextField>
@@ -231,20 +292,6 @@ function Order() {
             </LocalizationProvider>
             </div>   
             <div className='submit'>
-            <Button variant="contained">Submit</Button>
+            <Button variant="contained"><input type="Submit"/></Button>
             </div>
-            </CardContent>
-            </Card>
-      </form>
-      <button><Link to="/distribution/new">Add</Link></button>
-      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
-      <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
-    </div>
-
-  );
-}
-
-export default Order;
-
-
-
+*/

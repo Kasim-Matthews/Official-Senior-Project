@@ -8,9 +8,9 @@ const sb = mysql.createPool({
 });
 
 const partner_index = (req, res) => {
-    const sqlGet = `SELECT Name, Email, Partner_id FROM claire.partner 
+    const sqlGet = `SELECT Name, Email, Partner_id, DeletedAt FROM claire.partner 
     join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-    WHERE DeletedAt IS NULL AND partnertype.Type = "Partner";`
+    WHERE partnertype.Type = "Partner";`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
