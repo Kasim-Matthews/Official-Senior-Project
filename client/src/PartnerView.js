@@ -60,43 +60,70 @@ function PartnerView() {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div style={{ display: "flex" }}>
-
-                    <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
-                    <label htmlFor="non-active" >Also include inactive items</label>
-
-                </div>
-                <input type="Submit" />
-            </form>
-
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
+                    <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
+                    </Typography>
+                        <div>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                </Box>
             <button><Link to="/partner/new">Add</Link></button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {records.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Name}</td>
-                                <td>{val.Email}</td>
-                                <td>
-                                    {typeof val.DeletedAt != "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
-                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
-                                </td>
+            <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 450 }} aria-label="a simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell align="right">Name</TableCell>
+                                                    <TableCell align="right">Email</TableCell>
+                                                    <TableCell align="right">Actions</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                            {partnerList.map((val) => {
+                                                return (
+                                                    <TableRow>
+                                                        <TableCell>{val.Name}</TableCell>
+                                                        <TableCell>{val.Email}</TableCell>
+                                                        <TableCell>
+                                                            <Button onClick={() => handleRemove(val.Partner_id)}>Delete</Button>
+                                                            <Button onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
+                                                            <Button onClick={() => handleView(val.Partner_id)}>View</Button>
+                                                        </TableCell>
 
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
+                                                    </TableRow>
+                                                );
+                                            })}
+                                            </TableBody>
+                                            <TableFooter>
+                                            </TableFooter>
+                                        </Table>
+                                    </TableContainer>
+           
+            <p style={{ display: "none" }}>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
         </div>
     );
 }
