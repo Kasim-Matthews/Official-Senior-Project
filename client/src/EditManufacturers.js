@@ -20,7 +20,7 @@ function EditManufacturers() {
   }
 
   useEffect(() => {
-    Axios.get(`http://localhost:3001/manufacturers/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3306/manufacturers/${id}/edit`).then((response) => {
       response.data.map((key, value) => { setFormData(key) });
     })
   }, [])
@@ -30,7 +30,7 @@ function EditManufacturers() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    Axios.put(`http://localhost:3001/manufacturers/${id}/update`, { name: formData.Name, }, {
+    Axios.put(`http://localhost:3306/manufacturers/${id}/update`, { name: formData.Name, }, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }

@@ -8,26 +8,28 @@ function Manufacturers() {
     const [manuList, setManuList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/manufacturers").then((response) => {
+        Axios.get("http://localhost:3306/manufacturers").then((response) => {
             setManuList(response.data);
         })
-    })
+    }, [])
 
-    const handleRemove = (id) => {
-        Axios.delete(`http://localhost:3001/manufacturers/remove/${id}`);
-    }
 
     const handleEdit = (id) => {
         navigate(`/manufacturers/${id}/edit`)
     }
 
+    const handleView = (id) => {
+        navigate(`/manufacturers/${id}`)
+    }
+
     return (
         <div>
+            <button><Link to="/manufacturers/new">Add</Link></button>
             <table>
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Market Value</th>
+                        <th>Total Items</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,10 +38,10 @@ function Manufacturers() {
                         return (
                             <tr>
                                 <td>{val.Name}</td>
-                                <td>0</td>
+                                <td>{val.TotalItems}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.id)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.id)}>Edit</button>
+                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>
                             </tr>
                         );

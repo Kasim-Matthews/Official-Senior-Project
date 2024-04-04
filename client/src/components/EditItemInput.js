@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import {useParams} from "react-router-dom";
 import Axios from 'axios';
 
-export default function ItemInput({ record, handleItem, handleQuantity, index, deleteField }) {
+export default function EditItemInput({ record, handleItem, handleQuantity, index, deleteField }) {
 
     const { id } = useParams();
     const [item, setItem] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/item").then((response) => {
+        Axios.get("http://localhost:3306/item/use").then((response) => {
             setItem(response.data);
         })
     }, [])

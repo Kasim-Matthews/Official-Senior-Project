@@ -2,33 +2,57 @@ const mysql = require('mysql2');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Lindsey1!",
-    database: "claire",
+    password: "Piano2601!",
+    database: 'claire',
     port: 3306
 });
 
 const item_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.item WHERE DeletedAt IS NULL;"
+    const sqlGet = "SELECT * FROM claire.item;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
+        res.end();
+        return;
+    })
+}
+
+const anything_else = (req, res) => {
+    const sqlGet = "SELECT * FROM claire.item WHERE DeletedAt IS null;"
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+        res.end();
+        return
     })
 }
 
 const item_creation = (req, res) => {
     let Name = req.body.name;
     let FairMarketValue = req.body.FairMarketValue;
+    let PackageCount = req.body.PackageCount
 
-    if (typeof Name != "string" && typeof FairMarketValue != "number") {
+    if (typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (Name && FairMarketValue) {
-        const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue) VALUES (?,?);"
-        sb.query(sqlInsert, [Name, FairMarketValue], (err, result) => {
-            console.log(err);
-        })
+    if (Name && FairMarketValue && PackageCount) {
+        if (PackageCount > 0) {
+            const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue, PackageCount) VALUES (?,?,?);"
+            sb.query(sqlInsert, [Name, FairMarketValue, PackageCount], (err, result) => {
+                console.log(err);
+                res.end();
+                return
+            })
+        }
+        else {
+            const sqlInsert = "INSERT INTO claire.item (Name, FairMarketValue) VALUES (?,?);"
+            sb.query(sqlInsert, [Name, FairMarketValue], (err, result) => {
+                console.log(err);
+                res.end();
+                return;
+            })
+        }
     }
 }
 
@@ -41,9 +65,26 @@ const item_delete = (req, res) => {
         return;
     }
 
-    if (id) {
+    if (id && date) {
         const sqlDelete = `UPDATE claire.item Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Item_id = ?;`
         sb.query(sqlDelete, [date, id], (err, result) => {
+            console.log(err);
+        })
+    }
+}
+
+const item_reactivate = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlDelete = `UPDATE claire.item Set DeletedAt= NULL WHERE Item_id = ?;`
+        sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
         })
     }
@@ -59,7 +100,7 @@ const item_edit = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT * FROM claire.item WHERE Item_id = ?;'
+        const sqlGet = 'SELECT Name, FairMarketValue, Item_id, PackageCount FROM claire.item WHERE Item_id = ?;'
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -71,19 +112,35 @@ const item_update = (req, res) => {
     let id = req.params.id
     let Name = req.body.name;
     let FairMarketValue = req.body.FairMarketValue;
+    let PackageCount = req.body.PackageCount
 
 
-    if (typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number") {
+    if (typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (Name && FairMarketValue && id) {
-        const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ? WHERE Item_id = ?;"
-        sb.query(sqlUpdate, [Name, FairMarketValue, id], (err, result) => {
-            console.log(err);
-        })
+    if (Name && FairMarketValue && id && PackageCount) {
+        if (PackageCount > 0) {
+            const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ?, PackageCount= ? WHERE Item_id = ?;"
+            sb.query(sqlUpdate, [Name, FairMarketValue, PackageCount, id], (err, result) => {
+                console.log(err);
+
+            })
+            res.end();
+            return
+        }
+        else {
+            const sqlUpdate = "UPDATE claire.item SET Name= ?, FairMarketValue= ? WHERE Item_id = ?;"
+            sb.query(sqlUpdate, [Name, FairMarketValue, id], (err, result) => {
+                console.log(err);
+
+            })
+            res.end();
+            return
+        }
+
     }
 }
 
@@ -97,7 +154,12 @@ const item_view = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT * FROM claire.item WHERE Item_id = ?;'
+        const sqlGet = `SELECT l.Name as Location, il.Quantity
+        from claire.itemlocation il
+        join claire.item i on il.Item_id = i.Item_id
+        join claire.location l on il.Location_id = l.Location_id
+        WHERE il.Item_id = ?
+        order by il.Location_id;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -108,7 +170,7 @@ const last = (req, res) => {
     const sqlGet = `SELECT Item_id from claire.item
     ORDER BY Item_id DESC
     Limit 1;`
-    sb.query(sqlGet, (err,result) => {
+    sb.query(sqlGet, (err, result) => {
         res.send(result)
     })
 }
@@ -116,7 +178,7 @@ const last = (req, res) => {
 const pair = (req, res) => {
     let Locations = req.body.Locations;
     let Item_id = req.body.Item_id;
-    if(typeof Locations != "object" && typeof Item_id != "number"){
+    if (typeof Locations != "object" && typeof Item_id != "number") {
         res.send("Invalid");
         res.end();
         return;
@@ -129,7 +191,21 @@ const pair = (req, res) => {
             })
         }
     }
-    
+
+}
+
+const tab2 = (req, res) => {
+  const sqlGet = `SELECT i.Name as Item, l.Name as Location, il.Quantity
+  from claire.itemlocation il
+  join claire.item i on il.Item_id = i.Item_id
+  join claire.location l on il.Location_id = l.Location_id
+  order by i.Name;`
+
+  sb.query(sqlGet, (err, result) => {
+    res.send(result);
+    res.end();
+    return;
+  })
 }
 
 
@@ -141,5 +217,8 @@ module.exports = {
     item_edit,
     item_view,
     last,
-    pair
+    pair,
+    tab2,
+    item_reactivate,
+    anything_else
 }

@@ -3,15 +3,43 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import IntakePosts from "./components/IntakePosts";
 import Pagination from "./components/Pagination";
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Menu from '@mui/material/Menu';
+import Typography from '@mui/material/Typography';
+import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
+import { DateRangePicker } from 'react-date-range'
+import { addDays } from 'date-fns';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import { te } from "date-fns/locale";
 
 function Intake() {
     const navigate = useNavigate();
 
+    const [partners, setPartners] = React.useState([])
+    const [locations, setLocations] = React.useState([])
     const [intakeList, setIntakeList] = React.useState([])
     const [records, setRecords] = React.useState([])
 
+    const [filters, setFilters] = React.useState({
+        PartnerType: 0,
+        Location: "",
+
+    })
+
+    const [state, setState] = React.useState([{
+        startDate: new Date(),
+        endDate: addDays(new Date(), 30),
+        key: 'selection'
+    }])
+
     const [currentPage, setCurrentPage] = React.useState(1);
-    const [postsPerPage] = React.useState(1);
+    const [postsPerPage] = React.useState(10);
 
     //Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
@@ -19,7 +47,7 @@ function Intake() {
     const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/intake").then((response) => {
+        Axios.get("http://localhost:3306/intake").then((response) => {
             setIntakeList(response.data);
             setRecords(response.data)
         })
@@ -32,16 +60,16 @@ function Intake() {
 
     const handleRemove = async (id) => {
         let GetData = async function (id) {
-            return await Axios.get(`http://localhost:3001/intake/${id}/cleanup`).then((response) => {
+            return await Axios.get(`http://localhost:3306/intake/${id}/cleanup`).then((response) => {
                 return response
             });
         }
         let data = GetData(id)
         data.then(async (response) => {
-            await Axios.put("http://localhost:3001/intake/reclaim", { records: response.data })
+            await Axios.put("http://localhost:3306/intake/reclaim", { records: response.data })
         })
 
-        await Axios.delete(`http://localhost:3001/intake/remove/${id}`);
+        await Axios.delete(`http://localhost:3306/intake/remove/${id}`);
 
         window.location.reload(false);
 
@@ -49,22 +77,132 @@ function Intake() {
     }
 
     const handleEdit = (id) => {
-        navigate(`/intake/${id}/edit`)
+        navigate(`/partner/${id}/edit`)
     }
 
     const handleView = (id) => {
         navigate(`/intake/${id}`)
     }
 
+    function handleChange(event) {
+        setFilters(prevFilters => {
+            return {
+                ...prevFilters,
+                [event.target.name]: event.target.value
+            }
+        })
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        var temp = intakeList;
+
+        if (filters.PartnerType != 0) {
+            temp = temp.filter(f => f.Type == filters.PartnerType);
+        }
+
+        if (filters.Location != "") {
+            temp = temp.filter(f => f.Location == filters.Location);
+        }
+
+
+        if (state != null) {
+            temp = temp.filter(f => new Date(f.RecievedDate) >= state[0].startDate && new Date(f.RecievedDate) <= state[0].endDate)
+        }
+
+
+        setRecords(temp);
+    }
+
+    useEffect(() => {
+        Axios.get("http://localhost:3306/partner/types").then((response) => {
+            setPartners(response.data);
+        })
+    }, [])
+
+    useEffect(() => {
+        Axios.get("http://localhost:3306/location/use").then((response) => {
+            setLocations(response.data);
+        })
+    }, [])
 
 
     return (
         <div>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static" sx={{ bgcolor: '#065AB0' }}>
+                    <Toolbar>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
+                        </Typography>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
+                        </Typography>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+                        </Typography>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
+                        </Typography>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                            <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
+                        </Typography>
+                        <div>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+            </Box>
+
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="PartnerType">
+                    Partner
+                    <select id="PartnerType" name="PartnerType" value={filters.PartnerType} onChange={handleChange}>
+                        <option value=""></option>
+                        {partners.map((val) => {
+                            return (
+                                <option value={val.PartnerType_id}>{val.Type}</option>
+                            )
+                        })}
+
+                    </select>
+
+                </label>
+
+                <label htmlFor="Location">
+                    Location
+                    <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
+                        <option value=""></option>
+                        {locations.map((val) => {
+                            return (
+                                <option value={val.Name}>{val.Name}</option>
+                            )
+                        })}
+
+                    </select>
+
+                </label>
+
+                <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+
+
+
+                <input type="submit" value="Filter" />
+            </form>
+
+
             <button><Link to="/intake/new">Add</Link></button>
 
             <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
-
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );

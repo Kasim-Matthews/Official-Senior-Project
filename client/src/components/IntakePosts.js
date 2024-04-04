@@ -1,14 +1,17 @@
 import React from "react";
 
-const IntakePosts = ({posts, handleView, handleEdit, handleRemove}) => {
+const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
+    const total = posts.reduce((sum, val) => sum + parseFloat(val.Total), 0);
+    const totalQuantity = posts.reduce((sum, val) => sum + parseInt(val.TotalItems), 0);
     return (
         <table>
             <thead>
                 <tr>
                     <th>Partner</th>
-                    <th>Value</th>
-                    <th>Recieved Date</th>
+                    <th>Issued on</th>
                     <th>Comments</th>
+                    <th>Quantity of Items</th>
+                    <th>Money Raised</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -17,9 +20,10 @@ const IntakePosts = ({posts, handleView, handleEdit, handleRemove}) => {
                     return (
                         <tr>
                             <td>{val.Name}</td>
-                            <td>${val.Total}</td>
                             <td>{val.RecievedDate}</td>
                             <td>{val.Comments}</td>
+                            <td>{val.TotalItems}</td>
+                            <td>${val.Total}</td>
                             <td>
                                 <button onClick={() => handleRemove(val.Intake_id)}>Delete</button>
                                 <button onClick={() => handleEdit(val.Intake_id)}>Edit</button>
@@ -30,6 +34,15 @@ const IntakePosts = ({posts, handleView, handleEdit, handleRemove}) => {
                     );
                 })}
             </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <td></td>
+                    <td></td>
+                    <td>{totalQuantity}</td>
+                    <td>${total}</td>
+                </tr>
+            </tfoot>
         </table>
     )
 }

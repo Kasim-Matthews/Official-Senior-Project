@@ -2,13 +2,33 @@ const mysql = require('mysql2');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Lindsey1!",
-    database: "claire",
+    password: "Piano2601!",
+    database: 'claire',
     port: 3306
 });
 
 const partner_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.partner WHERE DeletedAt IS NULL;"
+    const sqlGet = `SELECT Name, Email, Partner_id, DeletedAt FROM claire.partner 
+    join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
+    WHERE partnertype.Type = "Partner";`
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+    })
+}
+
+const anything_else = (req, res) => {
+    const sqlGet = `SELECT Name, Email, Partner_id FROM claire.partner 
+    join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
+    WHERE partnertype.Type = "Partner";`
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+    })
+}
+
+const partner_list = (req, res) => {
+    const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
+    join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
+    WHERE DeletedAt IS NULL AND partnertype.Type = "Partner";`
     sb.query(sqlGet, (err, result) => {
         res.send(result);
     })
@@ -26,20 +46,19 @@ const partner_create = (req, res) => {
     let Email = req.body.email;
     let Type = req.body.type;
 
-    if (typeof Name != "string" && typeof Email != "string") {
+    if (typeof Name != "string" && typeof Email != "string" && typeof Type != "number") {
         res.send("Invalid");
         res.end();
         return;
     }
 
-    if (Name && Email) {
-        const sqlInsert = "INSERT INTO claire.partner (name, email) VALUES (?,?);"
-        sb.query(sqlInsert, [Name, Email], (err, result) => {
-            const sqlInsert = "INSERT INTO claire.partnertype (Partner_id, Type) VALUES (?,?);"
-            sb.query(sqlInsert, [result.insertId, Type], (err, result) => {
-                console.log(err)
-            })
+    if (Name && Email && Type) {
+        const sqlInsert = "INSERT INTO claire.partner (Name, Email, Type) VALUES (?,?,?);"
+        sb.query(sqlInsert, [Name, Email, Type], (err, result) => {
+            console.log(err);
         })
+        res.end();
+        return;
     }
 }
 
@@ -55,6 +74,23 @@ const partner_delete = (req, res) => {
     if (id) {
         const sqlDelete = `UPDATE claire.partner Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Partner_id = ?;`
         sb.query(sqlDelete, [date, id], (err, result) => {
+            console.log(err);
+        })
+    }
+}
+
+const partner_reactivate = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlDelete = `UPDATE claire.partner Set DeletedAt= NULL WHERE Partner_id = ?;`
+        sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
         })
     }
@@ -99,6 +135,41 @@ const partner_update = (req, res) => {
     }
 }
 
+const partner_view = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `SELECT o.Order_id, Cast(o.CompletedDate as char(10)) AS CompletedDate, SUM(oi.Quantity) as Total, l.Name as Location 
+        from claire.order o 
+        join claire.orderitems oi on o.Order_id = oi.Order_id
+        join claire.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
+        join claire.location l on l.Location_id = il.Location_id
+        WHERE o.Partner_id = ?
+        GROUP by o.Order_id, l.Name;`
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+        })
+    }
+}
+
+const partner_types = (req, res) => {
+    const sqlGet = `SELECT *
+    from partnertype
+    WHERE Type NOT IN ("Vendor", "Adjustment", "Partner");`
+
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+        res.end();
+        return;
+    })
+}
+
 
 module.exports = {
     partner_create,
@@ -106,5 +177,10 @@ module.exports = {
     partner_delete,
     partner_update,
     partner_edit,
-    partner_options
+    partner_options,
+    partner_list,
+    partner_view,
+    partner_types,
+    anything_else,
+    partner_reactivate
 }

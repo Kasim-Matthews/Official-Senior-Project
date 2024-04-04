@@ -1,7 +1,7 @@
 const Partner = {
     Name: "",
     Email: "",
-    Type:"Partner"
+    Type:4
 }
 
 export default Partner;

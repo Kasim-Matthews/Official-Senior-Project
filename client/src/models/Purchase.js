@@ -1,8 +1,8 @@
 const Purchase = {
     Vendor:"",
-    Location:"",
+    Location: 0,
     Total:0,
-    Comment: "",
+    Comments: "",
     Purchase_date:""
 }
 
