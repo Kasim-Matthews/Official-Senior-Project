@@ -2,9 +2,9 @@ const mysql = require('mysql2');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Piano2601!",
+    password: "WebVoyage2023!",
     database: 'claire',
-    port: 3306
+    port: 3006
 });
 
 const partner_index = (req, res) => {
