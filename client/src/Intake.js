@@ -187,9 +187,9 @@ function Intake(){
                                 <td>{concatRecievedDate}</td>
                                 <td>{val.Comments}</td>
                                 <td>
-                                    <button /*onClick={() => handleRemove(val.Partner_id)}*/>Delete</button>
-                                    <button /*onClick={() => handleEdit(val.Partner_id)}*/>Edit</button>
-                                    <button /*onClick={() => handleView(val.Partner_id)}*/>View</button>
+                                    <button onClick={() => handleRemove(val.Partner_id)}>Delete</button>
+                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>
 
                             </tr>

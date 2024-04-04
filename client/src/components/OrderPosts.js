@@ -54,6 +54,12 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                                                 })}
                                             </TableBody>
                                             <TableFooter>
+                                                <TableRow>
+                                                    <TableCell>Total</TableCell>
+                                                    <TableCell></TableCell>
+                                                    <TableCell></TableCell>
+                                                    <TableCell>{total}</TableCell>
+                                                </TableRow>
                                             </TableFooter>
                                         </Table>
                                     </TableContainer>
