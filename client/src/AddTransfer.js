@@ -91,7 +91,7 @@ function AddTransfer() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/location").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setTo(response.data);
         })
     }, [])
@@ -127,7 +127,7 @@ function AddTransfer() {
         let ild = await Axios.post("http://localhost:3001/transfer/ild", {Items: items, Location: formData.To});
         let Values = await Axios.post('http://localhost:3001/transfer/values', {Items: items});
 
-        await Axios.post('http://localhost:3001/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data});
+        await Axios.post('http://localhost:3001/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
 
     }
 

@@ -21,6 +21,8 @@ function ViewOrder() {
     });
   }, [])
 
+  const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+  const total = itemList.reduce((sum, val) => sum + (parseFloat(val.Quantity) * parseFloat(val.FairMarketValue)), 0);
 
   return (
     <div>
@@ -58,16 +60,24 @@ function ViewOrder() {
         </thead>
         <tbody>
           {itemList.map((val) => {
-            return(
+            return (
               <tr>
                 <td>{val.Item}</td>
                 <td>{val.FairMarketValue}</td>
-                <td>{val.FairMarketValue * val.Quantity}</td>
+                <td>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
                 <td>{val.Quantity}</td>
               </tr>
             )
           })}
         </tbody>
+        <tfoot>
+          <tr>
+            <td>Total</td>
+            <td></td>
+            <td>${total}</td>
+            <td>{totalQuantity}</td>
+          </tr>
+        </tfoot>
       </table>
       <button><Link to="/Dashboard">Dasboard</Link></button>
     </div>

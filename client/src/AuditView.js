@@ -74,7 +74,7 @@ function AuditView() {
                                 <td>{val.Date}</td>
                                 <td>{val.Affected}</td>
                                 <td>
-                                    <button onClick={() => handleView(val.Audit_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Audit_id)}>View</button>
                                 </td>
                             </tr>
                         );

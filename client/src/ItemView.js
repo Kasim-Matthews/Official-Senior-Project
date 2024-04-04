@@ -13,7 +13,7 @@ function ItemView() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/location").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setLocationList(response.data);
 
         })

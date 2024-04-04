@@ -9,7 +9,7 @@ const sb = mysql.createPool({
 
 const data = (req, res) => {
     const sqlGet = `
-    select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, i.Intake_id, i.TotalValue as Total, l.Name as Location, p.Type
+    select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, SUM(ii.Quantity) as TotalItems, i.Intake_id, i.TotalValue as Total, l.Name as Location, p.Type
     from claire.intake i
     join claire.partner p on i.Partner = p.Partner_id
     join claire.partnertype pt on p.Type = pt.PartnerType_id

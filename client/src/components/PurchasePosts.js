@@ -1,6 +1,8 @@
 import React from "react";
 
-const PurchasePosts = ({posts, handleView, handleEdit, handleRemove}) => {
+const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
+    const total = posts.reduce((sum, val) => sum + parseFloat(val.Total), 0);
+    const totalQuantity = posts.reduce((sum, val) => sum + parseInt(val.TotalItems), 0);
     return (
         <table>
             <thead>
@@ -8,8 +10,8 @@ const PurchasePosts = ({posts, handleView, handleEdit, handleRemove}) => {
                     <th>Partner</th>
                     <th>Recieved Date</th>
                     <th>Total Items</th>
-                    <th>Amount Spent</th>
                     <th>Comments</th>
+                    <th>Amount Spent</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -20,8 +22,8 @@ const PurchasePosts = ({posts, handleView, handleEdit, handleRemove}) => {
                             <td>{val.Name}</td>
                             <td>{val.RecievedDate}</td>
                             <td>{val.TotalItems}</td>
-                            <td>${val.Total}</td>
                             <td>{val.Comments}</td>
+                            <td>${val.Total}</td>
                             <td>
                                 <button onClick={() => handleRemove(val.Intake_id)}>Delete</button>
                                 <button onClick={() => handleEdit(val.Intake_id)}>Edit</button>
@@ -32,6 +34,16 @@ const PurchasePosts = ({posts, handleView, handleEdit, handleRemove}) => {
                     );
                 })}
             </tbody>
+
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <td></td>
+                    <td>{totalQuantity}</td>
+                    <td></td>
+                    <td>${total}</td>
+                </tr>
+            </tfoot>
         </table>
     )
 }

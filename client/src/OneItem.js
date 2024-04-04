@@ -21,6 +21,8 @@ function ViewItem() {
         })
     }, [])
 
+    const totalQuantity = list.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+
     return (
         <div>
             <h2>Item Information for {record.Name}</h2>
@@ -61,6 +63,13 @@ function ViewItem() {
                         )
                     })}
                 </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <td>{totalQuantity}</td>
+                    </tr>
+                </tfoot>
             </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>

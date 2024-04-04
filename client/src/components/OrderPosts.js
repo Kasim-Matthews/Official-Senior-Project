@@ -1,6 +1,7 @@
 import React from "react";
 
 const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncomplete, handleRemove, handleprint }) => {
+    const total = posts.reduce((sum, val) => sum + parseInt(val.Total), 0);
     return (
         <div>
             <table>
@@ -41,6 +42,15 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                             </tr>);
                     })}
                 </tbody>
+
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <td></td>
+                        <td></td>
+                        <td>{total}</td>
+                    </tr>
+                </tfoot>
             </table>
 
         </div>

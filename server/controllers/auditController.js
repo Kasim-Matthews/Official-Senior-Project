@@ -8,7 +8,7 @@ const sb = mysql.createPool({
 });
 
 const index = (req, res) => {
-    const sqlGet = `SELECT a.Audit_id, CAST(a.Date as char(10)) as Date, COUNT(IF(ai.Changed IS null, 1, NULL)) as Affected
+    const sqlGet = `SELECT a.Audit_id, CAST(a.Date as char(10)) as Date, COUNT(IF(ai.Changed IS NOT null, 1, NULL)) as Affected
     from claire.audit a
     join claire.audititems ai on a.Audit_id = ai.Audit
     group by a.date, a.Audit_id;`

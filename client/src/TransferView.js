@@ -63,7 +63,7 @@ function TransferView() {
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/location").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])

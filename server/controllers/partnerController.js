@@ -16,6 +16,15 @@ const partner_index = (req, res) => {
     })
 }
 
+const anything_else = (req, res) => {
+    const sqlGet = `SELECT Name, Email, Partner_id FROM claire.partner 
+    join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
+    WHERE partnertype.Type = "Partner";`
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+    })
+}
+
 const partner_list = (req, res) => {
     const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
     join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
@@ -65,6 +74,23 @@ const partner_delete = (req, res) => {
     if (id) {
         const sqlDelete = `UPDATE claire.partner Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Partner_id = ?;`
         sb.query(sqlDelete, [date, id], (err, result) => {
+            console.log(err);
+        })
+    }
+}
+
+const partner_reactivate = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlDelete = `UPDATE claire.partner Set DeletedAt= NULL WHERE Partner_id = ?;`
+        sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
         })
     }
@@ -154,5 +180,7 @@ module.exports = {
     partner_options,
     partner_list,
     partner_view,
-    partner_types
+    partner_types,
+    anything_else,
+    partner_reactivate
 }

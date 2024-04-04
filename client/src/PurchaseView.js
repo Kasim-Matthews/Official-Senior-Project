@@ -30,7 +30,7 @@ function Purchase() {
     }])
 
     const [currentPage, setCurrentPage] = React.useState(1);
-    const [postsPerPage] = React.useState(1);
+    const [postsPerPage] = React.useState(10);
 
     //Get current posts
     const indexOfLastPost = currentPage * postsPerPage;
@@ -82,7 +82,7 @@ function Purchase() {
       }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/location").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])
