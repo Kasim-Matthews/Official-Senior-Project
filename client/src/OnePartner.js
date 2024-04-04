@@ -45,7 +45,7 @@ function ViewPartner() {
                     </tr>
                 </tbody>
             </table>
-
+            <h3>Prior Distributions</h3>
             <table>
                 <thead>
                     <tr>

@@ -24,6 +24,7 @@ function Manufacturers() {
 
     return (
         <div>
+            <button><Link to="/manufacturers/new">Add</Link></button>
             <table>
                 <thead>
                     <tr>

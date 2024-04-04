@@ -124,7 +124,7 @@ function AddOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location").then((response) => {
+    Axios.get("http://localhost:3306/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])

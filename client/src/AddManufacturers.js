@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
+import Manufacturer from "./models/Manufacturer";
 
 function AddManufacturers() {
 
-  const [formData, setFormData] = React.useState(
-    {
-      Name: "",
-    }
-  )
+  const [formData, setFormData] = React.useState(Manufacturer)
   const [formErrors, setFormErrors] = useState({})
 
 
@@ -38,7 +35,7 @@ function AddManufacturers() {
 
   function handleSubmit() {
     try {
-      Axios.post("http://localhost:3306/manufacturers/new", { name: formData.Name, }, {
+      Axios.post("http://localhost:3306/manufacturers/new", { name: formData.Name, type: formData.Type}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

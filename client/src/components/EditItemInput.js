@@ -8,7 +8,7 @@ export default function EditItemInput({ record, handleItem, handleQuantity, inde
     const [item, setItem] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/item").then((response) => {
+        Axios.get("http://localhost:3306/item/use").then((response) => {
             setItem(response.data);
         })
     }, [])

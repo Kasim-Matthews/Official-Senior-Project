@@ -16,10 +16,11 @@ function AddAudit() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        //await Axios.post("http://localhost:3306/audit/log", {date: date});
-        //let id = await Axios.get("http://localhost:3306/audit/last")
-        //await Axios.post("http://localhost:3306/audit/new", {Audits: inventory, audit: id.data[0].Audit_id});
+        await Axios.post("http://localhost:3306/audit/log", {date: date});
+        let id = await Axios.get("http://localhost:3306/audit/last")
+        await Axios.post("http://localhost:3306/audit/new", {Audits: inventory, audit: id.data[0].Audit_id});
         await Axios.put("http://localhost:3306/audit/update", {Audits: inventory});
+        window.location.href = `/audit`;
     }
 
     useEffect(() => {

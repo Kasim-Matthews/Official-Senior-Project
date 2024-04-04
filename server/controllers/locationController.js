@@ -8,7 +8,16 @@ const sb = mysql.createPool({
 });
 
 const location_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS NULL;"
+    const sqlGet = "SELECT * FROM claire.location;"
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+        res.end();
+        return
+    })
+}
+
+const anything_else = (req, res) => {
+    const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS null;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
         res.end();
@@ -58,6 +67,23 @@ const location_delete = (req, res) => {
     }
 }
 
+const location_reactivate = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlDelete = `UPDATE claire.location Set DeletedAt= NULL WHERE Location_id = ?;`
+        sb.query(sqlDelete, [id], (err, result) => {
+            console.log(err);
+        })
+    }
+}
+
 const location_edit = (req, res) => {
     let id = req.params.id
 
@@ -69,6 +95,79 @@ const location_edit = (req, res) => {
 
     if (id) {
         const sqlGet = 'SELECT * FROM claire.location WHERE Location_id= ?;'
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+            res.end();
+            return
+        })
+    }
+}
+
+const tab_1 = (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `SELECT i.Name as Item, il.Quantity
+        from claire.itemlocation il
+        join claire.item i on il.Item_id = i.Item_id
+        WHERE il.Location_id = ?
+        order by il.Item_id;`
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+            res.end();
+            return
+        })
+    }
+}
+
+const tab_2 = (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `SELECT i.Name as Item, SUM(oi.Quantity) as Quantity, il.Item_id
+        from claire.itemlocation il
+        join claire.item i on il.Item_id = i.Item_id
+        join claire.orderitems oi on oi.ItemLocationFK = il.ItemLocation_id
+        WHERE il.Location_id = ?
+        group by i.Name, il.Item_id
+        order by il.Item_id;`
+        sb.query(sqlGet, [id], (err, result) => {
+            res.send(result);
+            res.end();
+            return
+        })
+    }
+}
+
+const tab_3 = (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlGet = `SELECT i.Name as Item, SUM(ii.Quantity) as Quantity, il.Item_id
+        from claire.itemlocation il
+        join claire.item i on il.Item_id = i.Item_id
+        join claire.intakeitems ii on ii.FKItemLocation = il.ItemLocation_id
+        WHERE il.Location_id = ?
+        group by i.Name, il.Item_id
+        order by il.Item_id;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
             res.end();
@@ -177,5 +276,10 @@ module.exports = {
     last,
     pair,
     adjustment,
-    partner
+    partner,
+    location_reactivate,
+    anything_else,
+    tab_1,
+    tab_2,
+    tab_3
 }

@@ -15,6 +15,8 @@ function ViewPurchase() {
         });
     }, [])
 
+    const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+
     return (
         <div>
             <table>
@@ -50,6 +52,12 @@ function ViewPurchase() {
                         )
                     })}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <td>${totalQuantity}</td>
+                    </tr>
+                </tfoot>
             </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>

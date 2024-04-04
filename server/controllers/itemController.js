@@ -8,11 +8,20 @@ const sb = mysql.createPool({
 });
 
 const item_index = (req, res) => {
-    const sqlGet = "SELECT * FROM claire.item WHERE DeletedAt IS NULL;"
+    const sqlGet = "SELECT * FROM claire.item;"
     sb.query(sqlGet, (err, result) => {
         res.send(result);
         res.end();
         return;
+    })
+}
+
+const anything_else = (req, res) => {
+    const sqlGet = "SELECT * FROM claire.item WHERE DeletedAt IS null;"
+    sb.query(sqlGet, (err, result) => {
+        res.send(result);
+        res.end();
+        return
     })
 }
 
@@ -56,9 +65,26 @@ const item_delete = (req, res) => {
         return;
     }
 
-    if (id) {
+    if (id && date) {
         const sqlDelete = `UPDATE claire.item Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Item_id = ?;`
         sb.query(sqlDelete, [date, id], (err, result) => {
+            console.log(err);
+        })
+    }
+}
+
+const item_reactivate = (req, res) => {
+    let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if (id) {
+        const sqlDelete = `UPDATE claire.item Set DeletedAt= NULL WHERE Item_id = ?;`
+        sb.query(sqlDelete, [id], (err, result) => {
             console.log(err);
         })
     }
@@ -128,7 +154,12 @@ const item_view = (req, res) => {
     }
 
     if (id) {
-        const sqlGet = 'SELECT * FROM claire.item WHERE Item_id = ?;'
+        const sqlGet = `SELECT l.Name as Location, il.Quantity
+        from claire.itemlocation il
+        join claire.item i on il.Item_id = i.Item_id
+        join claire.location l on il.Location_id = l.Location_id
+        WHERE il.Item_id = ?
+        order by il.Location_id;`
         sb.query(sqlGet, [id], (err, result) => {
             res.send(result);
         })
@@ -163,6 +194,20 @@ const pair = (req, res) => {
 
 }
 
+const tab2 = (req, res) => {
+  const sqlGet = `SELECT i.Name as Item, l.Name as Location, il.Quantity
+  from claire.itemlocation il
+  join claire.item i on il.Item_id = i.Item_id
+  join claire.location l on il.Location_id = l.Location_id
+  order by i.Name;`
+
+  sb.query(sqlGet, (err, result) => {
+    res.send(result);
+    res.end();
+    return;
+  })
+}
+
 
 module.exports = {
     item_index,
@@ -172,5 +217,8 @@ module.exports = {
     item_edit,
     item_view,
     last,
-    pair
+    pair,
+    tab2,
+    item_reactivate,
+    anything_else
 }

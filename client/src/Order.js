@@ -29,7 +29,7 @@ function Order() {
   const [distributionsList, setDistributionsList] = React.useState([])
   const [records, setRecords] = React.useState([]);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [postsPerPage] = React.useState(2);
+  const [postsPerPage] = React.useState(10);
 
   //Get current posts
   const indexOfLastPost = currentPage * postsPerPage;
@@ -83,13 +83,13 @@ function Order() {
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner").then((response) => {
+    Axios.get("http://localhost:3306/partner/use").then((response) => {
       setPartners(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location").then((response) => {
+    Axios.get("http://localhost:3306/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])

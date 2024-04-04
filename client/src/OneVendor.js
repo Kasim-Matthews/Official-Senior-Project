@@ -29,6 +29,7 @@ function ViewVendor() {
 
     return (
         <div>
+            <h3>Vendor Information for {record.BusinessName}</h3>
             <table>
                 <thead>
                     <tr>
@@ -74,6 +75,5 @@ function ViewVendor() {
         </div>
     )
 }
-/*Cannot edit till the purchase functionality is a thing*/
 
 export default ViewVendor;

@@ -6,25 +6,67 @@ function LocationView() {
     const navigate = useNavigate();
 
     const [locationList, setLocationList] = React.useState([])
+    const [records, setRecords] = React.useState([])
+    const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
         Axios.get("http://localhost:3306/location").then((response) => {
             setLocationList(response.data);
+            setRecords(response.data.filter(function (currentObject) {
+                return typeof (currentObject.DeletedAt) == "object";
+            }))
         })
     }, [])
 
-    const handleRemove = (id) => {
-        let date = new Date().toLocaleDateString()
-        Axios.put(`http://localhost:3306/location/remove/${id}`, {date: date});
-        window.location.reload(false);
+    const handleRemove = (id, Name) => {
+        if (window.confirm(`Are you sure you want to delete ${Name} from the location list?`) == true) {
+            let date = new Date().toLocaleDateString()
+            Axios.put(`http://localhost:3306/location/remove/${id}`, { date: date });
+            window.location.reload(false);
+        }
+    }
+
+    const handleReactivate = (id, Name) => {
+        if (window.confirm(`Are you sure you want to reactivate ${Name} from the location list?`) == true) {
+            Axios.put(`http://localhost:3306/location/reactivate/${id}`);
+            window.location.reload(false);
+        }
     }
 
     const handleEdit = (id) => {
         navigate(`/location/${id}/edit`)
     }
 
+    const handleView = (id) => {
+        navigate(`/location/${id}`)
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        var temp = locationList;
+
+        if (nonActive) {
+            setRecords(temp)
+        }
+
+        else {
+            setRecords(temp.filter(function (currentObject) {
+                return typeof (currentObject.DeletedAt) == "object";
+            }))
+        }
+    }
+
     return (
         <div>
+            <form onSubmit={handleSubmit}>
+                <div style={{ display: "flex" }}>
+
+                    <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+                    <label htmlFor="non-active" >Also include inactive items</label>
+
+                </div>
+                <input type="Submit" />
+            </form>
             <button><Link to="/location/new">Add</Link></button>
             <table>
                 <thead>
@@ -35,14 +77,15 @@ function LocationView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {locationList.map((val) => {
+                    {records.map((val) => {
                         return (
                             <tr>
                                 <td>{val.Name}</td>
                                 <td>{val.Address}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.Location_id)}>Delete</button>
+                                {typeof (val.DeletedAt) == "object" ? <button onClick={() => handleRemove(val.Location_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Location_id, val.Name)}>Reactivate</button>}
                                     <button onClick={() => handleEdit(val.Location_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Location_id)}>View</button>
                                 </td>
                             </tr>
                         );
