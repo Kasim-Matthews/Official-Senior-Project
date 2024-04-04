@@ -116,8 +116,10 @@ const find_ild = (req, res) => {
         from claire.itemlocation il
         WHERE il.Item_id IN (?) AND il.Location_id = ?;`
 
-        sb.query(sqlGet, [ids.toString(), Location], (err, result) => {
+        
+        sb.query(sqlGet, [ids, Location], (err, result) => {
             console.log(err);
+            console.log(result);
             res.send(result);
             res.end();
             return;

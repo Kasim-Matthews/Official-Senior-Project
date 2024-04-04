@@ -159,7 +159,7 @@ function TransferView() {
                                 <td>{val.TotalMoved}</td>
                                 <td>
                                     <button onClick={() => handleRemove(val.Intake_id, val.Taken, val.Location)}>Delete</button>
-                                    <button onClick={() => handleView(val.Intake_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Intake_id)}>View</button>
                                 </td>
                             </tr>
                         );
