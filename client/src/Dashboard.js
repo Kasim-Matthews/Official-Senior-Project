@@ -21,6 +21,9 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
+import Typography from '@mui/material/Typography';
+import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
 
 function Dashboard() {
 
@@ -71,31 +74,22 @@ function Dashboard() {
     return (
         <div className="dashboard-container">
             <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
+                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
                     <Toolbar>
-                    <IconButton
-                        size="large"
-                        edge="start"
-                        color="inherit"
-                        aria-label="menu"
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link href="/Dashboard" underline="none">Dasboard</Link>
+                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/distribution" underline="none">Distributions</Link>
+                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/intake" underline="none">Collections</Link>
+                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <a href="#" underline="none">Inventory</a>
+                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/partner" underline="none">Partner</Link>
+                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
                     </Typography>
                         <div>
                         <IconButton
@@ -107,24 +101,6 @@ function Dashboard() {
                         >
                             <AccountCircle />
                         </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'right',
-                            }}
-                            open={Boolean(anchorEl)}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                        </Menu>
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -133,15 +109,8 @@ function Dashboard() {
                     <h1>Welcome, DBNF Admin!</h1>
                 <div className="boxes">
                     <div className="box">
-                    <Box height={275}
-                         width={500}
-                         my={4}
-                         display="flex"
-                         alignItems="center"
-                         gap={4}
-                         p={2}
-                         borderRadius={2}
-                         sx={{ border: '1px solid grey' }}>
+                    <Card>
+                        <CardContent>
                         <div className="content">
                             <h2>Item Locations</h2>
                             <div className="filter-section">
@@ -185,9 +154,19 @@ function Dashboard() {
                                 </div>
                             </div>
                         </div>
-                    </CardContent>
-                </Card>
-            </div></>
+                        </CardContent>
+                    </Card>
+                    <div className='pie-chart'>
+                    <Card>
+                        <CardContent>
+                            Pie chart goes here!
+                        </CardContent>
+                    </Card>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     );
 }
 

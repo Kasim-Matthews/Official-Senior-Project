@@ -58,7 +58,8 @@ h1{
 }
 
 .box2{
-  padding: 0px 0px 0px 30px;
+  padding: 0px 0px 0px 60px;
+  display: flex;
 }
 
 .content{
@@ -79,3 +80,6 @@ Select{
   padding: 10px 0px 10px 0px;
 }
   
+.pie-chart{
+  display: flex;
+}
