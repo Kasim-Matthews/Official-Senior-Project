@@ -69,7 +69,8 @@ const data = (req, res) => {
         SELECT i.Name as itemName, l.Name as locationName, il.Quantity
         FROM claire.itemlocation il 
         JOIN claire.item i ON il.Item_id = i.Item_id
-        JOIN claire.location l ON il.Location_id = l.Location_i`;
+        JOIN claire.location l ON il.Location_id = l.Location_id
+        `;
 
     sb.query(query, (err, result) => {
 
