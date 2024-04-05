@@ -3,10 +3,6 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import IntakePosts from "./components/IntakePosts";
 import Pagination from "./components/Pagination";
-import { DateRangePicker } from 'react-date-range'
-import { addDays } from 'date-fns';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 
 function Intake() {
     const navigate = useNavigate();
@@ -19,14 +15,10 @@ function Intake() {
     const [filters, setFilters] = React.useState({
         PartnerType: 0,
         Location: "",
-
+        Date: ""
     })
 
-    const [state, setState] = React.useState([{
-        startDate: new Date(),
-        endDate: addDays(new Date(), 30),
-        key: 'selection'
-    }])
+
 
     const [currentPage, setCurrentPage] = React.useState(1);
     const [postsPerPage] = React.useState(10);
@@ -83,6 +75,17 @@ function Intake() {
         })
     }
 
+    function clearFilters(e) {
+        e.preventDefault();
+
+        setFilters({
+            PartnerType: 0,
+            Location: "",
+            Date: ""
+        })
+        setRecords(intakeList)
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
         var temp = intakeList;
@@ -96,8 +99,8 @@ function Intake() {
         }
 
 
-        if (state != null) {
-            temp = temp.filter(f => new Date(f.RecievedDate) >= state[0].startDate && new Date(f.RecievedDate) <= state[0].endDate)
+        if (filters.Date != "") {
+            temp = temp.filter(f => new Date(f.RecievedDate) >= new Date(filters.Date))
         }
 
 
@@ -106,9 +109,9 @@ function Intake() {
 
     useEffect(() => {
         Axios.get("http://localhost:3001/partner/types").then((response) => {
-          setPartners(response.data);
+            setPartners(response.data);
         })
-      }, [])
+    }, [])
 
     useEffect(() => {
         Axios.get("http://localhost:3001/location/use").then((response) => {
@@ -148,11 +151,18 @@ function Intake() {
 
                 </label>
 
-                <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                <label>
+                    Date Range
+                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                </label>
 
 
 
                 <input type="submit" value="Filter" />
+                <button onClick={clearFilters}>Clear</button>
+
+
+
             </form>
 
 

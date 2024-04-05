@@ -23,7 +23,7 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
                 })}
             </select>
 
-            <input type="number" name={objName} required onChange={(e) => handleQuantity(e, index)} />
+            <input type="number" name={objName} min="0" required onChange={(e) => handleQuantity(e, index)} />
 
             <div onClick={(e) => deleteField(e, index)}>X</div>
         </div>

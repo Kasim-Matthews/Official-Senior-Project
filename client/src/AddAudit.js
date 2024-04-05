@@ -38,7 +38,7 @@ function AddAudit() {
                     return(
                         <div>
                             <h4>{val.Item} + {val.Location}</h4>
-                            <input type="Number" name="Changed" defaultValue={val.Past} onChange={(e) => handleChange(e, index)}/>
+                            <input type="Number" name="Changed" defaultValue={val.Past} min="0" onChange={(e) => handleChange(e, index)}/>
                         </div>
                     )
                 })}

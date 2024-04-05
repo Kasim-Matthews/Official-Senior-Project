@@ -228,6 +228,38 @@ const distribution_find_ild = (req, res) => {
 
 }
 
+const validation = (req, res) => {
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Items != "object" && typeof Location != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(Items && Location){
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+
+        const sqlGet = `SELECT il.ItemLocation_id, il.Quantity, i.Name as Item, i.Item_id
+        from claire.itemlocation il
+        join claire.item i on i.Item_id = il.Item_id
+        WHERE il.Item_id IN (?) AND il.Location_id = ?;`
+
+        
+        sb.query(sqlGet, [ids, Location], (err, result) => {
+            console.log(err);
+            res.send(result);
+            res.end();
+            return;
+        })
+
+    }
+}
+
 
 const distribution_find_value = (req, res) => {
     let Items = req.body.Items
@@ -475,5 +507,6 @@ module.exports = {
     distribution_itemlist,
     distribution_edit_items,
     distribution_update_delete,
-    distribution_print
+    distribution_print,
+    validation
 }

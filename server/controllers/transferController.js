@@ -119,7 +119,38 @@ const find_ild = (req, res) => {
         
         sb.query(sqlGet, [ids, Location], (err, result) => {
             console.log(err);
-            console.log(result);
+            res.send(result);
+            res.end();
+            return;
+        })
+
+    }
+}
+
+const validation = (req, res) => {
+    let Items = req.body.Items
+    let Location = req.body.Location
+
+    if (typeof Items != "object" && typeof Location != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    if(Items && Location){
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+
+        const sqlGet = `SELECT il.ItemLocation_id, il.Quantity, i.Name as Item, i.Item_id
+        from claire.itemlocation il
+        join claire.item i on i.Item_id = il.Item_id
+        WHERE il.Item_id IN (?) AND il.Location_id = ?;`
+
+        
+        sb.query(sqlGet, [ids, Location], (err, result) => {
+            console.log(err);
             res.send(result);
             res.end();
             return;
@@ -287,5 +318,6 @@ module.exports = {
     transfer_view,
     transfer_cleanup,
     transfer_reclaim,
-    transfer_renounce
+    transfer_renounce,
+    validation
 }

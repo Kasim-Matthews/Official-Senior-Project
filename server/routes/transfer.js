@@ -17,4 +17,5 @@ router.post('/track', transferController.track_intake)
 router.get('/:id/cleanup', transferController.transfer_cleanup)
 router.put('/reclaim', transferController.transfer_reclaim)
 router.put('/renounce', transferController.transfer_renounce)
+router.post('/validation', transferController.validation)
 module.exports = router;

@@ -77,8 +77,8 @@ function AddOrder() {
   }
 
 
-  function handleCancel(){
-    if(window.confirm("Are you sure you want to cancel") == true){
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
       window.location.href = "/distribution";
     }
   }
@@ -87,17 +87,39 @@ function AddOrder() {
     e.preventDefault();
     const errors = {};
     const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
-
+    
 
     if (!regex_comments.test(formData.Comments)) {
       errors.Comments = "The comments contains an SQL keyword !"
     }
     setFormErrors(errors)
     if (!errors.Comments) {
-        handleSubmit()
+      quantityCheck()
     }
     return;
-}
+  }
+
+  const quantityCheck = async () => {
+    let ild = await Axios.post("http://localhost:3001/distribution/validation", { Items: items, Location_id: formData.Location });
+    var result = []
+    for (let o1 of ild.data) {
+      for (let o2 of items) {
+        if (o1.Item_id == o2.Item_id) {
+          if (o1.Quantity < o2.Quantity) {
+            result.push(o1.Item);
+          }
+        }
+      }
+    }
+    
+    if (result.length == 0) {
+      handleSubmit()
+      return
+    }
+    else {
+      alert(`There is not a sufficient amount of ${result.toString()} to complete the transfer`)
+    }
+  }
 
 
   const handleSubmit = async () => {
@@ -108,11 +130,11 @@ function AddOrder() {
       }
     });
 
-    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Items: items, Location_id: formData.Location  })
+    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Items: items, Location_id: formData.Location })
     let OID_response = await Axios.get("http://localhost:3001/distribution/find_id");
-    let V_response = await Axios.post("http://localhost:3001/distribution/find_value", {Items: items })
-    await Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
-    await Axios.put("http://localhost:3001/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
+    let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Items: items })
+    await Axios.post("http://localhost:3001/distribution/track", { Order_id: OID_response.data[0].Order_id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data });
+    await Axios.put("http://localhost:3001/distribution/take", { Items: items, ItemLocationFK: IL_response.data });
     window.location.href = "/distribution";
 
   }

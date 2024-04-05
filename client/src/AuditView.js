@@ -12,13 +12,13 @@ function AuditView() {
 
     const [auditList, setAuditList] = React.useState([])
     const [records, setRecords] = React.useState([])
+    const [filters, setFilters] = React.useState({
+        Date: ""
+
+    })
 
 
-    const [state, setState] = React.useState([{
-        startDate: new Date(),
-        endDate: addDays(new Date(), 30),
-        key: 'selection'
-    }])
+
 
     useEffect(() => {
         Axios.get("http://localhost:3001/audit").then((response) => {
@@ -32,14 +32,32 @@ function AuditView() {
         navigate(`/audit/${id}`)
     }
 
+    function handleChange(event) {
+        setFilters(prevFilters => {
+            return {
+                ...prevFilters,
+                [event.target.name]: event.target.value
+            }
+        })
+    }
+
+    function clearFilters(e) {
+        e.preventDefault();
+
+        setFilters({
+            Date: ""
+        })
+        setRecords(auditList)
+    }
+
 
     function handleSubmit(e) {
         e.preventDefault();
         var temp = auditList;
 
 
-        if (state != null) {
-            temp = temp.filter(f => new Date(f.Date) >= state[0].startDate && new Date(f.Date) <= state[0].endDate)
+        if (filters.Date != "") {
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date))
         }
 
 
@@ -51,12 +69,15 @@ function AuditView() {
 
             <form onSubmit={handleSubmit}>
 
-
-                <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                <label>
+                    Date Range
+                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                </label>
 
 
 
                 <input type="submit" value="Filter" />
+                <button onClick={clearFilters}>Clear</button>
             </form>
             <button><Link to="/audit/new">Add</Link></button>
             <table>
