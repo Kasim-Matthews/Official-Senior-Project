@@ -1,11 +1,6 @@
 const mysql = require('mysql2');
-const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306
-});
+const dbconfig = require('../database')
+var sb = mysql.createPool(dbconfig);
 
 const vendor_index = (req, res) => {
     const sqlGet = `SELECT Name, Email, PhoneNumber as Phone, ContactName as Contact, Partner_id FROM sql5669328.partner 

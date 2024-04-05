@@ -1,11 +1,6 @@
 const mysql = require('mysql2');
-const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306
-});
+const dbconfig = require('../database')
+var sb = mysql.createPool(dbconfig);
 
 const drive_index = (req, res) => {
     const sqlGet = `SELECT p.Name as Drive, COUNT(ii.FKItemLocation) as Variety, SUM(ii.Value) as Total, SUM(ii.Quantity) as Quantity, p.Partner_id

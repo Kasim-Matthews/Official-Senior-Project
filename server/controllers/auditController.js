@@ -1,11 +1,7 @@
 const mysql = require('mysql2');
-const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306
-});
+const dbconfig = require('../database')
+var sb = mysql.createPool(dbconfig);
+
 
 const index = (req, res) => {
     const sqlGet = `SELECT a.Audit_id, CAST(a.Date as char(10)) as Date, COUNT(IF(ai.Changed IS null, 1, NULL)) as Affected

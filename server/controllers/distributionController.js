@@ -1,30 +1,41 @@
 const mysql = require('mysql2');
-const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306
-});
+const dbconfig = require('../database')
+var sb = mysql.createPool(dbconfig);
 
 const distribution_index = (req, res) => {
-    const sqlGet = `
-    select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name, SUM(oi.Quantity) as Total, l.Name as Location
-    from sql5669328.order o
-    join sql5669328.partner p on o.Partner_id = p.Partner_id 
-    join sql5669328.orderitems oi on o.Order_id = oi.Order_id
-    join sql5669328.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
-    join sql5669328. location l on l.Location_id = il.Location_id
-    group by o.Order_id, l.Name;
-    `;
-    sb.query(sqlGet, (err, result) => {
-        if(err){
-            console.log(err)
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
         }
-        res.send(result);
-        res.end()
-        return;
+        else {
+            console.log('Connected!');
+
+            const sqlGet = `
+            select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name, SUM(oi.Quantity) as Total, l.Name as Location
+            from sql5669328.order o
+            join sql5669328.partner p on o.Partner_id = p.Partner_id 
+            join sql5669328.orderitems oi on o.Order_id = oi.Order_id
+            join sql5669328.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
+            join sql5669328. location l on l.Location_id = il.Location_id
+            group by o.Order_id, l.Name;
+            `;
+            tempCont.query(sqlGet, (err, result) => {
+                tempCont.release();
+                if (err) {
+                    console.log(err)
+                }
+                else {
+                    res.send(result);
+                    res.end()
+                    return;
+                }
+
+            })
+        }
     })
+
+
 }
 
 const distribution_creation = (req, res) => {
@@ -249,7 +260,7 @@ const distribution_find_value = (req, res) => {
         from sql5669328.item i
         WHERE i.Item_id IN (?);`
 
-        
+
         sb.query(sqlGet, [ids], (err, result, fields, query) => {
             console.log(err);
             res.send(result);
@@ -277,22 +288,22 @@ const distribution_track = (req, res) => {
     let Values = req.body.Values
     let Order_id = req.body.Order_id
     let ItemLocationFK = req.body.ItemLocationFK
-    
-    
-    
+
+
+
     if (typeof Items != "object" && typeof Values != "object" && typeof Order_id != "number" && typeof ItemLocationFK != "object") {
         res.send("Invalid")
         res.end();
         return;
     }
-    
+
     if (Items && Values && Order_id && ItemLocationFK) {
         const sqlInsert = `INSERT INTO sql5669328.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES (?,?,?,?);`
         for (var i = 0; i < Items.length; i++) {
             let Value = Items[i].Quantity * Values[i].FairMarketValue
             sb.query(sqlInsert, [Order_id, Items[i].Quantity, Value, ItemLocationFK[i].ItemLocation_id], (err, result) => {
                 console.log(err);
-    
+
             })
         }
         res.send();
