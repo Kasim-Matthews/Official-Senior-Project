@@ -10,6 +10,9 @@ const sb = mysql.createPool({
 const item_index = (req, res) => {
     const sqlGet = "SELECT * FROM sql5669328.item WHERE DeletedAt IS NULL;"
     sb.query(sqlGet, (err, result) => {
+        if(err){
+            console.log(err)
+        }
         res.send(result);
         res.end();
         return;
