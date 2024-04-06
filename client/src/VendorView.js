@@ -6,15 +6,24 @@ import { useNavigate, Link } from "react-router-dom";
 function VendorView() {
 
     const [vendorList, setVendorList] = useState([])
+    const [records, setRecords] = React.useState([])
+    const [nonActive, setNonActive] = React.useState(false)
     const navigate = useNavigate();
 
     const handleRemove = (id, Name) => {
-        if (window.confirm(`Are you sure you want to delete ${Name} from the partner list?`) == true) {
+        if (window.confirm(`Are you sure you want to delete ${Name} from the vendor list?`) == true) {
             let date = new Date().toLocaleDateString();
             Axios.put(`http://localhost:3001/vendor/remove/${id}`, { date: date });
             window.location.reload(false);
         }
 
+    }
+
+    const handleReactivate = (id, Name) => {
+        if (window.confirm(`Are you sure you want to reactivate ${Name} from the vendor list?`) == true) {
+            Axios.put(`http://localhost:3001/vendor/reactivate/${id}`);
+            window.location.reload(false);
+        }
     }
 
     const handleEdit = (id) => {
@@ -25,14 +34,41 @@ function VendorView() {
         navigate(`/vendor/${id}`)
     }
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        var temp = vendorList;
+
+        if (nonActive) {
+            setRecords(temp)
+        }
+
+        else {
+            setRecords(temp.filter(function (currentObject) {
+                return typeof (currentObject.DeletedAt) == "object";
+            }))
+        }
+    }
+
     useEffect(() => {
         Axios.get("http://localhost:3001/vendor").then((response) => {
             setVendorList(response.data)
+            setRecords(response.data.filter(function (currentObject) {
+                return typeof (currentObject.DeletedAt) == "object";
+            }))
         })
     }, [])
 
     return (
         <div>
+            <form onSubmit={handleSubmit}>
+                <div style={{ display: "flex" }}>
+
+                    <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+                    <label htmlFor="non-active" >Also include inactive items</label>
+
+                </div>
+                <input type="Submit" />
+            </form>
             <button><Link to="/vendor/new">Add</Link></button>
             <table>
                 <thead>
@@ -45,7 +81,7 @@ function VendorView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {vendorList.map((val) => {
+                    {records.map((val) => {
                         return (
                             <tr>
                                 <td>{val.Name}</td>
@@ -53,7 +89,7 @@ function VendorView() {
                                 <td>{val.Phone}</td>
                                 <td>{val.Email}</td>
                                 <td>
-                                    <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button>
+                                {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
                                     <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
                                     <button onClick={() => handleView(val.Partner_id)}>View</button>
                                 </td>

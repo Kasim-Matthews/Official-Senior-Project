@@ -39,7 +39,6 @@ function AddPartner() {
     await Axios.post("http://localhost:3001/partner/new", {
       name: formData.Name,
       email: formData.Email,
-      type: formData.Type
     }, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

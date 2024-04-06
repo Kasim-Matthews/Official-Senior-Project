@@ -50,6 +50,7 @@ import AddAudit from './AddAudit';
 import AuditView from './AuditView';
 import ViewAudit from './OneAudit';
 import ViewLocation from './OneLocation';
+import ErrorHandler from './ErrorHandler';
 
 export class Application extends React.Component {
     render() {
@@ -58,6 +59,7 @@ export class Application extends React.Component {
                 <Routes>
                     <Route path="/" element={<App />} />
                     <Route path="/Dashboard" element={<Dashboard />} />
+                    <Route path="/error" element={<ErrorHandler />} />
 
                     <Route path="/distribution" element={<Order />} />
                     <Route path='/distribution/:id' element={<ViewOrder />} />
