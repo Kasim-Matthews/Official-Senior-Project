@@ -50,6 +50,7 @@ import ProductDriveView from './ProductDriveView';
 import AddAudit from './AddAudit';
 import AuditView from './AuditView';
 import ViewAudit from './OneAudit';
+import ErrorHandler from './ErrorHandler';
 
 export class Application extends React.Component {
     render() {
@@ -60,6 +61,7 @@ export class Application extends React.Component {
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
+                    <Route path="/error" element={<ErrorHandler />} />
                     
                     <Route path="/distribution" element={<Order />} />
                     <Route path='/distribution/:id' element={<ViewOrder />} />
