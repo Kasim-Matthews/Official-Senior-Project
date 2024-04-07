@@ -12,13 +12,7 @@ const distribution_index = (req, res) => {
             console.log('Connected!');
 
             const sqlGet = `
-            select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name, SUM(oi.Quantity) as Total, l.Name as Location
-            from sql5669328.order o
-            join sql5669328.partner p on o.Partner_id = p.Partner_id 
-            join sql5669328.orderitems oi on o.Order_id = oi.Order_id
-            join sql5669328.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
-            join sql5669328.location l on l.Location_id = il.Location_id
-            group by o.Order_id, l.Name;
+            SELECT 1;
             `;
             tempCont.query(sqlGet, (err, result) => {
                 tempCont.release();
@@ -38,6 +32,15 @@ const distribution_index = (req, res) => {
 
 
 }
+/* 
+select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name, SUM(oi.Quantity) as Total, l.Name as Location
+            from sql5669328.order o
+            join sql5669328.partner p on o.Partner_id = p.Partner_id 
+            join sql5669328.orderitems oi on o.Order_id = oi.Order_id
+            join sql5669328.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
+            join sql5669328.location l on l.Location_id = il.Location_id
+            group by o.Order_id, l.Name;
+*/
 
 const distribution_creation = (req, res) => {
     let Comments = req.body.Comments;

@@ -183,8 +183,7 @@ function Order() {
         <input type="submit" value="Filter" />
       </form>
       <button><Link to="/distribution/new">Add</Link></button>
-      <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
-      <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
+      
       <button><Link to="/Dashboard">Dasboard</Link></button>
     </div>
 
@@ -195,3 +194,7 @@ export default Order;
 
 
 
+/* 
+<OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
+      <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
+*/
