@@ -44,6 +44,8 @@ const distribution_creation = (req, res) => {
     let RequestDate = req.body.RequestDate;
     let CompletedDate = req.body.CompletedDate;
     let Partner_id = req.body.Partner_id;
+    let Items = req.body.Items
+    let Location = req.body.Location_id
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -53,23 +55,36 @@ const distribution_creation = (req, res) => {
 
         else {
             console.log('Connected!')
-            if (typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number') {
+            if (typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number' && typeof Items != "object" && typeof Location != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
 
-            if (DeliveryMethod && RequestDate && CompletedDate && Partner_id) {
-                const sqlInsert = "INSERT INTO claire.order (Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id) VALUES (?,?,?,?,?,?);"
+            if (DeliveryMethod && RequestDate && CompletedDate && Partner_id && Items && Location) {
+                let sqlInsert = "INSERT INTO claire.order (Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id) VALUES (?,?,?,?,?,?);"
                 tempCont.query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id], (err, result) => {
-                    tempCont.release()
                     if (err) {
                         console.log(err);
                     }
                     else {
                         console.log('Distribution log created')
-                        res.end()
                         return;
+                    }
+                }).then(() => {
+                    let sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,((SELECT FairMarketValue from claire.item WHERE Item_id = 1) * ?),(SELECT ItemLocation_id from claire.itemlocation WHERE Item_id = ? AND Location_id = ?))`
+                    for (var i = 0; i < Items.length; i++) {
+                        tempCont.query(sqlInsert, [Items[i].Quantity, Items[i].Quantity, Items[i].Item_id, Location], (err, result) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                            else {
+                                console.log(`${i + 1} out of ${Items.length} has been logged`)
+                                return;
+                            }
+                        }).then(() => {
+                            
+                        })
                     }
                 })
             }
