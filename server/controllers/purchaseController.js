@@ -162,7 +162,6 @@ const find_id = (req, res) => {
 }
 
 const track = (req, res) => {
-    let Intake_id = req.body.Intake_id;
     let Items = req.body.Items;
     let Value = req.body.Total;
     let FKItemLocation = req.body.FKItemLocation;
@@ -173,16 +172,16 @@ const track = (req, res) => {
             console.log('Error')
         }
         else {
-            if (typeof Intake_id != "number" && typeof Items != "object" && typeof Value != "number" && typeof FKItemLocation != "object") {
+            if (typeof Items != "object" && typeof Value != "number" && typeof FKItemLocation != "object") {
                 res.send("Invalid")
                 res.end();
                 return
             }
 
-            if (Intake_id && Items && Value && FKItemLocation) {
-                const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);"
+            if (Items && Value && FKItemLocation) {
+                const sqlInsert = "INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES ((SELECT MAX(Intake_id) as Intake_id FROM claire.intake),?,?,?);"
                 for (var i = 0; i < Items.length; i++) {
-                    tempCont.query(sqlInsert, [Intake_id, Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
+                    tempCont.query(sqlInsert, [Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
                         if (err) {
                             console.log(err);
                             return

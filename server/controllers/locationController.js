@@ -412,7 +412,6 @@ const last = (req, res) => {
 }
 
 const pair = (req, res) => {
-    let Location_id = req.body.Location_id;
     let Items = req.body.Items;
     
     sb.getConnection(function (error, tempCont){
@@ -421,15 +420,15 @@ const pair = (req, res) => {
             console.log('Error')
         }
         else{
-            if (typeof Location_id != "number" && typeof Items != "object") {
+            if (typeof Items != "object") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
             if (Location_id, Items) {
                 for (let item in Items) {
-                    const sqlInsert = `INSERT INTO claire.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
-                    tempCont.query(sqlInsert, [Location_id, Items[item].Item_id], (err, result) => {
+                    const sqlInsert = `INSERT INTO claire.itemlocation (Location_id, Item_id, Quantity) VALUES ((SELECT Location_id as Type from claire.location ORDER BY Location_id DESC Limit 1),?,0);`
+                    tempCont.query(sqlInsert, [Items[item].Item_id], (err, result) => {
                         if (err) {
                             console.log(err);
                             return
@@ -452,43 +451,11 @@ const pair = (req, res) => {
 
 }
 
-const adjustment = (req, res) => {
-    
-    sb.getConnection(function (error, tempCont){
-        if(error){
-            tempCont.release();
-            console.log('Error')
-        }
-        else{
-            const sqlGet = `SELECT pt.PartnerType_id
-            FROM claire.partnertype pt
-            WHERE pt.Type = "Adjustment";`
-        
-            tempCont.query(sqlGet, (err, result) => {
-                tempCont.release()
-                if (err) {
-                    console.log(err)
-                    return
-                }
 
-                else {
-                    console.log('Adjustment data found')
-                    res.send(result);
-                    res.end()
-                    return
-                }
-                
-            })
-        }
-    })
-
-}
 
 const partner = (req, res) => {
     let name = req.body.name
     let address = req.body.address
-    let type = req.body.Type
-    let Location = req.body.Location
 
     sb.getConnection(function (error, tempCont){
         if(error){
@@ -496,15 +463,15 @@ const partner = (req, res) => {
             console.log('Error')
         }
         else{
-            if(typeof name != " string" && typeof address != "string" && typeof type != "string" && typeof Location != "number"){
+            if(typeof name != " string" && typeof address != "string"){
                 res.send("Invalid")
                 res.end();
                 return;
             }
         
-            if(name && address && type && Location){
-                const sqlInsert = `INSERT INTO claire.partner (Name, Address, Type, Location) VALUES (?,?,?,?);`
-                tempCont.query(sqlInsert, [name, address, type, Location], (err, result) =>{
+            if(name && address){
+                const sqlInsert = `INSERT INTO claire.partner (Name, Address, Location, Type) VALUES (?,?,(SELECT Location_id as Type from claire.location ORDER BY Location_id DESC Limit 1),(SELECT PartnerType_id as Type from claire.partnertype WHERE Type = 'Adjustment'));`
+                tempCont.query(sqlInsert, [name, address], (err, result) =>{
                     tempCont.release()
 
                     if (err) {
@@ -536,7 +503,6 @@ module.exports = {
     location_edit,
     last,
     pair,
-    adjustment,
     partner,
     location_reactivate,
     anything_else,

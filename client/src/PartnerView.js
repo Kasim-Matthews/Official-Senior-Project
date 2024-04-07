@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-
+import ErrorHandler from "./ErrorHandler";
 
 function PartnerView() {
 
@@ -57,6 +57,14 @@ function PartnerView() {
             }))
         })
     }, [])
+
+
+    if (partnerList[0] == "error"){
+        return(
+            <ErrorHandler />
+        )
+    }
+
 
     return (
         <div>

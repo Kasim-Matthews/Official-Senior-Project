@@ -152,11 +152,10 @@ function AddIntake() {
   const submitDonation = async () => {
     await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
 
-    let IID_response = await Axios.get("http://localhost:3001/intake/find_id");
     let V_response = await Axios.post("http://localhost:3001/intake/find_value", { Items: items })
     let IL_response = await Axios.post("http://localhost:3001/intake/location", { Items: items, Location_id: formData.Location })
 
-    await Axios.post("http://localhost:3001/intake/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
+    await Axios.post("http://localhost:3001/intake/track", { Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
     await Axios.put("http://localhost:3001/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
     window.location.href = "/intake";
   }

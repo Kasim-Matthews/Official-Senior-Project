@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import PurchasePosts from "./components/PurchasePosts";
 import Pagination from "./components/Pagination";
+import ErrorHandler from "./ErrorHandler";
 
 
 function Purchase() {

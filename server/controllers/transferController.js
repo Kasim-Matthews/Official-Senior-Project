@@ -269,7 +269,6 @@ const validation = (req, res) => {
 const track_intake = (req, res) => {
     let Items = req.body.Items
     let Values = req.body.Values
-    let Intake_id = req.body.Intake_id
     let FKItemLocation = req.body.FKItemLocation
 
     sb.getConnection(function (error, tempCont){
@@ -278,17 +277,17 @@ const track_intake = (req, res) => {
             console.log('Error')
         }
         else{
-            if (typeof Items != "object" && typeof Values != "object" && typeof Intake_id != "number" && typeof FKItemLocation != "object") {
+            if (typeof Items != "object" && typeof Values != "object" && typeof FKItemLocation != "object") {
                 res.send("Invalid")
                 res.end();
                 return;
             }
         
-            if (Items && Values && Intake_id && FKItemLocation) {
-                const sqlInsert = `INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);`
+            if (Items && Values && FKItemLocation) {
+                const sqlInsert = `INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES ((SELECT MAX(Intake_id) as Intake_id FROM claire.intake),?,?,?);`
                 for (var i = 0; i < Items.length; i++) {
                     let Value = Items[i].Quantity * Values[i].FairMarketValue
-                    tempCont.query(sqlInsert, [Intake_id.Intake_id, Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
+                    tempCont.query(sqlInsert, [Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
                         if (err) {
                             console.log(err);
                             return

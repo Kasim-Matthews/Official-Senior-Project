@@ -105,7 +105,7 @@ const log = (req, res) => {
 
 const create = (req, res) => {
     let Audits = req.body.Audits
-    let audit = req.body.audit
+
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -113,19 +113,19 @@ const create = (req, res) => {
             console.log('Error')
         }
         else {
-            if (typeof Audits != "object" && typeof audit != "number") {
+            if (typeof Audits != "object") {
                 res.send("Invalid");
                 res.end();
                 return
 
             }
 
-            if (Audits && audit) {
-                const sqlInsert = `INSERT INTO claire.audititems (ItemLocation, Past, Changed, Audit) VALUES (?,?,?,?)`
+            if (Audits) {
+                const sqlInsert = `INSERT INTO claire.audititems (ItemLocation, Past, Changed, Audit) VALUES (?,?,?,(SELECT Audit_id from claire.auditORDER BY Audit_id DESC Limit 1))`
 
                 for (var i = 0; i < Audits.length; i++) {
                     if (Audits[i].Changed) {
-                        tempCont.query(sqlInsert, [Audits[i].ItemLocation_id, Audits[i].Past, Audits[i].Changed, audit], (err, result) => {
+                        tempCont.query(sqlInsert, [Audits[i].ItemLocation_id, Audits[i].Past, Audits[i].Changed], (err, result) => {
                             if (err) {
                                 console.log(err);
                             }
@@ -141,8 +141,8 @@ const create = (req, res) => {
                     }
 
                     else {
-                        const sqlInsert = `INSERT INTO claire.audititems (ItemLocation, Past, Audit) VALUES (?,?,?)`
-                        tempCont.query(sqlInsert, [Audits[i].ItemLocation_id, Audits[i].Past, audit], (err, result) => {
+                        const sqlInsert = `INSERT INTO claire.audititems (ItemLocation, Past, Audit) VALUES (?,?,(SELECT Audit_id from claire.auditORDER BY Audit_id DESC Limit 1))`
+                        tempCont.query(sqlInsert, [Audits[i].ItemLocation_id, Audits[i].Past], (err, result) => {
                             if (err) {
                                 console.log(err);
                             }

@@ -145,11 +145,10 @@ function AddTransfer() {
         await Axios.put('http://localhost:3001/transfer/give', {Location:formData.To, Items: items})
         await Axios.put('http://localhost:3001/transfer/take', {Location:formData.From.Location, Items: items})
         await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
-        let id = await Axios.get("http://localhost:3001/intake/find_id");
         let ild = await Axios.post("http://localhost:3001/transfer/ild", {Items: items, Location: formData.To});
         let Values = await Axios.post('http://localhost:3001/transfer/values', {Items: items});
 
-       await Axios.post('http://localhost:3001/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
+       await Axios.post('http://localhost:3001/transfer/track', {Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
 
     }
 

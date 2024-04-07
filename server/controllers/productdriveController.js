@@ -105,7 +105,6 @@ const drive_list = (req, res) => {
 
 const drive_create = (req, res) => {
     let Name = req.body.name;
-    let Type = req.body.type;
 
     sb.getConnection(function (error, tempCont){
         if(error){
@@ -119,9 +118,9 @@ const drive_create = (req, res) => {
                 return;
             }
         
-            if (Name && Type) {
-                const sqlInsert = "INSERT INTO claire.partner (Name, Type) VALUES (?,?);"
-                tempCont.query(sqlInsert, [Name, Type], (err, result) => {
+            if (Name) {
+                const sqlInsert = "INSERT INTO claire.partner (Name, Type) VALUES (?,(SELECT PartnerType_id as Type from claire.partnertype WHERE Type = 'Product Drive'));"
+                tempCont.query(sqlInsert, [Name], (err, result) => {
                     tempCont.release()
                     if (err) {
                         console.log(err);

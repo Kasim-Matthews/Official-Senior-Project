@@ -16,6 +16,8 @@ const partner_index = (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send(["error"])
+                    res.end();
                     return
                 }
 
@@ -131,15 +133,15 @@ const partner_create = (req, res) => {
             console.log('Error')
         }
         else {
-            if (typeof Name != "string" && typeof Email != "string" && typeof Type != "number") {
+            if (typeof Name != "string" && typeof Email != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
 
-            if (Name && Email && Type) {
+            if (Name && Email) {
                 const sqlInsert = "INSERT INTO claire.partner (Name, Email, Type) VALUES (?,?,(SELECT PartnerType_id as Type from claire.partnertype WHERE Type = 'Partner'));"
-                tempCont.query(sqlInsert, [Name, Email, Type], (err, result) => {
+                tempCont.query(sqlInsert, [Name, Email], (err, result) => {
                     tempCont.release()
                     if (err) {
                         console.log(err);

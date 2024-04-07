@@ -104,8 +104,7 @@ function AddPurchase() {
     const handleSubmit = async () => {
         await Axios.post("http://localhost:3001/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
         let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Items: items, Location_id: formData.Location })
-        let IID_response = await Axios.get("http://localhost:3001/purchase/find_id");
-        await Axios.post("http://localhost:3001/purchase/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
+        await Axios.post("http://localhost:3001/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
         await Axios.put("http://localhost:3001/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
         window.location.href = "/purchase";
 

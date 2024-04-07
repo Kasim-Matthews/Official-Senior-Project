@@ -91,7 +91,6 @@ const dsite_list = (req, res) => {
 const dsite_create = (req, res) => {
     let Name = req.body.name;
     let Address = req.body.address;
-    let Type = req.body.type;
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -99,15 +98,15 @@ const dsite_create = (req, res) => {
             console.log('Error')
         }
         else {
-            if (typeof Name != "string" && typeof Address != "string" && typeof Type != "number") {
+            if (typeof Name != "string" && typeof Address != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
 
-            if (Name && Address && Type) {
-                const sqlInsert = "INSERT INTO claire.partner (Name, Address, Type) VALUES (?,?,?);"
-                tempCont.query(sqlInsert, [Name, Address, Type], (err, result) => {
+            if (Name && Address) {
+                const sqlInsert = "INSERT INTO claire.partner (Name, Address, Type) VALUES (?,?,(SELECT PartnerType_id as Type from claire.partnertype WHERE Type = 'Donation Site'));"
+                tempCont.query(sqlInsert, [Name, Address], (err, result) => {
                     tempCont.release();
                     if (err) {
                         console.log(err);

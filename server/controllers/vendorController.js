@@ -97,7 +97,6 @@ const vendor_create = (req, res) => {
     let Phone = req.body.phone;
     let Email = req.body.email;
     let Contact = req.body.contact;
-    let Type = req.body.type;
 
     sb.getConnection(function (error, tempCont){
         if(error){
@@ -105,15 +104,15 @@ const vendor_create = (req, res) => {
             console.log('Error')
         }
         else{
-            if (typeof Name != "string" && typeof Type != "number" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
+            if (typeof Name != "string" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
         
-            if (Name && Type) {
-                const sqlInsert = "INSERT INTO claire.partner (Name, Email, PhoneNumber, ContactName, Type) VALUES (?,?,?,?,?);"
-                tempCont.query(sqlInsert, [Name, Email, Phone, Contact, Type], (err, result) => {
+            if (Name) {
+                const sqlInsert = "INSERT INTO claire.partner (Name, Email, PhoneNumber, ContactName, Type) VALUES (?,?,?,?,(SELECT PartnerType_id as Type from claire.partnertype WHERE Type = 'Vendor'));"
+                tempCont.query(sqlInsert, [Name, Email, Phone, Contact], (err, result) => {
                     tempCont.release()
                     if (err) {
                         console.log(err);

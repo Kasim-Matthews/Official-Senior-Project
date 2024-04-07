@@ -13,11 +13,11 @@ const distribution_index = (req, res) => {
 
             const sqlGet = `
             select o.Comments, o.Status, o.DeliveryMethod, Cast(o.RequestDate as char(10)) AS RequestDate, CAST(o.CompletedDate as char(10))AS CompletedDate, o.Order_id, p.Name, SUM(oi.Quantity) as Total, l.Name as Location
-            from sql5669328.order o
-            join sql5669328.partner p on o.Partner_id = p.Partner_id 
-            join sql5669328.orderitems oi on o.Order_id = oi.Order_id
-            join sql5669328.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
-            join sql5669328. location l on l.Location_id = il.Location_id
+            from claire.order o
+            join claire.partner p on o.Partner_id = p.Partner_id 
+            join claire.orderitems oi on o.Order_id = oi.Order_id
+            join claire.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
+            join claire.location l on l.Location_id = il.Location_id
             group by o.Order_id, l.Name;
             `;
             tempCont.query(sqlGet, (err, result) => {
@@ -487,7 +487,6 @@ const distribution_find_id = (req, res) => {
 const distribution_track = (req, res) => {
     let Items = req.body.Items
     let Values = req.body.Values
-    let Order_id = req.body.Order_id
     let ItemLocationFK = req.body.ItemLocationFK
 
     sb.getConnection(function (error, tempCont) {
@@ -496,17 +495,17 @@ const distribution_track = (req, res) => {
             console.log('Error')
         }
         else {
-            if (typeof Items != "object" && typeof Values != "object" && typeof Order_id != "number" && typeof ItemLocationFK != "object") {
+            if (typeof Items != "object" && typeof Values != "object" && typeof ItemLocationFK != "object") {
                 res.send("Invalid")
                 res.end();
                 return;
             }
 
-            if (Items && Values && Order_id && ItemLocationFK) {
-                const sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES (?,?,?,?);`
+            if (Items && Values && ItemLocationFK) {
+                const sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,?,?);`
                 for (var i = 0; i < Items.length; i++) {
                     let Value = Items[i].Quantity * Values[i].FairMarketValue
-                    tempCont.query(sqlInsert, [Order_id, Items[i].Quantity, Value, ItemLocationFK[i].ItemLocation_id], (err, result) => {
+                    tempCont.query(sqlInsert, [Items[i].Quantity, Value, ItemLocationFK[i].ItemLocation_id], (err, result) => {
 
                         if (err) {
                             console.log(err);
