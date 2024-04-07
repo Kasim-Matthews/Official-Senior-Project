@@ -31,7 +31,7 @@ function AddDrive(){
     }
 
     async function handleSubmit() {
-        await Axios.post("http://localhost:3306/productdrive/new", {
+        await Axios.post("http://localhost:3001/productdrive/new", {
           name: formData.Name,
           type: formData.Type
         }, {

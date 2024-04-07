@@ -8,13 +8,13 @@ function Location(){
     const [locationList, setLocationList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location").then((response) =>{
+        Axios.get("http://localhost:3001/location").then((response) =>{
             setLocationList(response.data);
         })
     })
 
     const handleRemove = (id) =>{
-        Axios.delete(`http://localhost:3306/location/remove/${id}`);
+        Axios.delete(`http://localhost:3001/location/remove/${id}`);
     }
 
     const handleEdit = (id) => {

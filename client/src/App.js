@@ -21,7 +21,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const register = () => {
-    Axios.post('http://localhost:3306/register', {
+    Axios.post('http://localhost:3001/register', {
       username: usernameReg,
       password: passwordReg,
     }).then((response) => {
@@ -30,7 +30,7 @@ function App() {
   }
 
   const login = () => {
-    Axios.post('http://localhost:3306/login', {
+    Axios.post('http://localhost:3001/login', {
       username: username,
       password: password,
     }).then((response) => {

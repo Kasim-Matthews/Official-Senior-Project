@@ -21,7 +21,7 @@ function AuditView() {
     }])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/audit").then((response) => {
+        Axios.get("http://localhost:3001/audit").then((response) => {
             setAuditList(response.data);
             setRecords(response.data);
         })

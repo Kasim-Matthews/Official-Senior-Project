@@ -10,7 +10,7 @@ function ViewTransfer() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/transfer/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/transfer/${id}/view`).then((response) => {
             setRecord(response.data)
         });
     }, [])

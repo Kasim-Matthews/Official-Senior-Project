@@ -31,7 +31,7 @@ function PartnerView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the partner list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3306/partner/remove/${id}`, { date: date });
+            Axios.put(`http://localhost:3001/partner/remove/${id}`, { date: date });
             window.location.reload(false);
         }
 
@@ -62,13 +62,13 @@ function PartnerView() {
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the partner list?`) == true) {
-            Axios.put(`http://localhost:3306/partner/reactivate/${id}`);
+            Axios.put(`http://localhost:3001/partner/reactivate/${id}`);
             window.location.reload(false);
         }
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/partner").then((response) => {
+        Axios.get("http://localhost:3001/partner").then((response) => {
             setPartnerList(response.data)
             setRecords(response.data.filter(function (currentObject) {
                 return typeof (currentObject.DeletedAt) == "object";

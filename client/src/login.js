@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const login = () => {
-    Axios.post('http://localhost:3306/login', {
+    Axios.post('http://localhost:3001/login', {
       email: emailLog,
       password: passwordLog,
     }).then((response) => {

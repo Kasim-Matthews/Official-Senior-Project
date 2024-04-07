@@ -32,7 +32,7 @@ const Register = () => {
         return;
     }
 
-    Axios.post('http://localhost:3306/register', {
+    Axios.post('http://localhost:3001/register', {
       email: emailReg,
       password: passwordReg,
     }).then((response) => {

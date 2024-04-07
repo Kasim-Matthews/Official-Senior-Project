@@ -10,7 +10,7 @@ function EditDrive() {
 
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/productdrive/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3001/productdrive/${id}/edit`).then((response) => {
       response.data.map((key, value) => { setFormData(key) });
     })
   }, [])
@@ -40,7 +40,7 @@ function EditDrive() {
   }
 
   async function handleSubmit() {
-    await Axios.put(`http://localhost:3306/productdrive/${id}/update`, {
+    await Axios.put(`http://localhost:3001/productdrive/${id}/update`, {
       name: formData.Name
     }, {
       headers: {

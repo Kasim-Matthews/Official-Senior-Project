@@ -21,7 +21,7 @@ function EditLocation() {
   }
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/location/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3001/location/${id}/edit`).then((response) => {
       response.data.map((key, value) => { setFormData(key) });
     })
   }, [])
@@ -51,7 +51,7 @@ function EditLocation() {
 
   function handleSubmit() {
 
-    Axios.put(`http://localhost:3306/location/${id}/update`, {
+    Axios.put(`http://localhost:3001/location/${id}/update`, {
       name: formData.Name,
       Address: formData.Address
     }, {

@@ -10,13 +10,13 @@ function PDFView() {
     const [itemList, setItemList] = React.useState([])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/distribution/${id}/print`).then((response) => {
+        Axios.get(`http://localhost:3001/distribution/${id}/print`).then((response) => {
             setRecord(response.data[0])
         });
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/distribution/${id}/itemlist`).then((response) => {
+        Axios.get(`http://localhost:3001/distribution/${id}/itemlist`).then((response) => {
             setItemList(response.data)
         });
     }, [])

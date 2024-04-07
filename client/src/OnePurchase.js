@@ -9,7 +9,7 @@ function ViewPurchase() {
     const [itemList, setItemList] = React.useState([])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/purchase/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/purchase/${id}/view`).then((response) => {
             setRecord(response.data[0])
             setItemList(response.data)
         });
