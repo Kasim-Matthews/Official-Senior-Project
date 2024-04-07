@@ -24,6 +24,7 @@ const distribution_index = (req, res) => {
                 tempCont.release();
                 if (err) {
                     console.log(err)
+                    console.log("here")
                 }
                 else {
                     res.send(result);
