@@ -129,11 +129,7 @@ function AddOrder() {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
-
-    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Items: items, Location_id: formData.Location })
-    let V_response = await Axios.post("http://localhost:3001/distribution/find_value", { Items: items })
-    await Axios.post("http://localhost:3001/distribution/track", { Items: items, Values: V_response.data, ItemLocationFK: IL_response.data });
-    await Axios.put("http://localhost:3001/distribution/take", { Items: items, ItemLocationFK: IL_response.data });
+    await Axios.put("http://localhost:3001/distribution/take", { Items: items, Location_id: formData.Location  });
     window.location.href = "/distribution";
 
   }

@@ -63,15 +63,7 @@ const distribution_creation = (req, res) => {
 
             if (DeliveryMethod && RequestDate && CompletedDate && Partner_id && Items && Location) {
                 let sqlInsert = "INSERT INTO claire.order (Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id) VALUES (?,?,?,?,?,?);"
-                tempCont.query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id], (err, result) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                    else {
-                        console.log('Distribution log created')
-                        return;
-                    }
-                }).then(() => {
+                tempCont.promise().query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id]).then(() => {
                     let sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,((SELECT FairMarketValue from claire.item WHERE Item_id = 1) * ?),(SELECT ItemLocation_id from claire.itemlocation WHERE Item_id = ? AND Location_id = ?))`
                     for (var i = 0; i < Items.length; i++) {
                         tempCont.query(sqlInsert, [Items[i].Quantity, Items[i].Quantity, Items[i].Item_id, Location], (err, result) => {
@@ -82,12 +74,15 @@ const distribution_creation = (req, res) => {
                                 console.log(`${i + 1} out of ${Items.length} has been logged`)
                                 return;
                             }
-                        }).then(() => {
-                            
                         })
                     }
+                }).catch(error => {
+                    console.log(error)
+                    throw error
                 })
             }
+            tempCont.release()
+            return
         }
     })
 }
@@ -546,39 +541,56 @@ const distribution_track = (req, res) => {
 
 
 const distribution_update_item = (req, res) => {
-    let ItemLocationFK = req.body.ItemLocationFK;
     let Items = req.body.Items;
+    let Location = req.body.Location_id
     sb.getConnection(function (error, tempCont) {
         if (error) {
             tempCont.release();
             console.log('Error')
         }
         else {
-            if (typeof ItemLocationFK != "object" && typeof Items != "object") {
+            if (typeof Location != "string" && typeof Items != "object") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
 
-            if (ItemLocationFK && Items) {
-                const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= Quantity - ? WHERE ItemLocation_id = ?;"
-                for (var i = 0; i < Items.length; i++) {
-                    tempCont.query(sqlUpdate, [Items[i].Quantity, ItemLocationFK[i].ItemLocation_id], (err, result) => {
+            if (Location && Items) {
 
-                        if (err) {
-                            console.log(err);
-                        }
+                let ids = []
+                Items.forEach(element => {
+                    ids.push(element.Item_id);
+                });
 
-                        else {
-                            console.log(`${i + 1} out of ${Items.length} locations have been updated`)
-                            res.send()
-                            res.end()
-                            return;
-                        }
+                const sqlGet = `SELECT il.ItemLocation_id
+                from claire.itemlocation il
+                WHERE il.Item_id IN (?) AND il.Location_id = ?;`
 
-                    })
-                }
+                tempCont.promise().query(sqlGet, [ids, Location]).then((result) => {
+                    const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= Quantity - ? WHERE ItemLocation_id = ?;"
+                    for (var i = 0; i < Items.length; i++) {
+                        tempCont.query(sqlUpdate, [Items[i].Quantity, result[0][i].ItemLocation_id], (err, result) => {
+
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            else {
+                                console.log(`${i + 1} out of ${Items.length} locations have been updated`)
+
+                            }
+
+                        })
+                    }
+                }).catch(error => {
+                    console.log(error)
+                    throw error
+                })
+                
+
                 tempCont.release();
+                res.end()
+                return;
             }
         }
     })

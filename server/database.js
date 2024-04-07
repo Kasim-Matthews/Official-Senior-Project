@@ -4,5 +4,6 @@ module.exports = {
     password: "WebVoyage2023!",
     database: 'claire',
     port: 3006,
-    connectionLimit: 50
+    connectionLimit: 50,
+    multipleStatements: true
 }
