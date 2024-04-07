@@ -29,7 +29,9 @@ const distributionRoute = require('./routes/distribution');
 const partnerRoute = require('./routes/partner');
 const itemRoute = require('./routes/item');
 const locationRoute = require('./routes/location')
-const accountRoute = require('./routes/account')
+const registerRoute = require('./routes/register')
+const authRoute = require('./routes/auth')
+const dataRoute = require('./routes/data')
 const intakeRoute = require('./routes/intake')
 const donationSiteRoute = require('./routes/donationsite')
 const manufacturerRoute = require('./routes/manufacturers')
@@ -52,7 +54,9 @@ app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
 app.use('/item', itemRoute);
 app.use('/location', locationRoute);
-app.use('/', accountRoute);
+app.use('/', registerRoute);
+app.use('/auth', authRoute);
+app.use('/data', dataRoute);
 app.use('/intake', intakeRoute)
 app.use('/donationsite', donationSiteRoute)
 app.use('/manufacturers', manufacturerRoute)

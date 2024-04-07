@@ -1,55 +1,104 @@
-import React, { useState } from 'react';
+import { useRef, useState, useEffect, useContext } from 'react';
+import AuthContext from "./context/AuthProvider";
+
 import Axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 
 const Login = () => {
-  const [emailLog, setEmail] = useState('');
-  const [passwordLog, setPassword] = useState('');
-  const [loginStatus, setLoginStatus] = useState("");
-  const navigate = useNavigate();
+    const { setAuth } = useContext(AuthContext);
+    const userRef = useRef();
+    const errRef = useRef();
 
-  const login = () => {
-    Axios.post('http://localhost:3001/login', {
-      email: emailLog,
-      password: passwordLog,
-    }).then((response) => {
-      if (response.data.success) {
-        navigate("/dashboard"); // Redirect to dashboard on successful login
-      } else {
-        setLoginStatus(response.data.message); 
-      }
-    }).catch((error) => {
-        const message = error.response && error.response.data.message ? error.response.data.message : "An error occurred";
-        setLoginStatus(message);
-      });
-  };
+    const [user, setUser] = useState('');
+    const [pwd, setPwd] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+    const [success, setSuccess] = useState(false);
 
-  return (
-    <div className="login-container">
-      <Card>
-        <CardContent>
-      <h1>Login</h1>
-      <TextField id="email" label="Email" variant="outlined"
-        type="text"
-        placeholder="Email..."
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <br></br><TextField id="Password" label="Password" variant="outlined"
-        type="password"
-        placeholder="Password..."
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br></br><Button onClick={login}>Login</Button>
-      {loginStatus && <h1>{loginStatus}</h1>}
-      <br></br><Link to="/register">Haven't made an account? Register here</Link>
-      </CardContent>
-      </Card>
-    </div>
-  );
-};
+    useEffect(() => {
+        userRef.current.focus();
+    }, [])
 
-export default Login;
+    useEffect(() => {
+        setErrMsg('');
+    }, [user, pwd])
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+          const response = await Axios.post('http://localhost:3001/login', {
+            user: user,
+            pwd: pwd,
+    }
+            );
+            console.log(JSON.stringify(response?.data));
+            //console.log(JSON.stringify(response));
+            const accessToken = response?.data?.accessToken;
+            const roles = response?.data?.roles;
+            setAuth({ user, pwd, roles, accessToken });
+            setUser('');
+            setPwd('');
+            setSuccess(true);
+        } catch (err) {
+            if (!err?.response) {
+                setErrMsg('No Server Response');
+            } else if (err.response?.status === 400) {
+                setErrMsg('Missing Username or Password');
+            } else if (err.response?.status === 401) {
+                setErrMsg('Unauthorized');
+            } else {
+                setErrMsg('Login Failed');
+            }
+            errRef.current.focus();
+        }
+    }
+
+    return (
+        <>
+            {success ? (
+                <section>
+                    <h1>You are logged in!</h1>
+                    <br />
+                    <p>
+                        <a href="#">Go to Home</a>
+                    </p>
+                </section>
+            ) : (
+                <section>
+                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                    <h1>Sign In</h1>
+                    <form onSubmit={handleSubmit}>
+                        <label htmlFor="username">Username:</label>
+                        <input
+                            type="text"
+                            id="username"
+                            ref={userRef}
+                            autoComplete="off"
+                            onChange={(e) => setUser(e.target.value)}
+                            value={user}
+                            required
+                        />
+
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            type="password"
+                            id="password"
+                            onChange={(e) => setPwd(e.target.value)}
+                            value={pwd}
+                            required
+                        />
+                        <button>Sign In</button>
+                    </form>
+                    <p>
+                        Need an Account?<br />
+                        <span className="line">
+                            {/*put router link here*/}
+                            <a href="#">Sign Up</a>
+                        </span>
+                    </p>
+                </section>
+            )}
+        </>
+    )
+}
+
+export default Login
