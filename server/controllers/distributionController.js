@@ -17,7 +17,7 @@ const distribution_index = (req, res) => {
             join sql5669328.partner p on o.Partner_id = p.Partner_id 
             join sql5669328.orderitems oi on o.Order_id = oi.Order_id
             join sql5669328.itemlocation il on oi.ItemLocationFK = il.ItemLocation_id
-            join sql5669328. location l on l.Location_id = il.Location_id
+            join sql5669328.location l on l.Location_id = il.Location_id
             group by o.Order_id, l.Name;
             `;
             tempCont.query(sqlGet, (err, result) => {
