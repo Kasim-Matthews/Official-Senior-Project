@@ -25,7 +25,7 @@ const Login = () => {
         e.preventDefault();
 
         try {
-          const response = await Axios.post('http://localhost:3001/login', {
+          const response = await Axios.post('http://localhost:3001/auth/login', {
             user: user,
             pwd: pwd,
     }
@@ -39,6 +39,7 @@ const Login = () => {
             setPwd('');
             setSuccess(true);
         } catch (err) {
+          console.log(err)
             if (!err?.response) {
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 400) {

@@ -20,6 +20,8 @@ const login = async (req, res) => {
         if (!foundUser) return res.sendStatus(401); // Unauthorized
 
         // Evaluate password
+        console.log(pwd)
+        console.log(foundUser.Password)
         const match = await bcrypt.compare(pwd, foundUser.Password); // Ensure the column name matches your DB schema
         if (match) {
             // Here you would create JWTs or perform other login success actions
