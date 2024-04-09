@@ -87,7 +87,7 @@ function AddOrder() {
     e.preventDefault();
     const errors = {};
     const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
-    
+
 
     if (!regex_comments.test(formData.Comments)) {
       errors.Comments = "The comments contains an SQL keyword !"
@@ -111,7 +111,7 @@ function AddOrder() {
         }
       }
     }
-    
+
     if (result.length == 0) {
       handleSubmit()
       return
@@ -124,13 +124,18 @@ function AddOrder() {
 
   const handleSubmit = async () => {
 
-    Axios.post("http://localhost:3001/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
-    await Axios.put("http://localhost:3001/distribution/take", { Items: items, Location_id: formData.Location  });
-    window.location.href = "/distribution";
+    try {
+      Axios.post("http://localhost:3001/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      await Axios.put("http://localhost:3001/distribution/take", { Items: items, Location_id: formData.Location });
+      window.location.href = "/distribution";
+    }
+    catch {
+
+    }
 
   }
 

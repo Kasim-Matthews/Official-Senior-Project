@@ -64,14 +64,15 @@ const distribution_creation = (req, res) => {
             if (DeliveryMethod && RequestDate && CompletedDate && Partner_id && Items && Location) {
                 let sqlInsert = "INSERT INTO claire.order (Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id) VALUES (?,?,?,?,?,?);"
                 tempCont.promise().query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id]).then(() => {
-                    let sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,((SELECT FairMarketValue from claire.item WHERE Item_id = 1) * ?),(SELECT ItemLocation_id from claire.itemlocation WHERE Item_id = ? AND Location_id = ?))`
+                    let sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,((SELECT FairMarketValue from claire.item WHERE Item_id = ?) * ?),(SELECT ItemLocation_id from claire.itemlocation WHERE Item_id = ? AND Location_id = ?))`
                     for (var i = 0; i < Items.length; i++) {
-                        tempCont.query(sqlInsert, [Items[i].Quantity, Items[i].Quantity, Items[i].Item_id, Location], (err, result) => {
+                        tempCont.query(sqlInsert, [Items[i].Quantity, Items[i].Item_id, Items[i].Quantity, Items[i].Item_id, Location], (err, result) => {
                             if (err) {
                                 console.log(err);
                             }
                             else {
                                 console.log(`${i + 1} out of ${Items.length} has been logged`)
+
                                 return;
                             }
                         })
@@ -573,11 +574,11 @@ const distribution_update_item = (req, res) => {
 
                             if (err) {
                                 console.log(err);
+                                throw(error)
                             }
 
                             else {
                                 console.log(`${i + 1} out of ${Items.length} locations have been updated`)
-
                             }
 
                         })
