@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Piano2601!",
+    password: "Lindsey1!",
     database: 'claire',
     port: 3306
 });
@@ -40,6 +40,7 @@ const purchaseRoute = require('./routes/purchase')
 const dirveRoute = require('./routes/productdrive')
 const transferRoute = require('./routes/transfer')
 const auditRoute = require('./routes/audit')
+const refreshRoute = require('./routes/refresh')
 
 app.use(cors())
 app.use(express.json())
@@ -65,6 +66,7 @@ app.use('/purchase', purchaseRoute)
 app.use('/productdrive', dirveRoute)
 app.use('/transfer', transferRoute)
 app.use('/audit', auditRoute)
+app.use('/refresh', refreshRoute)
 
 
 

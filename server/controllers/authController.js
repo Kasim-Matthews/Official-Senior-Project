@@ -9,6 +9,10 @@ const sb = mysql.createPool({
 
 const bcrypt = require('bcrypt');
 
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const path = require('path');
+
 const login = async (req, res) => {
     const { user, pwd } = req.body;
     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
@@ -19,13 +23,30 @@ const login = async (req, res) => {
         const foundUser = rows[0]; // Assuming usernames are unique, so we take the first result
         if (!foundUser) return res.sendStatus(401); // Unauthorized
 
-        // Evaluate password
-        console.log(pwd)
-        console.log(foundUser.Password)
         const match = await bcrypt.compare(pwd, foundUser.Password); // Ensure the column name matches your DB schema
         if (match) {
+            const roles = Object.values(foundUser.Role);
             // Here you would create JWTs or perform other login success actions
-            res.json({ 'success': `User ${user} is logged in!` });
+            const accessToken = jwt.sign(
+                { 
+                    "UserInfo": {
+                        "username": foundUser.Username,
+                        "roles": roles
+                }
+            },
+                process.env.ACCESS_TOKEN_SECRET,
+                { expiresIn: '10m' }
+            );
+            const refreshToken = jwt.sign(
+                { "username": foundUser.Username },
+                process.env.REFRESH_TOKEN_SECRET,
+                { expiresIn: '1d' }
+            );
+
+            await sb.query('UPDATE user SET RefreshToken = ? WHERE User_id = ?', [refreshToken, foundUser.User_id]);
+
+            res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+            res.json({ accessToken });
         } else {
             res.sendStatus(401); // Unauthorized
         }

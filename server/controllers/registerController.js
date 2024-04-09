@@ -23,8 +23,16 @@ const register = async (req, res) => {
         // Encrypt the password
         const hashedPwd = await bcrypt.hash(pwd, 10);
 
+        //default role in string format
+        const rolesJson = JSON.stringify({
+            "roles": [
+              { "User": 2001 }
+            ]
+          });
+
+
         // Store the new user in the database
-        await sb.query('INSERT INTO claire.user (Username, Password) VALUES (?, ?)', [user, hashedPwd]);
+        await sb.query('INSERT INTO claire.user (Username, Password, Role) VALUES (?, ?, ?)', [user, hashedPwd, rolesJson]);
 
         console.log(`New user ${user} created!`);
         res.status(201).json({ 'success': `New user ${user} created!` });

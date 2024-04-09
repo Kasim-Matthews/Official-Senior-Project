@@ -1,4 +1,5 @@
-const mysql =  require('mysql2/promise');
+const mysql =  require('mysql2');
+//make it a promise to do an await and not callbacks
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
