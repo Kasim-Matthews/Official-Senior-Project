@@ -5,8 +5,8 @@ var sb = mysql.createPool(dbconfig);
 const manu_index = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT p.Name, p.Partner_id, COUNT(ii.FKItemLocation) as TotalItems , p.DeletedAt
@@ -21,12 +21,13 @@ const manu_index = (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send({status: 'error in query', message: err.message})
                     return
                 }
 
                 else {
                     console.log('Manufacturer data found')
-                    res.send(result);
+                    res.send({status: 'complete', data: result});
                     res.end()
                     return
                 }
@@ -40,8 +41,8 @@ const manu_index = (req, res) => {
 const anything_else = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT p.Name, p.Partner_id, COUNT(ii.FKItemLocation) as TotalItems 
@@ -56,12 +57,13 @@ const anything_else = (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send({status: 'error in query', message: err.message})
                     return
                 }
 
                 else {
                     console.log('Manufacturer data found')
-                    res.send(result);
+                    res.send({status: 'complete', data: result});
                     res.end()
                     return
                 }
@@ -77,7 +79,7 @@ const manu_list = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
             tempCont.release();
-            console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
@@ -87,12 +89,13 @@ const manu_list = (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send({status: 'error in query', message: err.message})
                     return
                 }
 
                 else {
                     console.log('Manufacturer list found')
-                    res.send(result);
+                    res.send({status: 'complete', data: result});
                     res.end()
                     return
                 }
@@ -223,8 +226,8 @@ const manu_edit = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -239,12 +242,13 @@ const manu_edit = (req, res) => {
                     tempCont.release()
                     if (err) {
                         console.log(err)
+                        res.send({status: 'error in query', message: err.message})
                         return
                     }
 
                     else{
                         console.log('Manufacturer edit data found')
-                        res.send(result);
+                        res.send({status: 'complete', data: result});
                         res.end()
                         return
                     }
@@ -302,8 +306,8 @@ const manu_view = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if(typeof id != "string"){
@@ -324,12 +328,13 @@ const manu_view = (req, res) => {
                     tempCont.release()
                     if (err) {
                         console.log(err)
+                        res.send({status: 'error in query', message: err.message})
                         return
                     }
 
                     else {
                         console.log('Manufacturer view data found')
-                        res.send(result);
+                        res.send({status: 'complete', data: result});
                         res.end();
                         return
                     }

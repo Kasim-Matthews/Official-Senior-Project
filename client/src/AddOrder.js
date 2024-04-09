@@ -130,11 +130,11 @@ function AddOrder() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      await Axios.put("http://localhost:3001/distribution/take", { Items: items, Location_id: formData.Location });
       window.location.href = "/distribution";
     }
-    catch {
-
+    catch (error) {
+      navigate('/query')
+      console.error(error)
     }
 
   }

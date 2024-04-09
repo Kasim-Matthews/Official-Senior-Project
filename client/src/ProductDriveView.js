@@ -28,10 +28,22 @@ function ProductDriveView() {
 
     useEffect(() => {
         Axios.get("http://localhost:3001/productdrive").then((response) => {
-            setDriveList(response.data);
-            setRecords(response.data.filter(function (currentObject) {
-                return typeof (currentObject.DeletedAt) == "object";
-            }))
+            if (response.data.status == 'complete') {
+                setDriveList(response.data.data);
+                setRecords(response.data.data.filter(function (currentObject) {
+                    return typeof (currentObject.DeletedAt) == "object";
+                }))
+            }
+
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
@@ -58,11 +70,9 @@ function ProductDriveView() {
     }
 
 
-
-
-    return (
+    if (records.length == 0) {
         <div>
-            
+
             <form onSubmit={handleSubmit}>
                 <div style={{ display: "flex" }}>
 
@@ -85,27 +95,60 @@ function ProductDriveView() {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {records.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Drive}</td>
-                                <td>{val.Quantity}</td>
-                                <td>{val.Variety}</td>
-                                <td>{val.Total}</td>
-                                <td>
-                                {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
-                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
             </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
-    );
+    }
+
+
+    else {
+        return (
+            <div>
+
+                <form onSubmit={handleSubmit}>
+                    <div style={{ display: "flex" }}>
+
+                        <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+                        <label htmlFor="non-active" >Also include inactive items</label>
+
+                    </div>
+                    <input type="Submit" />
+                </form>
+
+                <button><Link to="/productdrive/new">Add</Link></button>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Drive Name</th>
+                            <th>Quantity of Items</th>
+                            <th>Variety of Items</th>
+                            <th>In-Kind Value</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {records.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.Drive}</td>
+                                    <td>{val.Quantity}</td>
+                                    <td>{val.Variety}</td>
+                                    <td>{val.Total}</td>
+                                    <td>
+                                        {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
+                                        <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+                                        <button onClick={() => handleView(val.Partner_id)}>View</button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        );
+    }
 }
 
 export default ProductDriveView;

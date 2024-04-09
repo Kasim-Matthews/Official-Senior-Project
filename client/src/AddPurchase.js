@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import Purchase from "./models/Purchase";
 import ItemInput from "./components/ItemInput";
+import { useNavigate } from "react-router-dom";
 
 function AddPurchase() {
     const [formData, setFormData] = useState(Purchase)
     const [vendor, setVendors] = React.useState([])
     const [locations, setLocations] = React.useState([])
     const [formErrors, setFormErrors] = useState({})
+    const navigate = useNavigate();
 
     const [index, setIndex] = React.useState(0);
     const [items, setItems] = React.useState([
@@ -74,7 +76,18 @@ function AddPurchase() {
 
     useEffect(() => {
         Axios.get("http://localhost:3001/vendor/list").then((response) => {
-            setVendors(response.data);
+            if (response.data.status === 'complete') {
+                setVendors(response.data);
+            }
+
+            else if (response.data.status === 'error in query'){
+                navigate('/query')
+                console.error("Fail in the query loading vendor options for the filter")
+                console.error(response.data.message)
+            }
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 

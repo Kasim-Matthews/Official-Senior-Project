@@ -47,10 +47,11 @@ const distribution_creation = (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location_id
 
-    sb.getConnection(function (error, tempCont) {
+    sb.getConnection(async function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.sendStatus(500).json({ 'message': error.message })
+            return
         }
 
         else {
@@ -63,26 +64,58 @@ const distribution_creation = (req, res) => {
 
             if (DeliveryMethod && RequestDate && CompletedDate && Partner_id && Items && Location) {
                 let sqlInsert = "INSERT INTO claire.order (Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id) VALUES (?,?,?,?,?,?);"
-                tempCont.promise().query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id]).then(() => {
-                    let sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,((SELECT FairMarketValue from claire.item WHERE Item_id = ?) * ?),(SELECT ItemLocation_id from claire.itemlocation WHERE Item_id = ? AND Location_id = ?))`
-                    for (var i = 0; i < Items.length; i++) {
-                        tempCont.query(sqlInsert, [Items[i].Quantity, Items[i].Item_id, Items[i].Quantity, Items[i].Item_id, Location], (err, result) => {
-                            if (err) {
-                                console.log(err);
-                            }
-                            else {
-                                console.log(`${i + 1} out of ${Items.length} has been logged`)
+                await tempCont.promise().query(sqlInsert, [Comments, Status, DeliveryMethod, RequestDate, CompletedDate, Partner_id]).then(async () => {
+                    let ids = []
+                    Items.forEach(element => {
+                        ids.push(element.Item_id);
+                    });
 
-                                return;
+                    const sqlGet = `SELECT il.ItemLocation_id, il.Quantity, il.Item_id, il.Location_id
+                    from claire.itemlocation il
+                    WHERE il.Item_id IN (?) AND il.Location_id = ?;`
+
+                    await tempCont.promise().query(sqlGet, [ids, Location]).then(async (result) => {
+                        const sqlUpdate = "INSERT INTO claire.itemlocation (ItemLocation_id, Quantity, Item_id, Location_id) VALUES ? ON DUPLICATE KEY UPDATE Quantity = values(Quantity);"
+                        let rows = []
+                        for (let i = 0; i < Items.length; i++) {
+                            rows.push([result[0][i].ItemLocation_id, result[0][i].Quantity - Items[i].Quantity, result[0][i].Item_id, result[0][i].Location_id])
+                        }
+                        await tempCont.promise().query(sqlUpdate, [rows]).then(() => {
+                            let sqlInsert = `INSERT INTO claire.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,((SELECT FairMarketValue from claire.item WHERE Item_id = ?) * ?),(SELECT ItemLocation_id from claire.itemlocation WHERE Item_id = ? AND Location_id = ?))`
+                            for (var i = 0; i < Items.length; i++) {
+                                tempCont.query(sqlInsert, [Items[i].Quantity, Items[i].Item_id, Items[i].Quantity, Items[i].Item_id, Location], (err, result) => {
+                                    if(err){
+                                        console.log(error)
+                                        res.sendStatus(500).json({ 'message': error.message })
+                                        return
+                                    }
+
+                                    else {
+                                        return
+                                    }
+                                })
                             }
+                        }).catch(error => {
+                            console.log(error)
+                            console.log("Error while updating")
+                            res.sendStatus(500).json({ 'message': error.message })
+                            return
                         })
-                    }
+                    }).catch(error => {
+                        console.log(error)
+                        console.log("Error while selecting")
+                        res.sendStatus(500).json({ 'message': error.message })
+                        return
+                    })
                 }).catch(error => {
                     console.log(error)
-                    throw error
+                    console.log("Error while inserting")
+                    res.sendStatus(500).json({ 'message': error.message })
+                    return
                 })
             }
             tempCont.release()
+            console.log("Distribution creation complete")
             return
         }
     })
@@ -574,7 +607,7 @@ const distribution_update_item = (req, res) => {
 
                             if (err) {
                                 console.log(err);
-                                throw(error)
+                                throw (error)
                             }
 
                             else {
@@ -587,7 +620,7 @@ const distribution_update_item = (req, res) => {
                     console.log(error)
                     throw error
                 })
-                
+
 
                 tempCont.release();
                 res.end()

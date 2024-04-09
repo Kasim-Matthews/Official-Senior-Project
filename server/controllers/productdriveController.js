@@ -6,8 +6,8 @@ const drive_index = (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT p.Name as Drive, COUNT(ii.FKItemLocation) as Variety, SUM(ii.Value) as Total, SUM(ii.Quantity) as Quantity, p.Partner_id, p.DeletedAt
@@ -21,12 +21,13 @@ const drive_index = (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send({status: 'error in query', message: err.message})
                     return
                 }
 
                 else{
                     console.log("Product drive data found")
-                    res.send(result);
+                    res.send({status: 'complete', data: result});
                     res.end();
                     return
                 }
@@ -41,8 +42,8 @@ const anything_else= (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT p.Name as Drive, COUNT(ii.FKItemLocation) as Variety, SUM(ii.Value) as Total, SUM(ii.Quantity) as Quantity, p.Partner_id
@@ -56,12 +57,13 @@ const anything_else= (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send({status: 'error in query', message: err.message})
                     return
                 }
 
                 else{
                     console.log("Product drive data found")
-                    res.send(result);
+                    res.send({status: 'complete', data: result});
                     res.end();
                     return
                 }
@@ -78,6 +80,7 @@ const drive_list = (req, res) => {
         if(error){
             tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
@@ -87,12 +90,13 @@ const drive_list = (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send({status: 'error in query', message: err.message})
                     return
                 }
 
                 else {
                     console.log("Product drive list data found")
-                    res.send(result);
+                    res.send({status: 'complete', data: result});
                     res.end()
                     return
                 }
@@ -224,8 +228,8 @@ const drive_edit = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -240,12 +244,13 @@ const drive_edit = (req, res) => {
                     tempCont.release()
                     if (err) {
                         console.log(err)
+                        res.send({status: 'error in query', message: err.message})
                         return
                     }
 
                     else {
                         console.log("Product Drive edit data found")
-                        res.send(result);
+                        res.send({status: 'complete', data: result});
                         res.end()
                         return
                     }
@@ -303,8 +308,8 @@ const drive_view = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -326,12 +331,13 @@ const drive_view = (req, res) => {
                     tempCont.release()
                     if (err) {
                         console.log(err)
+                        res.send({status: 'error in query', message: err.message})
                         return
                     }
 
                     else {
                         console.log("Product Drive view data found")
-                        res.send(result);
+                        res.send({status: 'complete', data: result});
                         res.end()
                         return
                     }

@@ -16,59 +16,117 @@ function ViewDonationSite() {
 
     useEffect(() => {
         Axios.get(`http://localhost:3001/donationsite/${id}/edit`).then((response) => {
-            setRecord(response.data[0])
+            if (response.data.status === 'complete') {
+                setRecord(response.data[0])
+            }
+
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         });
     }, [])
 
     useEffect(() => {
         Axios.get(`http://localhost:3001/donationsite/${id}/view`).then((response) => {
-            setIntakeList(response.data)
-        });
+            if (response.data.status === 'complete') {
+                setIntakeList(response.data.data)
+            }
+
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
     }, [])
 
 
-    return (
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Donation Site</th>
-                        <th>Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{record.Name}</td>
-                        <td>{record.Address}</td>
-                    </tr>
-                </tbody>
-            </table>
+    if (intakeList.length === 0) {
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donation Site</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{record.Name}</td>
+                            <td>{record.Address}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Location</th>
-                        <th>Total Items</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {intakeList.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Location}</td>
-                                <td>{val.Total}</td>
-                                <td>
-                                    <button onClick={() => handleView(val.Intake_id)}>View Details</button>
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
-        </div>
-    )
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>Total Items</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
+
+    else {
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Donation Site</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{record.Name}</td>
+                            <td>{record.Address}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>Total Items</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {intakeList.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.Location}</td>
+                                    <td>{val.Total}</td>
+                                    <td>
+                                        <button onClick={() => handleView(val.Intake_id)}>View Details</button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
 }
 /*Cannot edit till the purchase functionality is a thing*/
 

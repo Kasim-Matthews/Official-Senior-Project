@@ -72,7 +72,18 @@ function Purchase() {
 
     useEffect(() => {
         Axios.get("http://localhost:3001/vendor/list").then((response) => {
-            setPartners(response.data);
+            if (response.data.status === 'complete') {
+                setPartners(response.data.data);
+            }
+
+            else if (response.data.status === 'error in query'){
+                navigate('/query')
+                console.error("Fail in the query loading vendor options for the filter")
+                console.error(response.data.message)
+            }
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 

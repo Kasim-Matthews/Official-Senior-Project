@@ -5,8 +5,8 @@ var sb = mysql.createPool(dbconfig);
 const dsite_index = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({ 'message': error.message })
         }
         else {
             const sqlGet = `SELECT Name, Address, Partner_id, DeletedAt FROM claire.partner 
@@ -16,11 +16,13 @@ const dsite_index = (req, res) => {
                 tempCont.release();
                 if (err) {
                     console.log(err)
+                    res.send({ status: 'error in query', message: err.message })
+                    return
                 }
 
                 else {
-                    console.log('Data sent')
-                    res.send(result);
+                    console.log('Donation site data found')
+                    res.send({ status: 'complete', data: result });
                     res.end();
                     return;
                 }
@@ -34,8 +36,8 @@ const dsite_index = (req, res) => {
 const anything_else = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({ 'message': error.message })
         }
         else {
             const sqlGet = `SELECT Name, Address, Partner_id FROM claire.partner 
@@ -45,11 +47,12 @@ const anything_else = (req, res) => {
                 tempCont.release()
                 if (err) {
                     console.log(err)
+                    res.send({ status: 'error in query', message: err.message })
                     return
                 }
 
                 else {
-                    res.send(result);
+                    res.send({ status: 'complete', data: result });
                     res.end();
                     return
                 }
@@ -63,8 +66,8 @@ const anything_else = (req, res) => {
 const dsite_list = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({ 'message': error.message })
         }
         else {
             const sqlGet = `SELECT Name, Partner_id FROM claire.partner 
@@ -74,10 +77,12 @@ const dsite_list = (req, res) => {
                 tempCont.release();
                 if (err) {
                     console.log(err)
+                    res.send({ status: 'error in query', message: err.message })
+                    return
                 }
 
                 else {
-                    res.send(result);
+                    res.send({ status: 'complete', data: result });
                     res.end()
                     return
                 }
@@ -130,18 +135,18 @@ const dsite_create = (req, res) => {
 const dsite_reactivate = (req, res) => {
     let id = req.params.id;
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
             tempCont.release();
             console.log('Error')
         }
-        else{
+        else {
             if (typeof id != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
-        
+
             if (id) {
                 const sqlDelete = `UPDATE claire.partner Set DeletedAt= NULL WHERE Partner_id = ?;`
                 tempCont.query(sqlDelete, [id], (err, result) => {
@@ -157,7 +162,7 @@ const dsite_reactivate = (req, res) => {
                         res.end()
                         return
                     }
-                    
+
                 })
             }
         }
@@ -168,19 +173,19 @@ const dsite_reactivate = (req, res) => {
 const dsite_delete = (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
-    
-    sb.getConnection(function (error, tempCont){
-        if(error){
+
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
             tempCont.release();
             console.log('Error')
         }
-        else{
+        else {
             if (typeof id != "string" && typeof date != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
-        
+
             if (id) {
                 const sqlDelete = `UPDATE claire.partner Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Partner_id = ?;`
                 tempCont.query(sqlDelete, [date, id], (err, result) => {
@@ -195,7 +200,7 @@ const dsite_delete = (req, res) => {
                         res.end();
                         return;
                     }
-                    
+
                 })
             }
         }
@@ -206,18 +211,18 @@ const dsite_delete = (req, res) => {
 const dsite_edit = (req, res) => {
     let id = req.params.id
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
-            tempCont.release();
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
             console.log('Error')
+            res.status(500).json({ 'message': error.message })
         }
-        else{
+        else {
             if (typeof id != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
-        
+
             if (id) {
                 const sqlGet = 'SELECT Name, Address FROM claire.partner WHERE Partner_id = ?;'
                 tempCont.query(sqlGet, [id], (err, result) => {
@@ -225,15 +230,17 @@ const dsite_edit = (req, res) => {
 
                     if (err) {
                         console.log(err)
+                        res.send({ status: 'error in query', message: err.message })
+                        return
                     }
 
                     else {
-                        console.log('Edit data sent')
-                        res.send(result);
+                        console.log('Donation site edit data sent')
+                        res.send({ status: 'complete', data: result });
                         res.end();
                         return
                     }
-                    
+
                 })
             }
         }
@@ -247,18 +254,18 @@ const dsite_update = (req, res) => {
     let Name = req.body.name;
     let Address = req.body.address;
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
             tempCont.release();
             console.log('Error')
         }
-        else{
+        else {
             if (typeof id != "string" && typeof Name != "string" && typeof Address != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
-        
+
             if (Name && Address && id) {
                 const sqlUpdate = "UPDATE claire.partner SET Name= ?, Address= ? WHERE Partner_id = ?;"
                 tempCont.query(sqlUpdate, [Name, Address, id], (err, result) => {
@@ -273,7 +280,7 @@ const dsite_update = (req, res) => {
                         res.end();
                         return
                     }
-                    
+
                 })
             }
         }
@@ -285,18 +292,18 @@ const dsite_update = (req, res) => {
 const dsite_view = (req, res) => {
     let id = req.params.id;
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
-            tempCont.release();
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
             console.log('Error')
+            res.status(500).json({ 'message': error.message })
         }
-        else{
+        else {
             if (typeof id != "string") {
                 res.send("Invalid");
                 res.end();
                 return;
             }
-        
+
             if (id) {
                 const sqlGet = `SELECT l.Name as Location, i.Intake_id, SUM(ii.Quantity) as Total
                 from claire.intake i 
@@ -310,16 +317,18 @@ const dsite_view = (req, res) => {
                     tempCont.release();
                     if (err) {
                         console.log(err)
+                        res.send({ status: 'error in query', message: err.message })
+                        return
                     }
 
                     else {
                         console.log('View data sent for donation site')
-                        res.send(result);
+                        res.send({status: 'complete', data: result});
                         res.end();
                         return
                     }
 
-                    
+
                 })
             }
         }
