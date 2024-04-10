@@ -152,7 +152,6 @@ function AddIntake() {
   const submitDonation = async () => {
     await Axios.post("http://localhost:3306/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
 
-    let IID_response = await Axios.get("http://localhost:3306/intake/find_id");
     let V_response = await Axios.post("http://localhost:3306/intake/find_value", { Items: items })
     let IL_response = await Axios.post("http://localhost:3306/intake/location", { Items: items, Location_id: formData.Location })
 

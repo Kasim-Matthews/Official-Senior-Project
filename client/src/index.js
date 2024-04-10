@@ -51,6 +51,8 @@ import AddAudit from './AddAudit';
 import AuditView from './AuditView';
 import ViewAudit from './OneAudit';
 import ViewLocation from './OneLocation';
+import ErrorHandler from './ErrorHandler';
+import QueryError from './QueryError';
 
 export class Application extends React.Component {
     render() {
@@ -61,7 +63,9 @@ export class Application extends React.Component {
                     <Route path="/Dashboard" element={<Dashboard />} />
                     <Route path='/login' element={<Login />} />
                     <Route path='/register' element={<Register />} />
-                    
+                    <Route path="/error" element={<ErrorHandler />} />
+                    <Route path="/query" element={<QueryError />} />
+
                     <Route path="/distribution" element={<Order />} />
                     <Route path='/distribution/:id' element={<ViewOrder />} />
                     <Route path='/distribution/:id/edit' element={<EditOrder />} />

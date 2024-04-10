@@ -16,10 +16,9 @@ function AddAudit() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await Axios.post("http://localhost:3306/audit/log", {date: date});
-        let id = await Axios.get("http://localhost:3306/audit/last")
-        await Axios.post("http://localhost:3306/audit/new", {Audits: inventory, audit: id.data[0].Audit_id});
-        await Axios.put("http://localhost:3306/audit/update", {Audits: inventory});
+        await Axios.post("http://localhost:3001/audit/log", {date: date});
+        await Axios.post("http://localhost:3001/audit/new", {Audits: inventory});
+        await Axios.put("http://localhost:3001/audit/update", {Audits: inventory});
         window.location.href = `/audit`;
     }
 
@@ -38,7 +37,7 @@ function AddAudit() {
                     return(
                         <div>
                             <h4>{val.Item} + {val.Location}</h4>
-                            <input type="Number" name="Changed" defaultValue={val.Past} onChange={(e) => handleChange(e, index)}/>
+                            <input type="Number" name="Changed" defaultValue={val.Past} min="0" onChange={(e) => handleChange(e, index)}/>
                         </div>
                     )
                 })}

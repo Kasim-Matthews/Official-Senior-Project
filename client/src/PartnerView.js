@@ -19,7 +19,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableFooter } from '@mui/material';
 import Button from '@mui/material/Button';
-
+import ErrorHandler from "./ErrorHandler";
 
 function PartnerView() {
 
@@ -75,6 +75,14 @@ function PartnerView() {
             }))
         })
     }, [])
+
+
+    if (partnerList[0] == "error"){
+        return(
+            <ErrorHandler />
+        )
+    }
+
 
     return (
         <div>

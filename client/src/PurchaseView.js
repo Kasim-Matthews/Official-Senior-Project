@@ -3,31 +3,26 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import PurchasePosts from "./components/PurchasePosts";
 import Pagination from "./components/Pagination";
-import { DateRangePicker } from 'react-date-range'
-import { addDays } from 'date-fns';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import ErrorHandler from "./ErrorHandler";
+
 
 function Purchase() {
     const navigate = useNavigate();
 
-    
+
     const [partners, setPartners] = React.useState([])
     const [locations, setLocations] = React.useState([])
     const [intakeList, setIntakeList] = React.useState([])
     const [records, setRecords] = React.useState([])
 
     const [filters, setFilters] = React.useState({
-        Vendor: 0,
+        Vendor: "",
         Location: "",
+        Date: ""
 
     })
 
-    const [state, setState] = React.useState([{
-        startDate: new Date(),
-        endDate: addDays(new Date(), 30),
-        key: 'selection'
-    }])
+
 
     const [currentPage, setCurrentPage] = React.useState(1);
     const [postsPerPage] = React.useState(10);
@@ -77,9 +72,20 @@ function Purchase() {
 
     useEffect(() => {
         Axios.get("http://localhost:3306/vendor/list").then((response) => {
-          setPartners(response.data);
+            if (response.data.status === 'complete') {
+                setPartners(response.data.data);
+            }
+
+            else if (response.data.status === 'error in query'){
+                navigate('/query')
+                console.error("Fail in the query loading vendor options for the filter")
+                console.error(response.data.message)
+            }
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
-      }, [])
+    }, [])
 
     useEffect(() => {
         Axios.get("http://localhost:3306/location/use").then((response) => {
@@ -96,21 +102,34 @@ function Purchase() {
         })
     }
 
+    function clearFilters(e) {
+        e.preventDefault();
+
+        setFilters({
+            Vendor: "",
+            Location: "",
+            Date: ""
+        })
+        setRecords(intakeList)
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
         var temp = intakeList;
 
         if (filters.Vendor != "") {
             temp = temp.filter(f => f.Name == filters.Vendor);
+            
         }
 
         if (filters.Location != "") {
             temp = temp.filter(f => f.Location == filters.Location);
+            
         }
 
 
-        if (state != null) {
-            temp = temp.filter(f => new Date(f.RecievedDate) >= state[0].startDate && new Date(f.RecievedDate) <= state[0].endDate)
+        if (filters.Date != "") {
+            temp = temp.filter(f => new Date(f.RecievedDate) >= new Date(filters.Date))
         }
 
 
@@ -150,13 +169,19 @@ function Purchase() {
 
                 </label>
 
-                <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                <label>
+                    Date Range
+                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                </label>
 
 
 
                 <input type="submit" value="Filter" />
+                <button onClick={clearFilters}>Clear</button>
+
+
             </form>
-            
+
             <button><Link to="/purchase/new">Add</Link></button>
 
             <PurchasePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />

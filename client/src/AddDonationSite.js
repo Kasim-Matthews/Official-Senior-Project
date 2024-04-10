@@ -38,8 +38,7 @@ function AddDonationSite(){
     async function handleSubmit() {
         await Axios.post("http://localhost:3306/donationsite/new", {
           name: formData.Name,
-          address: formData.Address,
-          type: formData.Type
+          address: formData.Address
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
