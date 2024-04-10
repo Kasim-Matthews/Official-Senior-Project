@@ -91,13 +91,13 @@ function AddTransfer() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location/use").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setTo(response.data);
         })
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/transfer/adjustment").then((response) => {
+        Axios.get("http://localhost:3001/transfer/adjustment").then((response) => {
             setFrom(response.data);
         })
     }, [])

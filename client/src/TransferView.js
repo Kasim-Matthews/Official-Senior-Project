@@ -20,7 +20,7 @@ function TransferView() {
 
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/transfer").then((response) => {
+        Axios.get("http://localhost:3001/transfer").then((response) => {
             setTransferList(response.data);
             setRecords(response.data);
         })
@@ -29,17 +29,17 @@ function TransferView() {
     const handleRemove = async (id, Name, Location) => {
         if (window.confirm(`Are you sure you want to delete ${Name}'s transfer from the transfer list?`) == true) {
             let GetData = async function (id) {
-                return await Axios.get(`http://localhost:3306/transfer/${id}/cleanup`).then((response) => {
+                return await Axios.get(`http://localhost:3001/transfer/${id}/cleanup`).then((response) => {
                     return response
                 });
             }
             let data = GetData(id)
             data.then(async (response) => {
-                await Axios.put("http://localhost:3306/transfer/reclaim", { records: response.data })
-                await Axios.put("http://localhost:3306/transfer/renounce", { records: response.data, Location: Location })
+                await Axios.put("http://localhost:3001/transfer/reclaim", { records: response.data })
+                await Axios.put("http://localhost:3001/transfer/renounce", { records: response.data, Location: Location })
             })
 
-            await Axios.delete(`http://localhost:3306/intake/remove/${id}`);
+            await Axios.delete(`http://localhost:3001/intake/remove/${id}`);
 
             window.location.reload(false);
         }
@@ -50,13 +50,13 @@ function TransferView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/transfer/adjustment").then((response) => {
+        Axios.get("http://localhost:3001/transfer/adjustment").then((response) => {
             setPartners(response.data);
         })
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location/use").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])

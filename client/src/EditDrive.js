@@ -53,7 +53,7 @@ function EditDrive() {
   }
 
   async function handleSubmit() {
-    await Axios.put(`http://localhost:3306/productdrive/${id}/update`, {
+    await Axios.put(`http://localhost:3001/productdrive/${id}/update`, {
       name: formData.Name
     }, {
       headers: {

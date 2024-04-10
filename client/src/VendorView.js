@@ -13,7 +13,7 @@ function VendorView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the vendor list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3306/vendor/remove/${id}`, { date: date });
+            Axios.put(`http://localhost:3001/vendor/remove/${id}`, { date: date });
             window.location.reload(false);
         }
 

@@ -10,7 +10,7 @@ function LocationView() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location").then((response) => {
+        Axios.get("http://localhost:3001/location").then((response) => {
             setLocationList(response.data);
             setRecords(response.data.filter(function (currentObject) {
                 return typeof (currentObject.DeletedAt) == "object";
@@ -21,14 +21,14 @@ function LocationView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the location list?`) == true) {
             let date = new Date().toLocaleDateString()
-            Axios.put(`http://localhost:3306/location/remove/${id}`, { date: date });
+            Axios.put(`http://localhost:3001/location/remove/${id}`, { date: date });
             window.location.reload(false);
         }
     }
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the location list?`) == true) {
-            Axios.put(`http://localhost:3306/location/reactivate/${id}`);
+            Axios.put(`http://localhost:3001/location/reactivate/${id}`);
             window.location.reload(false);
         }
     }

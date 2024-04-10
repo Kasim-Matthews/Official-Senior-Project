@@ -17,13 +17,13 @@ function Partner(){
     const [partnerList, setPartnerList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/partner").then((response) =>{
+        Axios.get("http://localhost:3001/partner").then((response) =>{
             setPartnerList(response.data);
         })
     })
 
     const handleRemove = (id) =>{
-        Axios.delete(`http://localhost:3306/partner/remove/${id}`);
+        Axios.delete(`http://localhost:3001/partner/remove/${id}`);
     }
 
     const handleEdit = (id) => {

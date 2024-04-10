@@ -140,13 +140,13 @@ function AddOrder() {
   }
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner/list").then((response) => {
+    Axios.get("http://localhost:3001/partner/list").then((response) => {
       setPartners(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location/use").then((response) => {
+    Axios.get("http://localhost:3001/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])

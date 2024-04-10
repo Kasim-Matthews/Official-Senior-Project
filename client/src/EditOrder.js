@@ -72,25 +72,25 @@ function EditOrder() {
 
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/distribution/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3001/distribution/${id}/edit`).then((response) => {
       setFormData(response.data[0]);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/distribution/${id}/edititems`).then((response) => {
+    Axios.get(`http://localhost:3001/distribution/${id}/edititems`).then((response) => {
       setItems(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner/options").then((response) => {
+    Axios.get("http://localhost:3001/partner/options").then((response) => {
       setPartners(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location/use").then((response) => {
+    Axios.get("http://localhost:3001/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -137,24 +137,24 @@ function EditOrder() {
 
 
     let GetData = async function (id) {
-      return await Axios.get(`http://localhost:3306/distribution/${id}/cleanup`).then((response) => {
+      return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
         return response
       });
     }
 
     let data = GetData(id)
     await data.then(async (response) => {
-      await Axios.put("http://localhost:3306/distribution/reclaim", { records: response.data })
+      await Axios.put("http://localhost:3001/distribution/reclaim", { records: response.data })
     })
 
-    await Axios.delete(`http://localhost:3306/distribution/${id}/edit_delete`)
+    await Axios.delete(`http://localhost:3001/distribution/${id}/edit_delete`)
 
-    await Axios.put(`http://localhost:3306/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id });
+    await Axios.put(`http://localhost:3001/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id });
 
-    let IL_response = await Axios.post("http://localhost:3306/distribution/find_ild", { Items: items, Location_id: formData.Location  })
-    let V_response = await Axios.post("http://localhost:3306/distribution/find_value", {Items: items })
-    await Axios.post("http://localhost:3306/distribution/track", { Order_id: id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
-    await Axios.put("http://localhost:3306/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
+    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Items: items, Location_id: formData.Location  })
+    let V_response = await Axios.post("http://localhost:3001/distribution/find_value", {Items: items })
+    await Axios.post("http://localhost:3001/distribution/track", { Order_id: id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
+    await Axios.put("http://localhost:3001/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
     navigate('/distribution')
 
 

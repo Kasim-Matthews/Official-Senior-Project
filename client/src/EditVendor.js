@@ -66,7 +66,7 @@ function EditVendor() {
   }
 
   async function handleSubmit() {
-    await Axios.put(`http://localhost:3306/vendor/${id}/update`, {
+    await Axios.put(`http://localhost:3001/vendor/${id}/update`, {
       name: formData.BusinessName,
       phone: formData.Phone,
       email: formData.Email,

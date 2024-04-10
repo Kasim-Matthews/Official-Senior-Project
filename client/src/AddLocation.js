@@ -43,7 +43,7 @@ function AddLocation() {
   
   async function handleSubmit() {
     try {
-      Axios.post("http://localhost:3306/location/new", {
+      Axios.post("http://localhost:3001/location/new", {
         name: formData.Name,
         Address: formData.Address
       }, {
@@ -67,7 +67,7 @@ function AddLocation() {
   }
 
   React.useEffect(() => {
-    Axios.get("http://localhost:3306/item").then((response) => {
+    Axios.get("http://localhost:3001/item").then((response) => {
         setItems(response.data);
     })
 }, [])

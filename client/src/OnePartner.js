@@ -17,13 +17,13 @@ function ViewPartner() {
     }
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/partner/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/partner/${id}/edit`).then((response) => {
             setRecord(response.data[0])
         });
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/partner/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/partner/${id}/view`).then((response) => {
             setDistributionList(response.data)
         });
     }, [])

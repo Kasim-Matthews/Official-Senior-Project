@@ -33,7 +33,7 @@ function Purchase() {
     const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/purchase").then((response) => {
+        Axios.get("http://localhost:3001/purchase").then((response) => {
             setIntakeList(response.data);
             setRecords(response.data)
         })
@@ -46,16 +46,16 @@ function Purchase() {
 
     const handleRemove = async (id) => {
         let GetData = async function (id) {
-            return await Axios.get(`http://localhost:3306/purchase/${id}/cleanup`).then((response) => {
+            return await Axios.get(`http://localhost:3001/purchase/${id}/cleanup`).then((response) => {
                 return response
             });
         }
         let data = GetData(id)
         data.then(async (response) => {
-            await Axios.put("http://localhost:3306/purchase/reclaim", { records: response.data })
+            await Axios.put("http://localhost:3001/purchase/reclaim", { records: response.data })
         })
 
-        await Axios.delete(`http://localhost:3306/purchase/remove/${id}`);
+        await Axios.delete(`http://localhost:3001/purchase/remove/${id}`);
 
         window.location.reload(false);
 
@@ -88,7 +88,7 @@ function Purchase() {
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location/use").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])

@@ -114,7 +114,7 @@ function AddIntake() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:33306/location/use").then((response) => {
+    Axios.get("http://localhost:33001/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -122,7 +122,7 @@ function AddIntake() {
  const typechecker = async (e) => {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
-      await Axios.get("http://localhost:3306/intake/misc").then((response) => {
+      await Axios.get("http://localhost:3001/intake/misc").then((response) => {
         setFormData(prevFormData => {
           return {
             ...prevFormData,

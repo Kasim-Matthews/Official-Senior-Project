@@ -104,20 +104,20 @@ function Order() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/distribution").then((response) => {
+    Axios.get("http://localhost:3001/distribution").then((response) => {
       setDistributionsList(response.data);
       setRecords(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner/use").then((response) => {
+    Axios.get("http://localhost:3001/partner/use").then((response) => {
       setPartners(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location/use").then((response) => {
+    Axios.get("http://localhost:3001/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -127,16 +127,16 @@ function Order() {
   const handleRemove = async (id) => {
     if (window.confirm("Are you sure you want to reclaim this distribution?") == true) {
       let GetData = async function (id) {
-        return await Axios.get(`http://localhost:3306/distribution/${id}/cleanup`).then((response) => {
+        return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
           return response
         });
       }
       let data = GetData(id)
       data.then(async (response) => {
-        await Axios.put("http://localhost:3306/distribution/reclaim", { records: response.data })
+        await Axios.put("http://localhost:3001/distribution/reclaim", { records: response.data })
       })
 
-      await Axios.delete(`http://localhost:3306/distribution/remove/${id}`);
+      await Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
 
       window.location.reload(false);
     }
@@ -151,12 +151,12 @@ function Order() {
   }
 
   const handleComplete = (id) => {
-    Axios.put(`http://localhost:3306/distribution/${id}/complete`);
+    Axios.put(`http://localhost:3001/distribution/${id}/complete`);
     window.location.reload(false);
   }
 
   const handleIncomplete = (id) => {
-    Axios.put(`http://localhost:3306/distribution/${id}/incomplete`);
+    Axios.put(`http://localhost:3001/distribution/${id}/incomplete`);
     window.location.reload(false);
   }
 

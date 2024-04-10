@@ -4,7 +4,7 @@ const dbconfig = require('../database');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Piano2601!",
+    password: "Lindsey1!",
     database: 'claire',
     port: 3306
 });
