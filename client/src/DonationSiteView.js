@@ -21,7 +21,7 @@ function DonationSiteView() {
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the donation site list?`) == true) {
-            Axios.put(`http://localhost:3001/donationsite/reactivate/${id}`);
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/reactivate/${id}`);
             window.location.reload(false);
         }
     }

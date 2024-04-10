@@ -13,7 +13,7 @@ function ProductDriveView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the product drive list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3001/productdrive/remove/${id}`, { date: date });
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/productdrive/remove/${id}`, { date: date });
             window.location.reload(false);
         }
 
@@ -21,7 +21,7 @@ function ProductDriveView() {
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the product drive list?`) == true) {
-            Axios.put(`http://localhost:3001/productdrive/reactivate/${id}`);
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/productdrive/reactivate/${id}`);
             window.location.reload(false);
         }
     }

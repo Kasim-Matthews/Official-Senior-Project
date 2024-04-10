@@ -38,7 +38,7 @@ function Order() {
     Partner: "",
     Location: "",
     Status: "",
-    Date:""
+    Date: ""
   })
 
   const [distributionsList, setDistributionsList] = React.useState([])
@@ -65,14 +65,14 @@ function Order() {
   //Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  function clearFilters(e){
+  function clearFilters(e) {
     e.preventDefault();
 
     setFilters({
       Partner: "",
       Location: "",
       Status: "",
-      Date:""
+      Date: ""
     })
     setRecords(distributionsList)
   }
@@ -239,17 +239,19 @@ function Order() {
               </select>
             </label>
 
-        <label>
-          Date Range
-        <input type="date" name="Date" value={filters.Date} onChange={handleChange}/>
-        </label>
+            <label>
+              Date Range
+              <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+            </label>
 
 
 
-        <input type="submit" value="Filter" />
-        <button onClick={clearFilters}>Clear</button>
+            <input type="submit" value="Filter" />
+            <button onClick={clearFilters}>Clear</button>
+          </CardContent>
+          </Card >
       </form>
-      
+
       <button><Link to="/distribution/new">Add</Link></button>
       <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
       <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />

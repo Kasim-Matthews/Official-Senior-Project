@@ -21,7 +21,7 @@ function VendorView() {
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the vendor list?`) == true) {
-            Axios.put(`http://localhost:3001/vendor/reactivate/${id}`);
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`);
             window.location.reload(false);
         }
     }

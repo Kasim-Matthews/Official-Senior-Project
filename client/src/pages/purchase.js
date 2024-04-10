@@ -14,7 +14,7 @@ function Purchase() {
 
 
     const submitPurchase = () => {
-      Axios.post("http://localhost:3001/api/insert", {
+      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/api/insert", {
         partnerName: partnerName, 
         receivedDate: receivedDate, 
         totalValue: totalValue,

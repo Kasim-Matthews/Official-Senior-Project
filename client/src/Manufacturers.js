@@ -34,7 +34,7 @@ function Manufacturers() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the manufacturer list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3001/manufacturers/remove/${id}`, { date: date });
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/remove/${id}`, { date: date });
             window.location.reload(false);
         }
 
@@ -42,7 +42,7 @@ function Manufacturers() {
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the manufacturer list?`) == true) {
-            Axios.put(`http://localhost:3001/manufacturers/reactivate/${id}`);
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/reactivate/${id}`);
             window.location.reload(false);
         }
     }

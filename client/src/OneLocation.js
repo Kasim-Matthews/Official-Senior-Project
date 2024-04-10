@@ -12,25 +12,25 @@ function ViewLocation() {
     const [incoming, setIncoming] = React.useState([])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/location/${id}/edit`).then((response) => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/edit`).then((response) => {
             response.data.map((key, value) => { setRecord(key) });
         })
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/location/${id}/tab1`).then((response) => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/tab1`).then((response) => {
             setList(response.data)
         })
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/location/${id}/tab2`).then((response) => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/tab2`).then((response) => {
             setOutgoing(response.data)
         })
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3001/location/${id}/tab3`).then((response) => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/tab3`).then((response) => {
             setIncoming(response.data)
         })
     }, [])

@@ -119,7 +119,7 @@ function AddTransfer() {
     }
 
     const quantityCheck = async() => {
-        let ild = await Axios.post("http://localhost:3001/transfer/validation", {Items: items, Location: formData.To});
+        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/validation", {Items: items, Location: formData.To});
         var result = []
         for(let o1 of ild.data){
             for(let o2 of items){
@@ -148,7 +148,7 @@ function AddTransfer() {
         let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/ild", {Items: items, Location: formData.To});
         let Values = await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/values', {Items: items});
 
-       await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
+       await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/track', { Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
 
     }
 

@@ -56,21 +56,21 @@ function AddDistribution(){
         const handleSubmit = async (e) => {
             e.preventDefault();
             
-            Axios.post("http://localhost:3001/distribution/new", {Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id:formData.Partner},{
+            Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", {Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id:formData.Partner},{
               headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
               }
           });
-          let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", {Item_id: formData.item, Location_id: formData.location})
+          let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_ild", {Item_id: formData.item, Location_id: formData.location})
           
-          let OID_response = await Axios.post("http://localhost:3001/distribution/find_id", {RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner});
+          let OID_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_id", {RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner});
 
-          let V_response = await Axios.post("http://localhost:3001/distribution/find_value", {Item_id: formData.item})
+          let V_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_value", {Item_id: formData.item})
 
-          Axios.post("http://localhost:3001/distribution/track", {Order_id: OID_response.data[0].Order_id, Quantity: formData.Quantity, Value: formData.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id});
+          Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/track", {Order_id: OID_response.data[0].Order_id, Quantity: formData.Quantity, Value: formData.Quantity * V_response.data[0].FairMarketValue, ItemLocationFK: IL_response.data[0].ItemLocation_id});
           
-          let current = await Axios.post("http://localhost:3001/distribution/find_q", {ItemLocationFK: IL_response.data[0].ItemLocation_id})
-          Axios.put("http://localhost:3001/distribution/update_item", {Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity});
+          let current = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/find_q", {ItemLocationFK: IL_response.data[0].ItemLocation_id})
+          Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/update_item", {Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity});
 
          
           
@@ -79,19 +79,19 @@ function AddDistribution(){
           }
 
           useEffect(() => {
-            Axios.get("http://localhost:3001/partner").then((response) =>{
+            Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) =>{
                     setPartners(response.data);
                 })
           }, [])
           
           useEffect(() => {
-            Axios.get("http://localhost:3001/item").then((response) =>{
+            Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) =>{
                     setItems(response.data);
                 })
           }, [])
 
           useEffect(() => {
-            Axios.get("http://localhost:3001/location").then((response) =>{
+            Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) =>{
                     setLocations(response.data);
                 })
           }, [])

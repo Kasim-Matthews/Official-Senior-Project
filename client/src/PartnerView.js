@@ -62,7 +62,7 @@ function PartnerView() {
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the partner list?`) == true) {
-            Axios.put(`http://localhost:3001/partner/reactivate/${id}`);
+            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/reactivate/${id}`);
             window.location.reload(false);
         }
     }

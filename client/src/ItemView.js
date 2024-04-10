@@ -13,7 +13,7 @@ function ItemView() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/location/use").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
             setLocationList(response.data);
 
         })
@@ -29,7 +29,7 @@ function ItemView() {
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/item/tab2").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item/tab2").then((response) => {
             setTab2(response.data);
         })
     }, [])
