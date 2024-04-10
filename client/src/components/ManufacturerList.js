@@ -6,7 +6,7 @@ export default function ManufacturerList({handleChange}) {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/list").then((response) => {
-          setManuList(response.data);
+          setManuList(response.data.data);
         })
       }, [])
 

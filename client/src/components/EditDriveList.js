@@ -6,7 +6,7 @@ export default function EditDriveList({handleChange, id}) {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/productdrive/list").then((response) => {
-            setDrives(response.data);
+            setDrives(response.data.data);
         })
     }, [])
 
