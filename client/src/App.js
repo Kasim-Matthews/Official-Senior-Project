@@ -1,5 +1,5 @@
 import Login from './login';
-import Home from './Home';
+import Home from './home';
 import Order from './Order';
 import AddOrder from './AddOrder';
 import AddPartner from'./AddPartner';
