@@ -76,7 +76,7 @@ function Purchase() {
                 setPartners(response.data.data);
             }
 
-            else if (response.data.status === 'error in query'){
+            else if (response.data.status === 'error in query') {
                 navigate('/query')
                 console.error("Fail in the query loading vendor options for the filter")
                 console.error(response.data.message)
@@ -119,12 +119,12 @@ function Purchase() {
 
         if (filters.Vendor != "") {
             temp = temp.filter(f => f.Name == filters.Vendor);
-            
+
         }
 
         if (filters.Location != "") {
             temp = temp.filter(f => f.Location == filters.Location);
-            
+
         }
 
 
@@ -136,7 +136,76 @@ function Purchase() {
         setRecords(temp);
     }
 
+    if (records.length == 0) {
+        return (
+            <div>
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="Vendor">
+                        Vendor
+                        <select id="Vendor" name="Vendor" value={filters.Vendor} onChange={handleChange}>
+                            <option value=""></option>
+                            {partners.map((val) => {
+                                return (
+                                    <option value={val.Name}>{val.Name}</option>
+                                )
+                            })}
 
+                        </select>
+
+                    </label>
+
+                    <label htmlFor="Location">
+                        Location
+                        <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
+                            <option value=""></option>
+                            {locations.map((val) => {
+                                return (
+                                    <option value={val.Name}>{val.Name}</option>
+                                )
+                            })}
+
+                        </select>
+
+                    </label>
+
+                    <label>
+                        Date Range
+                        <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                    </label>
+
+
+
+                    <input type="submit" value="Filter" />
+                    <button onClick={clearFilters}>Clear</button>
+
+
+                </form>
+
+                <button><Link to="/purchase/new">Add</Link></button>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Partner</th>
+                            <th>Recieved Date</th>
+                            <th>Total Items</th>
+                            <th>Comments</th>
+                            <th>Amount Spent</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
 
     return (
         <div>
