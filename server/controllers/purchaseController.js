@@ -15,7 +15,7 @@ const data = (req, res) => {
             select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, i.TotalValue as Total, i.Intake_id, SUM(ii.Quantity) as TotalItems, l.Name as Location
             from sql5669328.intake i
             join sql5669328.partner p on i.Partner = p.Partner_id
-            join sql5669328.partnerType pt on p.Type = pt.PartnerType_id
+            join sql5669328.partnertype pt on p.Type = pt.PartnerType_id
             join sql5669328.intakeitems ii on i.Intake_id = ii.Intake_id
             join sql5669328.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
             join sql5669328.location l on il.Location_id = l.Location_id
