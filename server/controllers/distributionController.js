@@ -5,8 +5,8 @@ var sb = mysql.createPool(dbconfig);
 const distribution_index = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             console.log('Connected!');
@@ -125,8 +125,8 @@ const distribution_remove = (req, res) => {
     let id = req.params.id;
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -159,8 +159,8 @@ const distribution_view = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -201,8 +201,8 @@ const distribution_itemlist = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -241,8 +241,8 @@ const distribution_edit = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -281,8 +281,8 @@ const distribution_edit_items = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -327,8 +327,8 @@ const distribution_update = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof Comments != "string" && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number') {
@@ -364,8 +364,8 @@ const distribution_find_ild = (req, res) => {
     let Location = req.body.Location_id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object" && typeof Location != "string") {
@@ -410,8 +410,8 @@ const validation = (req, res) => {
     let Location = req.body.Location_id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object" && typeof Location != "string") {
@@ -457,8 +457,8 @@ const distribution_find_value = (req, res) => {
     let Items = req.body.Items
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object") {
@@ -501,8 +501,8 @@ const distribution_find_value = (req, res) => {
 const distribution_find_id = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const query = "SELECT MAX(Order_id) as Order_id FROM sql5669328.order;"
@@ -535,8 +535,8 @@ const distribution_track = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object" && typeof Values != "object" && typeof ItemLocationFK != "object") {
@@ -579,8 +579,8 @@ const distribution_update_item = (req, res) => {
     let Location = req.body.Location_id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Location != "string" && typeof Items != "object") {
@@ -635,8 +635,8 @@ const distribution_complete = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != 'string') {
@@ -671,8 +671,8 @@ const distribution_incomplete = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != 'string') {
@@ -707,8 +707,8 @@ const distribution_cleanup = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != 'string') {
@@ -746,8 +746,8 @@ const distribution_reclaim = (req, res) => {
     let records = req.body.records
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof records != "object") {
@@ -788,8 +788,8 @@ const distribution_update_delete = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -824,8 +824,8 @@ const distribution_print = (req, res) => {
     let id = req.params.id
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {

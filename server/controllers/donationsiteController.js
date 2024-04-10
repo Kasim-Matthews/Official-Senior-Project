@@ -99,8 +99,8 @@ const dsite_create = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Name != "string" && typeof Address != "string") {
@@ -137,8 +137,8 @@ const dsite_reactivate = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -176,8 +176,8 @@ const dsite_delete = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof date != "string") {
@@ -256,8 +256,8 @@ const dsite_update = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof Name != "string" && typeof Address != "string") {

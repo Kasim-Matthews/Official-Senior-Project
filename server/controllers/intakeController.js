@@ -6,8 +6,8 @@ const data = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `
@@ -48,8 +48,8 @@ const create = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Partner != "number" && typeof Value != "number") {
@@ -88,8 +88,8 @@ const location = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object" && typeof Location != "string") {
@@ -133,6 +133,7 @@ const find_id = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const query = "SELECT MAX(Intake_id) as Intake_id FROM sql5669328.intake;"
@@ -163,8 +164,8 @@ const track = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object" && typeof Values != "object" && typeof FKItemLocation != "object") {
@@ -209,8 +210,8 @@ const update_item = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof ItemLocationFK != "object" && typeof Items != "object") {
@@ -250,8 +251,8 @@ const intake_view = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -295,8 +296,8 @@ const edit = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -344,8 +345,8 @@ const update = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
@@ -382,8 +383,8 @@ const intake_find_value = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object") {
@@ -429,8 +430,8 @@ const intake_cleanup = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != 'string') {
@@ -470,8 +471,8 @@ const intake_reclaim = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof records != "object") {
@@ -514,8 +515,8 @@ const intake_remove = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -552,8 +553,8 @@ const intake_edit_items = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -594,8 +595,8 @@ const intake_update_delete = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -629,8 +630,8 @@ const intake_update_delete = (req, res) => {
 const intake_misc = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `SELECT p.Partner_id

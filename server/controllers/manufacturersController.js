@@ -78,7 +78,7 @@ const manu_list = (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
+            console.log('Error')
             res.status(500).json({'message': error.message})
         }
         else{
@@ -111,8 +111,8 @@ const manu_create = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Name != "string") {
@@ -149,8 +149,8 @@ const manu_reactivate = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -188,8 +188,8 @@ const manu_delete = (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string" && typeof date != "string") {
@@ -268,8 +268,8 @@ const manu_update = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string" && typeof Name != "string") {

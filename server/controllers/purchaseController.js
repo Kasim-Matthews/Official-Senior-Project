@@ -8,6 +8,7 @@ const data = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `
@@ -51,6 +52,7 @@ const create = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Total != "number" && typeof Partner != "number") {
@@ -89,6 +91,7 @@ const location = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object" && typeof Location != "string") {
@@ -133,6 +136,7 @@ const find_id = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const query = "SELECT MAX(Intake_id) as Intake_id FROM sql5669328.intake;"
@@ -165,6 +169,7 @@ const track = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Items != "object" && typeof Value != "number" && typeof FKItemLocation != "object") {
@@ -211,6 +216,7 @@ const update_item = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof ItemLocationFK != "object" && typeof Quantity != "object") {
@@ -252,6 +258,7 @@ const purchase_view = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -297,6 +304,7 @@ const edit = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -344,6 +352,7 @@ const update = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
@@ -384,6 +393,7 @@ const purchase_cleanup = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != 'string') {
@@ -424,6 +434,7 @@ const purchase_reclaim = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof records != "object") {
@@ -467,6 +478,7 @@ const purchase_remove = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -504,6 +516,7 @@ const purchase_edit_items = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -546,6 +559,7 @@ const purchase_update_delete = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {

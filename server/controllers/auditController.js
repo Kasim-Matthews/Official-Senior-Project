@@ -6,8 +6,8 @@ var sb = mysql.createPool(dbconfig);
 const index = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `SELECT a.Audit_id, CAST(a.Date as char(10)) as Date, COUNT(IF(ai.Changed IS NOT null, 1, NULL)) as Affected
@@ -37,8 +37,8 @@ const index = (req, res) => {
 const inventory = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `SELECT il.ItemLocation_id, i.Name as Item, l.Name as Location, il.Quantity as Past
@@ -69,8 +69,8 @@ const log = (req, res) => {
     let date = req.body.date;
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof date != "string") {
@@ -110,8 +110,8 @@ const create = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Audits != "object") {
@@ -169,8 +169,8 @@ const update = (req, res) => {
     let Audits = req.body.Audits
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Audits != "object") {
@@ -210,8 +210,8 @@ const update = (req, res) => {
 const last = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `SELECT Audit_id from sql5669328.audit
@@ -241,8 +241,8 @@ const view = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {

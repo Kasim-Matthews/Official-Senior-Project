@@ -5,8 +5,8 @@ var sb = mysql.createPool(dbconfig);
 const item_index = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = "SELECT * FROM sql5669328.item;"
@@ -32,8 +32,8 @@ const item_index = (req, res) => {
 const anything_else = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = "SELECT * FROM sql5669328.item WHERE DeletedAt IS null;"
@@ -62,8 +62,8 @@ const item_creation = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
@@ -120,8 +120,8 @@ const item_delete = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof date != "string") {
@@ -158,8 +158,8 @@ const item_reactivate = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -195,8 +195,8 @@ const item_edit = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -237,8 +237,8 @@ const item_update = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
@@ -296,8 +296,8 @@ const item_view = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -337,8 +337,8 @@ const item_view = (req, res) => {
 const last = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT Item_id from sql5669328.item
@@ -369,8 +369,8 @@ const pair = (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Locations != "object" && typeof Item_id != "number") {
@@ -408,8 +408,8 @@ const pair = (req, res) => {
 const tab2 = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT i.Name as Item, l.Name as Location, il.Quantity

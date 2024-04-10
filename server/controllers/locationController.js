@@ -5,8 +5,8 @@ var sb = mysql.createPool(dbconfig);
 const location_index = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = "SELECT * FROM sql5669328.location;"
@@ -33,8 +33,8 @@ const location_index = (req, res) => {
 const anything_else = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = "SELECT * FROM sql5669328.location WHERE DeletedAt IS null;"
@@ -63,8 +63,8 @@ const location_creation = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Name != "string" && typeof Address != "string") {
@@ -102,8 +102,8 @@ const location_delete = (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string" && typeof date != "string") {
@@ -140,8 +140,8 @@ const location_reactivate = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -178,8 +178,8 @@ const location_edit = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
             return
         }
         else{
@@ -217,8 +217,8 @@ const tab_1 = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -259,8 +259,8 @@ const tab_2 = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -303,8 +303,8 @@ const tab_3 = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -350,8 +350,8 @@ const location_update = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Name != "string" && typeof Address != "string" && typeof id != "string") {
@@ -385,8 +385,8 @@ const location_update = (req, res) => {
 const last = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT Location_id from sql5669328.location
@@ -416,8 +416,8 @@ const pair = (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Items != "object") {
@@ -459,8 +459,8 @@ const partner = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if(typeof name != " string" && typeof address != "string"){

@@ -105,6 +105,7 @@ const vendor_create = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Name != "string" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
@@ -142,6 +143,7 @@ const vendor_reactivate = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string") {
@@ -180,6 +182,7 @@ const vendor_delete = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof id != "string" && typeof date != "string") {
@@ -261,6 +264,7 @@ const vendor_update = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Name != "string" && typeof Type != "number" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {

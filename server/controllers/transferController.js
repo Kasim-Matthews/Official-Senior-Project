@@ -7,8 +7,8 @@ var sb = mysql.createPool(dbconfig);
 const adjustment = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT p.Partner_id, p.Name, p.Location
@@ -40,8 +40,8 @@ const takeaway = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Items != "object" && typeof Location != "number") {
@@ -83,8 +83,8 @@ const give = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Items != "object" && typeof Location != "string") {
@@ -124,8 +124,8 @@ const find_value = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Items != "object") {
@@ -172,8 +172,8 @@ const find_ild = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Items != "object" && typeof Location != "string") {
@@ -221,8 +221,8 @@ const validation = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Items != "object" && typeof Location != "string") {
@@ -274,8 +274,8 @@ const track_intake = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof Items != "object" && typeof Values != "object" && typeof FKItemLocation != "object") {
@@ -316,8 +316,8 @@ const track_intake = (req, res) => {
 const transfer = (req, res) => {
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT p.Name as Taken, l.Name as Given, Cast(i.RecievedDate as char(10)) as Date, i.Intake_id, SUM(ii.Quantity) as TotalMoved, i.Comments, p.Location
@@ -355,8 +355,8 @@ const transfer_view = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if(typeof id != "string"){
@@ -402,8 +402,8 @@ const transfer_cleanup = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != 'string') {
@@ -443,8 +443,8 @@ const transfer_reclaim = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof records != "object") {
@@ -485,8 +485,8 @@ const transfer_renounce = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof records != "object" && typeof Location != "string") {

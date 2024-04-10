@@ -5,8 +5,8 @@ var sb = mysql.createPool(dbconfig);
 const partner_index = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `SELECT Name, Email, Partner_id, DeletedAt FROM sql5669328.partner 
@@ -37,8 +37,8 @@ const partner_index = (req, res) => {
 const anything_else = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `SELECT Name, Email, Partner_id FROM sql5669328.partner 
@@ -67,8 +67,8 @@ const partner_list = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = `SELECT Name, Partner_id FROM sql5669328.partner 
@@ -98,8 +98,8 @@ const partner_options = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             const sqlGet = "SELECT Partner_id as value, Name as label FROM sql5669328.partner;"
@@ -129,8 +129,8 @@ const partner_create = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else {
             if (typeof Name != "string" && typeof Email != "string") {
@@ -169,8 +169,8 @@ const partner_delete = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string" && typeof date != "string") {
@@ -207,8 +207,8 @@ const partner_reactivate = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -245,8 +245,8 @@ const partner_edit = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -287,8 +287,8 @@ const partner_update = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string" && typeof Name != "string" && typeof Email != "string") {
@@ -325,8 +325,8 @@ const partner_view = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             if (typeof id != "string") {
@@ -368,8 +368,8 @@ const partner_types = (req, res) => {
     
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
+            res.status(500).json({'message': error.message})
         }
         else{
             const sqlGet = `SELECT *
