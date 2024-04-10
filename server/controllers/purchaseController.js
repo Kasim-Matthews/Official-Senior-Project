@@ -7,7 +7,6 @@ const data = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -51,7 +50,6 @@ const create = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -90,7 +88,6 @@ const location = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -135,7 +132,6 @@ const location = (req, res) => {
 const find_id = (req, res) => {
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -168,7 +164,6 @@ const track = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -215,7 +210,6 @@ const update_item = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -257,7 +251,6 @@ const purchase_view = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -303,7 +296,6 @@ const edit = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -351,7 +343,6 @@ const update = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -392,7 +383,6 @@ const purchase_cleanup = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -433,7 +423,6 @@ const purchase_reclaim = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
         }
         else{
@@ -477,7 +466,6 @@ const purchase_remove = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
         }
         else{
@@ -515,7 +503,6 @@ const purchase_edit_items = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
         }
         else{
@@ -558,7 +545,6 @@ const purchase_update_delete = (req, res) => {
 
     sb.getConnection(function (error, tempCont){
         if(error){
-            tempCont.release();
             console.log('Error')
         }
         else{
