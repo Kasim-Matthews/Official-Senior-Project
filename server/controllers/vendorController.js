@@ -73,7 +73,7 @@ const vendor_list = (req, res) => {
         }
         else {
             const sqlGet = `SELECT Name, Partner_id FROM sql5669328.partner 
-            join sql5669328.partnertype on csql5669328.partner.Type = sql5669328.partnertype.PartnerType_id 
+            join sql5669328.partnertype on sql5669328.partner.Type = sql5669328.partnertype.PartnerType_id 
             WHERE DeletedAt IS NULL AND sql5669328.partnertype.Type = "Vendor";`
             tempCont.query(sqlGet, (err, result) => {
                 tempCont.release()
