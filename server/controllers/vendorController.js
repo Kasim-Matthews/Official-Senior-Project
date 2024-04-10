@@ -104,7 +104,6 @@ const vendor_create = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -142,7 +141,6 @@ const vendor_reactivate = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -181,7 +179,6 @@ const vendor_delete = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
@@ -263,7 +260,6 @@ const vendor_update = (req, res) => {
 
     sb.getConnection(function (error, tempCont) {
         if (error) {
-            tempCont.release();
             console.log('Error')
         }
         else {
