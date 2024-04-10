@@ -15,13 +15,13 @@ function ViewDrive() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/productdrive/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/productdrive/${id}/edit`).then((response) => {
             setRecord(response.data[0])
         });
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/productdrive/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/productdrive/${id}/view`).then((response) => {
             setIntakeList(response.data)
         });
     }, [])

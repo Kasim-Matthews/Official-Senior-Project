@@ -36,7 +36,7 @@ function AddDonationSite(){
     }
 
     async function handleSubmit() {
-        await Axios.post("http://localhost:3306/donationsite/new", {
+        await Axios.post("http://localhost:3001/donationsite/new", {
           name: formData.Name,
           address: formData.Address,
           type: formData.Type

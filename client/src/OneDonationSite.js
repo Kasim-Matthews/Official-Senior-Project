@@ -15,13 +15,13 @@ function ViewDonationSite() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/donationsite/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/donationsite/${id}/edit`).then((response) => {
             setRecord(response.data[0])
         });
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/donationsite/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/donationsite/${id}/view`).then((response) => {
             setIntakeList(response.data)
         });
     }, [])

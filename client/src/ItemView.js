@@ -20,7 +20,7 @@ function ItemView() {
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/item").then((response) => {
+        Axios.get("http://localhost:3001/item").then((response) => {
             setItemList(response.data);
             setRecords(response.data.filter(function (currentObject) {
                 return typeof (currentObject.DeletedAt) == "object";
@@ -37,14 +37,14 @@ function ItemView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the item list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3306/item/remove/${id}`, { date: date });
+            Axios.put(`http://localhost:3001/item/remove/${id}`, { date: date });
             window.location.reload(false);
         }
     }
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the item list?`) == true) {
-            Axios.put(`http://localhost:3306/item/reactivate/${id}`);
+            Axios.put(`http://localhost:3001/item/reactivate/${id}`);
             window.location.reload(false);
         }
     }

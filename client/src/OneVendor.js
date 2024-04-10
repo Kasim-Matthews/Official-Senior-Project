@@ -15,13 +15,13 @@ function ViewVendor() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/vendor/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/vendor/${id}/edit`).then((response) => {
             setRecord(response.data[0])
         });
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/vendor/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/vendor/${id}/view`).then((response) => {
             setIntakeList(response.data)
         });
     }, [])
