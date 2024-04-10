@@ -37,7 +37,7 @@ const anything_else = (req, res) => {
             console.log('Error')
         }
         else{
-            const sqlGet = "SELECT * FROM claire.location WHERE DeletedAt IS null;"
+            const sqlGet = "SELECT * FROM sql5669328.location WHERE DeletedAt IS null;"
             tempCont.query(sqlGet, (err, result) => {
                 tempCont.release()
                 if (err) {

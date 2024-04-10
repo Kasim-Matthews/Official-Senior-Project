@@ -36,7 +36,7 @@ const anything_else = (req, res) => {
             console.log('Error')
         }
         else {
-            const sqlGet = "SELECT * FROM claire.item WHERE DeletedAt IS null;"
+            const sqlGet = "SELECT * FROM sql5669328.item WHERE DeletedAt IS null;"
             tempCont.query(sqlGet, (err, result) => {
                 tempCont.release();
                 if (err) {
@@ -380,7 +380,7 @@ const pair = (req, res) => {
             }
             if (Locations, Item_id) {
                 for (let location in Locations) {
-                    const sqlInsert = `INSERT INTO claire.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
+                    const sqlInsert = `INSERT INTO sql5669328.itemlocation (Location_id, Item_id, Quantity) VALUES (?,?,0);`
                     tempCont.query(sqlInsert, [Locations[location].Location_id, Item_id], (err, result) => {
                         if (err) {
                             console.log(err);

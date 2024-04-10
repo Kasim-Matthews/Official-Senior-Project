@@ -122,7 +122,7 @@ const create = (req, res) => {
             }
 
             if (Audits) {
-                const sqlInsert = `INSERT INTO sql5669328.audititems (ItemLocation, Past, Changed, Audit) VALUES (?,?,?,(SELECT Audit_id from claire.auditORDER BY Audit_id DESC Limit 1))`
+                const sqlInsert = `INSERT INTO sql5669328.audititems (ItemLocation, Past, Changed, Audit) VALUES (?,?,?,(SELECT Audit_id from sql5669328.auditORDER BY Audit_id DESC Limit 1))`
 
                 for (var i = 0; i < Audits.length; i++) {
                     if (Audits[i].Changed) {
@@ -142,7 +142,7 @@ const create = (req, res) => {
                     }
 
                     else {
-                        const sqlInsert = `INSERT INTO sql5669328.audititems (ItemLocation, Past, Audit) VALUES (?,?,(SELECT Audit_id from claire.auditORDER BY Audit_id DESC Limit 1))`
+                        const sqlInsert = `INSERT INTO sql5669328.audititems (ItemLocation, Past, Audit) VALUES (?,?,(SELECT Audit_id from sql5669328.audit ORDER BY Audit_id DESC Limit 1))`
                         tempCont.query(sqlInsert, [Audits[i].ItemLocation_id, Audits[i].Past], (err, result) => {
                             if (err) {
                                 console.log(err);

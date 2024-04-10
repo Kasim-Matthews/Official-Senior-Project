@@ -10,8 +10,8 @@ const dsite_index = (req, res) => {
         }
         else {
             const sqlGet = `SELECT Name, Address, Partner_id, DeletedAt FROM sql5669328.partner 
-            join claire.partnertype on claire.partner.Type = claire.partnertype.PartnerType_id 
-            WHERE partnertype.Type = "Donation Site";`
+            join sql5669328.partnertype on sql5669328.partner.Type = sql5669328.partnertype.PartnerType_id 
+            WHERE sql5669328.partnertype.Type = "Donation Site";`
             tempCont.query(sqlGet, (err, result) => {
                 tempCont.release();
                 if (err) {
@@ -40,7 +40,7 @@ const anything_else = (req, res) => {
             res.status(500).json({ 'message': error.message })
         }
         else {
-            const sqlGet = `SELECT Name, Address, Partner_id FROM claire.partner 
+            const sqlGet = `SELECT Name, Address, Partner_id FROM sql5669328.partner 
             join sql5669328.partnertype on sql5669328.partner.Type = sql5669328.partnertype.PartnerType_id 
             WHERE DeletedAt IS NULL AND partnertype.Type = "Donation Site";`
             tempCont.query(sqlGet, (err, result) => {
@@ -148,7 +148,7 @@ const dsite_reactivate = (req, res) => {
             }
 
             if (id) {
-                const sqlDelete = `UPDATE claire.partner Set DeletedAt= NULL WHERE Partner_id = ?;`
+                const sqlDelete = `UPDATE sql5669328.partner Set DeletedAt= NULL WHERE Partner_id = ?;`
                 tempCont.query(sqlDelete, [id], (err, result) => {
                     tempCont.release()
                     if (err) {

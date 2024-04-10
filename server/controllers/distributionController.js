@@ -81,7 +81,7 @@ const distribution_creation = (req, res) => {
                             rows.push([result[0][i].ItemLocation_id, result[0][i].Quantity - Items[i].Quantity, result[0][i].Item_id, result[0][i].Location_id])
                         }
                         await tempCont.promise().query(sqlUpdate, [rows]).then(() => {
-                            let sqlInsert = `INSERT INTO sql5669328.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM claire.order),?,((SELECT FairMarketValue from claire.item WHERE Item_id = ?) * ?),(SELECT ItemLocation_id from claire.itemlocation WHERE Item_id = ? AND Location_id = ?))`
+                            let sqlInsert = `INSERT INTO sql5669328.orderitems (Order_id, Quantity, Value, ItemLocationFK) VALUES ((SELECT MAX(Order_id) as Order_id FROM sql5669328.order),?,((SELECT FairMarketValue from sql5669328.item WHERE Item_id = ?) * ?),(SELECT ItemLocation_id from sql5669328.itemlocation WHERE Item_id = ? AND Location_id = ?))`
                             for (var i = 0; i < Items.length; i++) {
                                 tempCont.query(sqlInsert, [Items[i].Quantity, Items[i].Item_id, Items[i].Quantity, Items[i].Item_id, Location], (err, result) => {
                                     if(err){
@@ -427,8 +427,8 @@ const validation = (req, res) => {
                 });
 
                 const sqlGet = `SELECT il.ItemLocation_id, il.Quantity, i.Name as Item, i.Item_id
-                from claire.itemlocation il
-                join claire.item i on i.Item_id = il.Item_id
+                from sql5669328.itemlocation il
+                join sql5669328.item i on i.Item_id = il.Item_id
                 WHERE il.Item_id IN (?) AND il.Location_id = ?;`
 
 

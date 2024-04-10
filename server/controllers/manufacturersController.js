@@ -46,8 +46,8 @@ const anything_else = (req, res) => {
         }
         else{
             const sqlGet = `SELECT p.Name, p.Partner_id, COUNT(ii.FKItemLocation) as TotalItems 
-            FROM claire.partner p 
-            join claire.partnertype pt on p.Type = pt.PartnerType_id
+            FROM sql5669328.partner p 
+            join sql5669328.partnertype pt on p.Type = pt.PartnerType_id
             join sql5669328.intake i on i.Partner = p.Partner_id
             join sql5669328.intakeitems ii on ii.Intake_id = i.Intake_id
             join sql5669328.itemlocation il on il.ItemLocation_id = ii.FKItemLocation 
