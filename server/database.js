@@ -4,6 +4,6 @@ module.exports = {
     password: "xJdIL1M3qI",
     database: 'sql5669328',
     port: 3306,
-    connectionLimit: 50,
+    connectionLimit: 150,
     keepAlive: true
 }
