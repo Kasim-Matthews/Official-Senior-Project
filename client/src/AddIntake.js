@@ -155,7 +155,7 @@ function AddIntake() {
     let V_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/find_value", { Items: items })
     let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/location", { Items: items, Location_id: formData.Location })
 
-    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/track", { Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
     await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
     window.location.href = "/intake";
   }

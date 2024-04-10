@@ -59,8 +59,8 @@ function AddLocation() {
     
 
 
-    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/partner", {name: formData.Name, address: formData.Address, Type: ptype.data[0].PartnerType_id, Location: Location_id.data[0].Location_id})
-    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items}).then(window.location.href ="/location")
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/partner", {name: formData.Name, address: formData.Address})
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/pair", {Items: items}).then(window.location.href ="/location")
 
 
     
