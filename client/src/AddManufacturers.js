@@ -35,7 +35,7 @@ function AddManufacturers() {
 
   function handleSubmit() {
     try {
-      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/new", { name: formData.Name, type: formData.Type}, {
+      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/new", { name: formData.Name}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

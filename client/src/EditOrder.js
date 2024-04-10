@@ -90,7 +90,7 @@ function EditOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -106,10 +106,32 @@ function EditOrder() {
     }
     setFormErrors(errors)
     if (!errors.Comments) {
-        handleSubmit()
+      quantityCheck()
     }
     return;
-}
+  }
+
+  const quantityCheck = async () => {
+    let ild = await Axios.post("http://localhost:3001/distribution/validation", { Items: items, Location_id: formData.Location });
+    var result = []
+    for (let o1 of ild.data) {
+      for (let o2 of items) {
+        if (o1.Item_id == o2.Item_id) {
+          if (o1.Quantity < o2.Quantity) {
+            result.push(o1.Item);
+          }
+        }
+      }
+    }
+    if (result.length == 0) {
+      handleSubmit()
+      return
+    }
+    else {
+      alert(`There is not a sufficient amount of ${result.toString()} to complete the transfer`)
+      return
+    }
+  }
 
   async function handleSubmit() {
 

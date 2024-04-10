@@ -17,9 +17,9 @@ function AddAudit() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/audit/log", {date: date});
-        let id = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/audit/last")
-        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/audit/new", {Audits: inventory, audit: id.data[0].Audit_id});
+        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/audit/new", {Audits: inventory});
         await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/audit/update", {Audits: inventory});
+        window.location.href = `/audit`;
     }
 
     useEffect(() => {
@@ -37,7 +37,7 @@ function AddAudit() {
                     return(
                         <div>
                             <h4>{val.Item} + {val.Location}</h4>
-                            <input type="Number" name="Changed" defaultValue={val.Past} onChange={(e) => handleChange(e, index)}/>
+                            <input type="Number" name="Changed" defaultValue={val.Past} min="0" onChange={(e) => handleChange(e, index)}/>
                         </div>
                     )
                 })}

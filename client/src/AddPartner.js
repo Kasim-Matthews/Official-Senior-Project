@@ -39,7 +39,6 @@ function AddPartner() {
     await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/partner/new", {
       name: formData.Name,
       email: formData.Email,
-      type: formData.Type
     }, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'

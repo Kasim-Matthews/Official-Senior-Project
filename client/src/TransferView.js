@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-import { DateRangePicker } from 'react-date-range'
-import { addDays } from 'date-fns';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+
 
 function TransferView() {
     const navigate = useNavigate();
@@ -17,14 +14,10 @@ function TransferView() {
     const [filters, setFilters] = React.useState({
         From: "",
         To: "",
+        Date: ""
 
     })
 
-    const [state, setState] = React.useState([{
-        startDate: new Date(),
-        endDate: addDays(new Date(), 30),
-        key: 'selection'
-    }])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/transfer").then((response) => {
@@ -63,7 +56,7 @@ function TransferView() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])
@@ -75,6 +68,17 @@ function TransferView() {
                 [event.target.name]: event.target.value
             }
         })
+    }
+
+    function clearFilters(e) {
+        e.preventDefault();
+
+        setFilters({
+            From: "",
+            To: "",
+            Date: ""
+        })
+        setRecords(transferList)
     }
 
     function handleSubmit(e) {
@@ -90,8 +94,8 @@ function TransferView() {
         }
 
 
-        if (state != null) {
-            temp = temp.filter(f => new Date(f.Date) >= state[0].startDate && new Date(f.Date) <= state[0].endDate)
+        if (filters.Date != "") {
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date))
         }
 
 
@@ -117,7 +121,7 @@ function TransferView() {
                 </label>
 
                 <label htmlFor="To">
-                To
+                    To
                     <select id="To" name="To" value={filters.To} onChange={handleChange}>
                         <option value=""></option>
                         {locations.map((val) => {
@@ -129,12 +133,15 @@ function TransferView() {
                     </select>
 
                 </label>
-
-                <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                <label>
+                    Date Range
+                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                </label>
 
 
 
                 <input type="submit" value="Filter" />
+                <button onClick={clearFilters}>Clear</button>
             </form>
             <button><Link to="/transfer/new">Add</Link></button>
             <table>
@@ -159,7 +166,7 @@ function TransferView() {
                                 <td>{val.TotalMoved}</td>
                                 <td>
                                     <button onClick={() => handleRemove(val.Intake_id, val.Taken, val.Location)}>Delete</button>
-                                    <button onClick={() => handleView(val.Intake_id)}>Edit</button>
+                                    <button onClick={() => handleView(val.Intake_id)}>View</button>
                                 </td>
                             </tr>
                         );

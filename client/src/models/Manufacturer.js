@@ -1,5 +1,4 @@
 const Manufacturer = {
-    Name:"",
-    Type: 5
+    Name:""
 }
 export default Manufacturer;

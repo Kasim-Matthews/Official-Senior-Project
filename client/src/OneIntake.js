@@ -15,6 +15,9 @@ function ViewIntake() {
         });
     }, [])
 
+    const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+    const total = itemList.reduce((sum, val) => sum + (parseFloat(val.Quantity) * parseFloat(val.FairMarketValue)), 0);
+
     return (
         <div>
             <table>
@@ -46,12 +49,19 @@ function ViewIntake() {
                         return (
                             <tr>
                                 <td>{val.Item}</td>
-                                <td>{Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
+                                <td>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
                                 <td>{val.Quantity}</td>
                             </tr>
                         )
                     })}
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <td>${total}</td>
+                        <td>{totalQuantity}</td>
+                    </tr>
+                </tfoot>
             </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>

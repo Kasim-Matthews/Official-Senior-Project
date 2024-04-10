@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function EditVendor() {
   const { id } = useParams();
   const [formData, setFormData] = useState({})
   const [formErrors, setFormErrors] = useState({})
+  const navigate = useNavigate();
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/vendor/${id}/edit`).then((response) => {
-      response.data.map((key, value) => { setFormData(key) });
+      if (response.data.status === 'complete') {
+        response.data.data.map((key, value) => { setFormData(key) });
+      }
+
+      else if (response.data.status === 'error in query') {
+        navigate('/query')
+        console.error("Fail in the query")
+        console.error(response.data.message)
+      }
+    }).catch(error => {
+      navigate('/error')
+      console.error(error.response.data.message)
     })
   }, [])
 

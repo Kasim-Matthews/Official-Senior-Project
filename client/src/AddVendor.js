@@ -49,8 +49,7 @@ function AddVendor() {
             name: formData.BusinessName,
             phone: formData.Phone,
             email: formData.Email,
-            contact: formData.ContactName,
-            type: formData.Type
+            contact: formData.ContactName
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'

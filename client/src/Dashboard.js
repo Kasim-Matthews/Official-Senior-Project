@@ -9,21 +9,32 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
 import { TableFooter } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Menu from '@mui/material/Menu';
+import Typography from '@mui/material/Typography';
+import MenuItem from '@mui/material/MenuItem';
+import Box from '@mui/material/Box';
 
 function Dashboard() {
 
     const [items, setItems] = useState([]);
     const [locations, setLocations] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState('');
+    const [auth, setAuth] = React.useState(true);
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
-        axios.get('https://diaper-bank-inventory-management-system.onrender.com/item-location-data')
+        axios.get('https://diaper-bank-inventory-management-system.onrender.com/data')
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);
@@ -36,6 +47,18 @@ function Dashboard() {
                 console.error('Error fetching data', error);
             });
     }, []);
+
+    const handleChange = (event) => {
+        setAuth(event.target.checked);
+      };
+    
+      const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+      };
+    
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
 
     const handleLocationChange = (e) => {
         setSelectedLocation(e.target.value);
@@ -51,77 +74,100 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container">
-            <div className="header">
-                <nav className="navbar">
-                    <ul>
-                        <li><Link to="/Dashboard">Dasboard</Link></li>
-                        <li><Link to="/distribution">Distributions</Link></li>
-                        <li><Link to="/intake">Collections</Link></li>
-                        <li><a href="#">Inventory</a></li>
-                        <li><Link to="/partner">Partner</Link></li>
-                        <li><a href="#">User Profile</a></li>
-                        <li><Link to="/item">Items</Link></li>
-                        <li><Link to="/location">Locations</Link></li>
-                    </ul>
-                </nav>
-            </div>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
+                    <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
+                    </Typography>
+                        <div>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                </Box>
             <div className="main-content">
                     <h1>Welcome, DBNF Admin!</h1>
-                    <Box height={275}
-                         width={500}
-                         my={4}
-                         display="flex"
-                         alignItems="center"
-                         gap={4}
-                         p={2}
-                         borderRadius={2}
-                         sx={{ border: '1px solid grey' }}>
+                <div className="boxes">
+                    <div className="box">
+                    <Card>
+                        <CardContent>
                         <div className="content">
-                        <h2>Item Locations</h2>
+                            <h2>Item Locations</h2>
                             <div className="filter-section">
                                 <FormControl fullWidth>
-                                 <InputLabel id="selectedLocation">Location</InputLabel>
+                                    <InputLabel id="selectedLocation">Location</InputLabel>
                                     <Select labelId="selectedLocation" id="selectedLocation" value={selectedLocation} label="Location" onChange={handleLocationChange}>
                                         <MenuItem value={''}>All Locations</MenuItem>
                                         {locations.map((location, index) => (
-                                        <MenuItem key={index} value={location}>{location}</MenuItem>
+                                            <MenuItem key={index} value={location}>{location}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
                                 <div className="item-table">
-                                <TableContainer component={Paper}>
-                                    <Table sx={{ minWidth: 450 }} aria-label="a simple table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell align="right">Item Name</TableCell>
-                                                <TableCell align="right">Location Name</TableCell>
-                                                <TableCell align="right">Quantity</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {filteredItems.map((item, index) => (
-                                            <TableRow key={index}
-                                                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                                <TableCell>{item.itemName}</TableCell>
-                                                <TableCell>{item.locationName}</TableCell>
-                                                <TableCell>{item.Quantity}</TableCell>
-                                            </TableRow>
-                                            ))}
-                                        </TableBody>
-                                        <TableFooter>
-                                            <TableRow>
-                                                <TableCell colSpan="2">Total Number of Items</TableCell>
-                                                <TableCell>{totalQuantity}</TableCell>
-                                            </TableRow>
-                                        </TableFooter>
-                                    </Table>
-                                </TableContainer>
+                                    <TableContainer component={Paper}>
+                                        <Table sx={{ minWidth: 450 }} aria-label="a simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell align="right">Item Name</TableCell>
+                                                    <TableCell align="right">Location Name</TableCell>
+                                                    <TableCell align="right">Quantity</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {filteredItems.map((item, index) => (
+                                                    <TableRow key={index}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                                        <TableCell>{item.itemName}</TableCell>
+                                                        <TableCell>{item.locationName}</TableCell>
+                                                        <TableCell>{item.Quantity}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                            <TableFooter>
+                                                <TableRow>
+                                                    <TableCell colSpan="2">Total Number of Items</TableCell>
+                                                    <TableCell>{totalQuantity}</TableCell>
+                                                </TableRow>
+                                            </TableFooter>
+                                        </Table>
+                                    </TableContainer>
                                 </div>
                             </div>
                         </div>
-                    </Box>
+                        </CardContent>
+                    </Card>
+                    <div className='pie-chart'>
+                    <Card>
+                        <CardContent>
+                            Pie chart goes here!
+                        </CardContent>
+                    </Card>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
     );
 }
 

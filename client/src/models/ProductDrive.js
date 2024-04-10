@@ -1,5 +1,4 @@
 const ProductDrive = {
-    Name:"",
-    Type:6
+    Name:""
 }
 export default ProductDrive;

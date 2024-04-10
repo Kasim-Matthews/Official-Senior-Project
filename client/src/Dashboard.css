@@ -49,6 +49,19 @@ h1{
   font-family: 'Open Sans', sans-serif;
 }
 
+.boxes{
+  display: flex;
+}
+
+.box{
+  padding: 0px 0px 0px 60px;
+}
+
+.box2{
+  padding: 0px 0px 0px 60px;
+  display: flex;
+}
+
 .content{
   width: 500px;
   padding: 10px;
@@ -67,3 +80,6 @@ Select{
   padding: 10px 0px 10px 0px;
 }
   
+.pie-chart{
+  display: flex;
+}

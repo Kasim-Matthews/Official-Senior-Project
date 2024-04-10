@@ -91,7 +91,7 @@ function AddTransfer() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
             setTo(response.data);
         })
     }, [])
@@ -113,21 +113,42 @@ function AddTransfer() {
         }
         setFormErrors(errors)
         if (!errors.Comments) {
-            handleSubmit()
+            quantityCheck()
         }
         return;
+    }
+
+    const quantityCheck = async() => {
+        let ild = await Axios.post("http://localhost:3001/transfer/validation", {Items: items, Location: formData.To});
+        var result = []
+        for(let o1 of ild.data){
+            for(let o2 of items){
+                if(o1.Item_id == o2.Item_id){
+                    if(o1.Quantity < o2.Quantity){
+                        result.push(o1.Item);
+                    }
+                }
+            }
+        }
+        if(result.length == 0){
+            handleSubmit()
+            return
+        }
+        else{
+            alert(`There is not a sufficient amount of ${result.toString()} to complete the transfer`)
+            return
+        }
     }
 
 
     const handleSubmit = async () => {
         await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/give', {Location:formData.To, Items: items})
-        await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/take', {Location:formData.From.Location, Items: items})
+        await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/take', {Location:formData.From.Location, Items: items})
         await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
-        let id = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/find_id");
         let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/ild", {Items: items, Location: formData.To});
         let Values = await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/values', {Items: items});
 
-        await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data});
+       await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
 
     }
 

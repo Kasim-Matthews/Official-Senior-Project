@@ -77,8 +77,8 @@ function AddOrder() {
   }
 
 
-  function handleCancel(){
-    if(window.confirm("Are you sure you want to cancel") == true){
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
       window.location.href = "/distribution";
     }
   }
@@ -94,26 +94,48 @@ function AddOrder() {
     }
     setFormErrors(errors)
     if (!errors.Comments) {
-        handleSubmit()
+      quantityCheck()
     }
     return;
-}
+  }
+
+  const quantityCheck = async () => {
+    let ild = await Axios.post("http://localhost:3001/distribution/validation", { Items: items, Location_id: formData.Location });
+    var result = []
+    for (let o1 of ild.data) {
+      for (let o2 of items) {
+        if (o1.Item_id == o2.Item_id) {
+          if (o1.Quantity < o2.Quantity) {
+            result.push(o1.Item);
+          }
+        }
+      }
+    }
+
+    if (result.length == 0) {
+      handleSubmit()
+      return
+    }
+    else {
+      alert(`There is not a sufficient amount of ${result.toString()} to complete the transfer`)
+    }
+  }
 
 
   const handleSubmit = async () => {
 
-    Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
-
-    let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_ild", { Items: items, Location_id: formData.Location  })
-    let OID_response = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_id");
-    let V_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_value", {Items: items })
-    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/track", { Order_id: OID_response.data[0].Order_id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
-    await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
-    window.location.href = "/distribution";
+    try {
+      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      window.location.href = "/distribution";
+    }
+    catch (error) {
+      navigate('/query')
+      console.error(error)
+    }
 
   }
 
@@ -124,7 +146,7 @@ function AddOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])

@@ -113,7 +113,7 @@ function EditIntake() {
 
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])
