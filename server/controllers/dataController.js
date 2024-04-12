@@ -19,23 +19,36 @@ const bcrypt = require('bcrypt');
 
 
 
-const data = (req, res) => {
-    const query = `
-        SELECT i.Name as itemName, l.Name as locationName, il.Quantity
-        FROM sql5669328.itemlocation il 
-        JOIN sql5669328.item i ON il.Item_id = i.Item_id
-        JOIN sql5669328.location l ON il.Location_id = l.Location_id`;
+const data = async (req, res) => {
+    
+    try {
+        let sqlGet = `SELECT item."Name" as itemName, location."Name" as locationName, itemlocation."Quantity"
+        FROM public.itemlocation
+        Join public.item on item."Item_id" = itemlocation."Item_id"
+        join public.location on location."Location_id" = itemlocation."Location_id"`
+        const response = await sb.query(sqlGet);
+        res.send({ status: 'complete', data: response.rows })
+    }
+    catch (error) {
+        res.sendStatus(500).json({ "message": error.message })
+    }
 
-    sb.query(query, (err, result) => {
+    // const query = `
+    //     SELECT i.Name as itemName, l.Name as locationName, il.Quantity
+    //     FROM sql5669328.itemlocation il 
+    //     JOIN sql5669328.item i ON il.Item_id = i.Item_id
+    //     JOIN sql5669328.location l ON il.Location_id = l.Location_id`;
 
-        console.log(result)
+    // sb.query(query, (err, result) => {
 
-        if (err) {
-            res.send({ status: 'error', message: err.message });
-        } else {
-            res.send({ status: 'ok', data: result });
-        }
-    });
+    //     console.log(result)
+
+    //     if (err) {
+    //         res.send({ status: 'error', message: err.message });
+    //     } else {
+    //         res.send({ status: 'ok', data: result });
+    //     }
+    // });
 }
 
 module.exports = {

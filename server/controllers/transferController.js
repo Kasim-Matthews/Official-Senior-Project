@@ -299,7 +299,7 @@ const validation = async (req, res) => {
                 ids.push(element.Item_id);
             });
 
-            let sqlGet = `SELECT "ItemLocation_id", "Quantity", "Name" as Item, item."Item_id"
+            let sqlGet = `SELECT "ItemLocation_id", "Quantity", item."Name" as Item, item."Item_id"
             from public.itemlocation
             join public.item on itemlocation."Item_id" = item."Item_id"
             WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
