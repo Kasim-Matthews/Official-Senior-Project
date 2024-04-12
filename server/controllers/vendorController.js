@@ -255,9 +255,17 @@ const vendor_delete = (req, res) => {
 
 }
 
-const vendor_edit = (req, res) => {
+const vendor_edit = async (req, res) => {
     let id = req.params.id
-
+    try{
+        let sqlGet = `SELECT "Name" as BusinessName, "Email", "PhoneNumber" as "Phone", "ContactName" FROM public.partner
+        Where "Partner_id" = ${id}`
+        const response = await sb.query(sqlGet);
+        res.send({status: 'complete', data: response.rows})
+    }
+    catch (error){
+        res.send({status: 'error', message: error.message})
+    }
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
