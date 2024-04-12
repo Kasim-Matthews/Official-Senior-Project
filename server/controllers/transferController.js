@@ -14,8 +14,19 @@ sb.on('error', error => {
 
 
 
-const adjustment = (req, res) => {
-    sb.getConnection(function (error, tempCont){
+const adjustment = async (req, res) => {
+    try {
+        let sqlGet = `SELECT "Partner_id", "Name", "Location"
+        from public.partner
+        WHERE "Location" IS NOT NULL`
+        const response = await sb.query(sqlGet);
+        res.send({ status: 'complete', data: response.rows })
+    }
+    catch (error) {
+        res.send({ status: 'error', message: error.message })
+    }
+
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -40,7 +51,7 @@ const adjustment = (req, res) => {
                 
             })
         }
-    })
+    })*/
 
 }
 
@@ -48,7 +59,7 @@ const takeaway = (req, res) => {
     let Location = req.body.Location
     let Items = req.body.Items
 
-    sb.getConnection(function (error, tempCont){
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -82,7 +93,7 @@ const takeaway = (req, res) => {
                 console.log("Taking away complete")
             }
         }
-    })
+    })*/
 
 
 }
@@ -91,7 +102,7 @@ const give = (req, res) => {
     let Location = req.body.Location
     let Items = req.body.Items
 
-    sb.getConnection(function (error, tempCont){
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -125,14 +136,36 @@ const give = (req, res) => {
                 console.log("Giving complete")
             }
         }
-    })
+    })*/
 
 }
 
-const find_value = (req, res) => {
+const find_value = async (req, res) => {
     let Items = req.body.Items
 
-    sb.getConnection(function (error, tempCont){
+    if (typeof Items != "object") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (Items) {
+        try {
+            let ids = []
+            Items.forEach(element => {
+                ids.push(element.Item_id);
+            });
+
+            let sqlGet = `SELECT "FairMarketValue"
+            from public.item
+            WHERE "Item_id" IN (${ids})`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        } catch (error) {
+            res.send({ status: 'error', message: error.message })
+        }
+    }
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -171,16 +204,39 @@ const find_value = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
 
-const find_ild = (req, res) => {
+const find_ild = async (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location
 
-    sb.getConnection(function (error, tempCont){
+
+    if (typeof Items != "object" && typeof Location != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (Items && Location) {
+        try {
+            let ids = []
+            Items.forEach(element => {
+                ids.push(element.Item_id);
+            });
+
+            let sqlGet = `SELECT "ItemLocation_id"
+            from public.itemlocation
+            WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        } catch (error) {
+            res.send({ status: 'error', message: error.message })
+        }
+    }
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -221,15 +277,39 @@ const find_ild = (req, res) => {
         
             }
         }
-    })
+    })*/
 
 }
 
-const validation = (req, res) => {
+const validation = async (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location
 
-    sb.getConnection(function (error, tempCont){
+    
+    if (typeof Items != "object" && typeof Location != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (Items && Location) {
+        try {
+            let ids = []
+            Items.forEach(element => {
+                ids.push(element.Item_id);
+            });
+
+            let sqlGet = `SELECT "ItemLocation_id", "Quantity", "Name" as Item, item."Item_id"
+            from public.itemlocation
+            join public.item on itemlocation."Item_id" = item."Item_id"
+            WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        } catch (error) {
+            res.send({ status: 'error', message: error.message })
+        }
+    }
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -271,7 +351,7 @@ const validation = (req, res) => {
         
             }
         }
-    })
+    })*/
 
 }
 
@@ -282,7 +362,7 @@ const track_intake = (req, res) => {
     let Values = req.body.Values
     let FKItemLocation = req.body.FKItemLocation
 
-    sb.getConnection(function (error, tempCont){
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -319,12 +399,30 @@ const track_intake = (req, res) => {
                 
             }
         }
-    })
+    })*/
 
 }
 
-const transfer = (req, res) => {
-    sb.getConnection(function (error, tempCont){
+const transfer = async (req, res) => {
+    
+    try {
+        let sqlGet = `SELECT partner."Name" as Taken, location."Name" as Given, "RecievedDate" as Date, "Intake_id", SUM(intakeitems."Quantity") as TotalMoved, intake."Comments", partner."Location"
+        from public.intake
+        join public.partner on "Partner" = "Partner_id"
+        join public.partnertype on partner."Type_id" = "PartnerType_id"
+        join public.intakeitems on "Intake" = "Intake_id"
+        join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+        join public.location on location."Location_id" = itemlocation."Location_id"
+        WHERE partnertype."Type" = 'Adjustment'
+        group by partner."Name", location."Name", "RecievedDate", intake."Intake_id", partner."Location"`
+        const response = await sb.query(sqlGet);
+        res.send({ status: 'complete', data: response.rows })
+    }
+    catch (error) {
+        res.send({ status: 'error', message: error.message })
+    }
+    
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -356,14 +454,37 @@ const transfer = (req, res) => {
                 
             })
         }
-    })
+    })*/
 
 }
 
-const transfer_view = (req, res) => {
+const transfer_view = async (req, res) => {
     let id = req.params.id
+    if(typeof id != "string"){
+        res.send("Invalid");
+        res.end();
+        return;
+    }
 
-    sb.getConnection(function (error, tempCont){
+    if (id) {
+        try {
+            let sqlGet = `SELECT partner."Name" as Taken, location."Name" as Given, "RecievedDate" as Date, intakeitems."Quantity", item."Name" as Item
+            from public.intake
+            join public.partner on "Partner" = "Partner_id"
+            join public.intakeitems on "Intake" = "Intake_id"
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            join public.item on item."Item_id" = itemlocation."Item_id"
+            join public.location on location."Location_id" = itemlocation."Location_id"
+            WHERE intake."Intake_id" = ${id}
+            group by partner."Name", location."Name", "RecievedDate", item."Name", intakeitems."Quantity"`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        }
+        catch (error) {
+            res.send({ status: 'error', message: error.message })
+        }
+    }
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -403,14 +524,14 @@ const transfer_view = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
 const transfer_cleanup = (req, res) => {
     let id = req.params.id
 
-    sb.getConnection(function (error, tempCont){
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -444,14 +565,14 @@ const transfer_cleanup = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
 const transfer_reclaim = (req, res) => {
     let records = req.body.records
 
-    sb.getConnection(function (error, tempCont){
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -485,7 +606,7 @@ const transfer_reclaim = (req, res) => {
         
             }
         }
-    })
+    })*/
 
 }
 
@@ -493,7 +614,7 @@ const transfer_renounce = (req, res) => {
     let records = req.body.records
     let Location = req.body.Location
 
-    sb.getConnection(function (error, tempCont){
+    /*sb.getConnection(function (error, tempCont){
         if(error){
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -528,7 +649,7 @@ const transfer_renounce = (req, res) => {
         
             }
         }
-    })
+    })*/
 
 }
 

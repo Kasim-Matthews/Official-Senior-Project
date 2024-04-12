@@ -345,9 +345,23 @@ const vendor_update = (req, res) => {
 
 }
 
-const vendor_view = (req, res) => {
+const vendor_view = async(req, res) => {
     let id = req.params.id;
 
+    try{
+        let sqlGet = `SELECT "Intake_id", "RecievedDate" as PurchaseDate, SUM("Quantity") as Total
+        from public.intake
+        join public.intakeitems on "Intake" = "Intake_id"
+        join public.itemlocation on "ItemLocation_id" = "FKItemLocation"
+        join public.partner on "Partner" = "Partner_id"
+        WHERE "Partner" = ${id}
+        GROUP by "Intake_id"`
+        const response = await sb.query(sqlGet);
+        res.send({status: 'complete', data: response.rows})
+    }
+    catch (error){
+        res.send({status: 'error', message: error.message})
+    }
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
