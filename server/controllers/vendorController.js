@@ -1,10 +1,29 @@
 const mysql = require('mysql2');
+const pg = require('pg')
+
+const { Pool } = pg
 const dbconfig = require('../database')
-var sb = mysql.createPool(dbconfig);
+var sb = new Pool(dbconfig)
+
+sb.on('connect', connection => {
+    console.log("Connected")
+})
+sb.on('error', error => {
+    console.log(error);
+})
 
 const vendor_index = async (req, res) => {
-
-    sb.getConnection(function (error, tempCont) {
+    try{
+        let sqlGet = `SELECT * FROM public.partner
+        Join public.partnertype on "PartnerType_id" = "Type_id"
+        Where "Type" = 'Vendor'`
+        const response = await sb.query(sqlGet);
+        console.log(response.rows)
+    }
+    catch (error){
+        res.send({status: 'error', message: error.message})
+    }
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -30,12 +49,12 @@ const vendor_index = async (req, res) => {
 
             })
         }
-    })
+    })*/
 
 }
 
 const anything_else = (req, res) => {
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -61,12 +80,12 @@ const anything_else = (req, res) => {
 
             })
         }
-    })
+    })*/
 
 }
 
 const vendor_list = (req, res) => {
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -92,7 +111,7 @@ const vendor_list = (req, res) => {
 
             })
         }
-    })
+    })*/
 
 }
 
@@ -102,7 +121,7 @@ const vendor_create = (req, res) => {
     let Email = req.body.email;
     let Contact = req.body.contact;
 
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -134,13 +153,13 @@ const vendor_create = (req, res) => {
 
             }
         }
-    })
+    })*/
 
 }
 const vendor_reactivate = (req, res) => {
     let id = req.params.id;
 
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -171,7 +190,7 @@ const vendor_reactivate = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
@@ -179,7 +198,7 @@ const vendor_delete = (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
 
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -210,14 +229,14 @@ const vendor_delete = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
 const vendor_edit = (req, res) => {
     let id = req.params.id
 
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -249,7 +268,7 @@ const vendor_edit = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
@@ -261,7 +280,7 @@ const vendor_update = (req, res) => {
     let Email = req.body.email;
     let Contact = req.body.contact;
 
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -292,14 +311,14 @@ const vendor_update = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
 const vendor_view = (req, res) => {
     let id = req.params.id;
 
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -338,7 +357,7 @@ const vendor_view = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 

@@ -5,6 +5,13 @@ const { Pool } = pg
 const dbconfig = require('../database')
 var sb = new Pool(dbconfig)
 
+sb.on('connect', connection => {
+    console.log("Connected")
+})
+sb.on('error', error => {
+    console.log(error);
+})
+
 
 
 const distribution_index = (req, res) => {

@@ -1,6 +1,16 @@
 const mysql = require('mysql2');
+const pg = require('pg')
+
+const { Pool } = pg
 const dbconfig = require('../database')
-var sb = mysql.createPool(dbconfig);
+var sb = new Pool(dbconfig)
+
+sb.on('connect', connection => {
+    console.log("Connected")
+})
+sb.on('error', error => {
+    console.log(error);
+})
 
 const partner_index = (req, res) => {
     sb.getConnection(function (error, tempCont) {

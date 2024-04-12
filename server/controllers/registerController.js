@@ -1,13 +1,16 @@
 const mysql =  require('mysql2/promise');
-const sb = mysql.createPool({
-    host: "sql5.freesqldatabase.com",
-    user: "sql5669328",
-    password: "xJdIL1M3qI",
-    database: 'sql5669328',
-    port: 3306,
-    connectionLimit: 50,
-    keepAlive: true
-});
+const pg = require('pg')
+
+const { Pool } = pg
+const dbconfig = require('../database')
+var sb = new Pool(dbconfig)
+
+sb.on('connect', connection => {
+    console.log("Connected")
+})
+sb.on('error', error => {
+    console.log(error);
+})
 
 
 

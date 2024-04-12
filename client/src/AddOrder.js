@@ -191,8 +191,10 @@ function AddOrder() {
 
       <label htmlFor="Drop-off">Drop Off</label>
       <input type="radio" id="Drop-off" name="DeliveryMethod" value="Drop-off" checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange} />
-      <label htmlFor="Other">Other</label>
-      <input type="radio" id="Other" name="DeliveryMethod" value="Other" checked={formData.DeliveryMethod === "Other"} onChange={handleChange} />
+      <label htmlFor="Pick-up">Pick-up</label>
+      <input type="radio" id="Pick-up" name="DeliveryMethod" value="Pick-up" checked={formData.DeliveryMethod === "Pick-up"} onChange={handleChange} />
+      <label htmlFor="Shipped">Shipped</label>
+      <input type="radio" id="Shipped" name="DeliveryMethod" value="Shipped" checked={formData.DeliveryMethod === "Shipped"} onChange={handleChange} />
 
       <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
       {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
