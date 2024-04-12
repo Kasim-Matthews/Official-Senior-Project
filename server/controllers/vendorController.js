@@ -53,7 +53,18 @@ const vendor_index = async (req, res) => {
 
 }
 
-const anything_else = (req, res) => {
+const anything_else = async (req, res) => {
+    try{
+        let sqlGet = `SELECT "Name", "Email", "PhoneNumber" as "Phone", "ContactName" as "Contact", "Partner_id" FROM public.partner
+        Join public.partnertype on "PartnerType_id" = "Type_id"
+        Where "Type" = 'Vendor' AND "DeletedAt" IS NULL`
+        const response = await sb.query(sqlGet);
+        res.send({status: 'complete', data: response.rows})
+    }
+    catch (error){
+        res.send({status: 'error', message: error.message})
+    }
+    
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
@@ -84,7 +95,18 @@ const anything_else = (req, res) => {
 
 }
 
-const vendor_list = (req, res) => {
+const vendor_list = async (req, res) => {
+    try{
+        let sqlGet = `SELECT "Name", "Partner_id" FROM public.partner
+        Join public.partnertype on "PartnerType_id" = "Type_id"
+        Where "Type" = 'Vendor' AND "DeletedAt" IS NULL`
+        const response = await sb.query(sqlGet);
+        res.send({status: 'complete', data: response.rows})
+    }
+    catch (error){
+        res.send({status: 'error', message: error.message})
+    }
+    
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
