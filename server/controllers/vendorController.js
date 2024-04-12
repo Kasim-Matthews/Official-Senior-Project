@@ -14,11 +14,11 @@ sb.on('error', error => {
 
 const vendor_index = async (req, res) => {
     try{
-        let sqlGet = `SELECT * FROM public.partner
+        let sqlGet = `SELECT "Name", "Email", "PhoneNumber" as "Phone", "ContactName" as "Contact", "DeletedAt", "Partner_id" FROM public.partner
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Vendor'`
         const response = await sb.query(sqlGet);
-        console.log(response.rows)
+        res.send({status: 'complete', data: response.rows})
     }
     catch (error){
         res.send({status: 'error', message: error.message})
