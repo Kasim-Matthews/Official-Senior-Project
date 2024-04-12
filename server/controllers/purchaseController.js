@@ -13,9 +13,24 @@ sb.on('error', error => {
 })
 
 
-const data = (req, res) => {
-
-    sb.getConnection(function (error, tempCont) {
+const data = async (req, res) => {
+    try {
+        let sqlGet = `SELECT partner."Name", intake."Comments", "RecievedDate", "TotalValue", intake."Intake_id", SUM(intakeitems."Quantity") as TotalItems, location."Name" as Location
+        from public.intake
+        join public.partner on "Partner" = "Partner_id"
+        join public.partnertype on "Type_id" = "PartnerType_id"
+        join public.intakeitems on "Intake" = "Intake_id"
+        join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+        join public.location on itemlocation."Location_id" = location."Location_id"
+        WHERE partnertype."Type" = 'Vendor'
+        group by intake."Intake_id", location."Name", partner."Name"`
+        const response = await sb.query(sqlGet);
+        res.send({ status: 'complete', data: response.rows })
+    }
+    catch (error) {
+        res.sendStatus(500).json({ "message": error.message })
+    }
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -48,7 +63,7 @@ const data = (req, res) => {
 
             })
         }
-    })
+    })*/
 
 }
 
@@ -59,7 +74,7 @@ const create = (req, res) => {
     let Total = req.body.Total;
     let Partner = req.body.Vendor;
 
-    sb.getConnection(function (error, tempCont) {
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -90,15 +105,37 @@ const create = (req, res) => {
                 })
             }
         }
-    })
+    })*/
 
 }
 
-const location = (req, res) => {
+const location = async (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location_id
 
-    sb.getConnection(function (error, tempCont) {
+    if (typeof Items != "object" && typeof Location != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (Items && Location) {
+        try {
+            let ids = []
+            Items.forEach(element => {
+                ids.push(element.Item_id);
+            });
+
+            let sqlGet = `SELECT "ItemLocation_id"
+            from public.itemlocation
+            WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        } catch (error) {
+            res.send({ status: 'error', message: error.message })
+        }
+    }
+    /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
             res.status(500).json({'message': error.message})
@@ -138,36 +175,46 @@ const location = (req, res) => {
 
             }
         }
-    })
+    })*/
 
 }
 
-const find_id = (req, res) => {
-    sb.getConnection(function (error, tempCont) {
-        if (error) {
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else {
-            const query = "SELECT MAX(Intake_id) as Intake_id FROM sql5669328.intake;"
+const find_id = async (req, res) => {
+    try {
+        let sqlGet = `SELECT MAX("Intake_id") as Intake_id
+        from public.intake`
+        const response = await sb.query(sqlGet);
+        res.send({ status: 'complete', data: response.rows })
+    }
+    catch (error) {
+        res.sendStatus(500).json({ "message": error.message })
+    }
 
-            tempCont.query(query, (err, result) => {
-                tempCont.release()
-                if (err) {
-                    console.log(err)
-                    return
-                }
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         const query = "SELECT MAX(Intake_id) as Intake_id FROM sql5669328.intake;"
 
-                else {
-                    console.log("Latest purchase id found")
-                    res.send(result);
-                    res.end()
-                    return;
-                }
+    //         tempCont.query(query, (err, result) => {
+    //             tempCont.release()
+    //             if (err) {
+    //                 console.log(err)
+    //                 return
+    //             }
 
-            })
-        }
-    })
+    //             else {
+    //                 console.log("Latest purchase id found")
+    //                 res.send(result);
+    //                 res.end()
+    //                 return;
+    //             }
+
+    //         })
+    //     }
+    // })
 
 }
 
@@ -176,44 +223,44 @@ const track = (req, res) => {
     let Value = req.body.Total;
     let FKItemLocation = req.body.FKItemLocation;
 
-    sb.getConnection(function (error, tempCont) {
-        if (error) {
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else {
-            if (typeof Items != "object" && typeof Value != "number" && typeof FKItemLocation != "object") {
-                res.send("Invalid")
-                res.end();
-                return
-            }
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof Items != "object" && typeof Value != "number" && typeof FKItemLocation != "object") {
+    //             res.send("Invalid")
+    //             res.end();
+    //             return
+    //         }
 
-            if (Items && Value && FKItemLocation) {
-                const sqlInsert = "INSERT INTO sql5669328.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES ((SELECT MAX(Intake_id) as Intake_id FROM sql5669328.intake),?,?,?);"
-                for (var i = 0; i < Items.length; i++) {
-                    tempCont.query(sqlInsert, [Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
-                        if (err) {
-                            console.log(err);
-                            return
-                        }
+    //         if (Items && Value && FKItemLocation) {
+    //             const sqlInsert = "INSERT INTO sql5669328.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES ((SELECT MAX(Intake_id) as Intake_id FROM sql5669328.intake),?,?,?);"
+    //             for (var i = 0; i < Items.length; i++) {
+    //                 tempCont.query(sqlInsert, [Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
+    //                     if (err) {
+    //                         console.log(err);
+    //                         return
+    //                     }
 
-                        else {
-                            console.log(`${i + 1} out of ${Items.length} purchase items logged`)
-                            res.send()
-                            res.end()
-                            return;
-                        }
-
-
-                    })
-                }
-                console.log("Tracking process complete")
-                tempCont.release()
+    //                     else {
+    //                         console.log(`${i + 1} out of ${Items.length} purchase items logged`)
+    //                         res.send()
+    //                         res.end()
+    //                         return;
+    //                     }
 
 
-            }
-        }
-    })
+    //                 })
+    //             }
+    //             console.log("Tracking process complete")
+    //             tempCont.release()
+
+
+    //         }
+    //     }
+    // })
 
 }
 
@@ -223,132 +270,176 @@ const update_item = (req, res) => {
     let ItemLocationFK = req.body.ItemLocationFK;
     let Items = req.body.Items;
 
-    sb.getConnection(function (error, tempCont) {
-        if (error) {
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else {
-            if (typeof ItemLocationFK != "object" && typeof Quantity != "object") {
-                res.send("Invalid");
-                res.end();
-                return;
-            }
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof ItemLocationFK != "object" && typeof Quantity != "object") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
 
-            if (ItemLocationFK && Items) {
-                const sqlUpdate = "UPDATE sql5669328.itemlocation SET Quantity= Quantity + ? WHERE ItemLocation_id = ?;"
-                for (var i = 0; i < Items.length; i++) {
-                    tempCont.query(sqlUpdate, [Items[i].Quantity, ItemLocationFK[i].ItemLocation_id], (err, result) => {
-                        if (err) {
-                            console.log(err);
-                            return
-                        }
+    //         if (ItemLocationFK && Items) {
+    //             const sqlUpdate = "UPDATE sql5669328.itemlocation SET Quantity= Quantity + ? WHERE ItemLocation_id = ?;"
+    //             for (var i = 0; i < Items.length; i++) {
+    //                 tempCont.query(sqlUpdate, [Items[i].Quantity, ItemLocationFK[i].ItemLocation_id], (err, result) => {
+    //                     if (err) {
+    //                         console.log(err);
+    //                         return
+    //                     }
 
-                        else {
-                            console.log("Updating location quantities")
-                            res.send()
-                            res.end()
-                            return;
-                        }
+    //                     else {
+    //                         console.log("Updating location quantities")
+    //                         res.send()
+    //                         res.end()
+    //                         return;
+    //                     }
 
-                    })
-                }
-                console.log("Updating location quantities complete");
-                tempCont.release()
+    //                 })
+    //             }
+    //             console.log("Updating location quantities complete");
+    //             tempCont.release()
 
-            }
-        }
-    })
-
-}
-
-const purchase_view = (req, res) => {
-    let id = req.params.id
-
-    sb.getConnection(function (error, tempCont) {
-        if (error) {
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else {
-            if (typeof id != "string") {
-                res.send("Invalid");
-                res.end();
-                return;
-            }
-
-            if (id) {
-                const sqlGet = `
-            select Cast(i.RecievedDate as char(10)) as PurchaseDate, p.Name as Vendor, it.Name as Item, l.Name as Location, ii.Quantity
-            from sql5669328.intakeitems ii
-            join sql5669328.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-            join sql5669328.intake i on ii.Intake_id = i.Intake_id
-            join sql5669328.item it on it.Item_id = il.Item_id
-            join sql5669328.location l on l.Location_id = il.Location_id
-            join sql5669328.partner p on i.Partner = p.Partner_id
-            where ii.Intake_id = ?; 
-            `;
-                tempCont.query(sqlGet, [id], (err, result) => {
-                    if (err) {
-                        console.log(err)
-                        return
-                    }
-
-                    else {
-                        console.log("Purchase view data found")
-                        res.send(result);
-                        res.end();
-                        return
-                    }
-
-                })
-            }
-        }
-    })
+    //         }
+    //     }
+    // })
 
 }
 
-const edit = (req, res) => {
+const purchase_view = async (req, res) => {
     let id = req.params.id
 
-    sb.getConnection(function (error, tempCont) {
-        if (error) {
-            console.log('Error')
-            res.status(500).json({'message': error.message})
+    if (typeof id != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (id) {
+        try {
+            let sqlGet = `SELECT "RecievedDate" as PurchaseDate, partner."Name" as Vendor, item."Name" as Item, location."Name" as Location, intakeitems."Quantity"
+            from public.inatkeitems
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            join public.intake on "Intake" = "Intake_id"
+            join public.item on item."Item_id" = itemlocation."Item_id"
+            join public.location on location."Location_id" = itemlocation."Location_id"
+            join public.partner on intake."Partner" = partner."Partner_id"
+            WHERE intakeitems."Intake" = ${id}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
         }
-        else {
-            if (typeof id != "string") {
-                res.send("Invalid");
-                res.end();
-                return;
-            }
-
-            if (id) {
-                const sqlGet = `
-            select i.Comments, i.TotalValue, Cast(i.RecievedDate as char(10)) AS PurchaseDate, i.Partner as Vendor, il.Location_id as Location
-            from sql5669328.intake i
-            join sql5669328.intakeitems ii on i.Intake_id = ii.Intake_id
-            join sql5669328.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-            where i.Intake_id = ?; 
-            `;
-                tempCont.query(sqlGet, [id], (err, result) => {
-                    tempCont.release()
-                    if (err) {
-                        console.log(err)
-                        return
-                    }
-
-                    else {
-                        console.log("Purchase edit data found")
-                        res.send(result);
-                        res.end()
-                        return;
-                    }
-
-                })
-            }
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message })
         }
-    })
+    }
+
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof id != "string") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
+
+    //         if (id) {
+    //             const sqlGet = `
+    //         select Cast(i.RecievedDate as char(10)) as PurchaseDate, p.Name as Vendor, it.Name as Item, l.Name as Location, ii.Quantity
+    //         from sql5669328.intakeitems ii
+    //         join sql5669328.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+    //         join sql5669328.intake i on ii.Intake_id = i.Intake_id
+    //         join sql5669328.item it on it.Item_id = il.Item_id
+    //         join sql5669328.location l on l.Location_id = il.Location_id
+    //         join sql5669328.partner p on i.Partner = p.Partner_id
+    //         where ii.Intake_id = ?; 
+    //         `;
+    //             tempCont.query(sqlGet, [id], (err, result) => {
+    //                 if (err) {
+    //                     console.log(err)
+    //                     return
+    //                 }
+
+    //                 else {
+    //                     console.log("Purchase view data found")
+    //                     res.send(result);
+    //                     res.end();
+    //                     return
+    //                 }
+
+    //             })
+    //         }
+    //     }
+    // })
+
+}
+
+const edit = async (req, res) => {
+    let id = req.params.id
+
+    if (typeof id != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (id) {
+        try {
+            let sqlGet = `SELECT "Comments", "TotalValue", "RecievedDate" as PurchaseDate, "Partner" as Vendor, itemlocation."Location_id" as Location
+            from public.intake
+            join public.intakeitems on "Intake" = "Intake_id"
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            WHERE intake."Intake_id" = ${id}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        }
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message })
+        }
+    }
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof id != "string") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
+
+    //         if (id) {
+    //             const sqlGet = `
+    //         select i.Comments, i.TotalValue, Cast(i.RecievedDate as char(10)) AS PurchaseDate, i.Partner as Vendor, il.Location_id as Location
+    //         from sql5669328.intake i
+    //         join sql5669328.intakeitems ii on i.Intake_id = ii.Intake_id
+    //         join sql5669328.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+    //         where i.Intake_id = ?; 
+    //         `;
+    //             tempCont.query(sqlGet, [id], (err, result) => {
+    //                 tempCont.release()
+    //                 if (err) {
+    //                     console.log(err)
+    //                     return
+    //                 }
+
+    //                 else {
+    //                     console.log("Purchase edit data found")
+    //                     res.send(result);
+    //                     res.end()
+    //                     return;
+    //                 }
+
+    //             })
+    //         }
+    //     }
+    // })
 
 }
 
@@ -359,125 +450,145 @@ const update = (req, res) => {
     let Value = req.body.Value;
     let Partner = req.body.Partner;
 
-    sb.getConnection(function (error, tempCont) {
-        if (error) {
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else {
-            if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
-                res.send("Invalid");
-                res.end();
-                return;
-            }
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
 
-            if (RecievedDate && Value && Partner) {
-                const sqlUpdate = "UPDATE sql5669328.intake SET Comments= ?, RecievedDate= ?, Partner= ?, TotalValue = ? WHERE Intake_id = ?;"
-                tempCont.query(sqlUpdate, [Comments, RecievedDate, Partner, Value, id], (err, result) => {
-                    tempCont.release()
-                    if (err) {
-                        console.log(err);
-                        return
-                    }
+    //         if (RecievedDate && Value && Partner) {
+    //             const sqlUpdate = "UPDATE sql5669328.intake SET Comments= ?, RecievedDate= ?, Partner= ?, TotalValue = ? WHERE Intake_id = ?;"
+    //             tempCont.query(sqlUpdate, [Comments, RecievedDate, Partner, Value, id], (err, result) => {
+    //                 tempCont.release()
+    //                 if (err) {
+    //                     console.log(err);
+    //                     return
+    //                 }
 
-                    else {
-                        console.log("Purchase updated")
-                        res.send()
-                        res.end()
-                        return;
-                    }
+    //                 else {
+    //                     console.log("Purchase updated")
+    //                     res.send()
+    //                     res.end()
+    //                     return;
+    //                 }
 
-                })
-            }
-        }
-    })
+    //             })
+    //         }
+    //     }
+    // })
 
 }
 
 
 
 
-const purchase_cleanup = (req, res) => {
+const purchase_cleanup = async (req, res) => {
     let id = req.params.id
 
-    sb.getConnection(function (error, tempCont) {
-        if (error) {
-            console.log('Error')
-            res.status(500).json({'message': error.message})
+    if(typeof id != "string"){
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (id) {
+        try {
+            let sqlGet = `SELECT intakeitems."Quantity" as Given, intakeitems."FKItemLocation", itemlocation."Item_id"
+            from public.intakeitems
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            WHERE intakeitems."Intake" = ${id}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
         }
-        else {
-            if (typeof id != 'string') {
-                res.send('Invalid');
-                res.end();
-                return
-            }
-
-            if (id) {
-                const sqlUpdate = `SELECT ii.Quantity as Given, ii.FKItemLocation, il.Quantity
-                from sql5669328.intakeitems as ii
-                join sql5669328.itemlocation il on ii.FKItemLocation = il. ItemLocation_id
-                where ii.Intake_id = ?;`
-                tempCont.query(sqlUpdate, [id], (err, result) => {
-                    tempCont.release()
-                    if (err) {
-                        console.log(err)
-                        return
-                    }
-
-                    else {
-                        console.log("Purchase cleanup data found")
-                        res.send(result)
-                        res.end()
-                        return;
-                    }
-
-                })
-            }
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message})
         }
-    })
+    }
+
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof id != 'string') {
+    //             res.send('Invalid');
+    //             res.end();
+    //             return
+    //         }
+
+    //         if (id) {
+    //             const sqlUpdate = `SELECT ii.Quantity as Given, ii.FKItemLocation, il.Quantity
+    //             from sql5669328.intakeitems as ii
+    //             join sql5669328.itemlocation il on ii.FKItemLocation = il. ItemLocation_id
+    //             where ii.Intake_id = ?;`
+    //             tempCont.query(sqlUpdate, [id], (err, result) => {
+    //                 tempCont.release()
+    //                 if (err) {
+    //                     console.log(err)
+    //                     return
+    //                 }
+
+    //                 else {
+    //                     console.log("Purchase cleanup data found")
+    //                     res.send(result)
+    //                     res.end()
+    //                     return;
+    //                 }
+
+    //             })
+    //         }
+    //     }
+    // })
 
 }
 
 const purchase_reclaim = (req, res) => {
     let records = req.body.records
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else{
-            if (typeof records != "object") {
-                res.send("Invalid");
-                res.end();
-                return;
-            }
-        
-            if (records) {
-                for (let record in records) {
-                    Quantity = records[record].Quantity - records[record].Given
-                    const sqlUpdate = "UPDATE sql5669328.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
-                    tempCont.query(sqlUpdate, [Quantity, records[record].FKItemLocation], (err, result) => {
-                        
-                        if (err) {
-                            console.log(err);
-                        }
-                        
-                        else {
-                            console.log("Reclaim in progress")
-                            res.send()
-                            res.end()
-                            return;
-                        }
-                        
-                    })
-                }
-                tempCont.release()
-                console.log("Reclaim complete")
-        
-            }
-        }
-    })
+    // sb.getConnection(function (error, tempCont){
+    //     if(error){
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else{
+    //         if (typeof records != "object") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
+
+    //         if (records) {
+    //             for (let record in records) {
+    //                 Quantity = records[record].Quantity - records[record].Given
+    //                 const sqlUpdate = "UPDATE sql5669328.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+    //                 tempCont.query(sqlUpdate, [Quantity, records[record].FKItemLocation], (err, result) => {
+
+    //                     if (err) {
+    //                         console.log(err);
+    //                     }
+
+    //                     else {
+    //                         console.log("Reclaim in progress")
+    //                         res.send()
+    //                         res.end()
+    //                         return;
+    //                     }
+
+    //                 })
+    //             }
+    //             tempCont.release()
+    //             console.log("Reclaim complete")
+
+    //         }
+    //     }
+    // })
 
 }
 
@@ -485,119 +596,139 @@ const purchase_remove = (req, res) => {
 
     let id = req.params.id;
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else{
-            if (typeof id != "string") {
-                res.send("Invalid");
-                res.end();
-                return;
-            }
-        
-            if (id) {
-                const sqlDelete = 'DELETE FROM sql5669328.intake WHERE Intake_id = ?;'
-                tempCont.query(sqlDelete, [id], (err, result) => {
-                    tempCont.release()
-                    if (err) {
-                        console.log(err);
-                        return
-                    }
+    // sb.getConnection(function (error, tempCont){
+    //     if(error){
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else{
+    //         if (typeof id != "string") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
 
-                    else{
-                        console.log("Purchase deleted");
-                        res.send()
-                        res.end()
-                        return;
-                    }
-                    
-                })
-            }
-        }
-    })
+    //         if (id) {
+    //             const sqlDelete = 'DELETE FROM sql5669328.intake WHERE Intake_id = ?;'
+    //             tempCont.query(sqlDelete, [id], (err, result) => {
+    //                 tempCont.release()
+    //                 if (err) {
+    //                     console.log(err);
+    //                     return
+    //                 }
+
+    //                 else{
+    //                     console.log("Purchase deleted");
+    //                     res.send()
+    //                     res.end()
+    //                     return;
+    //                 }
+
+    //             })
+    //         }
+    //     }
+    // })
 
 }
 
-const purchase_edit_items = (req, res) => {
+const purchase_edit_items = async (req, res) => {
     let id = req.params.id
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else{
-            if (typeof id != "string") {
-                res.send("Invalid");
-                res.end();
-                return;
-            }
-        
-            if (id) {
-                const sqlGet = `
-                SELECT ii.Quantity, il.Item_id as Item
-                from sql5669328.intakeitems as ii
-                join sql5669328.itemlocation il on ii.FKItemLocation= il.ItemLocation_id
-                where ii.Intake_id = ?;
-            `;
-                tempCont.query(sqlGet, [id], (err, result) => {
-                    tempCont.release()
-                    if (err) {
-                        console.log(err)
-                        return
-                    }
+    if(typeof id != "string"){
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
 
-                    else {
-                        console.log("Purchase edit items data found")
-                        res.send(result);
-                        res.end()
-                        return;
-                    }
-                    
-                })
-            }
+    if (id) {
+        try {
+            let sqlGet = `SELECT intakeitems."Quantity", itemlocation."Item_id" as Item
+            from public.intakeitems
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            WHERE intakeitems."Intake" = ${id}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
         }
-    })
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message})
+        }
+    }
+
+    // sb.getConnection(function (error, tempCont){
+    //     if(error){
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else{
+    //         if (typeof id != "string") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
+
+    //         if (id) {
+    //             const sqlGet = `
+    //             SELECT ii.Quantity, il.Item_id as Item
+    //             from sql5669328.intakeitems as ii
+    //             join sql5669328.itemlocation il on ii.FKItemLocation= il.ItemLocation_id
+    //             where ii.Intake_id = ?;
+    //         `;
+    //             tempCont.query(sqlGet, [id], (err, result) => {
+    //                 tempCont.release()
+    //                 if (err) {
+    //                     console.log(err)
+    //                     return
+    //                 }
+
+    //                 else {
+    //                     console.log("Purchase edit items data found")
+    //                     res.send(result);
+    //                     res.end()
+    //                     return;
+    //                 }
+
+    //             })
+    //         }
+    //     }
+    // })
 
 }
 
 const purchase_update_delete = (req, res) => {
     let id = req.params.id
 
-    sb.getConnection(function (error, tempCont){
-        if(error){
-            console.log('Error')
-            res.status(500).json({'message': error.message})
-        }
-        else{
-            if (typeof id != "string") {
-                res.send("Invalid");
-                res.end();
-                return
-            }
-        
-            if (id) {
-                const sqlDelete = "DELETE FROM sql5669328.intakeitems WHERE Intake_id = ?;"
-                tempCont.query(sqlDelete, [id], (err, result) => {
-                    tempCont.release()
-                    if (err) {
-                        console.log(err);
-                        return
-                    }
-                    
-                    else {
-                        console.log("Deleting all refernece of this Purchase")
-                        res.send()
-                        res.end()
-                        return;
-                    }
-                    
-                })
-            }
-        }
-    })
+    // sb.getConnection(function (error, tempCont){
+    //     if(error){
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else{
+    //         if (typeof id != "string") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return
+    //         }
+
+    //         if (id) {
+    //             const sqlDelete = "DELETE FROM sql5669328.intakeitems WHERE Intake_id = ?;"
+    //             tempCont.query(sqlDelete, [id], (err, result) => {
+    //                 tempCont.release()
+    //                 if (err) {
+    //                     console.log(err);
+    //                     return
+    //                 }
+
+    //                 else {
+    //                     console.log("Deleting all refernece of this Purchase")
+    //                     res.send()
+    //                     res.end()
+    //                     return;
+    //                 }
+
+    //             })
+    //         }
+    //     }
+    // })
 
 }
 

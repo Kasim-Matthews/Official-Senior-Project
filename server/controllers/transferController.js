@@ -306,7 +306,7 @@ const validation = async (req, res) => {
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            res.sendStatus(500).json({ "message": error.message})
         }
     }
     /*sb.getConnection(function (error, tempCont){
@@ -419,7 +419,7 @@ const transfer = async (req, res) => {
         res.send({ status: 'complete', data: response.rows })
     }
     catch (error) {
-        res.send({ status: 'error', message: error.message })
+        res.sendStatus(500).json({ "message": error.message})
     }
     
     /*sb.getConnection(function (error, tempCont){
@@ -461,7 +461,7 @@ const transfer = async (req, res) => {
 const transfer_view = async (req, res) => {
     let id = req.params.id
     if(typeof id != "string"){
-        res.send("Invalid");
+        res.sendStatus(400)
         res.end();
         return;
     }
@@ -481,7 +481,7 @@ const transfer_view = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
         }
         catch (error) {
-            res.send({ status: 'error', message: error.message })
+            res.sendStatus(500).json({ "message": error.message})
         }
     }
     /*sb.getConnection(function (error, tempCont){
@@ -528,8 +528,28 @@ const transfer_view = async (req, res) => {
 
 }
 
-const transfer_cleanup = (req, res) => {
+const transfer_cleanup = async (req, res) => {
     let id = req.params.id
+
+    if(typeof id != "string"){
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (id) {
+        try {
+            let sqlGet = `SELECT intakeitems."Quantity" as Given, intakeitems."FKItemLocation", itemlocation."Item_id"
+            from public.intakeitems
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            WHERE intakeitems."Intake" = ${id}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        }
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message})
+        }
+    }
 
     /*sb.getConnection(function (error, tempCont){
         if(error){

@@ -13,15 +13,15 @@ sb.on('error', error => {
 })
 
 const vendor_index = async (req, res) => {
-    try{
+    try {
         let sqlGet = `SELECT "Name", "Email", "PhoneNumber" as "Phone", "ContactName" as "Contact", "DeletedAt", "Partner_id" FROM public.partner
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Vendor'`
         const response = await sb.query(sqlGet);
-        res.send({status: 'complete', data: response.rows})
+        res.send({ status: 'complete', data: response.rows })
     }
-    catch (error){
-        res.send({status: 'error', message: error.message})
+    catch (error) {
+        res.sendStatus(500).json({ "message": error.message })
     }
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -54,17 +54,17 @@ const vendor_index = async (req, res) => {
 }
 
 const anything_else = async (req, res) => {
-    try{
+    try {
         let sqlGet = `SELECT "Name", "Email", "PhoneNumber" as "Phone", "ContactName" as "Contact", "Partner_id" FROM public.partner
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Vendor' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
-        res.send({status: 'complete', data: response.rows})
+        res.send({ status: 'complete', data: response.rows })
     }
-    catch (error){
-        res.send({status: 'error', message: error.message})
+    catch (error) {
+        res.sendStatus(500).json({ "message": error.message })
     }
-    
+
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
@@ -96,17 +96,17 @@ const anything_else = async (req, res) => {
 }
 
 const vendor_list = async (req, res) => {
-    try{
+    try {
         let sqlGet = `SELECT "Name", "Partner_id" FROM public.partner
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Vendor' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
-        res.send({status: 'complete', data: response.rows})
+        res.send({ status: 'complete', data: response.rows })
     }
-    catch (error){
-        res.send({status: 'error', message: error.message})
+    catch (error) {
+        res.sendStatus(500).json({ "message": error.message })
     }
-    
+
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
@@ -257,15 +257,25 @@ const vendor_delete = (req, res) => {
 
 const vendor_edit = async (req, res) => {
     let id = req.params.id
-    try{
-        let sqlGet = `SELECT "Name" as BusinessName, "Email", "PhoneNumber" as "Phone", "ContactName" FROM public.partner
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    if (id) {
+        try {
+            let sqlGet = `SELECT "Name" as BusinessName, "Email", "PhoneNumber" as "Phone", "ContactName" FROM public.partner
         Where "Partner_id" = ${id}`
-        const response = await sb.query(sqlGet);
-        res.send({status: 'complete', data: response.rows})
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        }
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message })
+        }
     }
-    catch (error){
-        res.send({status: 'error', message: error.message})
-    }
+
+
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
             console.log('Error')
@@ -345,22 +355,30 @@ const vendor_update = (req, res) => {
 
 }
 
-const vendor_view = async(req, res) => {
+const vendor_view = async (req, res) => {
     let id = req.params.id;
 
-    try{
-        let sqlGet = `SELECT "Intake_id", "RecievedDate" as PurchaseDate, SUM("Quantity") as Total
-        from public.intake
-        join public.intakeitems on "Intake" = "Intake_id"
-        join public.itemlocation on "ItemLocation_id" = "FKItemLocation"
-        join public.partner on "Partner" = "Partner_id"
-        WHERE "Partner" = ${id}
-        GROUP by "Intake_id"`
-        const response = await sb.query(sqlGet);
-        res.send({status: 'complete', data: response.rows})
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
     }
-    catch (error){
-        res.send({status: 'error', message: error.message})
+
+    if (id) {
+        try {
+            let sqlGet = `SELECT "Intake_id", "RecievedDate" as PurchaseDate, SUM("Quantity") as Total
+            from public.intake
+            join public.intakeitems on "Intake" = "Intake_id"
+            join public.itemlocation on "ItemLocation_id" = "FKItemLocation"
+            join public.partner on "Partner" = "Partner_id"
+            WHERE "Partner" = ${id}
+            GROUP by "Intake_id"`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+        }
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message })
+        }
     }
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
