@@ -22,7 +22,7 @@ const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                             <td>{val.Name}</td>
                             <td>{val.RecievedDate}</td>
                             <td>{val.Comments}</td>
-                            <td>{val.totalIitems}</td>
+                            <td>{val.totalitems}</td>
                             <td>${val.total}</td>
                             <td>
                                 <button onClick={() => handleRemove(val.Intake_id)}>Delete</button>
