@@ -1,8 +1,8 @@
 import React from "react";
 
 const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
-    const total = posts.reduce((sum, val) => sum + parseFloat(val.Total), 0);
-    const totalQuantity = posts.reduce((sum, val) => sum + parseInt(val.TotalItems), 0);
+    const total = posts.reduce((sum, val) => sum + parseFloat(val.total), 0);
+    const totalQuantity = posts.reduce((sum, val) => sum + parseInt(val.totalitems), 0);
     return (
         <table>
             <thead>
@@ -22,8 +22,8 @@ const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                             <td>{val.Name}</td>
                             <td>{val.RecievedDate}</td>
                             <td>{val.Comments}</td>
-                            <td>{val.TotalItems}</td>
-                            <td>${val.Total}</td>
+                            <td>{val.totalIitems}</td>
+                            <td>${val.total}</td>
                             <td>
                                 <button onClick={() => handleRemove(val.Intake_id)}>Delete</button>
                                 <button onClick={() => handleEdit(val.Intake_id)}>Edit</button>

@@ -44,8 +44,8 @@ function Intake() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake").then((response) => {
-            setIntakeList(response.data);
-            setRecords(response.data)
+            setIntakeList(response.data.data);
+            setRecords(response.data.data)
         })
     }, [])
 
@@ -123,13 +123,13 @@ function Intake() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/types").then((response) => {
-            setPartners(response.data);
+            setPartners(response.data.data);
         })
     }, [])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocations(response.data);
+            setLocations(response.data.data);
         })
     }, [])
 

@@ -34,8 +34,8 @@ function Purchase() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/purchase").then((response) => {
-            setIntakeList(response.data);
-            setRecords(response.data)
+            setIntakeList(response.data.data);
+            setRecords(response.data.data)
         })
     }, [])
 
@@ -89,7 +89,7 @@ function Purchase() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocations(response.data);
+            setLocations(response.data.data);
         })
     }, [])
 
