@@ -34,8 +34,8 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                                                 return (
                                                     <TableRow>
                                                         <TableCell>{val.Name}</TableCell>
-                                                        <TableCell>{val.RequestDate}</TableCell>
-                                                        <TableCell>{val.CompletedDate}</TableCell>
+                                                        <TableCell>{new Date(val.RequestDate).toDateString()}</TableCell>
+                                                        <TableCell>{new Date(val.CompletedDate).toDateString()}</TableCell>
                                                         <TableCell>{val.total}</TableCell>
                                                         <TableCell>{val.DeliveryMethod}</TableCell>
                                                         <TableCell>{val.Comments}</TableCell>
