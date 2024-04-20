@@ -7,7 +7,7 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
-            setItem(response.data);
+            setItem(response.data.data);
         })
     }, [])
 

@@ -11,7 +11,7 @@ function ViewTransfer() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/transfer/${id}/view`).then((response) => {
-            setRecord(response.data)
+            setRecord(response.data.data)
         });
     }, [])
 

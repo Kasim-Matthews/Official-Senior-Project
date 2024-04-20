@@ -69,8 +69,8 @@ function PartnerView() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
-            setPartnerList(response.data)
-            setRecords(response.data.filter(function (currentObject) {
+            setPartnerList(response.data.data)
+            setRecords(response.data.data.filter(function (currentObject) {
                 return typeof (currentObject.DeletedAt) == "object";
             }))
         })

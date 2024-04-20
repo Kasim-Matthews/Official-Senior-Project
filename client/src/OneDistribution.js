@@ -10,7 +10,7 @@ function ViewDistribution(){
 
           useEffect(() => {
             Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/view`).then((response) => {
-            setRecord(response.data)});
+            setRecord(response.data.data)});
             }, [])
 
 

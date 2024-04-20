@@ -9,7 +9,7 @@ export default function EditItemInput({ record, handleItem, handleQuantity, inde
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
-            setItem(response.data);
+            setItem(response.data.data);
         })
     }, [])
 

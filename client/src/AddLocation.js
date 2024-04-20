@@ -68,7 +68,7 @@ function AddLocation() {
 
   React.useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
-        setItems(response.data);
+        setItems(response.data.data);
     })
 }, [])
 

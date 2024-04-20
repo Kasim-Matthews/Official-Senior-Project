@@ -11,13 +11,13 @@ function ViewItem() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/edit`).then((response) => {
-            response.data.map((key, value) => { setRecord(key) });
+            response.data.data.map((key, value) => { setRecord(key) });
         })
     }, [])
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/view`).then((response) => {
-            setList(response.data)
+            setList(response.data.data)
         })
     }, [])
 

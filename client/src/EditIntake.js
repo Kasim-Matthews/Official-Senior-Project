@@ -98,15 +98,15 @@ function EditIntake() {
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edit`).then((response) => {
-      setFormData(response.data[0]);
-      setSourceType(response.data[0].Type)
+      setFormData(response.data.data[0]);
+      setSourceType(response.data.data[0].Type)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edititems`).then((response) => {
-      setItems(response.data);
+      setItems(response.data.data);
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -114,7 +114,7 @@ function EditIntake() {
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-      setLocations(response.data);
+      setLocations(response.data.data);
     })
   }, [])
 
@@ -125,7 +125,7 @@ function EditIntake() {
         setFormData(prevFormData => {
           return {
             ...prevFormData,
-            Partner: response.data[0].Partner_id
+            Partner: response.data.data[0].Partner_id
           }
         })
       })

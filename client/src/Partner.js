@@ -18,7 +18,7 @@ function Partner(){
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) =>{
-            setPartnerList(response.data);
+            setPartnerList(response.data.data);
         })
     })
 

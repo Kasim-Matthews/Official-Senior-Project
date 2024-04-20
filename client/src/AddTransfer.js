@@ -92,13 +92,13 @@ function AddTransfer() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setTo(response.data);
+            setTo(response.data.data);
         })
     }, [])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/transfer/adjustment").then((response) => {
-            setFrom(response.data);
+            setFrom(response.data.data);
         })
     }, [])
 

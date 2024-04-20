@@ -77,7 +77,7 @@ function AddPurchase() {
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor/list").then((response) => {
             if (response.data.status === 'complete') {
-                setVendors(response.data);
+                setVendors(response.data.data);
             }
 
             else if (response.data.status === 'error in query'){
@@ -93,7 +93,7 @@ function AddPurchase() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocations(response.data);
+            setLocations(response.data.data);
         })
     }, [])
 

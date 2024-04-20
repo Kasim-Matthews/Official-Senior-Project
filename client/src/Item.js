@@ -9,7 +9,7 @@ function Item(){
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) =>{
-            setItemList(response.data);
+            setItemList(response.data.data);
         })
     })
 

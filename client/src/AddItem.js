@@ -50,7 +50,7 @@ function AddItem() {
       });
     }
     catch (error) {
-      console.log(error.response.data);
+      console.log(error.response.data.data);
     }
 
     let Item_id = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item/last")
@@ -63,7 +63,7 @@ function AddItem() {
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
-        setLocations(response.data);
+        setLocations(response.data.data);
     })
 }, [])
 

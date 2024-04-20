@@ -23,13 +23,13 @@ function EditDistribution(){
 
           useEffect(() => {
             Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/view`).then((response) => {
-            response.data.map((key, value) => {setFormData(value)});
+            response.data.data.map((key, value) => {setFormData(value)});
             })
           }, [])
 
           useEffect(() => {
             Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) =>{
-                    setPartners(response.data);
+                    setPartners(response.data.data);
                 })
           }, [])
 

@@ -9,7 +9,7 @@ function Location(){
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) =>{
-            setLocationList(response.data);
+            setLocationList(response.data.data);
         })
     })
 

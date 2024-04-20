@@ -17,7 +17,7 @@ function ViewDonationSite() {
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
-                setRecord(response.data[0])
+                setRecord(response.data.data[0])
             }
 
             else if (response.data.status === 'error in query') {

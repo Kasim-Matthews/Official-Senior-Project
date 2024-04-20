@@ -10,8 +10,8 @@ function ViewPurchase() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/view`).then((response) => {
-            setRecord(response.data[0])
-            setItemList(response.data)
+            setRecord(response.data.data[0])
+            setItemList(response.data.data)
         });
     }, [])
 

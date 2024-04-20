@@ -22,8 +22,8 @@ function AuditView() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/audit").then((response) => {
-            setAuditList(response.data);
-            setRecords(response.data);
+            setAuditList(response.data.data);
+            setRecords(response.data.data);
         })
     }, [])
 
