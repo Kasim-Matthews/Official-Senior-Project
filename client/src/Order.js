@@ -105,20 +105,20 @@ function Order() {
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/distribution").then((response) => {
-      setDistributionsList(response.data);
-      setRecords(response.data);
+      setDistributionsList(response.data.data);
+      setRecords(response.data.data);
     })
   }, [])
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/use").then((response) => {
-      setPartners(response.data);
+      setPartners(response.data.data);
     })
   }, [])
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-      setLocations(response.data);
+      setLocations(response.data.data);
     })
   }, [])
 
