@@ -107,7 +107,6 @@ function Order() {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/distribution").then((response) => {
       setDistributionsList(response.data);
       setRecords(response.data);
-      console.log(response.data)
     })
   }, [])
 
