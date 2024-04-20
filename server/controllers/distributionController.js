@@ -1044,7 +1044,7 @@ const distribution_update_delete = (req, res) => {
 
 const distribution_print = async (req, res) => {
     let id = req.params.id
-    
+    /* Add the total amount distributed to that specific partner */
     if(typeof id != "string"){
         res.sendStatus(400)
         res.end();
