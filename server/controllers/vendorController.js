@@ -137,11 +137,29 @@ const vendor_list = async (req, res) => {
 
 }
 
-const vendor_create = (req, res) => {
+const vendor_create = async (req, res) => {
     let Name = req.body.name;
     let Phone = req.body.phone;
     let Email = req.body.email;
     let Contact = req.body.contact;
+
+    if (typeof Name != "string" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlInsert = `INSERT INTO public.partner ("Name", "Email", "PhoneNumber", "ContactName", "Type") VALUES ('{${Name}}', '{${Email}}', '{${Phone}}', '{${Contact}}', (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Vendor'))`
+        const response = await sb.query(sqlInsert)
+        console.log(response)
+        res.send()
+        res.end();
+        return;
+    }
+    catch (error) {
+        res.sendStatus(500).json({ "message": error.message })
+    }
 
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
