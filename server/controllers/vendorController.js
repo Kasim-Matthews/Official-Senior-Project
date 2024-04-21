@@ -150,7 +150,7 @@ const vendor_create = async (req, res) => {
     }
 
     try {
-        const sqlInsert = `INSERT INTO public.partner ("Name", "Email", "PhoneNumber", "ContactName", "Type_id") VALUES ('{${Name}}', '{${Email}}', '{${Phone}}', '{${Contact}}', (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Vendor'))`
+        const sqlInsert = `INSERT INTO public.partner ("Name", "Email", "PhoneNumber", "ContactName", "Type") VALUES ('{${Name}}', '{${Email}}', '{${Phone}}', '{${Contact}}', (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Vendor'))`
         const response = await sb.query(sqlInsert)
         res.sendStatus(200)
         res.end();
