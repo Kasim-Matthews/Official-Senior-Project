@@ -56,11 +56,12 @@ function AddVendor() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      window.location.href = "/vendor";
+      console.log(response)
+      //window.location.href = "/vendor";
     }
 
     catch (error) {
-      alert("Your post request did not work")
+      alert("Bad request / Contact developer")
     }
   }
 
