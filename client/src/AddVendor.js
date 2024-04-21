@@ -55,8 +55,7 @@ function AddVendor() {
               'Content-Type': 'application/x-www-form-urlencoded'
             }
           });
-          console.log(response)
-          //window.location.href = "/vendor";
+          window.location.href = "/vendor";
         }
 
     return(
