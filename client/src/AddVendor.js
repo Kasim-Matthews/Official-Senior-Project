@@ -45,7 +45,7 @@ function AddVendor() {
       }
     
       async function handleSubmit() {
-          await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/vendor/new", {
+          const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/vendor/new", {
             name: formData.BusinessName,
             phone: formData.Phone,
             email: formData.Email,
@@ -55,7 +55,8 @@ function AddVendor() {
               'Content-Type': 'application/x-www-form-urlencoded'
             }
           });
-          window.location.href = "/vendor";
+          console.log(response)
+          //window.location.href = "/vendor";
         }
 
     return(
