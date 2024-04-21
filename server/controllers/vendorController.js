@@ -158,7 +158,7 @@ const vendor_create = async (req, res) => {
     }
     catch (error) {
         console.log(error)
-        res.status(500);
+        res.status(500).json(error);
         return;
     }
 
