@@ -71,33 +71,35 @@ function ProductDriveView() {
 
 
     if (records.length == 0) {
-        <div>
+        return (
+            <div>
 
-            <form onSubmit={handleSubmit}>
-                <div style={{ display: "flex" }}>
+                <form onSubmit={handleSubmit}>
+                    <div style={{ display: "flex" }}>
 
-                    <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
-                    <label htmlFor="non-active" >Also include inactive items</label>
+                        <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+                        <label htmlFor="non-active" >Also include inactive items</label>
 
-                </div>
-                <input type="Submit" />
-            </form>
+                    </div>
+                    <input type="Submit" />
+                </form>
 
-            <button><Link to="/productdrive/new">Add</Link></button>
+                <button><Link to="/productdrive/new">Add</Link></button>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Product Drive Name</th>
-                        <th>Quantity of Items</th>
-                        <th>Variety of Items</th>
-                        <th>In-Kind Value</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
-        </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Drive Name</th>
+                            <th>Quantity of Items</th>
+                            <th>Variety of Items</th>
+                            <th>In-Kind Value</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
     }
 
 
