@@ -34,9 +34,10 @@ function ViewManufacturer() {
         getrows();
     }, [])
 
-useEffect(() => {
+    useEffect(() => {
+        console.log("did it")
+    }, [])
 
-}, [])
 
     const handleView = (id) => {
         navigate(`/intake/${id}`)
@@ -48,7 +49,7 @@ useEffect(() => {
                 <table>
                     <thead>
                         <tr>
-                            <h3>Past Donations from {record[0].Manufacturer[0]}</h3>
+                            <h3>Past Donations from {record[0].Date}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
@@ -79,7 +80,7 @@ useEffect(() => {
                 <table>
                     <thead>
                         <tr>
-                            <h3>{`Past Donations from ${record[0].Manufacturer[0]}`}</h3>
+                            <h3>{`Past Donations from ${record.Manufacturer}`}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
