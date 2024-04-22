@@ -133,10 +133,10 @@ function ProductDriveView() {
                         {records.map((val) => {
                             return (
                                 <tr>
-                                    <td>{val.drive}</td>
-                                    <td>{val.quantity}</td>
-                                    <td>{val.variety}</td>
-                                    <td>{val.total}</td>
+                                    <td>{val.Drive}</td>
+                                    <td>{val.Quantity}</td>
+                                    <td>{val.Variety}</td>
+                                    <td>{val.Total}</td>
                                     <td>
                                         {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
                                         <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
