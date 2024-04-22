@@ -56,12 +56,12 @@ function AddVendor() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      console.log(response)
-      //window.location.href = "/vendor";
+      //if about status code of response
+      window.location.href = "/vendor";
     }
 
     catch (error) {
-      alert("Bad request / Contact developer")
+      alert("Server side error/Contact developer")
     }
   }
 
