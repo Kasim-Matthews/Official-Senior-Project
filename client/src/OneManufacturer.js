@@ -36,7 +36,7 @@ function ViewManufacturer() {
 
     useEffect(() => {
         console.log("did it")
-    })
+    }, [])
 
 
     const handleView = (id) => {
@@ -80,7 +80,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>{`Past Donations from ${record[0].Manufacturer}`}</h3>
+                            <h3>{`Past Donations from ${record.Manufacturer}`}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
