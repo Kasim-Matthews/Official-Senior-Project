@@ -19,9 +19,11 @@ const vendor_index = async (req, res) => {
         Where "Type" = 'Vendor'`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -60,9 +62,11 @@ const anything_else = async (req, res) => {
         Where "Type" = 'Vendor' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     /*sb.getConnection(function (error, tempCont) {
@@ -102,9 +106,11 @@ const vendor_list = async (req, res) => {
         Where "Type" = 'Vendor' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     /*sb.getConnection(function (error, tempCont) {
@@ -197,8 +203,27 @@ const vendor_create = async (req, res) => {
     })*/
 
 }
-const vendor_reactivate = (req, res) => {
+const vendor_reactivate = async (req, res) => {
     let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = NULL WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -235,9 +260,28 @@ const vendor_reactivate = (req, res) => {
 
 }
 
-const vendor_delete = (req, res) => {
+const vendor_delete = async (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
+
+    if (typeof id != "string" && typeof date != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = '{${date}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -291,6 +335,7 @@ const vendor_edit = async (req, res) => {
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -331,13 +376,32 @@ const vendor_edit = async (req, res) => {
 
 }
 
-const vendor_update = (req, res) => {
+const vendor_update = async (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
     let Phone = req.body.phone;
     let Email = req.body.email;
     let Contact = req.body.contact;
+
+    if (typeof Name != "string" && typeof Type != "number" && typeof Phone != "string" && typeof Email != "string" && typeof Contact != "string" && typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "Name" = '{${Name}}', "Email" = '{${Email}}', "PhoneNumber" = '{${Phone}}', "ContactName" = '{${Contact}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -394,9 +458,11 @@ const vendor_view = async (req, res) => {
             GROUP by "Intake_id"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
     /*sb.getConnection(function (error, tempCont) {

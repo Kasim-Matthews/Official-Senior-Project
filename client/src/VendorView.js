@@ -13,16 +13,39 @@ function VendorView() {
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the vendor list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date });
-            window.location.reload(false);
+            try {
+                Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date });
+                if (response.status == 400) {
+                    alert("Contact developer")
+                }
+
+                else if (response.status == 200) {
+                    window.location.reload(false);
+                }
+                
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
 
     }
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the vendor list?`) == true) {
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`);
-            window.location.reload(false);
+            try {
+                Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`);
+                if (response.status == 400) {
+                    alert("Contact developer")
+                }
+
+                else if (response.status == 200) {
+                    window.location.reload(false);
+                }
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 

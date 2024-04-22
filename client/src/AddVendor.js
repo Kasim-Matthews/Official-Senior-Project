@@ -19,7 +19,7 @@ function AddVendor() {
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+    const regex_name = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]).*$/;
     const regex_email = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     const regex_phone = /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/
 
@@ -57,9 +57,14 @@ function AddVendor() {
         }
       });
       
-      console.log(response)
-      //if about status code of response
-      //window.location.href = "/vendor";
+
+      if(response.status == 400){
+        alert("Check the values you input. One of the values are not of the correct type.")
+      }
+
+      else if (response.status == 200){
+        window.location.href = "/vendor"
+      }
     }
 
     catch (error) {
