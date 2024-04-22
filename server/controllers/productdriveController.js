@@ -474,7 +474,7 @@ const drive_view = async (req, res) => {
             join public.intakeitems on "Intake_id" = "Intake"
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             join public.location on location."Location_id" = itemlocation."Location_id"
-        Where "Partner_id" = 18
+        Where "Partner_id" = ${id}
         group by intake."Intake_id", location."Name"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
