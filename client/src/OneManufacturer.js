@@ -34,9 +34,7 @@ function ViewManufacturer() {
         getrows();
     }, [])
 
-    useEffect(() => {
-        console.log("did it")
-    }, [])
+    console.log(record)
 
 
     const handleView = (id) => {
