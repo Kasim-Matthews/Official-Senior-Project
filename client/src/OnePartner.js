@@ -16,8 +16,8 @@ function ViewPartner() {
         navigate(`/distribution/${id}/print.pdf`)
     }
 
-    useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/edit`).then((response) => {
+    useEffect(async () => {
+        await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data[0])
             }
@@ -33,8 +33,8 @@ function ViewPartner() {
         });
     }, [])
 
-    useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/view`).then((response) => {
+    useEffect(async () => {
+        await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setDistributionList(response.data.data)
             }
