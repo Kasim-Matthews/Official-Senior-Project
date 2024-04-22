@@ -24,9 +24,11 @@ const drive_index = async (req, res) => {
         group by partner."Name", partner."Partner_id"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -75,9 +77,11 @@ const anything_else = async (req, res) => {
         group by partner."Name", partner."Partner_id"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -123,9 +127,11 @@ const drive_list = async (req, res) => {
         Where "Type" = 'Product Drive' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -158,8 +164,28 @@ const drive_list = async (req, res) => {
 
 }
 
-const drive_create = (req, res) => {
+const drive_create = async (req, res) => {
     let Name = req.body.name;
+
+    if (typeof Name != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlInsert = `INSERT INTO public.partner ("Name", "Type_id") VALUES ('{${Name}}', (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Product Drive'))`
+        const response = await sb.query(sqlInsert)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -197,8 +223,27 @@ const drive_create = (req, res) => {
 
 }
 
-const drive_reactivate = (req, res) => {
+const drive_reactivate = async (req, res) => {
     let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = NULL WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -235,9 +280,28 @@ const drive_reactivate = (req, res) => {
 
 }
 
-const drive_delete = (req, res) => {
+const drive_delete = async (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
+
+    if (typeof id != "string" && typeof date != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = '{${date}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -289,9 +353,11 @@ const drive_edit = async (req, res) => {
         Where "Partner_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -331,10 +397,29 @@ const drive_edit = async (req, res) => {
 
 }
 
-const drive_update = (req, res) => {
+const drive_update = async (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
+
+    if (typeof Name != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "Name" = '{${Name}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -393,9 +478,11 @@ const drive_view = async (req, res) => {
         group by intake."Intake_id", location."Name"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
