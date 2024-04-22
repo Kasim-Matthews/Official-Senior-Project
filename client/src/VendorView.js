@@ -14,16 +14,19 @@ function VendorView() {
         if (window.confirm(`Are you sure you want to delete ${Name} from the vendor list?`) == true) {
             let date = new Date().toLocaleDateString();
             try {
-                const response = Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date });
-                console.log(response)
-                if (response.status == 400) {
-                    alert("Contact developer")
-                }
-
-                else if (response.status == 200) {
-                    window.location.reload(false);
-                }
+                Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date }).then((response) => {
+                console.log(response)    
                 
+                // if (response.status == 400) {
+                    //     alert("Contact developer")
+                    // }
+
+                    // else if (response.status == 200) {
+                    //     window.location.reload(false);
+                    // }
+                })
+
+
             }
             catch (error) {
                 alert("Server side error/Contact developer")
@@ -35,15 +38,18 @@ function VendorView() {
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the vendor list?`) == true) {
             try {
-                const response = Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`);
-                console.log(response)
-                if (response.status == 400) {
-                    alert("Contact developer")
-                }
+                Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`).then((response) => {
+                    console.log(response)    
+                
+                    // if (response.status == 400) {
+                        //     alert("Contact developer")
+                        // }
+    
+                        // else if (response.status == 200) {
+                        //     window.location.reload(false);
+                        // }  
+                })
 
-                else if (response.status == 200) {
-                    window.location.reload(false);
-                }
             }
             catch (error) {
                 alert("Server side error/Contact developer")
