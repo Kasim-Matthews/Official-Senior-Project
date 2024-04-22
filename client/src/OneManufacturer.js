@@ -13,6 +13,7 @@ function ViewManufacturer() {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data)
+                console.log(response.data.data)
             }
 
             else if (response.data.status === 'error in query') {
@@ -39,7 +40,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>{`Past Donations from ${record[0].Manufacturer[0]}`}</h3>
+                            <h3>`Past Donations from {record[0].Manufacturer}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
@@ -70,7 +71,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>{`Past Donations from ${record[0].Manufacturer[0]}`}</h3>
+                            <h3>{`Past Donations from ${record[0].Manufacturer}`}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
