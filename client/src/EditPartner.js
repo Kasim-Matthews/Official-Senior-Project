@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function EditPartner() {
 
   const { id } = useParams();
   const [formData, setFormData] = React.useState({})
   const [formErrors, setFormErrors] = React.useState({})
+  const navigate = useNavigate();
 
 
 
