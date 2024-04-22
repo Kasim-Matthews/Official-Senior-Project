@@ -18,7 +18,7 @@ function AddPartner() {
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+    const regex_name = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]).*$/;
     const regex_email = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
     if (!regex_name.test(formData.Name) && formData.Name != "") {
@@ -36,15 +36,30 @@ function AddPartner() {
   }
 
   async function handleSubmit() {
-    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/partner/new", {
-      name: formData.Name,
-      email: formData.Email,
-    }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+    try {
+      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/partner/new", {
+        name: formData.Name,
+        email: formData.Email,
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });;
+      
+
+      if(response.status == 400){
+        alert("Check the values you input. One of the values are not of the correct type.")
       }
-    });
-    window.location.href = "/partner";
+
+      else if (response.status == 200){
+        window.location.href = "/partner";
+      }
+    }
+
+    catch (error) {
+      alert("Server side error/Contact developer")
+    }
+
   }
 
 

@@ -28,11 +28,26 @@ function PartnerView() {
     const [nonActive, setNonActive] = React.useState(false)
     const navigate = useNavigate();
 
-    const handleRemove = (id, Name) => {
+    const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the partner list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/remove/${id}`, { date: date });
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/remove/${id}`, { date: date }).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
 
     }
@@ -60,25 +75,51 @@ function PartnerView() {
         }
     }
 
-    const handleReactivate = (id, Name) => {
+    const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the partner list?`) == true) {
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/reactivate/${id}`);
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/reactivate/${id}`).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 
-    useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
-            setPartnerList(response.data.data)
-            setRecords(response.data.data.filter(function (currentObject) {
-                return typeof (currentObject.DeletedAt) == "object";
-            }))
+    useEffect(async () => {
+        await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
+            if (response.data.status === 'complete') {
+                setPartnerList(response.data.data)
+                setRecords(response.data.data.filter(function (currentObject) {
+                    return typeof (currentObject.DeletedAt) == "object";
+                }))
+            }
+
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
 
-    if (partnerList[0] == "error"){
-        return(
+    if (partnerList[0] == "error") {
+        return (
             <ErrorHandler />
         )
     }
@@ -144,7 +185,7 @@ function PartnerView() {
                                     <TableCell>{val.Name}</TableCell>
                                     <TableCell>{val.Email}</TableCell>
                                     <TableCell>
-                                    {typeof val.DeletedAt == "object" ? <Button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</Button> : <Button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</Button>}
+                                        {typeof val.DeletedAt == "object" ? <Button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</Button> : <Button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</Button>}
                                         <Button onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
                                         <Button onClick={() => handleView(val.Partner_id)}>View</Button>
                                     </TableCell>

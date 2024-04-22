@@ -10,11 +10,11 @@ function VendorView() {
     const [nonActive, setNonActive] = React.useState(false)
     const navigate = useNavigate();
 
-    const handleRemove = (id, Name) => {
+    const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the vendor list?`) == true) {
             let date = new Date().toLocaleDateString();
             try {
-                Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date }).then((response) => {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date }).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -34,10 +34,10 @@ function VendorView() {
 
     }
 
-    const handleReactivate = (id, Name) => {
+    const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the vendor list?`) == true) {
             try {
-                Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`).then((response) => {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -78,8 +78,8 @@ function VendorView() {
         }
     }
 
-    useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor").then((response) => {
+    useEffect(async () => {
+        await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor").then((response) => {
             if (response.data.status === 'complete') {
                 setVendorList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {

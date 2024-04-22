@@ -22,7 +22,18 @@ function EditPartner() {
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/edit`).then((response) => {
-      response.data.data.map((key, value) => { setFormData(key) });
+      if (response.data.status === 'complete') {
+        response.data.data.map((key, value) => { setFormData(key) });
+      }
+
+      else if (response.data.status === 'error in query') {
+        navigate('/query')
+        console.error("Fail in the query")
+        console.error(response.data.message)
+      }
+    }).catch(error => {
+      navigate('/error')
+      console.error(error.response.data.message)
     })
   }, [])
 
@@ -30,7 +41,7 @@ function EditPartner() {
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+    const regex_name = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]).*$/;
     const regex_email = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
     if (!regex_name.test(formData.Name) && formData.Name != "") {
@@ -48,17 +59,29 @@ function EditPartner() {
   }
 
 
-  function handleSubmit() {
-    Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/update`, {
-      name: formData.Name,
-      email: formData.Email
-    }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
-    window.location.href = "/partner";
+  async function handleSubmit() {
+    try {
+      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/${id}/update`, {
+        name: formData.Name,
+        email: formData.Email
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
 
+      if (response.status == 400) {
+        alert("Check the values you input. One of the values are not of the correct type.")
+      }
+
+      else if (response.status == 200) {
+        window.location.href = "/partner";
+      }
+    }
+
+    catch (error) {
+      alert("Server side error/Contact developer")
+    }
   }
   return (
     <form id="edit partnerForm" onSubmit={validate}>
