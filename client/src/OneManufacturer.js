@@ -30,6 +30,7 @@ function ViewManufacturer() {
     const handleView = (id) => {
         navigate(`/intake/${id}`)
     }
+    console.log(record)
 
     if (record.length === 1) {
         return (
