@@ -7,6 +7,7 @@ function ViewManufacturer() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
+    const [manuList, setManuList] = React.useState([])
 
 
     useEffect(() => {
@@ -30,6 +31,25 @@ function ViewManufacturer() {
         });
     }, [])
 
+    useEffect(() => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/manufacturers").then((response) => {
+            if (response.data.status === 'complete') {
+                setManuList(response.data.data);
+            }
+
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+        }).catch(error => {
+            navigate('/error')
+            console.error(error)
+        })
+    }, [])
+
+    console.log(manuList)
+
     const handleView = (id) => {
         navigate(`/intake/${id}`)
     }
@@ -40,7 +60,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>Past Donations from {record[0].Manufacturer}</h3>
+                            <h3>Past Donations from {record[0].Date}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
