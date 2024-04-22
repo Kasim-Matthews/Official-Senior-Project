@@ -28,51 +28,83 @@ function ViewPartner() {
         });
     }, [])
 
-
-    return (
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{record.Name}</td>
-                        <td>{record.Email}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <h3>Prior Distributions</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Source Location</th>
-                        <th>Total Items</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {distributionList.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.CompletedDate}</td>
-                                <td>{val.Location}</td>
-                                <td>{val.Total}</td>
-                                <td>
-                                    <button onClick={() => handleprint(val.Order_id)}>Print</button>
-                                    <button onClick={() => handleView(val.Order_id)}>View</button>
-                                </td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
-        </div>
-    )
+    if (distributionList.length === 0) {
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{record.Name}</td>
+                            <td>{record.Email}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Prior Distributions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Source Location</th>
+                            <th>Total Items</th>
+                        </tr>
+                    </thead>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{record.Name}</td>
+                            <td>{record.Email}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h3>Prior Distributions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Source Location</th>
+                            <th>Total Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {distributionList.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.CompletedDate}</td>
+                                    <td>{val.Location}</td>
+                                    <td>{val.Total}</td>
+                                    <td>
+                                        <button onClick={() => handleprint(val.Order_id)}>Print</button>
+                                        <button onClick={() => handleView(val.Order_id)}>View</button>
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
 }
 
 export default ViewPartner;

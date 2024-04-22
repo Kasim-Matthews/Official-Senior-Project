@@ -38,7 +38,7 @@ function Dashboard() {
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);
-                    setLocations([...new Set(response.data.data.map(item => item.locationName))]);
+                    setLocations([...new Set(response.data.data.map(item => item.locationName[0]))]);
                 } else {
                     console.error('Failed to fetch data');
                 }
