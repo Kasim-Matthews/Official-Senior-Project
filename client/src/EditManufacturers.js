@@ -7,7 +7,7 @@ function EditManufacturers() {
 
   const { id } = useParams();
   const [formData, setFormData] = React.useState({})
-  const [formErrors, setFormErrors] = useState({})
+  const [formErrors, setFormErrors] = React.useState({})
   const navigate = useNavigate();
 
 
