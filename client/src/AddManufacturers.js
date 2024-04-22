@@ -20,7 +20,7 @@ function AddManufacturers() {
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+    const regex_name = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]).*$/;
 
 
     if (!regex_name.test(formData.Name)) {
@@ -28,23 +28,30 @@ function AddManufacturers() {
     }
     setFormErrors(errors)
     if (!errors.Name) {
-        handleSubmit()
+      handleSubmit()
     }
     return;
-}
+  }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     try {
-      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/new", { name: formData.Name}, {
+      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/new", { name: formData.Name }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
+      if (response.status == 400) {
+        alert("Check the values you input. One of the values are not of the correct type.")
+      }
+
+      else if (response.status == 200) {
+        window.location.href = "/manufacturers";
+      }
     }
+
     catch (error) {
-      console.log(error.response.data);
+      alert("Server side error/Contact developer")
     }
-    window.location.href = "/manufacturers";
   }
 
   return (

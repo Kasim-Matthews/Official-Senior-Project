@@ -17,16 +17,18 @@ const manu_index = async (req, res) => {
     try {
         let sqlGet = `SELECT partner."Name", COUNT(intakeitems."FKItemLocation") as Total, "DeletedAt", "Partner_id" 
         FROM public.partner
-        join public.intake on "Partner" = "Partner_id"
-        join public.intakeitems on "Intake" = "Intake_id"
+        left join public.intake on "Partner" = "Partner_id"
+        left join public.intakeitems on "Intake" = "Intake_id"
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Manufacturer'
         group by partner."Name", partner."Partner_id"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -76,9 +78,11 @@ const anything_else = async (req, res) => {
         group by partner."Name", partner."Partner_id"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -125,9 +129,11 @@ const manu_list = async (req, res) => {
         Where "Type" = 'Manufacturer' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -160,8 +166,28 @@ const manu_list = async (req, res) => {
 
 }
 
-const manu_create = (req, res) => {
+const manu_create = async (req, res) => {
     let Name = req.body.name;
+
+    if (typeof Name != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlInsert = `INSERT INTO public.partner ("Name", "Type_id") VALUES ('{${Name}}', (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Manufacturer'))`
+        const response = await sb.query(sqlInsert)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -198,8 +224,27 @@ const manu_create = (req, res) => {
     // })
 
 }
-const manu_reactivate = (req, res) => {
+const manu_reactivate = async (req, res) => {
     let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = NULL WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -236,9 +281,28 @@ const manu_reactivate = (req, res) => {
 
 }
 
-const manu_delete = (req, res) => {
+const manu_delete = async (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
+
+    if (typeof id != "string" && typeof date != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = '{${date}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -290,9 +354,11 @@ const manu_edit = async (req, res) => {
         Where "Partner_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -332,11 +398,29 @@ const manu_edit = async (req, res) => {
 
 }
 
-const manu_update = (req, res) => {
+const manu_update = async (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
 
+    if (typeof Name != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "Name" = '{${Name}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -384,17 +468,19 @@ const manu_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Name" as Manufacturer, "RecievedDate" as Date, SUM(intakeitems."Quantity") as Volume, intkae."Intake_id"
-            FROM public.intake
-            join public.intakeitems on "Intake_id" = "Intake"
-            join public.partner on "Partner" = "Partner_id"
+            let sqlGet = `SELECT partner."Name" as "Manufacturer", "RecievedDate" as "Date", SUM(intakeitems."Quantity") as "Volume", intake."Intake_id"
+            FROM public.partner
+			left join public.intake on "Partner" = "Partner_id"
+            left join public.intakeitems on "Intake_id" = "Intake"
             Where "Partner_id" = ${id}
-            group by intake."ReceivedDate", intake."Intake_id" `
+            group by intake."RecievedDate", intake."Intake_id", "Name"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 

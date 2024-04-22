@@ -31,19 +31,48 @@ function Manufacturers() {
     }, [])
 
 
-    const handleRemove = (id, Name) => {
+    const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the manufacturer list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/remove/${id}`, { date: date });
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/remove/${id}`, { date: date }).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
 
     }
 
-    const handleReactivate = (id, Name) => {
+    const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the manufacturer list?`) == true) {
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/reactivate/${id}`);
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/reactivate/${id}`).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 
@@ -125,7 +154,7 @@ function Manufacturers() {
                             return (
                                 <tr>
                                     <td>{val.Name}</td>
-                                    <td>{val.TotalItems}</td>
+                                    {val.TotalItems == null ? <td>0</td>:<td>{val.TotalItems}</td>}
                                     <td>
                                         {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
                                         <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
