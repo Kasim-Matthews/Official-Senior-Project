@@ -31,37 +31,69 @@ function ViewManufacturer() {
         navigate(`/intake/${id}`)
     }
 
+    if (record.length === 1) {
+        return (
+            <div>
 
+                <table>
+                    <thead>
+                        <tr>
+                            <h3>{`Past Donations from ${record.Manufacturer}`}</h3>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <th>Volume</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {record.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.Date}</td>
+                                    <td>{val.Volume}</td>
+                                    <td><button onClick={() => handleView(val.Intake_id)}> View donation details</button></td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
+    else {
+        return (
+            <div>
 
-    return (
-        <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <h3>{`Past Donations from ${record[0].Manufacturer}`}</h3>
+                        </tr>
+                        <tr>
+                            <th>Date</th>
+                            <th>Volume</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {record.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.Date}</td>
+                                    <td>{val.Volume}</td>
+                                    <td><button onClick={() => handleView(val.Intake_id)}> View donation details</button></td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
 
-            <table>
-                <thead>
-                    <tr>
-                        <h3>{`Past Donations from ${record[0].Manufacturer}`}</h3>
-                    </tr>
-                    <tr>
-                        <th>Date</th>
-                        <th>Volume</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {record.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Date}</td>
-                                <td>{val.Volume}</td>
-                                <td><button onClick={() => handleView(val.Intake_id)}> View donation details</button></td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
-        </div>
-    )
 }
 /*Cannot edit till the purchase functionality is a thing*/
 
