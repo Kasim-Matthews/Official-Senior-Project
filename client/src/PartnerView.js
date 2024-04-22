@@ -96,8 +96,8 @@ function PartnerView() {
         }
     }
 
-    useEffect(async () => {
-        await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
+    useEffect(() => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
             if (response.data.status === 'complete') {
                 setPartnerList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {

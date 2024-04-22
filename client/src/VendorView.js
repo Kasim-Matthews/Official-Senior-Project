@@ -78,8 +78,8 @@ function VendorView() {
         }
     }
 
-    useEffect(async () => {
-        await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor").then((response) => {
+    useEffect(() => {
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor").then((response) => {
             if (response.data.status === 'complete') {
                 setVendorList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {
