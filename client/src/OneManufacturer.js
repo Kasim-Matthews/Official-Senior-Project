@@ -34,6 +34,10 @@ function ViewManufacturer() {
         getrows();
     }, [])
 
+    useEffect(() => {
+        console.log("did it")
+    })
+
 
     const handleView = (id) => {
         navigate(`/intake/${id}`)
