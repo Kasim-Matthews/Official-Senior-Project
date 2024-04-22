@@ -134,9 +134,9 @@ function ProductDriveView() {
                             return (
                                 <tr>
                                     <td>{val.Drive}</td>
-                                    <td>{val.Quantity}</td>
+                                    {val.Quantity == null ? <td></td>:<td>{val.Quantity}</td>}
                                     <td>{val.Variety}</td>
-                                    <td>{val.Total}</td>
+                                    {val.Total == null ? <td></td>:<td>{val.Total}</td>}
                                     <td>
                                         {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
                                         <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>

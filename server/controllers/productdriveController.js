@@ -15,7 +15,7 @@ sb.on('error', error => {
 const drive_index = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT partner."Name" as "Drive", COUNT(intakeitems."FKItemLocation") as "Variety", SUM(intakeitems."Value") as "Total", "DeletedAt", "Partner_id" 
+        let sqlGet = `SELECT partner."Name" as "Drive", SUM(intakeitems."Quantity") as "Quantity", COUNT(intakeitems."FKItemLocation") as "Variety", SUM(intakeitems."Value") as "Total", "DeletedAt", "Partner_id" 
         FROM public.partner
         left join public.intake on "Partner" = "Partner_id"
         left join public.intakeitems on "Intake" = "Intake_id"
