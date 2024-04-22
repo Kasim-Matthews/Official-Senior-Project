@@ -449,7 +449,7 @@ const vendor_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Intake_id", "RecievedDate" as PurchaseDate, SUM("Quantity") as Total
+            let sqlGet = `SELECT "Intake_id", "RecievedDate" as "PurchaseDate", SUM(intakeitems."Quantity") as "Total"
             from public.intake
             join public.intakeitems on "Intake" = "Intake_id"
             join public.itemlocation on "ItemLocation_id" = "FKItemLocation"

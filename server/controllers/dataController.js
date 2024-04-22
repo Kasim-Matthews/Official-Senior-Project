@@ -27,7 +27,7 @@ const data = async (req, res) => {
         Join public.item on item."Item_id" = itemlocation."Item_id"
         join public.location on location."Location_id" = itemlocation."Location_id"`
         const response = await sb.query(sqlGet);
-        res.send({ status: 'complete', data: response.rows })
+        res.send({ status: 'ok', data: response.rows })
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })

@@ -468,13 +468,13 @@ const drive_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Intake_id", location."Name" as Location, COUNT(intakeitems."FKItemLocation) as Quantity, SUM(intakeitems."Value") as TotalItems 
+            let sqlGet = `SELECT "Intake_id", location."Name" as "Location", COUNT(intakeitems."FKItemLocation") as "Quantity", SUM(intakeitems."Value") as "TotalItems" 
             FROM public.partner
             join public.intake on "Partner" = "Partner_id"
             join public.intakeitems on "Intake_id" = "Intake"
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             join public.location on location."Location_id" = itemlocation."Location_id"
-        Where "Partner_id" = ${id}
+        Where "Partner_id" = 18
         group by intake."Intake_id", location."Name"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
