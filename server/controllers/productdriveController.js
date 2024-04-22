@@ -17,8 +17,8 @@ const drive_index = async (req, res) => {
     try {
         let sqlGet = `SELECT partner."Name" as Drive, COUNT(intakeitems."FKItemLocation") as Variety, SUM(intakeitems."Value") as Total, "DeletedAt", "Partner_id" 
         FROM public.partner
-        join public.intake on "Partner" = "Partner_id"
-        join public.intakeitems on "Intake" = "Intake_id"
+        left join public.intake on "Partner" = "Partner_id"
+        left join public.intakeitems on "Intake" = "Intake_id"
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Product Drive'
         group by partner."Name", partner."Partner_id"`
@@ -70,8 +70,8 @@ const anything_else = async (req, res) => {
     try {
         let sqlGet = `SELECT partner."Name" as Drive, COUNT(intakeitems."FKItemLocation") as Variety, SUM(intakeitems."Value") as Total, "Partner_id" 
         FROM public.partner
-        join public.intake on "Partner" = "Partner_id"
-        join public.intakeitems on "Intake" = "Intake_id"
+        left join public.intake on "Partner" = "Partner_id"
+        left join public.intakeitems on "Intake" = "Intake_id"
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Product Drive' AND "DeletedAt" IS NULL
         group by partner."Name", partner."Partner_id"`
