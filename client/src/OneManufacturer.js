@@ -11,6 +11,8 @@ function ViewManufacturer() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/view`).then((response) => {
+            console.log(response.data.status)
+            console.log(response.data.data)
             if (response.data.status === 'complete') {
                 setRecord(response.data.data)
                 console.log(response.data.data)
@@ -31,16 +33,14 @@ function ViewManufacturer() {
     const handleView = (id) => {
         navigate(`/intake/${id}`)
     }
-    console.log(record)
 
     if (record.length === 1) {
         return (
             <div>
-
                 <table>
                     <thead>
                         <tr>
-                            <h3>`Past Donations from {record[0].Manufacturer}</h3>
+                            <h3>Past Donations from {record[0].Manufacturer}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
