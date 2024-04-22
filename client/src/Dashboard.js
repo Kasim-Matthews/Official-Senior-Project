@@ -65,7 +65,7 @@ function Dashboard() {
     };
 
     const filteredItems = selectedLocation 
-    ? items.filter(item => item.locationName === selectedLocation)
+    ? items.filter(item => item.locationName[0] === selectedLocation)
     : items;
 
     const totalQuantity = filteredItems.reduce((sum, item) => sum + item.Quantity, 0);
