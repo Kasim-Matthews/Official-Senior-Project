@@ -15,15 +15,14 @@ function VendorView() {
             let date = new Date().toLocaleDateString();
             try {
                 Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date }).then((response) => {
-                console.log(response)    
-                
-                // if (response.status == 400) {
-                    //     alert("Contact developer")
-                    // }
 
-                    // else if (response.status == 200) {
-                    //     window.location.reload(false);
-                    // }
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
                 })
 
 
@@ -39,15 +38,14 @@ function VendorView() {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the vendor list?`) == true) {
             try {
                 Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`).then((response) => {
-                    console.log(response)    
-                
-                    // if (response.status == 400) {
-                        //     alert("Contact developer")
-                        // }
-    
-                        // else if (response.status == 200) {
-                        //     window.location.reload(false);
-                        // }  
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
                 })
 
             }
