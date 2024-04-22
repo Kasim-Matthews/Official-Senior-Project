@@ -15,6 +15,7 @@ function VendorView() {
             let date = new Date().toLocaleDateString();
             try {
                 const response = Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date });
+                console.log(response.status)
                 if (response.status == 400) {
                     alert("Contact developer")
                 }
