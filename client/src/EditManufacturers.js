@@ -7,6 +7,7 @@ function EditManufacturers() {
 
   const { id } = useParams();
   const [formData, setFormData] = React.useState({})
+  const [formErrors, setFormErrors] = useState({})
   const navigate = useNavigate();
 
 
@@ -79,6 +80,7 @@ function EditManufacturers() {
     <form id="edit location Form" onSubmit={validate}>
       <label htmlFor="Name">Name</label>
       <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} />
+      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
       <input type="submit" value="Submit" />
     </form>
   )
