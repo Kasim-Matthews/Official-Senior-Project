@@ -328,7 +328,7 @@ const vendor_edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Name" as BusinessName, "Email", "PhoneNumber" as "Phone", "ContactName" FROM public.partner
+            let sqlGet = `SELECT "Name" as "BusinessName", "Email", "PhoneNumber" as "Phone", "ContactName" FROM public.partner
         Where "Partner_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
