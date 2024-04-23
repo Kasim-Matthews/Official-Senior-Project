@@ -26,9 +26,11 @@ const data = async (req, res) => {
         group by intake."Intake_id", location."Name", partner."Name"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -67,12 +69,49 @@ const data = async (req, res) => {
 
 }
 
-const create = (req, res) => {
+const create = async (req, res) => {
 
     let Comments = req.body.Comments;
     let RecievedDate = req.body.Purchase_date;
     let Total = req.body.Total;
     let Partner = req.body.Vendor;
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Total != "number" && typeof Partner != "number" && typeof Items != "object" && typeof Location != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        const purchasecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES (${Comments}, "${RecievedDate}", ${Total}, ${Partner})`
+        const createpurchase = await sb.query(purchasecreation)
+
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+
+        let quantities = []
+        Items.forEach(element => {
+            quantities.push(element.Quantity);
+        });
+
+        const purchasetrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
+        SELECT p."Intake_id", unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
+        from (SELECT MAX("Intake_id") as "Intake_id" from public.intake)p,
+             (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        const trackpurchase = await sb.query(purchasetrack)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -131,8 +170,10 @@ const location = async (req, res) => {
             WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
+            return
         }
     }
     /*sb.getConnection(function (error, tempCont) {
@@ -185,9 +226,11 @@ const find_id = async (req, res) => {
         from public.intake`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -330,9 +373,11 @@ const purchase_view = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -397,9 +442,11 @@ const edit = async (req, res) => {
             WHERE intake."Intake_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
     // sb.getConnection(function (error, tempCont) {
@@ -491,7 +538,7 @@ const update = (req, res) => {
 const purchase_cleanup = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -505,9 +552,11 @@ const purchase_cleanup = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -634,7 +683,7 @@ const purchase_remove = (req, res) => {
 const purchase_edit_items = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -648,9 +697,11 @@ const purchase_edit_items = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
