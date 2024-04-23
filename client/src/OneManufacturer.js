@@ -7,48 +7,56 @@ function ViewManufacturer() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
+    const [intakeList, setIntakeList] = React.useState([])
 
 
     useEffect(() => {
-        console.log("useEffect called");
-        const getrows = async () => {
-            try {
-                const res = await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/view`)
-                if (res.data.status === 'complete') {
-                    setRecord(res.data.data)
-                    console.log(res.data.data)
-                }
-
-                else if (res.data.status === 'error in query') {
-                    navigate('/query')
-                    console.error("Fail in the query")
-                    console.error(res.data.message)
-                }
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/edit`).then((response) => {
+            if (response.data.status === 'complete') {
+                setRecord(response.data.data[0])
             }
 
-            catch (error) {
-                navigate('/error')
-                console.error(error.response.data.message)
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
             }
-        }
-        getrows();
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        });
     }, [])
 
     useEffect(() => {
-        console.log("we did it")
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/view`).then((response) => {
+            if (response.data.status === 'complete') {
+                setIntakeList(response.data.data)
+            }
+
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
     }, [])
 
     const handleView = (id) => {
         navigate(`/intake/${id}`)
     }
 
-    if (record.length === 1) {
+    if (intakeList.length === 0) {
         return (
             <div>
                 <table>
                     <thead>
                         <tr>
-                            <h3>Past Donations from {record.Manufacturer.toString()}</h3>
+                            <h3>Past Donations from {record.Name}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
@@ -56,17 +64,6 @@ function ViewManufacturer() {
                             <th>Details</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {record.map((val) => {
-                            return (
-                                <tr>
-                                    <td>{val.Date}</td>
-                                    <td>{val.Volume}</td>
-                                    <td><button onClick={() => handleView(val.Intake_id)}> View donation details</button></td>
-                                </tr>
-                            )
-                        })}
-                    </tbody>
                 </table>
                 <button><Link to="/Dashboard">Dasboard</Link></button>
             </div>
@@ -79,7 +76,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>Past Donations from {record.Manufacturer.toString()}</h3>
+                            <h3>Past Donations from {record.Name}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
@@ -88,7 +85,7 @@ function ViewManufacturer() {
                         </tr>
                     </thead>
                     <tbody>
-                        {record.map((val) => {
+                        {intakeList.map((val) => {
                             return (
                                 <tr>
                                     <td>{val.Date}</td>
