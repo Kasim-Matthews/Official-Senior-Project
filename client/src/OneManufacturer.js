@@ -32,9 +32,7 @@ function ViewManufacturer() {
             }
         }
         getrows();
-    }, [])
-
-    console.log(record)
+    }, [id])
 
 
     const handleView = (id) => {
