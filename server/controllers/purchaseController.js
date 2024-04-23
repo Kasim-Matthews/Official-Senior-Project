@@ -85,7 +85,7 @@ const create = async (req, res) => {
     }
 
     try {
-        const purchasecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES (${Comments}, "${RecievedDate}", ${Total}, ${Partner})`
+        const purchasecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES (${Comments}, '{${RecievedDate}}', ${Total}, ${Partner})`
         const createpurchase = await sb.query(purchasecreation)
 
         let ids = []
