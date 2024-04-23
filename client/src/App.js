@@ -62,13 +62,13 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route path="/Dashboard" element={<Dashboard />} />
+        
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/' element={<Home />} />
 
-
-        
+        <Route element={<RequireAuth />}>
+        <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/distribution" element={<Order />} />
         <Route path='/distribution/:id' element={<ViewOrder />} />
         <Route path='/distribution/:id/edit' element={<EditOrder />} />
@@ -121,7 +121,7 @@ function App() {
         <Route path='/donationsite/:id' element={<ViewDonationSite/>}/>
 
         {/* We want to protect these wrotes */}
-        <Route element={<RequireAuth />}>
+
           <Route path='/transfer' element={<TransferView/>}/>
           <Route path='/transfer/new' element={<AddTransfer/>}/>
           <Route path='/transfer/:id' element={<ViewTransfer/>}/>

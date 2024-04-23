@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-// Your provided database connection pool
 const sb = require('mysql2/promise').createPool({
     host: "localhost",
     user: "root",
@@ -16,39 +15,37 @@ const handleRefreshToken = async (req, res) => {
     const refreshToken = cookies.jwt;
 
     try {
-        // Query the database for the user with the given refresh token
-        const [rows] = await sb.query('SELECT * FROM user WHERE RefreshToken = ?', [refreshToken]);
+        const [rows] = await sb.query('SELECT * FROM claire.user WHERE RefreshToken = ?', [refreshToken]);
         const foundUser = rows[0];
         if (!foundUser) return res.sendStatus(403); // Forbidden
 
-        // Evaluate JWT
-        jwt.verify(
-            refreshToken,
-            process.env.REFRESH_TOKEN_SECRET,
-            async (err, decoded) => {
-                if (err || foundUser.Username !== decoded.username) return res.sendStatus(403);
-                
-                // Assuming 'Role' is stored as a JSON string in the database and contains an object with roles
-                // Adjust this if your roles are stored differently
-                const roles = Object.values(JSON.parse(foundUser.Role));
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
+            if (err || foundUser.Username !== decoded.Username) return res.sendStatus(403);
 
-                const accessToken = jwt.sign(
-                    {
-                        "UserInfo": {
-                            "username": decoded.username,
-                            "roles": roles
-                        }
-                    },
-                    process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: '30s' }
-                );
-                res.json({ accessToken });
-            }
-        );
+            const newAccessToken = jwt.sign(
+                { "UserInfo": { "username": decoded.Username }},
+                process.env.ACCESS_TOKEN_SECRET,
+                { expiresIn: '5m' }
+            );
+            const newRefreshToken = jwt.sign(
+                { "username": decoded.Username },
+                process.env.REFRESH_TOKEN_SECRET,
+                { expiresIn: '5m' }
+            );
+
+            // Update refresh token in the database
+            await sb.query('UPDATE claire.user SET RefreshToken = ? WHERE User_id = ?', [newRefreshToken, foundUser.User_id]);
+
+            // Optionally reset the cookie with new refresh token
+            res.cookie('jwt', newRefreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+
+            res.json({ accessToken: newAccessToken });
+        });
     } catch (err) {
         console.error(err);
         res.sendStatus(500); // Server error
     }
-}
+};
+
 
 module.exports = { handleRefreshToken };

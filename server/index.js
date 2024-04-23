@@ -3,6 +3,7 @@ const app = express()
 const mysql = require('mysql')
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser');
 
 const sb = mysql.createPool({
     host: "localhost",
