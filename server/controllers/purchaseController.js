@@ -106,11 +106,11 @@ const create = async (req, res) => {
 
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
         const itemlocations = await sb.query(getitemlocations)
-        console.log(itemlocations.rows)
+        let results = itemlocations.rows
 
         let rows = []
         for (let i= 0; i < Items.lenght; i++) {
-            rows.push([itemlocations.rows[i].ItemLocation_id, itemlocations.rows[i].Item_id], itemlocations.rows[i].Location_id, itemlocations.rows[i].Quantity - Items[i].Quantity)
+            rows.push([results.rows[i].ItemLocation_id, results.rows[i].Item_id], results.rows[i].Location_id, results.rows[i].Quantity - Items[i].Quantity)
         }
         console.log(rows)
         res.sendStatus(200)
