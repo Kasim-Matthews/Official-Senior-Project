@@ -127,6 +127,8 @@ function ItemView() {
             }))
         }
     }
+    console.log(row2)
+    console.log(tab2)
 
     return (
         <div>
