@@ -15,7 +15,7 @@ sb.on('error', error => {
 
 const data = async (req, res) => {
     try {
-        let sqlGet = `SELECT partner."Name", intake."Comments", "RecievedDate", "TotalValue", intake."Intake_id", SUM(intakeitems."Quantity") as TotalItems, location."Name" as Location
+        let sqlGet = `SELECT partner."Name", intake."Comments", "RecievedDate", "TotalValue", intake."Intake_id", SUM(intakeitems."Quantity") as "TotalItems", location."Name" as "Location"
         from public.intake
         join public.partner on "Partner" = "Partner_id"
         join public.partnertype on "Type_id" = "PartnerType_id"
@@ -85,24 +85,29 @@ const create = async (req, res) => {
     }
 
     try {
-        const purchasecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES ('${Comments}', '{${RecievedDate}}', ${Total}, ${Partner})`
-        const createpurchase = await sb.query(purchasecreation)
+        // const purchasecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES ('${Comments}', '{${RecievedDate}}', ${Total}, ${Partner})`
+        // const createpurchase = await sb.query(purchasecreation)
 
-        let ids = []
-        Items.forEach(element => {
-            ids.push(element.Item_id);
-        });
+        // let ids = []
+        // Items.forEach(element => {
+        //     ids.push(element.Item_id);
+        // });
 
-        let quantities = []
-        Items.forEach(element => {
-            quantities.push(element.Quantity);
-        });
+        // let quantities = []
+        // Items.forEach(element => {
+        //     quantities.push(element.Quantity);
+        // });
 
-        const purchasetrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
-        SELECT p."Intake_id", unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
-        from (SELECT MAX("Intake_id") as "Intake_id" from public.intake)p,
-             (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
-        const trackpurchase = await sb.query(purchasetrack)
+        // const purchasetrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
+        // SELECT p."Intake_id", unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
+        // from (SELECT MAX("Intake_id") as "Intake_id" from public.intake)p,
+        //      (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        // const trackpurchase = await sb.query(purchasetrack)
+
+        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+        const itemlocations = await sb.query(getitemlocations)
+        console.log(itemlocations.rows)
+
         res.sendStatus(200)
         res.end();
         return;
