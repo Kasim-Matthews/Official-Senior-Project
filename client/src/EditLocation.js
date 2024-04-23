@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 function EditLocation() {
 
   const { id } = useParams();
   const [formData, setFormData] = React.useState({})
   const [formErrors, setFormErrors] = useState({})
+  const navigate = useNavigate();
 
 
 
