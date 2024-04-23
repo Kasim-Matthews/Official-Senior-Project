@@ -108,10 +108,7 @@ function ItemView() {
         navigate(`/item/${id}`)
     }
 
-    const row2 = tab2.reduce(function (rows, key, index) {
-        return (index % 2 == 0 ? rows.push([key])
-            : rows[rows.length - 1].push(key)) && rows;
-    }, [])
+
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -127,7 +124,6 @@ function ItemView() {
             }))
         }
     }
-    console.log(row2)
     console.log(tab2)
 
     return (
@@ -188,18 +184,7 @@ function ItemView() {
                         </thead>
 
                         <tbody>
-                            {row2.map((row) => {
-                                return (
-                                    <tr>
-                                        <td>{row[0].Item}</td>
-                                        {row.map((val) => {
-                                            return (
-                                                <td>{val.Quantity}</td>
-                                            )
-                                        })}
-                                    </tr>
-                                )
-                            })}
+
                         </tbody>
                     </table>
                 </TabPanel>

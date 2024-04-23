@@ -599,11 +599,10 @@ const pair = (req, res) => {
 const tab2 = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT item."Name" as "Item", location."Name" as "Location", itemlocation."Quantity" 
+        let sqlGet = `SELECT item."Name" as "Item",itemlocation."Item_id", array_agg(itemlocation."Quantity")
         from public.itemlocation
         join public.item on item."Item_id" = itemlocation."Item_id"
-        join public.location on location."Location_id" = itemlocation."Location_id"
-        ORDER BY item."Name", location."Name"`
+		group by itemlocation."Item_id", item."Name"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
         return
