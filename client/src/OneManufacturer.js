@@ -32,8 +32,11 @@ function ViewManufacturer() {
             }
         }
         getrows();
-    }, [id])
+    }, [])
 
+    useEffect(() => {
+        console.log("we did it")
+    }, [])
 
     const handleView = (id) => {
         navigate(`/intake/${id}`)
@@ -76,7 +79,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>{`Past Donations from ${record.Manufacturer[0]}`}</h3>
+                            <h3>Past Donations from {record.Manufacturer[0]}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
