@@ -79,7 +79,7 @@ const create = async (req, res) => {
     let Location = req.body.Location_id
 
     if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Total != "number" && typeof Partner != "number" && typeof Items != "object" && typeof Location != "string") {
-        res.send("Invalid");
+        res.sendStatus(400)
         res.end();
         return;
     }
@@ -108,6 +108,11 @@ const create = async (req, res) => {
         const itemlocations = await sb.query(getitemlocations)
         console.log(itemlocations.rows)
 
+        let rows = []
+        for (let i= 0; i < Items.lenght; i++) {
+            rows.push([itemlocations.rows[i].ItemLocation_id, itemlocations.rows[i].Item_id], itemlocations.rows[i].Location_id, itemlocations.rows[i].Quantity - Items[i].Quantity)
+        }
+        console.log(rows)
         res.sendStatus(200)
         res.end();
         return;
