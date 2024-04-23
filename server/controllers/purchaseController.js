@@ -88,10 +88,10 @@ const create = async (req, res) => {
         // const purchasecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES ('${Comments}', '{${RecievedDate}}', ${Total}, ${Partner})`
         // const createpurchase = await sb.query(purchasecreation)
 
-        // let ids = []
-        // Items.forEach(element => {
-        //     ids.push(element.Item_id);
-        // });
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
 
         // let quantities = []
         // Items.forEach(element => {
