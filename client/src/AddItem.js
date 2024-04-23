@@ -38,8 +38,7 @@ function AddItem() {
 
   async function handleSubmit() {
     try {
-
-      await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/item/new", {
+      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/item/new", {
         name: formData.Name,
         FairMarketValue: formData.FairMarketValue,
         PackageCount: formData.PackageCount
@@ -48,24 +47,25 @@ function AddItem() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
+      
+
+      if(response.status == 400){
+        alert("Check the values you input. One of the values are not of the correct type.")
+      }
+
+      else if (response.status == 200){
+        window.location.href = "/item"
+      }
     }
+
     catch (error) {
-      console.log(error.response.data.data);
+      alert("Server side error/Contact developer")
     }
-
-    let Item_id = await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item/last")
     
-    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/item/pair", {Locations: locations, Item_id: Item_id.data[0].Item_id}).then(window.location.href ="/item")
 
-    
-    navigate("/item");
   }
 
-  useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
-        setLocations(response.data.data);
-    })
-}, [])
+
 
   return (
     <form id="item" onSubmit={validate}>

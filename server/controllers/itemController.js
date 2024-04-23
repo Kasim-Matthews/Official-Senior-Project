@@ -18,9 +18,11 @@ const item_index = async (req, res) => {
         let sqlGet = `SELECT * from public.item`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -55,9 +57,11 @@ const anything_else = async (req, res) => {
         let sqlGet = `SELECT * from public.item WHERE "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -85,10 +89,43 @@ const anything_else = async (req, res) => {
 
 }
 
-const item_creation = (req, res) => {
+const item_creation = async (req, res) => {
     let Name = req.body.name;
     let FairMarketValue = req.body.FairMarketValue;
     let PackageCount = req.body.PackageCount
+
+    if (typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        if (PackageCount > 0) {
+            const insertitem = `INSERT INTO public.item ("Name", "FairMarketValue", "PackageCount") VALUES ('{${Name}}', ${FairMarketValue}, ${PackageCount})`
+            const itemcreation = await sb.query(insertitem)
+        }
+
+        else {
+            const insertitem = `INSERT INTO public.item ("Name", "FairMarketValue") VALUES ('{${Name}}', ${FairMarketValue})`
+            const itemcreation = await sb.query(insertitem)
+        }
+
+        const itemlocationpairing = `INSERT INTO public.itemlocation ("Item_id", "Location_id")
+        SELECT p."Item_id", t."Location_id"
+        from (SELECT "Item_id" from public.item ORDER BY "Item_id" DESC Limit 1) p,
+             (SELECT "Location_id" from public.location) t`
+        const itemlocationcreation = await sb.query(itemlocationpairing)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -144,9 +181,28 @@ const item_creation = (req, res) => {
 
 }
 
-const item_delete = (req, res) => {
+const item_delete = async (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
+
+    if (typeof id != "string" && typeof date != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.item Set "DeletedAt" = '{${date}}' WHERE "Item_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -183,8 +239,27 @@ const item_delete = (req, res) => {
 
 }
 
-const item_reactivate = (req, res) => {
+const item_reactivate = async (req, res) => {
     let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.item Set "DeletedAt" = NULL WHERE "Item_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -234,9 +309,11 @@ const item_edit = async (req, res) => {
             let sqlGet = `SELECT "Name", "FairMarketValue", "PackageCount" FROM public.item WHERE "Item_id" = ${id};`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -277,12 +354,39 @@ const item_edit = async (req, res) => {
 
 }
 
-const item_update = (req, res) => {
+const item_update = async (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
     let FairMarketValue = req.body.FairMarketValue;
     let PackageCount = req.body.PackageCount
+
+    if (typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        if (PackageCount > 0) {
+            const updateitem = `UPDATE public.item "Name" = '{${Name}}', "FairMarketValue" = ${FairMarketValue}, "PackageCount" = ${PackageCount} WHERE "Item_id" = ${id}`
+            const itemupdate = await sb.query(updateitem)
+        }
+
+        else {
+            const updateitem = `UPDATE public.item "Name" = '{${Name}}', "FairMarketValue" = ${FairMarketValue} WHERE "Item_id" = ${id}`
+            const itemupdate = await sb.query(updateitem)
+        }
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -351,16 +455,18 @@ const item_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT location."Name" as Location, "Quantity" 
+            let sqlGet = `SELECT location."Name" as "Location", "Quantity" 
             FROM public.itemlocation
             join public.item on item."Item_id" = itemlocation."Item_id"
             join public.location on location."Location_id = itemlocation."Location_id  
             WHERE itemlocation."Item_id" = ${id};`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -405,7 +511,7 @@ const item_view = async (req, res) => {
 }
 
 const last = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT "Item_id" 
         from public.item
@@ -413,9 +519,11 @@ const last = async (req, res) => {
         Limit 1`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -489,18 +597,20 @@ const pair = (req, res) => {
 }
 
 const tab2 = async (req, res) => {
-    
+
     try {
-        let sqlGet = `SELECT item."Name" as Item, location."Name" as Location, itemlocation."Quantity" 
+        let sqlGet = `SELECT item."Name" as "Item", location."Name" as "Location", itemlocation."Quantity" 
         from public.itemlocation
         join public.item on item."Item_id" = itemlocation."Item_id"
         join public.location on location."Location_id" = itemlocation."Location_id"
         ORDER BY item."Name", location."Name"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){

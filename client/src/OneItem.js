@@ -11,13 +11,35 @@ function ViewItem() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/edit`).then((response) => {
-            response.data.data.map((key, value) => { setRecord(key) });
+            if (response.data.status === 'complete') {
+                response.data.data.map((key, value) => { setRecord(key) });
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/view`).then((response) => {
-            setList(response.data.data)
+            if (response.data.status === 'complete') {
+                setList(response.data.data)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
