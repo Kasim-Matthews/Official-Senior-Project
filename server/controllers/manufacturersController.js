@@ -468,12 +468,12 @@ const manu_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT partner."Name" as "Manufacturer", "RecievedDate" as "Date", SUM(intakeitems."Quantity") as "Volume", intake."Intake_id"
+            let sqlGet = `SELECT "RecievedDate" as "Date", SUM(intakeitems."Quantity") as "Volume", intake."Intake_id"
             FROM public.partner
-			left join public.intake on "Partner" = "Partner_id"
-            left join public.intakeitems on "Intake_id" = "Intake"
+			join public.intake on "Partner" = "Partner_id"
+            join public.intakeitems on "Intake_id" = "Intake"
             Where "Partner_id" = ${id}
-            group by intake."RecievedDate", intake."Intake_id", "Name"`
+            group by intake."RecievedDate", intake."Intake_id"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
             return
