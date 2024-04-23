@@ -18,7 +18,7 @@ function AddDonationSite(){
     const validate = (e) => {
         e.preventDefault();
         const errors = {};
-        const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+        const regex_name = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]).*$/;
         const regex_address = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]|[0-9]).*$/;
 
     
@@ -36,15 +36,29 @@ function AddDonationSite(){
     }
 
     async function handleSubmit() {
-        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/donationsite/new", {
-          name: formData.Name,
-          address: formData.Address
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+        try {
+            const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/donationsite/new", {
+                name: formData.Name,
+                address: formData.Address
+              }, {
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+                }
+              });
+            
+      
+            if(response.status == 400){
+              alert("Check the values you input. One of the values are not of the correct type.")
+            }
+      
+            else if (response.status == 200){
+                window.location.href = "/donationsite";
+            }
           }
-        });
-        window.location.href = "/donationsite";
+      
+          catch (error) {
+            alert("Server side error/Contact developer")
+          }  
     }
 
     return(

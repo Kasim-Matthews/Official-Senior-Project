@@ -10,19 +10,48 @@ function DonationSiteView() {
     const [nonActive, setNonActive] = React.useState(false)
     const navigate = useNavigate();
 
-    const handleRemove = (id, Name) => {
+    const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the donation site list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/remove/${id}`, { date: date });
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/remove/${id}`, { date: date }).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
 
     }
 
-    const handleReactivate = (id, Name) => {
+    const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the donation site list?`) == true) {
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/reactivate/${id}`);
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/reactivate/${id}`).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 

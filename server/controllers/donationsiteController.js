@@ -13,7 +13,7 @@ sb.on('error', error => {
 })
 
 const dsite_index = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT "Name", "Address", "DeletedAt", "Partner_id" 
         FROM public.partner
@@ -21,9 +21,11 @@ const dsite_index = async (req, res) => {
         Where "Type" = 'Donation Site'`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -57,7 +59,7 @@ const dsite_index = async (req, res) => {
 }
 
 const anything_else = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT "Name", "Address", "Partner_id" 
         FROM public.partner
@@ -65,9 +67,11 @@ const anything_else = async (req, res) => {
         Where "Type" = 'Donation Site' "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -100,7 +104,7 @@ const anything_else = async (req, res) => {
 }
 
 const dsite_list = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT "Name", "Partner_id" 
         FROM public.partner
@@ -108,9 +112,11 @@ const dsite_list = async (req, res) => {
         Where "Type" = 'Donation Site' "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -142,9 +148,29 @@ const dsite_list = async (req, res) => {
 
 }
 
-const dsite_create = (req, res) => {
+const dsite_create = async (req, res) => {
     let Name = req.body.name;
     let Address = req.body.address;
+
+    if (typeof Name != "string" && typeof Address != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlInsert = `INSERT INTO public.partner ("Name", "Address", "Type_id") VALUES ('{${Name}}', '{${Address}}', (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Donation Site'))`
+        const response = await sb.query(sqlInsert)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -181,9 +207,26 @@ const dsite_create = (req, res) => {
 
 }
 
-const dsite_reactivate = (req, res) => {
+const dsite_reactivate = async (req, res) => {
     let id = req.params.id;
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
 
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = NULL WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -219,9 +262,28 @@ const dsite_reactivate = (req, res) => {
 
 }
 
-const dsite_delete = (req, res) => {
+const dsite_delete = async (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
+
+    if (typeof id != "string" && typeof date != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "DeletedAt" = '{${date}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -268,14 +330,16 @@ const dsite_edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Name", "Adress" 
+            let sqlGet = `SELECT "Name", "Address" 
             FROM public.partner
             Where "Partner_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -316,11 +380,30 @@ const dsite_edit = async (req, res) => {
 
 }
 
-const dsite_update = (req, res) => {
+const dsite_update = async (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
     let Address = req.body.address;
+
+    if (typeof id != "string" && typeof Name != "string" && typeof Address != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.partner Set "Name" = '{${Name}}', Set "Address" = '{${Address}}' WHERE "Partner_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -368,7 +451,7 @@ const dsite_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT  location."Name" as Location, "Intake_id", SUM(intakeitems."Quantity") as Total
+            let sqlGet = `SELECT  location."Name" as "Location", "Intake_id", SUM(intakeitems."Quantity") as "Total"
             FROM public.intake
             join public.intakeitems on "Intake" = "Intake_id"
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
@@ -378,9 +461,11 @@ const dsite_view = async (req, res) => {
             group by "Intake_id", location."Name"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
