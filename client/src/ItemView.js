@@ -14,9 +14,19 @@ function ItemView() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocationList(response.data.data);
+            if (response.data.status === 'complete') {
+                setLocationList(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
 
-        })
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })    
     }, [])
 
     useEffect(() => {
@@ -124,7 +134,6 @@ function ItemView() {
             }))
         }
     }
-    console.log(tab2)
 
     return (
         <div>

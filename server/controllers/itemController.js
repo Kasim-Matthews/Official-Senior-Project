@@ -114,7 +114,7 @@ const item_creation = async (req, res) => {
         const itemlocationpairing = `INSERT INTO public.itemlocation ("Item_id", "Location_id")
         SELECT p."Item_id", t."Location_id"
         from (SELECT "Item_id" from public.item ORDER BY "Item_id" DESC Limit 1) p,
-             (SELECT "Location_id" from public.location) t`
+             (SELECT "Location_id" from public.location Order by "Location_id") t`
         const itemlocationcreation = await sb.query(itemlocationpairing)
         res.sendStatus(200)
         res.end();
@@ -599,10 +599,11 @@ const pair = (req, res) => {
 const tab2 = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT item."Name" as "Item",itemlocation."Item_id", array_agg(itemlocation."Quantity") as "Quantities"
+        let sqlGet = `SELECT item."Name" as "Item",itemlocation."Item_id", array_agg(itemlocation."Quantity")as "Quantities"
         from public.itemlocation
         join public.item on item."Item_id" = itemlocation."Item_id"
-		group by itemlocation."Item_id", item."Name"`
+		group by itemlocation."Item_id", item."Name"
+		order by itemlocation."Item_id"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
         return
