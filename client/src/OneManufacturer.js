@@ -47,7 +47,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>Past Donations from {record[0].Date}</h3>
+                            <h3>Past Donations from {record.Manufacturer[0]}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
@@ -78,7 +78,7 @@ function ViewManufacturer() {
                 <table>
                     <thead>
                         <tr>
-                            <h3>{`Past Donations from ${record.Manufacturer}`}</h3>
+                            <h3>{`Past Donations from ${record[0].Manufacturer[0]}`}</h3>
                         </tr>
                         <tr>
                             <th>Date</th>
