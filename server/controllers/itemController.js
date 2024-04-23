@@ -95,7 +95,7 @@ const item_creation = async (req, res) => {
     let PackageCount = req.body.PackageCount
 
     if (typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
-        res.send("Invalid");
+        res.sendStatus(400);
         res.end();
         return;
     }
@@ -362,7 +362,7 @@ const item_update = async (req, res) => {
     let PackageCount = req.body.PackageCount
 
     if (typeof id != "string" && typeof Name != "string" && typeof FairMarketValue != "number" && typeof PackageCount != "number") {
-        res.send("Invalid");
+        res.sendStatus(400);
         res.end();
         return;
     }

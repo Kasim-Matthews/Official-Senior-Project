@@ -22,7 +22,18 @@ function EditLocation() {
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/edit`).then((response) => {
-      response.data.data.map((key, value) => { setFormData(key) });
+      if (response.data.status === 'complete') {
+        response.data.data.map((key, value) => { setFormData(key) });
+      }
+      else if (response.data.status === 'error in query') {
+        navigate('/query')
+        console.error("Fail in the query")
+        console.error(response.data.message)
+      }
+
+    }).catch(error => {
+      navigate('/error')
+      console.error(error.response.data.message)
     })
   }, [])
 
@@ -30,8 +41,8 @@ function EditLocation() {
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
-    const regex_address = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]|[0-9]).*$/;
+    const regex_name = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]).*$/;
+    const regex_address = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]|[0-9]).*$/;
 
 
     if (!regex_name.test(formData.Name)) {
@@ -39,28 +50,40 @@ function EditLocation() {
     }
 
     if (!regex_address.test(formData.Address)) {
-        errors.Address = "The address contains an SQL keyword !"
-      }
+      errors.Address = "The address contains an SQL keyword !"
+    }
     setFormErrors(errors)
     if (!errors.Name && !errors.Address) {
-        handleSubmit()
+      handleSubmit()
     }
     return;
-}
+  }
 
 
-  function handleSubmit() {
+  async function handleSubmit() {
+    try {
+      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/update`, {
+        name: formData.Name,
+        Address: formData.Address
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      
 
-    Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/update`, {
-      name: formData.Name,
-      Address: formData.Address
-    }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
+      if(response.status == 400){
+        alert("Check the values you input. One of the values are not of the correct type.")
       }
-    });
-    window.location.href = "/location";
 
+      else if (response.status == 200){
+        window.location.href = "/location";
+      }
+    }
+
+    catch (error) {
+      alert("Server side error/Contact developer")
+    }
   }
   return (
     <form id="edit location Form" onSubmit={validate}>
@@ -71,7 +94,7 @@ function EditLocation() {
       <label htmlFor="Adress">Address</label>
       <input type="text" name="Address" defaultValue={formData.Address} id="Address" required onChange={handleChange} />
       {formErrors.Address ? <p>{formErrors.Address}</p> : null}
-      
+
       <input type="submit" value="Submit" />
     </form>
   )
