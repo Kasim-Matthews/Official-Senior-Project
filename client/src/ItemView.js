@@ -184,7 +184,18 @@ function ItemView() {
                         </thead>
 
                         <tbody>
-
+                            {tab2.map((val) => {
+                                return (
+                                    <tr>
+                                        <td>{val.Item}</td>
+                                        {val.Quantities.map((quantity) => {
+                                            return(
+                                                <td>{quantity}</td>
+                                            )
+                                        })}
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </table>
                 </TabPanel>

@@ -599,7 +599,7 @@ const pair = (req, res) => {
 const tab2 = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT item."Name" as "Item",itemlocation."Item_id", array_agg(itemlocation."Quantity")
+        let sqlGet = `SELECT item."Name" as "Item",itemlocation."Item_id", array_agg(itemlocation."Quantity") as "Quantities"
         from public.itemlocation
         join public.item on item."Item_id" = itemlocation."Item_id"
 		group by itemlocation."Item_id", item."Name"`
