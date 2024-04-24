@@ -74,7 +74,6 @@ const create = async (req, res) => {
     let Value = req.body.Value
     let Items = req.body.Items
     let Location = req.body.Location_id
-    console.log(req.body)
 
     if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Partner != "number" && typeof Value != "number"&& typeof Items != "object" && typeof Location != "string") {
         res.send("Invalid");
@@ -111,6 +110,7 @@ const create = async (req, res) => {
         SELECT p."Intake_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."FKItemLocation")
         from (SELECT MAX("Intake_id") as "Intake_id" from public.intake)p,
              (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        console.log(intaketrack)
         const trackintake = await sb.query(intaketrack)
 
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
