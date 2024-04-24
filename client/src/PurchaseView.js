@@ -59,10 +59,10 @@ function Purchase() {
     const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete this purchase from ${Name}?`) == true) {
             try {
-                await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { id: id })
-                
+                const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { id: id })
+
                 if (response.status == 400) {
-                    alert("Check the values you input. One of the values are not of the correct type.")
+                    alert("Contact developer")
                 }
     
                 else if (response.status == 200) {
