@@ -111,7 +111,8 @@ const create = async (req, res) => {
         for (let i = 0; i < Items.length; i++) {
             rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
         }
-        console.log(rows)
+        console.log(rows.toString())
+        console.log(rows.toLocaleString())
         const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
         VALUES ${rows}
         ON CONFLICT ("ItemLocation_id") DO UPDATE
