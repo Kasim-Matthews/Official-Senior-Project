@@ -115,10 +115,10 @@ const create = async (req, res) => {
         console.log(rows)
         console.log(rows.toLocaleString())
         const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
-        VALUES ?
+        $1
         ON CONFLICT ("ItemLocation_id") DO UPDATE
         SET "Quantity" = excluded."Quantity"`
-        const locationsupdated = await sb.query(updatelocations)
+        const locationsupdated = await sb.query(updatelocations, rows)
         
         res.sendStatus(200)
         res.end();
