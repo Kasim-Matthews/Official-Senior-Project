@@ -124,12 +124,7 @@ function AddIntake() {
     if (sourceType == "Misc Donation") {
       await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/misc").then((response) => {
       console.log(response.data.data[0].Partner_id)  
-      setFormData(prevFormData => {
-          return {
-            ...prevFormData,
-            [Partner]: response.data.data[0].Partner_id
-          }
-        })
+      formData.Partner = response.data.data[0].Partner_id
       })
     }
     validate();
