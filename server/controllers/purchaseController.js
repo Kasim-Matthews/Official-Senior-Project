@@ -107,8 +107,8 @@ const create = async (req, res) => {
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
         const itemlocations = await sb.query(getitemlocations)
         let results = itemlocations.rows
-        let rows = [results.values]
-        console.log(results.values)
+        let rows = [results.values()]
+        console.log(results.values())
         console.log(rows)
         // for (let i= 0; i < Items.lenght; i++) {
         //     rows.push(results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + Items[i].Quantity)
