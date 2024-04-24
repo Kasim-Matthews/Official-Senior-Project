@@ -775,7 +775,7 @@ const purchase_edit_items = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT intakeitems."Quantity", itemlocation."Item_id" as Item
+            let sqlGet = `SELECT intakeitems."Quantity", itemlocation."Item_id" as "Item"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             WHERE intakeitems."Intake" = ${id}`
