@@ -1,4 +1,4 @@
-import router from './router'
+const router = require('./router')
 const distributionController = require('../controllers/distributionController')
 
 
