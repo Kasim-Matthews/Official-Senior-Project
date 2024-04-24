@@ -544,9 +544,10 @@ const update = async (req, res) => {
         const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
         const deletion = await sb.query(deleting)
         console.log("5")
+        console.log(Items)
         let ids = []
         Items.forEach(element => {
-            ids.push(element.Item_id);
+            ids.push(element.Item);
         });
 
         let quantities = []
