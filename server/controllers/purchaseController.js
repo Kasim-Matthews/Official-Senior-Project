@@ -109,7 +109,7 @@ const create = async (req, res) => {
         let results = itemlocations.rows
         let rows = []
         for (let i = 0; i < Items.length; i++) {
-            rows[i] = results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
         }
         console.log(rows.toString())
         console.log(rows)
@@ -118,7 +118,7 @@ const create = async (req, res) => {
         VALUES ?
         ON CONFLICT ("ItemLocation_id") DO UPDATE
         SET "Quantity" = excluded."Quantity"`
-        const locationsupdated = await sb.query(updatelocations, [rows])
+        const locationsupdated = await sb.query(updatelocations)
         
         res.sendStatus(200)
         res.end();
