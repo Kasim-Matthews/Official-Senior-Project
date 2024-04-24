@@ -74,6 +74,7 @@ const create = async (req, res) => {
     let Value = req.body.Value
     let Items = req.body.Items
     let Location = req.body.Location_id
+    console.log(req.body)
 
     if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Partner != "number" && typeof Value != "number"&& typeof Items != "object" && typeof Location != "string") {
         res.send("Invalid");
