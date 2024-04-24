@@ -692,8 +692,8 @@ const purchase_cleanup = async (req, res) => {
 const purchase_reclaim = async (req, res) => {
     let id = req.body.id
 
-    console.log(id)
-    
+    console.log(typeof id)
+
     if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
