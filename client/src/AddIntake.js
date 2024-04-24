@@ -127,7 +127,7 @@ function AddIntake() {
       setFormData(prevFormData => {
           return {
             ...prevFormData,
-            Partner: response.data.data[0].Partner_id
+            [Partner]: response.data.data[0].Partner_id
           }
         })
       })
@@ -152,7 +152,7 @@ function AddIntake() {
 }
   const submitDonation = async () => {
     try {
-      console.log(formData.Partner)
+      console.log(formData)
       const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location })
 
       
