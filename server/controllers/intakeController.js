@@ -103,7 +103,7 @@ const create = async (req, res) => {
         let values = []
 
         for (let i = 0; i < Items.length; i++) {
-            values.push(Items[i].Quantity * valueresults[i].FairMarketValues)
+            values.push(Items[i].Quantity * valueresults[i].FairMarketValue)
         }
 
         const intaketrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
