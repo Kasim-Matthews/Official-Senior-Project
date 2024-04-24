@@ -703,6 +703,7 @@ const purchase_reclaim = async (req, res) => {
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             WHERE intakeitems."Intake" = ${id}`
+            console.log(sqlGet)
         const intakeitemsinfo = await sb.query(sqlGet)
 
         let deletionresults = intakeitemsinfo.rows
