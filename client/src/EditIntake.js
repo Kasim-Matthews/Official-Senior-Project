@@ -146,7 +146,7 @@ function EditIntake() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location }, {
+      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.TotalValue, Items: items, Location_id: formData.Location }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -227,7 +227,7 @@ function EditIntake() {
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
 
         <label htmlFor="Value">Money Raised</label>
-        <input type="number" name="Value" id="Value" step="0.01" defaultValue={formData.TotalValue == null ? 0.00 : formData.TotalValue} onChange={handleChange} />
+        <input type="number" name="TotalValue" id="TotalValue" step="0.01" defaultValue={formData.TotalValue == null ? 0.00 : parseFloat(formData.TotalValue)} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
         {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
         <h2>Items</h2>
