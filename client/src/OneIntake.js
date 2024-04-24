@@ -31,7 +31,7 @@ function ViewIntake() {
                 <tbody>
                     <tr>
                         <td>{record.Partner}</td>
-                        <td>{record.RecievedDate}</td>
+                        <td>{new Date(record.RecievedDate).toLocaleDateString()}</td>
                         <td>{record.Location}</td>
                     </tr>
                 </tbody>

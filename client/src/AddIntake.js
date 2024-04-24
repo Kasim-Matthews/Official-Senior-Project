@@ -123,7 +123,6 @@ function AddIntake() {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
       await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/misc").then((response) => {
-      console.log(response.data.data[0].Partner_id)  
       formData.Partner = response.data.data[0].Partner_id
       })
     }
@@ -147,10 +146,7 @@ function AddIntake() {
 }
   const submitDonation = async () => {
     try {
-      console.log(formData)
       const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location })
-
-      
 
       if(response.status == 400){
         alert("Check the values you input. One of the values are not of the correct type.")
