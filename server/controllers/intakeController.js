@@ -66,12 +66,74 @@ const data = async (req, res) => {
 
 }
 
-const create = (req, res) => {
+const create = async (req, res) => {
 
     let Comments = req.body.Comments;
     let RecievedDate = req.body.RecievedDate;
     let Partner = req.body.Partner;
     let Value = req.body.Value
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Partner != "number" && typeof Value != "number"&& typeof Items != "object" && typeof Location != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        const intakecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES ('${Comments}', '{${RecievedDate}}', ${Value}, ${Partner})`
+        const createintake = await sb.query(intakecreation)
+
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+
+        let quantities = []
+        Items.forEach(element => {
+            quantities.push(element.Quantity);
+        });
+
+        let sqlGet = `SELECT "FairMarketValue"
+            from public.item
+            WHERE "Item_id" IN (${ids})`
+        const response = await sb.query(sqlGet);
+        let valueresults = response.rows
+        let values = []
+
+        for (let i = 0; i < Items.length; i++) {
+            values.push(Items[i].Quantity * valueresults[i].FairMarketValues)
+        }
+
+        const intaketrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
+        SELECT p."Intake_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."FKItemLocation")
+        from (SELECT MAX("Intake_id") as "Intake_id" from public.intake)p,
+             (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        const trackintake = await sb.query(intaketrack)
+
+        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+        const itemlocations = await sb.query(getitemlocations)
+
+        let results = itemlocations.rows
+        let rows = []
+        for (let i = 0; i < Items.length; i++) {
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+        }
+
+        for (let i = 0; i < Items.length; i++) {
+            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
+            VALUES (${rows[i]})
+            ON CONFLICT ("ItemLocation_id") DO UPDATE
+            SET "Quantity" = excluded."Quantity"`
+            const locationsupdated = await sb.query(updatelocations)
+        }
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -387,7 +449,7 @@ const edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "RecievedDate", "Partner", "Comments", "TotalValue", itemlocation."Location_id", "Type"
+            let sqlGet = `SELECT TO_CHAR("RecievedDate", 'yyyy-mm-dd') as "RecievedDate", "Partner", "Comments", "TotalValue", itemlocation."Location_id", "Type"
             from public.inatke
             join public.intakeitems on "Intake" = "Intake_id"
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
@@ -559,7 +621,7 @@ const intake_find_value = async (req, res) => {
 const intake_cleanup = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -575,7 +637,7 @@ const intake_cleanup = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
         }
     }
 
@@ -702,7 +764,7 @@ const intake_remove = (req, res) => {
 const intake_edit_items = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -718,7 +780,7 @@ const intake_edit_items = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
         }
     }
 
@@ -799,7 +861,7 @@ const intake_update_delete = (req, res) => {
 }
 
 const intake_misc = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT "Partner_id"
         from public.partner
