@@ -450,7 +450,7 @@ const edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "TotalValue", "RecievedDate" as "PurchaseDate", "Partner" as "Vendor", itemlocation."Location_id" as "Location"
+            let sqlGet = `SELECT "Comments", "TotalValue", TO_CHAR("RecievedDate", 'yyyy/mm/dd') as "PurchaseDate", "Partner" as "Vendor", itemlocation."Location_id" as "Location"
             from public.intake
             join public.intakeitems on "Intake" = "Intake_id"
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
