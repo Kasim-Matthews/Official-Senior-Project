@@ -108,12 +108,12 @@ const create = async (req, res) => {
         const itemlocations = await sb.query(getitemlocations)
         let results = itemlocations.rows
         let rows = []
-        for (let i= 0; i < Items.lenght; i++) {
-            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + Items[i].Quantity]
+        for (let i = 0; i < Items.lenght; i++) {
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
         }
         console.log(rows)
         console.log(Items)
-        console.log(results[0].Quantity + Items[0].Quantity)
+        console.log(results[0].Quantity + parseInt(Items[0].Quantity))
         // const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
         // VALUES ${rows}
         // ON CONFLICT ("ItemLocation_id") DO UPDATE
