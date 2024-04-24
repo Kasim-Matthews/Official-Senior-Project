@@ -115,7 +115,7 @@ const create = async (req, res) => {
 
         for (let i = 0; i < Items.length; i++) {
             const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
-            (${rows[i]})
+            VALUES (${rows[i]})
             ON CONFLICT ("ItemLocation_id") DO UPDATE
             SET "Quantity" = excluded."Quantity"`
             const locationsupdated = await sb.query(updatelocations)
