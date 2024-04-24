@@ -176,7 +176,7 @@ function EditIntake() {
     listtype(event.target.value)
   }
 
-  console.log(formData)
+  console.log(parseFloat(formData.TotalValue))
 
   return (
     <div>
