@@ -228,7 +228,7 @@ function EditIntake() {
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
 
         <label htmlFor="Value">Money Raised</label>
-        <input type="number" name="TotalValue" id="TotalValue" step="0.01" defaultValue={parseFloat(formData.TotalValue) == null ? 0.00 : parseFloat(formData.TotalValue)} onChange={handleChange} />
+        <input type="number" name="TotalValue" id="TotalValue" step="0.01" value={parseFloat(formData.TotalValue) == null ? 0.00 : parseFloat(formData.TotalValue)} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
         {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
         <h2>Items</h2>
