@@ -56,23 +56,25 @@ function Purchase() {
 
 
 
-    const handleRemove = async (id) => {
-        try {
-            const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { id: id })
-
-
-            if (response.status == 400) {
-                alert("Check the values you input. One of the values are not of the correct type.")
+    const handleRemove = async (id, Name) => {
+        if (window.confirm(`Are you sure you want to delete this purchase from ${Name}?`) == true) {
+            try {
+                await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { id: id })
+                
+                if (response.status == 400) {
+                    alert("Check the values you input. One of the values are not of the correct type.")
+                }
+    
+                else if (response.status == 200) {
+                    window.location.reload(false);
+                }
             }
-
-            else if (response.status == 200) {
-                window.location.reload(false);
+    
+            catch (error) {
+                alert("Server side error/Contact developer")
             }
         }
 
-        catch (error) {
-            alert("Server side error/Contact developer")
-        }
 
     }
 

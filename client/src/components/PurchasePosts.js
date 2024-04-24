@@ -25,7 +25,7 @@ const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                             <td>{val.Comments}</td>
                             <td>${val.TotalValue}</td>
                             <td>
-                                <button onClick={() => handleRemove(val.Intake_id)}>Delete</button>
+                                <button onClick={() => handleRemove(val.Intake_id, val.Name)}>Delete</button>
                                 <button onClick={() => handleEdit(val.Intake_id)}>Edit</button>
                                 <button onClick={() => handleView(val.Intake_id)}>View</button>
                             </td>
