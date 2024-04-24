@@ -152,6 +152,7 @@ function AddIntake() {
 }
   const submitDonation = async () => {
     try {
+      console.log(formData.Partner)
       const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location })
 
       
