@@ -110,7 +110,7 @@ const create = async (req, res) => {
         console.log(results[0])
         let rows = []
         for (let i= 0; i < Items.lenght; i++) {
-            rows.push([results.rows[i].ItemLocation_id, results.rows[i].Item_id, results.rows[i].Location_id, results.rows[i].Quantity - Items[i].Quantity])
+            rows.push([results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity - Items[i].Quantity])
         }
         console.log(rows)
         res.sendStatus(200)
