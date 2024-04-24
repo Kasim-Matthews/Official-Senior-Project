@@ -126,7 +126,7 @@ function AddIntake() {
         setFormData(prevFormData => {
           return {
             ...prevFormData,
-            Partner: response.data[0].Partner_id
+            Partner: response.data.data[0].Partner_id
           }
         })
       })
