@@ -109,9 +109,9 @@ const create = async (req, res) => {
         let results = itemlocations.rows
         let rows = [results]
         console.log(rows)
-        // for (let i= 0; i < Items.lenght; i++) {
-        //     rows.push(results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + Items[i].Quantity)
-        // }
+        for (let i= 0; i < Items.lenght; i++) {
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + Items[i].Quantity]
+        }
         // const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
         // VALUES ${rows}
         // ON CONFLICT ("ItemLocation_id") DO UPDATE
