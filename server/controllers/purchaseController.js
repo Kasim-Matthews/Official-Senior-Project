@@ -378,7 +378,7 @@ const purchase_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "RecievedDate" as PurchaseDate, partner."Name" as Vendor, item."Name" as Item, location."Name" as Location, intakeitems."Quantity"
+            let sqlGet = `SELECT "RecievedDate" as "PurchaseDate", partner."Name" as "Vendor", item."Name" as "Item", location."Name" as "Location", intakeitems."Quantity"
             from public.inatkeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             join public.intake on "Intake" = "Intake_id"
@@ -530,6 +530,7 @@ const update = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
         const intakeitemsinfo = await sb.query(sqlGet)
         console.log("2")
+        console.log(intakeitemsinfo.rows)
         let deletionresults = intakeitemsinfo.rows
         let deletionrows = []
 
