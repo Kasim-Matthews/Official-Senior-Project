@@ -109,7 +109,7 @@ const create = async (req, res) => {
         let results = itemlocations.rows
         let rows = []
         for (let i = 0; i < Items.lenght; i++) {
-            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+            rows[i] = results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)
         }
         console.log(rows)
         console.log(Items)
