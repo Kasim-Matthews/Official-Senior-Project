@@ -181,7 +181,7 @@ function EditPurchase() {
 
                 <div>
                     <label htmlFor="Purchase_date">Purchase date</label>
-                    <input type="date" name="Purchase_date" id="Purchase_date" defaultValue={new Date(formData.PurchaseDate).toISOString().replace('-', '/').split('T')[0]} onChange={handleChange} />
+                    <input type="date" name="Purchase_date" id="Purchase_date" defaultValue={formData.PurchaseDate} onChange={handleChange} />
                 </div>
 
                 <div>
