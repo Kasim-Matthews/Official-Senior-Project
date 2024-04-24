@@ -530,12 +530,11 @@ const update = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
         const intakeitemsinfo = await sb.query(sqlGet)
         console.log("2")
-        console.log(intakeitemsinfo.rows)
+        
         let deletionresults = intakeitemsinfo.rows
         let deletionrows = []
-
         for (let i = 0; i < deletionresults.length; i++) {
-            rows.push({Given: deletionresults[i].Given - deletionresults[i].Quantity, Id: deletionresults[i].FKItemLocation})
+            deletionrows.push({Given: deletionresults[i].Given - deletionresults[i].Quantity, Id: deletionresults[i].FKItemLocation})
         }
         console.log("3")
         for (let i = 0; i < deletionresults.length; i++) {
