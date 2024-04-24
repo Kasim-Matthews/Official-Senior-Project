@@ -20,7 +20,7 @@ const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                     return (
                         <tr>
                             <td>{val.Name}</td>
-                            <td>{val.RecievedDate}</td>
+                            <td>{new Date(val.RecievedDate).toDateString()}</td>
                             <td>{val.TotalItems}</td>
                             <td>{val.Comments}</td>
                             <td>${val.TotalValue}</td>
