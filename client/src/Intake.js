@@ -73,7 +73,7 @@ function Intake() {
     }
 
     const handleEdit = (id) => {
-        navigate(`/partner/${id}/edit`)
+        navigate(`/intake/${id}/edit`)
     }
 
     const handleView = (id) => {
