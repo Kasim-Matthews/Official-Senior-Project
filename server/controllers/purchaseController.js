@@ -523,25 +523,28 @@ const update = async (req, res) => {
     try {
         const sqlUpdate = `UPDATE public.intake SET "Comments" = '${Comments}', "RecievedDate" = '{${RecievedDate}}', "Partner" = ${Partner}, "TotalValue" = ${Total} WHERE "Intake_id" = ${id}`
         const update = await sb.query(sqlUpdate)
+        console.log("1")
         let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             WHERE intakeitems."Intake" = ${id}`
         const intakeitemsinfo = await sb.query(sqlGet)
+        console.log("2")
         let deletionresults = intakeitemsinfo.rows
         let deletionrows = []
 
         for (let i = 0; i < deletionresults.length; i++) {
             rows.push({Given: deletionresults[i].Given - deletionresults[i].Quantity, Id: deletionresults[i].FKItemLocation})
         }
-
+        console.log("3")
         for (let i = 0; i < deletionresults.length; i++) {
             const reclaiming = `UPDATE public.itemlocation SET "Quantity" = "Quantity" - ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
             const reclaim = await sb.query(reclaiming)
         }
+        console.log("4")
         const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
         const deletion = await sb.query(deleting)
-
+        console.log("5")
         let ids = []
         Items.forEach(element => {
             ids.push(element.Item_id);
@@ -556,9 +559,10 @@ const update = async (req, res) => {
         SELECT ${id}, unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
         from (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
         const trackpurchase = await sb.query(purchasetrack)
-
+        console.log("6")
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
         const itemlocations = await sb.query(getitemlocations)
+        console.log("7")
         let results = itemlocations.rows
         let rows = []
         for (let i = 0; i < Items.length; i++) {
@@ -571,6 +575,7 @@ const update = async (req, res) => {
             SET "Quantity" = excluded."Quantity"`
             const locationsupdated = await sb.query(updatelocations)
         }
+        console.log("8")
         res.sendStatus(200)
         res.end();
         return;
