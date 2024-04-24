@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 
 function ViewPurchase() {
 
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
     const [itemList, setItemList] = React.useState([])
+    const navigate = useNavigate();
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/view`).then((response) => {
