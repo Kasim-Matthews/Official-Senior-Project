@@ -125,7 +125,7 @@ function EditPurchase() {
 
         await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/edit_delete`)
 
-        await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.PurchaseDate, Partner: formData.Vendor, Value: parseFloat(formData.TotalValue)}, {
+        await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.PurchaseDate, Partner: formData.Vendor, Value: parseFloat(formData.TotalValue), Items: items, Location_id: formData.Location}, {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
