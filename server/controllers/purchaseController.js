@@ -530,15 +530,14 @@ const update = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
         const intakeitemsinfo = await sb.query(sqlGet)
         console.log("2")
-        
         let deletionresults = intakeitemsinfo.rows
         let deletionrows = []
         for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({Given: deletionresults[i].Given - deletionresults[i].Quantity, Id: deletionresults[i].FKItemLocation})
+            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
         }
         console.log("3")
         for (let i = 0; i < deletionresults.length; i++) {
-            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = "Quantity" - ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
             const reclaim = await sb.query(reclaiming)
         }
         console.log("4")
@@ -558,6 +557,7 @@ const update = async (req, res) => {
         const purchasetrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
         SELECT ${id}, unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
         from (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        console.log(purchasetrack)
         const trackpurchase = await sb.query(purchasetrack)
         console.log("6")
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
