@@ -694,7 +694,7 @@ const purchase_reclaim = async (req, res) => {
 
     console.log(typeof id)
 
-    if (typeof id != "string") {
+    if (typeof id != "number") {
         res.sendStatus(400)
         res.end();
         return;
