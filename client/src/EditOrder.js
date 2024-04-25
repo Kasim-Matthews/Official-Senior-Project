@@ -84,7 +84,7 @@ function EditOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/options").then((response) => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/list").then((response) => {
       setPartners(response.data.data);
     })
   }, [])
@@ -166,15 +166,14 @@ function EditOrder() {
       <select id="Partner_id" name="Partner_id" onChange={handleChange}>
         <option value="">--Please choose an option--</option>
         {partners.map((val) => {
-          if (val.value == formData.Partner_id) {
-
+          if (val.Partner_id == formData.Partner_id) {
             return (
-              <option value={val.value} selected>{val.label}</option>
+              <option value={val.Partner_id} selected>{val.Name}</option>
             )
           }
           else {
             return (
-              <option value={val.value}>{val.label}</option>
+              <option value={val.Partner_id}>{val.Name}</option>
             )
           }
         })}
