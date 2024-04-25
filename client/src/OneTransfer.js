@@ -7,15 +7,45 @@ function ViewTransfer() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
+    const [info, setInfo] = React.useState([])
 
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/transfer/${id}/view`).then((response) => {
-            setRecord(response.data.data)
-        });
+            if (response.data.status === 'complete') {
+                setRecord(response.data.data)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
+
     }, [])
 
-    console.log(record)
+    useEffect(() => {
+        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/transfer/${id}/info`).then((response) => {
+            if (response.data.status === 'complete') {
+                setInfo(response.data.data)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
+
+    }, [])
+
 
     return (
         <div>
@@ -23,7 +53,7 @@ function ViewTransfer() {
             <table>
                 <thead>
                     <tr>
-                        <h3>Transfer from ${record.Taken} to ${record.Given} on ${new Date(record.Date).toLocaleDateString()}</h3>
+                        <h3>Transfer from {info.Taken} to {info.Given} on {new Date(info.Date).toLocaleDateString()}</h3>
                     </tr>
                     <tr>
                         <th>Item</th>

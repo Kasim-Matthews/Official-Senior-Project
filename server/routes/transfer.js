@@ -8,6 +8,7 @@ router.use(cors())
 
 router.get('/', transferController.transfer)
 router.get('/:id/view', transferController.transfer_view)
+router.get('/:id/info', transferController.transfer_info)
 router.get('/adjustment', transferController.adjustment)
 router.put('/give', transferController.give)
 router.put('/take', transferController.takeaway)

@@ -558,7 +558,7 @@ const transfer = async (req, res) => {
 
 }
 
-const transfer_view = async (req, res) => {
+const transfer_info = async (req, res) => {
     let id = req.params.id
     if(typeof id != "string"){
         res.sendStatus(400)
@@ -568,15 +568,14 @@ const transfer_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT partner."Name" as "Taken", location."Name" as "Given", "RecievedDate" as "Date", intakeitems."Quantity", item."Name" as "Item"
+            let sqlGet = `SELECT partner."Name" as "Taken", location."Name" as "Given", "RecievedDate" as "Date"
             from public.intake
             join public.partner on "Partner" = "Partner_id"
             join public.intakeitems on "Intake" = "Intake_id"
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
-            join public.item on item."Item_id" = itemlocation."Item_id"
             join public.location on location."Location_id" = itemlocation."Location_id"
             WHERE intake."Intake_id" = ${id}
-            group by partner."Name", location."Name", "RecievedDate", item."Name", intakeitems."Quantity"`
+            group by partner."Name", location."Name", "RecievedDate"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
             return
@@ -629,6 +628,79 @@ const transfer_view = async (req, res) => {
     })*/
 
 }
+
+const transfer_view = async (req, res) => {
+    let id = req.params.id
+    if(typeof id != "string"){
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (id) {
+        try {
+            let sqlGet = `SELECT intakeitems."Quantity", item."Name" as "Item"
+            from public.intake
+            join public.partner on "Partner" = "Partner_id"
+            join public.intakeitems on "Intake" = "Intake_id"
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            join public.item on item."Item_id" = itemlocation."Item_id"
+            join public.location on location."Location_id" = itemlocation."Location_id"
+            WHERE intake."Intake_id" = ${id}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+            return
+        }
+        catch (error) {
+            res.sendStatus(500).json({ "message": error.message})
+            return
+        }
+    }
+    /*sb.getConnection(function (error, tempCont){
+        if(error){
+            console.log('Error')
+            res.status(500).json({'message': error.message})
+        }
+        else{
+            if(typeof id != "string"){
+                res.send("Invalid");
+                res.end();
+                return;
+            }
+        
+            if(id){
+                const sqlGet = `SELECT p.Name as Taken, l.Name as Given, CAST(i.RecievedDate as char(10)) as Date, it.Name as Item, ii.Quantity
+                from sql5669328.intake i
+                join sql5669328.partner p on p.Partner_id = i.Partner
+                join sql5669328.intakeitems ii on ii.Intake_id = i.Intake_id
+                join sql5669328.itemlocation il on il.ItemLocation_id = ii.FKItemLocation
+                join sql5669328.item it on it.Item_id = il.Item_id
+                join sql5669328.location l on l.Location_id = il.Location_id
+                WHERE i.Intake_id = ?
+                group by p.Name, l.Name, i.RecievedDate, it.Name, ii.Quantity;`
+        
+                tempCont.query(sqlGet, [id], (err, result) => {
+                    tempCont.release()
+                    if (err) {
+                        console.log(err)
+                        return
+                    }
+
+                    else {
+                        console.log("Transfer view data found");
+                        res.send(result);
+                        res.end();
+                        return;
+                    }
+                    
+                })
+            }
+        }
+    })*/
+
+}
+
+
 
 const transfer_cleanup = async (req, res) => {
     let id = req.params.id
@@ -789,5 +861,6 @@ module.exports = {
     transfer_cleanup,
     transfer_reclaim,
     transfer_renounce,
-    validation
+    validation,
+    transfer_info
 }
