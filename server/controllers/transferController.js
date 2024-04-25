@@ -141,7 +141,7 @@ const give = async (req, res) => {
         }
 
         const getitemlocationstake = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${From}`
-        const itemlocationstake = await sb.query(getitemlocations)
+        const itemlocationstake = await sb.query(getitemlocationstake)
 
         let take = itemlocationstake.rows
         let takerows = []
