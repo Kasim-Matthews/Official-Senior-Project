@@ -109,7 +109,7 @@ const distribution_creation = async (req, res) => {
         const distributiontrack = `INSERT INTO public.orderitems ("Order_id", "Quantity", "Value", "ItemLocationFK")
         SELECT p."Order_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."ItemLocationFK")
         from (SELECT MAX("Order_id") as "Order_id" from public.distribution)p,
-             (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+             (SELECT array_agg("ItemLocation_id") "ItemLocationFK" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
         const trackdistribution = await sb.query(distributiontrack)
 
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
@@ -117,7 +117,7 @@ const distribution_creation = async (req, res) => {
         let results = itemlocations.rows
         let rows = []
         for (let i = 0; i < Items.length; i++) {
-            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity - parseInt(Items[i].Quantity)]
         }
         for (let i = 0; i < Items.length; i++) {
             const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
