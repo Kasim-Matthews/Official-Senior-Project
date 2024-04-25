@@ -816,6 +816,10 @@ const intake_reclaim = async (req, res) => {
 
         const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
         const deletionintake = await sb.query(deletingintake)
+
+        res.sendStatus(200)
+        res.end();
+        return;
     }
 
     catch (error) {
