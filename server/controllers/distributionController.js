@@ -508,7 +508,6 @@ const distribution_update = async (req, res) => {
 
     let id = req.params.id
     let Comments = req.body.Comments;
-    let Status = req.body.Status;
     let DeliveryMethod = req.body.DeliveryMethod;
     let RequestDate = req.body.RequestDate;
     let CompletedDate = req.body.CompletedDate;
@@ -516,14 +515,14 @@ const distribution_update = async (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location_id
 
-    if (typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number' && typeof Items != "object" && typeof Location != "string" && typeof id != "string") {
+    if (typeof Comments != "string" && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number' && typeof Items != "object" && typeof Location != "string" && typeof id != "string") {
         res.send("Invalid");
         res.end();
         return;
     }
 
     try {
-        const sqlUpdate = `UPDATE public.distribution SET "Comments" = '${Comments}', "Status" = '${Status}', "DeliveryMethod" = '${DeliveryMethod}', "CompletedDate" = '{${CompletedDate}}', "RequestDate" = '{${RequestDate}}', "Partner_id" = ${Partner_id} WHERE "Order_id" = ${id}`
+        const sqlUpdate = `UPDATE public.distribution SET "Comments" = '${Comments}', "DeliveryMethod" = '${DeliveryMethod}', "CompletedDate" = '{${CompletedDate}}', "RequestDate" = '{${RequestDate}}', "Partner_id" = ${Partner_id} WHERE "Order_id" = ${id}`
         const update = await sb.query(sqlUpdate)
         
         let getdelete = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
