@@ -122,6 +122,7 @@ const give = async (req, res) => {
         Items.forEach(element => {
             ids.push(element.Item_id);
         });
+        console.log("i did it")
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${To}`
         const itemlocations = await sb.query(getitemlocations)
 
@@ -136,6 +137,8 @@ const give = async (req, res) => {
             VALUES (${giverows[i]})
             ON CONFLICT ("ItemLocation_id") DO UPDATE
             SET "Quantity" = excluded."Quantity"`
+            console.log("i did it")
+            console.log(updatelocations)
             const locationsupdated = await sb.query(updatelocations)
         }
 
@@ -153,6 +156,8 @@ const give = async (req, res) => {
             VALUES (${takerows[i]})
             ON CONFLICT ("ItemLocation_id") DO UPDATE
             SET "Quantity" = excluded."Quantity"`
+            console.log("i did it")
+            console.log(updatelocations)
             const locationsupdated = await sb.query(updatelocations)
         }
 
