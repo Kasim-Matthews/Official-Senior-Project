@@ -22,7 +22,7 @@ function ViewTransfer() {
             <table>
                 <thead>
                     <tr>
-                        <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
+                        <h3>{`Transfer from ${record[0].Taken} to ${record[0].Given} on ${record[0].Date}`}</h3>
                     </tr>
                     <tr>
                         <th>Item</th>
