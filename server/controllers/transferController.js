@@ -766,7 +766,7 @@ const transfer_cleanup = async (req, res) => {
 }
 
 const transfer_reclaim = async (req, res) => {
-    let id = req.params.id
+    let id = req.body.id
     let Location = req.body.Location
 
     if(typeof id != "string" && typeof Location != "number"){
