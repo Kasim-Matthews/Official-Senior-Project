@@ -3,6 +3,41 @@ import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
 import Distribution from "./models/Distribution";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Pagination from "./components/Pagination";
+import OrderPosts from "./components/OrderPosts";
+import  Box  from '@mui/material/Box';
+import  AppBar  from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import  IconButton  from '@mui/material/IconButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
+import './Order.css';import { DateRangePicker } from 'react-date-range'
+import { addDays } from 'date-fns';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Stack from '@mui/material/Stack';
+import 'react-date-range/dist/styles.css'; // main css file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 function AddOrder() {
   const navigate = useNavigate();
@@ -134,7 +169,106 @@ function AddOrder() {
 
 
   return (
+    <div className="dashboard-container">
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
+                    <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
+                    </Typography>
+                        <div>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                </Box>
     <form id="distribution" onSubmit={validate}>
+          <div className='partner'>
+            <TextField
+              id="outlined-select-partner"
+              select
+              label="Partner"
+              defaultValue="Partner"
+              helperText="Please select a partner"
+            >
+              {partners.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            </div>
+          <div className='location'>
+            <TextField
+              id="outlined-select-location"
+              select
+              label="Location"
+              defaultValue="Location"
+              helperText="Please select a location"
+            >
+              {locations.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            </div>
+            <div className='requestDate'>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker']}>
+                <DatePicker label="Request Date" min="2023-09-01" required onChange={handleChange}/>
+              </DemoContainer>
+            </LocalizationProvider>
+            </div> 
+            <div className='completeDate'>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker']}>
+                <DatePicker label="Complete Date" min={formData.RequestDate} required onChange={handleChange}/>
+              </DemoContainer>
+            </LocalizationProvider>
+            </div> 
+            <div className='delivery'>
+            <FormControl>
+              <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="delivery-method-label"
+                name="delivery-method-group"
+              >
+                <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off"  checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange}/>
+                <FormControlLabel value="other" control={<Radio />} label="Other"  checked={formData.DeliveryMethod === "Other"} onChange={handleChange}/>
+              </RadioGroup>
+            </FormControl>
+            </div>
+            <TextField
+              id="outlined-Comments-static"
+              label="Comments"
+              multiline
+              rows={4}
+              defaultValue="Comments"
+              onChange={handleChange} 
+              placeholder="Comments"
+            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
       <label htmlFor="Partner">Partner</label>
       <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
         <option value="">--Please choose an option--</option>
@@ -193,6 +327,7 @@ function AddOrder() {
       <input type="submit" value="Submit" />
       <button onClick={handleCancel}>Cancel</button>
     </form>
+    </div>
   )
 }
 

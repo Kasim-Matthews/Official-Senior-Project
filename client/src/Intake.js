@@ -197,7 +197,6 @@ function Intake(){
                     })}
                 </tbody>
             </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }

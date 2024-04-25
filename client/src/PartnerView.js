@@ -1,6 +1,21 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 
 function PartnerView() {
@@ -92,14 +107,14 @@ function PartnerView() {
                     </Toolbar>
                 </AppBar>
                 </Box>
-            <button><Link to="/partner/new">Add</Link></button>
+            <Button variant="contained"><Link to="/partner/new" style={{ textDecoration: 'none', color: 'white' }}>Add Partner</Link></Button>
             <TableContainer component={Paper}>
                                         <Table sx={{ minWidth: 450 }} aria-label="a simple table">
                                             <TableHead>
                                                 <TableRow>
-                                                    <TableCell align="right">Name</TableCell>
-                                                    <TableCell align="right">Email</TableCell>
-                                                    <TableCell align="right">Actions</TableCell>
+                                                    <TableCell align="left">Name</TableCell>
+                                                    <TableCell align="left">Email</TableCell>
+                                                    <TableCell align="left">Actions</TableCell>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>

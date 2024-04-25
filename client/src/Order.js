@@ -25,8 +25,17 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
 import './Order.css';import { DateRangePicker } from 'react-date-range'
 import { addDays } from 'date-fns';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Stack from '@mui/material/Stack';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+
 
 
 function Order() {
@@ -156,6 +165,16 @@ function Order() {
     navigate(`/distribution/${id}/print.pdf`)
   }
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
@@ -190,10 +209,28 @@ function Order() {
                     </Toolbar>
                 </AppBar>
                 </Box>
-      <form onSubmit={handleSubmit}>
       <h2>Distributions Table</h2>
-            <Card>
-              <CardContent>
+      <React.Fragment>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Filters</Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          component: 'form',
+          onSubmit: (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.currentTarget);
+            const formJson = Object.fromEntries(formData.entries());
+            const email = formJson.email;
+            console.log(email);
+            handleClose();
+          },
+        }}
+      >
+        <DialogTitle>Filters</DialogTitle>
+          <DialogContent>
+          <form onSubmit={handleSubmit}>
               <div className='partner'>
             <TextField
               id="outlined-select-partner"
@@ -231,12 +268,17 @@ function Order() {
             </LocalizationProvider>
             </div>   
             <div className='submit'>
-            <Button variant="contained">Submit</Button>
+            <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Submit</Button>
+        </DialogActions>
             </div>
-            </CardContent>
-            </Card>
-      </form>
-      <button><Link to="/distribution/new">Add</Link></button>
+            </form>
+          </DialogContent>
+      </Dialog>
+    </React.Fragment>
+      <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
+      <Button variant="contained"><Link to="/distribution/new" style={{ textDecoration: 'none', color: 'white' }}>Add</Link></Button>
       <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
       <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
     </div>
@@ -245,6 +287,3 @@ function Order() {
 }
 
 export default Order;
-
-
-

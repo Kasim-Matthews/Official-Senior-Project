@@ -7,6 +7,31 @@ import { DateRangePicker } from 'react-date-range'
 import { addDays } from 'date-fns';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+
 
 function Purchase() {
     const navigate = useNavigate();
@@ -117,45 +142,117 @@ function Purchase() {
         setRecords(temp);
     }
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="Vendor">
-                    Vendor
-                    <select id="Vendor" name="Vendor" value={filters.Vendor} onChange={handleChange}>
-                        <option value=""></option>
-                        {partners.map((val) => {
-                            return (
-                                <option value={val.Name}>{val.Name}</option>
-                            )
-                        })}
-
-                    </select>
-
-                </label>
-
-                <label htmlFor="Location">
-                    Location
-                    <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
-                        <option value=""></option>
-                        {locations.map((val) => {
-                            return (
-                                <option value={val.Name}>{val.Name}</option>
-                            )
-                        })}
-
-                    </select>
-
-                </label>
-
-                <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
-
-
-
-                <input type="submit" value="Filter" />
-            </form>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
+                    <Toolbar>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
+                    </Typography>
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
+                    </Typography>
+                        <div>
+                        <IconButton
+                            size="large"
+                            aria-label="account of current user"
+                            aria-controls="menu-appbar"
+                            aria-haspopup="true"
+                            color="inherit"
+                        >
+                            <AccountCircle />
+                        </IconButton>
+                        </div>
+                    </Toolbar>
+                </AppBar>
+                </Box>
+                <h2>Purchases</h2>
+                    <React.Fragment>
+                    <Button variant="outlined" onClick={handleClickOpen}>
+                        Filters</Button>
+                    <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        PaperProps={{
+                        component: 'form',
+                        onSubmit: (event) => {
+                            event.preventDefault();
+                            const formData = new FormData(event.currentTarget);
+                            const formJson = Object.fromEntries(formData.entries());
+                            const email = formJson.email;
+                            console.log(email);
+                            handleClose();
+                        },
+                        }}
+                    >
+                        <DialogTitle>Filters</DialogTitle>
+                        <DialogContent>
+                        <form onSubmit={handleSubmit}>
+                            <div className='vendor'>
+                            <TextField
+                            id="outlined-select-vendor"
+                            select
+                            label="Vendor"
+                            defaultValue="Vendor"
+                            helperText="Please select a vendor"
+                            >
+                            {partners.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                                </MenuItem>
+                            ))}
+                            </TextField>
+                            </div>
+                            <div className='location'>
+                            <TextField
+                            id="outlined-select-location"
+                            select
+                            label="Location"
+                            defaultValue="Location"
+                            helperText="Please select a location"
+                            >
+                            {locations.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                                </MenuItem>
+                            ))}
+                            </TextField>
+                            </div>
+                            <div className='date'>
+                            <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                            </div>   
+                            <div className='submit'>
+                            <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button type="submit">Submit</Button>
+                        </DialogActions>
+                            </div>
+                            </form>
+                        </DialogContent>
+                    </Dialog>
+                    </React.Fragment>
             
             <button><Link to="/purchase/new">Add</Link></button>
 

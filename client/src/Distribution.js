@@ -1,6 +1,20 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import {useNavigate, Link} from "react-router-dom";
+import PropTypes from 'prop-types';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
+import Typography from '@mui/material/Typography';
+import { blue } from '@mui/material/colors';
 
 
 function Distribution() {
@@ -92,6 +106,50 @@ function Distribution() {
     navigate(`/distribution/${id}`)
   }
 
+  function SimpleDialog(props) {
+    const { onClose, selectedValue, open } = props;
+  
+    const handleClose = () => {
+      onClose(selectedValue);
+    };
+
+    return(
+      <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>Set backup account</DialogTitle>
+      <form style={{ display: 'none' }} onSubmit={handleSubmit}>
+          <label htmlFor="Partner">
+            Partner
+            <select id="Partner" name="Partner" value={filters.Partner} onChange={handleChange}>
+              <option value="" disabled></option>
+              {partners.map((val) => {
+                return (
+                  <option value={val.Name}>{val.Name}</option>
+                );
+              })}
+
+            </select>
+
+          </label>
+          <label>
+            <input type="radio" value="All" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "All"} />
+            All
+          </label>
+          <label>
+            <input type="radio" value="Drop-off" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Drop-off"} />
+            Drop-off
+          </label>
+          <label>
+            <input type="radio" value="Other" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Other"} />
+            Other
+          </label>
+          <input type="date" onChange={handleChange} value={filters.date} name="date" />
+
+          <input type="submit" value="Submit" />
+        </form>
+    </Dialog>
+    );
+  }
+
   return (
     <div>
       <Box sx={{ flexGrow: 1 }}>
@@ -126,36 +184,14 @@ function Distribution() {
                     </Toolbar>
                 </AppBar>
                 </Box>
-        <form style={{ display: 'none' }} onSubmit={handleSubmit}>
-          <label htmlFor="Partner">
-            Partner
-            <select id="Partner" name="Partner" value={filters.Partner} onChange={handleChange}>
-              <option value="" disabled></option>
-              {partners.map((val) => {
-                return (
-                  <option value={val.Name}>{val.Name}</option>
-                );
-              })}
-
-            </select>
-
-          </label>
-          <label>
-            <input type="radio" value="All" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "All"} />
-            All
-          </label>
-          <label>
-            <input type="radio" value="Drop-off" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Drop-off"} />
-            Drop-off
-          </label>
-          <label>
-            <input type="radio" value="Other" name="deliverymethod" onChange={handleChange} checked={filters.deliverymethod == "Other"} />
-            Other
-          </label>
-          <input type="date" onChange={handleChange} value={filters.date} name="date" />
-
-          <input type="submit" value="Submit" />
-        </form>
+                <Button variant="outlined" onClick={handleClickOpen}>
+                  Filters
+                </Button>
+                <SimpleDialog
+                  selectedValue={selectedValue}
+                  open={open}
+                  onClose={handleClose}
+                />
         <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
         <button><Link to="/distribution/new">Add</Link></button>
         <table>
