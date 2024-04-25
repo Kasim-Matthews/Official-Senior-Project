@@ -769,7 +769,7 @@ const transfer_reclaim = async (req, res) => {
     let id = req.params.id
     let Location = req.body.Location
 
-    if(typeof id != "string" && typeof Location != "number"){
+    if(typeof id != "string" && typeof Location != "number "){
         res.sendStatus(400)
         res.end();
         return;
@@ -777,7 +777,7 @@ const transfer_reclaim = async (req, res) => {
 
     try {
         
-        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Item_id", intemlocation."Quantity"
+        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Item_id", itemlocation."Quantity"
         from public.intakeitems
         join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
         WHERE intakeitems."Intake" = ${id}`
