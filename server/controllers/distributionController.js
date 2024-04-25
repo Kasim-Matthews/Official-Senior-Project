@@ -82,7 +82,7 @@ const distribution_creation = async (req, res) => {
     }
 
     try {
-        const distributioncreation = `INSERT INTO public.distribution ("Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", "Partner_id") VALUES ('${Comments}', '{${Status}}', '${DeliveryMethod}', '{${RequestDate}}', '{${CompletedDate}}', ${Partner_id})`
+        const distributioncreation = `INSERT INTO public.distribution ("Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", "Partner_id") VALUES ('${Comments}', '${Status}', '${DeliveryMethod}', '{${RequestDate}}', '{${CompletedDate}}', ${Partner_id})`
         const createdistribution = await sb.query(distributioncreation)
 
         let ids = []
