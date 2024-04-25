@@ -146,7 +146,7 @@ function EditIntake() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.TotalValue, Items: items, Location_id: formData.Location }, {
+      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.TotalValue, Items: items, Location_id: formData.Location_id }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
