@@ -15,7 +15,7 @@ sb.on('error', error => {
 
 
 const distribution_index = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT "Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Order_id", partner."Name", SUM(orderitems."Quantity") as Total, location."Name" as Location
         from public.distribution
@@ -65,7 +65,7 @@ const distribution_index = async (req, res) => {
     // })
 }
 
-const distribution_creation = (req, res) => {
+const distribution_creation = async (req, res) => {
     let Comments = req.body.Comments;
     let Status = req.body.Status;
     let DeliveryMethod = req.body.DeliveryMethod;
@@ -74,6 +74,67 @@ const distribution_creation = (req, res) => {
     let Partner_id = req.body.Partner_id;
     let Items = req.body.Items
     let Location = req.body.Location_id
+
+    if (typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number' && typeof Items != "object" && typeof Location != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        const distributioncreation = `INSERT INTO public.distribution ("Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", "Partner_id") VALUES ('${Comments}', '{${Status}}', '${DeliveryMethod}', '{${RequestDate}}', '{${CompletedDate}}', ${Partner_id})`
+        const createdistribution = await sb.query(distributioncreation)
+
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+
+        let quantities = []
+        Items.forEach(element => {
+            quantities.push(element.Quantity);
+        });
+
+        let sqlGet = `SELECT "FairMarketValue"
+        from public.item
+        WHERE "Item_id" IN (${ids})`
+        const response = await sb.query(sqlGet);
+        let valueresults = response.rows
+        let values = []
+
+        for (let i = 0; i < Items.length; i++) {
+            values.push(Items[i].Quantity * valueresults[i].FairMarketValue)
+        }
+
+        const distributiontrack = `INSERT INTO public.orderitems ("Order_id", "Quantity", "Value", "ItemLocationFK")
+        SELECT p."ORder_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."ItemLocationFK")
+        from (SELECT MAX("Order_id") as "Order_id" from public.distribution)p,
+             (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        const trackdistribution = await sb.query(distributiontrack)
+
+        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+        const itemlocations = await sb.query(getitemlocations)
+        let results = itemlocations.rows
+        let rows = []
+        for (let i = 0; i < Items.length; i++) {
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+        }
+        for (let i = 0; i < Items.length; i++) {
+            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
+            VALUES (${rows[i]})
+            ON CONFLICT ("ItemLocation_id") DO UPDATE
+            SET "Quantity" = excluded."Quantity"`
+            const locationsupdated = await sb.query(updatelocations)
+        }
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(async function (error, tempCont) {
     //     if (error) {
@@ -186,7 +247,7 @@ const distribution_remove = (req, res) => {
 const distribution_view = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -251,8 +312,8 @@ const distribution_view = async (req, res) => {
 
 const distribution_itemlist = async (req, res) => {
     let id = req.params.id
-    
-    if(typeof id != "string"){
+
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -314,7 +375,7 @@ const distribution_itemlist = async (req, res) => {
 const distribution_edit = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -376,7 +437,7 @@ const distribution_edit = async (req, res) => {
 const distribution_edit_items = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -392,7 +453,7 @@ const distribution_edit_items = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
         }
     }
 
@@ -549,7 +610,7 @@ const distribution_find_ild = async (req, res) => {
 const validation = async (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location_id
-    
+
     if (typeof Items != "object" && typeof Location != "string") {
         res.sendStatus(400)
         res.end();
@@ -570,10 +631,10 @@ const validation = async (req, res) => {
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
         } catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
         }
     }
-    
+
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -621,7 +682,7 @@ const validation = async (req, res) => {
 
 const distribution_find_value = async (req, res) => {
     let Items = req.body.Items
-    
+
     if (typeof Items != "object") {
         res.sendStatus(400)
         res.end();
@@ -689,7 +750,7 @@ const distribution_find_value = async (req, res) => {
 }
 
 const distribution_find_id = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT MAX("Order_id") as Order_id
         from public.distribution`
@@ -906,8 +967,8 @@ const distribution_incomplete = (req, res) => {
 
 const distribution_cleanup = async (req, res) => {
     let id = req.params.id
-    
-    if(typeof id != "string"){
+
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -923,10 +984,10 @@ const distribution_cleanup = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
         }
     }
-    
+
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -1045,7 +1106,7 @@ const distribution_update_delete = (req, res) => {
 const distribution_print = async (req, res) => {
     let id = req.params.id
     /* Add the total amount distributed to that specific partner */
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -1062,7 +1123,7 @@ const distribution_print = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
         }
     }
 

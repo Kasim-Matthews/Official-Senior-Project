@@ -123,18 +123,25 @@ function AddOrder() {
 
 
   const handleSubmit = async () => {
-
     try {
-      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
+      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      window.location.href = "/distribution";
+      
+
+      if(response.status == 400){
+        alert("Check the values you input. One of the values are not of the correct type.")
+      }
+
+      else if (response.status == 200){
+        window.location.href = "/distribution"
+      }
     }
+
     catch (error) {
-      navigate('/query')
-      console.error(error)
+      alert("Server side error/Contact developer")
     }
 
   }
