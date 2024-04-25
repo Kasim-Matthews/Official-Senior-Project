@@ -53,7 +53,7 @@ function ViewTransfer() {
             <table>
                 <thead>
                     <tr>
-                        <h3>Transfer from {info.Taken} to {info.Given} on {info.Date}</h3>
+                        <h3>Transfer from {info.Taken} to {info.Given} on {new Date(info.Date).toLocaleDateString()}</h3>
                     </tr>
                     <tr>
                         <th>Item</th>
