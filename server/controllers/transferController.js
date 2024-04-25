@@ -713,7 +713,7 @@ const transfer_cleanup = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT intakeitems."Quantity" as Given, intakeitems."FKItemLocation", itemlocation."Item_id"
+            let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Item_id", intemlocation."Quantity"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             WHERE intakeitems."Intake" = ${id}`
@@ -765,8 +765,58 @@ const transfer_cleanup = async (req, res) => {
 
 }
 
-const transfer_reclaim = (req, res) => {
-    let records = req.body.records
+const transfer_reclaim = async (req, res) => {
+    let id = req.params.id
+    let Location = req.body.Location
+
+    if(typeof id != "string" && typeof Location != "string"){
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        
+        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Item_id", intemlocation."Quantity"
+        from public.intakeitems
+        join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+        WHERE intakeitems."Intake" = ${id}`
+        const response = await sb.query(sqlGet);
+
+        let used = response.rows
+
+        let giving = []
+        let taking = []
+        for (let i = 0; i < used.length; i++) {
+            giving.push({Quantity: used[i].Quantity + used[i].Given, Location: Location, Item_id: used[i].Item_id})
+            taking.push({Quantity: used[i].Quantity - used[i].Given, ItemLocation_id: used[i].ItemLocation_id})
+        }
+
+        for (let i = 0; i < used.length; i++) {
+            const give = `UPDATE public.itemlocation SET "Quantity" = ${giving[i].Quantity} WHERE "Location_id" = ${giving[i].Location} AND "Item_id" = ${giving[i].Item_id}`
+            const renounce = await sb.query(give)
+        }
+
+        for (let i = 0; i < used.length; i++) {
+            const give = `UPDATE public.itemlocation SET "Quantity" = ${taking[i].Quantity} WHERE "ItemLocation_id" = ${taking[i].ItemLocation_id}`
+            const renounce = await sb.query(give)
+        }
+
+        const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
+        const deletion = await sb.query(deleting)
+
+        const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
+        const deletionintake = await sb.query(deletingintake)
+
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     /*sb.getConnection(function (error, tempCont){
         if(error){

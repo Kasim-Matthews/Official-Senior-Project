@@ -28,20 +28,22 @@ function TransferView() {
 
     const handleRemove = async (id, Name, Location) => {
         if (window.confirm(`Are you sure you want to delete ${Name}'s transfer from the transfer list?`) == true) {
-            let GetData = async function (id) {
-                return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/transfer/${id}/cleanup`).then((response) => {
-                    return response
-                });
-            }
-            let data = GetData(id)
-            data.then(async (response) => {
-                await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/transfer/reclaim", { records: response.data })
-                await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/transfer/renounce", { records: response.data, Location: Location })
-            })
-
-            await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/intake/remove/${id}`);
-
-            window.location.reload(false);
+            try {
+                const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/transfer/reclaim", { id: id, Location: Location })
+                
+          
+                if(response.status == 400){
+                  alert("Check the values you input. One of the values are not of the correct type.")
+                }
+          
+                else if (response.status == 200){
+                    window.location.reload(false);
+                }
+              }
+          
+              catch (error) {
+                alert("Server side error/Contact developer")
+              }            
         }
     }
 
