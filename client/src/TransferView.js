@@ -33,7 +33,7 @@ function TransferView() {
                 
           
                 if(response.status == 400){
-                  alert("Check the values you input. One of the values are not of the correct type.")
+                  alert("Contact developer")
                 }
           
                 else if (response.status == 200){
