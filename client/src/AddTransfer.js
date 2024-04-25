@@ -161,6 +161,8 @@ function AddTransfer() {
           }
     }
 
+    console.log(formData)
+
     return (
         <form onSubmit={validate}>
             <label htmlFor="From">From storage location</label>

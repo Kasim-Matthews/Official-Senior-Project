@@ -137,8 +137,6 @@ const give = async (req, res) => {
             VALUES (${giverows[i]})
             ON CONFLICT ("ItemLocation_id") DO UPDATE
             SET "Quantity" = excluded."Quantity"`
-            console.log("i did it")
-            console.log(updatelocations)
             const locationsupdated = await sb.query(updatelocations)
         }
 
@@ -156,8 +154,6 @@ const give = async (req, res) => {
             VALUES (${takerows[i]})
             ON CONFLICT ("ItemLocation_id") DO UPDATE
             SET "Quantity" = excluded."Quantity"`
-            console.log("i did it")
-            console.log(updatelocations)
             const locationsupdated = await sb.query(updatelocations)
         }
 
