@@ -73,69 +73,25 @@ function EditOrder() {
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/edit`).then((response) => {
-      if (response.data.status === 'complete') {
-        setFormData(response.data.data[0]);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setFormData(response.data.data[0]);
     })
   }, [])
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/edititems`).then((response) => {
-      if (response.data.status === 'complete') {
-        setItems(response.data.data);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setItems(response.data.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/list").then((response) => {
-      if (response.data.status === 'complete') {
-        setPartners(response.data.data);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/options").then((response) => {
+      setPartners(response.data.data);
     })
   }, [])
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-      if (response.data.status === 'complete') {
-        setLocations(response.data.data);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setLocations(response.data.data);
     })
   }, [])
 
@@ -156,11 +112,11 @@ function EditOrder() {
   }
 
   const quantityCheck = async () => {
-    let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/edit_validation", { Items: items, Location_id: formData.Location_id });
+    let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/validation", { Items: items, Location_id: formData.Location });
     var result = []
-    for (let o1 of ild.data.data) {
+    for (let o1 of ild.data) {
       for (let o2 of items) {
-        if (o1.Item_id == o2.Item) {
+        if (o1.Item_id == o2.Item_id) {
           if (o1.Quantity < o2.Quantity) {
             result.push(o1.Item);
           }
@@ -178,21 +134,29 @@ function EditOrder() {
   }
 
   async function handleSubmit() {
-    try {
-      const response = await await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id, Items: items, Location_id: formData.Location_id });
 
-      if (response.status == 400) {
-        alert("Check the values you input. One of the values are not of the correct type.")
-      }
 
-      else if (response.status == 200) {
-        window.location.href = "/distribution"
-      }
+    let GetData = async function (id) {
+      return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/cleanup`).then((response) => {
+        return response
+      });
     }
 
-    catch (error) {
-      alert("Server side error/Contact developer")
-    }
+    let data = GetData(id)
+    await data.then(async (response) => {
+      await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/reclaim", { records: response.data })
+    })
+
+    await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/edit_delete`)
+
+    await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id });
+
+    let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_ild", { Items: items, Location_id: formData.Location  })
+    let V_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_value", {Items: items })
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/track", { Order_id: id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
+    await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
+    navigate('/distribution')
+
 
   }
 
@@ -202,14 +166,15 @@ function EditOrder() {
       <select id="Partner_id" name="Partner_id" onChange={handleChange}>
         <option value="">--Please choose an option--</option>
         {partners.map((val) => {
-          if (val.Partner_id == formData.Partner_id) {
+          if (val.value == formData.Partner_id) {
+
             return (
-              <option value={val.Partner_id} selected>{val.Name}</option>
+              <option value={val.value} selected>{val.label}</option>
             )
           }
           else {
             return (
-              <option value={val.Partner_id}>{val.Name}</option>
+              <option value={val.value}>{val.label}</option>
             )
           }
         })}
@@ -236,10 +201,10 @@ function EditOrder() {
       </select><br />
 
       <label htmlFor="RequestDate">RequestDate</label>
-      <input type="date" name="RequestDate" id="RequestDate" Value={formData.RequestDate} required onChange={handleChange} />
+      <input type="date" name="RequestDate" id="RequestDate" defaultValue={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
 
       <label htmlFor="CompletedDate">CompleteDate</label>
-      <input type="date" name="CompletedDate" id="CompletedDate" Value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange} />
+      <input type="date" name="CompletedDate" id="CompletedDate" defaultValue={formData.CompletedDate} min="2023-09-01" required onChange={handleChange} />
 
       <h3>Delivery Method</h3>
 

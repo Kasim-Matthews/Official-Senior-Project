@@ -2,7 +2,7 @@ import Login from './login';
 import Home from './home';
 import Order from './Order';
 import AddOrder from './AddOrder';
-import AddPartner from './AddPartner';
+import AddPartner from'./AddPartner';
 import PartnerView from './PartnerView';
 import ItemView from './ItemView';
 import AddItem from './AddItem';
@@ -68,12 +68,12 @@ function App() {
         <Route path='/' element={<Home />} />
 
 
-
+        
         <Route path="/distribution" element={<Order />} />
         <Route path='/distribution/:id' element={<ViewOrder />} />
         <Route path='/distribution/:id/edit' element={<EditOrder />} />
         <Route path="/distribution/new" element={<AddOrder />} />
-        <Route path='/distribution/:id/print.pdf' element={<PDFView />} />
+        <Route path='/distribution/:id/print.pdf' element={<PDFView />}/>
 
         <Route path="/partner/new" element={<AddPartner />} />
         <Route path='/partner/:id/edit' element={<EditPartner />} />
@@ -97,48 +97,47 @@ function App() {
 
         <Route path="/intake" element={<Intake />} />
         <Route path="/intake/new" element={<AddIntake />} />
-        <Route path='/intake/:id/edit' element={<EditIntake />} />
+        <Route path='/intake/:id/edit' element={<EditIntake/>}/>
         <Route path="/intake/:id" element={<ViewIntake />} />
-
-        <Route path="/purchase" element={<Purchase />} />
-        <Route path="/purchase/new" element={<AddPurchase />} />
+        
+        <Route path="/purchase" element={<Purchase/>}/>
+        <Route path="/purchase/new" element={<AddPurchase/>}/>
         <Route path="/purchase/:id" element={<ViewPurchase />} />
         <Route path="/purchase/:id/edit" element={<EditPurchase />} />
 
-        <Route path='/vendor' element={<VendorView />} />
-        <Route path='/vendor/new' element={<AddVendor />} />
-        <Route path='/vendor/:id/edit' element={<EditVendor />} />
-        <Route path='/vendor/:id' element={<ViewVendor />} />
+        <Route path='/vendor' element={<VendorView/>}/>
+        <Route path='/vendor/new' element={<AddVendor/>}/>
+        <Route path='/vendor/:id/edit' element={<EditVendor/>}/>
+        <Route path='/vendor/:id' element={<ViewVendor/>}/>
 
-        <Route path='/productdrive' element={<ProductDriveView />} />
-        <Route path='/productdrive/new' element={<AddDrive />} />
-        <Route path='/productdrive/:id/edit' element={<EditDrive />} />
-        <Route path='/productdrive/:id' element={<ViewDrive />} />
+        <Route path='/productdrive' element={<ProductDriveView/>}/>
+        <Route path='/productdrive/new' element={<AddDrive/>}/>
+        <Route path='/productdrive/:id/edit' element={<EditDrive/>}/>
+        <Route path='/productdrive/:id' element={<ViewDrive/>}/>
 
-        <Route path='/donationsite' element={<DonationSiteView />} />
-        <Route path='/donationsite/new' element={<AddDonationSite />} />
-        <Route path='/donationsite/:id/edit' element={<EditDonationSite />} />
-        <Route path='/donationsite/:id' element={<ViewDonationSite />} />
-        <Route path='/transfer' element={<TransferView />} />
-        <Route path='/transfer/new' element={<AddTransfer />} />
-        <Route path='/transfer/:id' element={<ViewTransfer />} />
+        <Route path='/donationsite' element={<DonationSiteView/>}/>
+        <Route path='/donationsite/new' element={<AddDonationSite/>}/>
+        <Route path='/donationsite/:id/edit' element={<EditDonationSite/>}/>
+        <Route path='/donationsite/:id' element={<ViewDonationSite/>}/>
 
-        <Route path='/audit' element={<AuditView />} />
-        <Route path='/audit/new' element={<AddAudit />} />
-        <Route path='/audit/:id' element={<ViewAudit />} />
-{/* Remember to move this junk back  */}
         {/* We want to protect these wrotes */}
         <Route element={<RequireAuth />}>
+          <Route path='/transfer' element={<TransferView/>}/>
+          <Route path='/transfer/new' element={<AddTransfer/>}/>
+          <Route path='/transfer/:id' element={<ViewTransfer/>}/>
 
+          <Route path='/audit' element={<AuditView/>}/>
+          <Route path='/audit/new' element={<AddAudit/>}/>
+          <Route path='/audit/:id' element={<ViewAudit />}/>
         </Route>
 
         {/* also want to add a "add new user" page that only the admin can access */}
 
-      </Route>
-      {/* catch all/404 */}
-      <Route path="*" element={<Missing />} />
+        </Route>
+        {/* catch all/404 */}
+        <Route path="*" element={<Missing />} />
 
-    </Routes>
+</Routes>
   );
 }
 

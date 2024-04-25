@@ -96,10 +96,10 @@ function EditPurchase() {
         e.preventDefault();
         const errors = {};
         const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
-
-
+    
+    
         if (!regex_comments.test(formData.Comments)) {
-            errors.Comments = "The comments contains an SQL keyword !"
+          errors.Comments = "The comments contains an SQL keyword !"
         }
         setFormErrors(errors)
         if (!errors.Comments) {
@@ -108,29 +108,33 @@ function EditPurchase() {
         return;
     }
 
-
+   
     const handleSubmit = async () => {
-        try {
-            const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.PurchaseDate, Partner: formData.Vendor, Value: parseFloat(formData.TotalValue), Items: items, Location_id: formData.Location }, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
+
+
+        let GetData = async function (id) {
+            return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/cleanup`).then((response) => {
+                return response
             });
-
-
-            if (response.status == 400) {
-                alert("Check the values you input. One of the values are not of the correct type.")
-            }
-
-            else if (response.status == 200) {
-                window.location.href = "/purchase";
-            }
         }
+        let data = GetData(id)
+        data.then(async (response) => {
+            await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { records: response.data })
+        })
 
-        catch (error) {
-            alert("Server side error/Contact developer")
-        }
 
+        await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/edit_delete`)
+
+        await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.PurchaseDate, Partner: formData.Vendor, Value: parseFloat(formData.TotalValue)}, {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/purchase/location", { Items: items, Location_id: formData.Location })
+        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/purchase/track", { Intake_id: id, Items: items, Total: parseFloat(formData.TotalValue), FKItemLocation: IL_response.data });
+        await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
+        window.location.href = "/purchase";
     }
 
     return (

@@ -98,37 +98,15 @@ function EditIntake() {
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edit`).then((response) => {
-      if (response.data.status === 'complete') {
-        setFormData(response.data.data[0]);
-        setSourceType(response.data.data[0].Type)
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setFormData(response.data.data[0]);
+      setSourceType(response.data.data[0].Type)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edititems`).then((response) => {
-      if (response.data.status === 'complete') {
-        setItems(response.data.data);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setItems(response.data.data);
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -136,18 +114,7 @@ function EditIntake() {
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-      if (response.data.status === 'complete') {
-        setLocations(response.data.data);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setLocations(response.data.data);
     })
   }, [])
 
@@ -155,7 +122,12 @@ function EditIntake() {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
       await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/misc").then((response) => {
-        formData.Partner = response.data.data[0].Partner_id
+        setFormData(prevFormData => {
+          return {
+            ...prevFormData,
+            Partner: response.data.data[0].Partner_id
+          }
+        })
       })
     }
     validate();
@@ -175,32 +147,35 @@ function EditIntake() {
       handleSubmit()
     }
     return;
-  }
+}
 
   async function handleSubmit() {
-    try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.TotalValue, Items: items, Location_id: formData.Location_id }, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
+
+    let GetData = async function (id) {
+      return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/cleanup`).then((response) => {
+        return response
       });
-
-      if (response.status == 400) {
-        alert("Check the values you input. One of the values are not of the correct type.")
-      }
-
-      else if (response.status == 200) {
-        window.location.href = "/intake"
-      }
     }
-
-    catch (error) {
-      alert("Server side error/Contact developer")
-    }
-
-
+    let data = GetData(id)
+    data.then(async (response) => {
+      await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/intake/reclaim", { records: response.data })
+    })
 
 
+    await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edit_delete`)
+
+
+    await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    let V_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/find_value", { Items: items })
+    let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/location", { Items: items, Location_id: formData.Location })
+
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/track", { Intake_id: id, Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
+    await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
+    navigate('/intake')
 
   }
 
@@ -209,7 +184,6 @@ function EditIntake() {
     listtype(event.target.value)
   }
 
-  console.log(parseFloat(formData.TotalValue))
 
   return (
     <div>
@@ -261,7 +235,7 @@ function EditIntake() {
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
 
         <label htmlFor="Value">Money Raised</label>
-        <input type="number" name="TotalValue" id="TotalValue" step="0.01" value={parseFloat(formData.TotalValue) == null ? 0.00 : parseFloat(formData.TotalValue)} onChange={handleChange} />
+        <input type="number" name="Value" id="Value" step="0.01" defaultValue={formData.Value == null ? 0.00 : formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
         {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
         <h2>Items</h2>

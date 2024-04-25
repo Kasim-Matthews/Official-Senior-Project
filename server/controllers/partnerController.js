@@ -146,7 +146,7 @@ const partner_list = async (req, res) => {
 const partner_options = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT "Name" as "lable", "Partner_id" as "value" FROM public.partner
+        let sqlGet = `SELECT "Name" as lable, "Partner_id" as value FROM public.partner
         Join public.partnertype on "PartnerType_id" = "Type_id"
         Where "Type" = 'Partner' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);

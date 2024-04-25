@@ -7,7 +7,7 @@ function EditItem() {
   const { id } = useParams();
   const [formData, setFormData] = React.useState({})
   const [formErrors, setFormErrors] = useState({})
-  const navigate = useNavigate();
+
 
 
 
@@ -22,18 +22,7 @@ function EditItem() {
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/edit`).then((response) => {
-      if (response.data.status === 'complete') {
-        response.data.data.map((key, value) => { setFormData(key) });
-      }
-
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      response.data.data.map((key, value) => { setFormData(key) });
     })
   }, [])
 
@@ -55,33 +44,18 @@ function EditItem() {
 }
 
 
-  async function handleSubmit() {
-    try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/update`, {
-        name: formData.Name,
-        FairMarketValue: formData.FairMarketValue,
-        PackageCount: formData.PackageCount
-      }, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      });
+  function handleSubmit() {
 
-      if (response.status == 400) {
-        alert("Check the values you input. One of the values are not of the correct type.")
+    Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/update`, {
+      name: formData.Name,
+      FairMarketValue: formData.FairMarketValue,
+      PackageCount: formData.PackageCount
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
       }
-
-      else if (response.status == 200) {
-        window.location.href = "/item";
-      }
-    }
-
-    catch (error) {
-      alert("Server side error/Contact developer")
-    }
-
-    
-    
+    });
+    window.location.href = "/item";
 
   }
   return (

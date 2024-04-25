@@ -102,7 +102,7 @@ function AddOrder() {
   const quantityCheck = async () => {
     let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/validation", { Items: items, Location_id: formData.Location });
     var result = []
-    for (let o1 of ild.data.data) {
+    for (let o1 of ild.data) {
       for (let o2 of items) {
         if (o1.Item_id == o2.Item_id) {
           if (o1.Quantity < o2.Quantity) {
@@ -123,60 +123,31 @@ function AddOrder() {
 
 
   const handleSubmit = async () => {
+
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
+      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-
-
-      if (response.status == 400) {
-        alert("Check the values you input. One of the values are not of the correct type.")
-      }
-
-      else if (response.status == 200) {
-        window.location.href = "/distribution"
-      }
+      window.location.href = "/distribution";
     }
-
     catch (error) {
-      alert("Server side error/Contact developer")
+      navigate('/query')
+      console.error(error)
     }
 
   }
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/list").then((response) => {
-      if (response.data.status === 'complete') {
-        setPartners(response.data.data);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setPartners(response.data.data);
     })
   }, [])
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-      if (response.data.status === 'complete') {
-        setLocations(response.data.data);
-      }
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-      }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
+      setLocations(response.data.data);
     })
   }, [])
 
@@ -208,7 +179,7 @@ function AddOrder() {
 
       </select><br />
       <label htmlFor="RequestDate">RequestDate</label>
-      <input type="date" name="RequestDate" id="RequestDate" value={formData.RequestDate} required onChange={handleChange} />
+      <input type="date" name="RequestDate" id="RequestDate" value={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
 
       <label htmlFor="CompletedDate">CompleteDate</label>
       <input type="date" name="CompletedDate" id="CompletedDate" value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange} />

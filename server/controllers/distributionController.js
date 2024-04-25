@@ -15,22 +15,20 @@ sb.on('error', error => {
 
 
 const distribution_index = async (req, res) => {
-
+    
     try {
-        let sqlGet = `SELECT "Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Order_id", partner."Name", SUM(orderitems."Quantity") as "Total", location."Name" as "Location", partner."Partner_id"
+        let sqlGet = `SELECT "Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Order_id", partner."Name", SUM(orderitems."Quantity") as Total, location."Name" as Location
         from public.distribution
         join public.partner on distribution."Partner_id" = partner."Partner_id"
         join public.orderitems on distribution."Order_id" = orderitems."Order_id"
         join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
         join public.location on location."Location_id" = itemlocation."Location_id"
-        group by distribution."Order_id", location."Name", partner."Name", partner."Partner_id"`
+        group by distribution."Order_id", location."Name", partner."Name"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
-        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
-        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -67,7 +65,7 @@ const distribution_index = async (req, res) => {
     // })
 }
 
-const distribution_creation = async (req, res) => {
+const distribution_creation = (req, res) => {
     let Comments = req.body.Comments;
     let Status = req.body.Status;
     let DeliveryMethod = req.body.DeliveryMethod;
@@ -76,67 +74,6 @@ const distribution_creation = async (req, res) => {
     let Partner_id = req.body.Partner_id;
     let Items = req.body.Items
     let Location = req.body.Location_id
-
-    if (typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number' && typeof Items != "object" && typeof Location != "string") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
-
-    try {
-        const distributioncreation = `INSERT INTO public.distribution ("Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", "Partner_id") VALUES ('${Comments}', '${Status}', '${DeliveryMethod}', '{${RequestDate}}', '{${CompletedDate}}', ${Partner_id})`
-        const createdistribution = await sb.query(distributioncreation)
-
-        let ids = []
-        Items.forEach(element => {
-            ids.push(element.Item_id);
-        });
-
-        let quantities = []
-        Items.forEach(element => {
-            quantities.push(element.Quantity);
-        });
-
-        let sqlGet = `SELECT "FairMarketValue"
-        from public.item
-        WHERE "Item_id" IN (${ids})`
-        const response = await sb.query(sqlGet);
-        let valueresults = response.rows
-        let values = []
-
-        for (let i = 0; i < Items.length; i++) {
-            values.push(Items[i].Quantity * valueresults[i].FairMarketValue)
-        }
-
-        const distributiontrack = `INSERT INTO public.orderitems ("Order_id", "Quantity", "Value", "ItemLocationFK")
-        SELECT p."Order_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."ItemLocationFK")
-        from (SELECT MAX("Order_id") as "Order_id" from public.distribution)p,
-             (SELECT array_agg("ItemLocation_id") "ItemLocationFK" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
-        const trackdistribution = await sb.query(distributiontrack)
-
-        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
-        const itemlocations = await sb.query(getitemlocations)
-        let results = itemlocations.rows
-        let rows = []
-        for (let i = 0; i < Items.length; i++) {
-            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity - parseInt(Items[i].Quantity)]
-        }
-        for (let i = 0; i < Items.length; i++) {
-            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
-            VALUES (${rows[i]})
-            ON CONFLICT ("ItemLocation_id") DO UPDATE
-            SET "Quantity" = excluded."Quantity"`
-            const locationsupdated = await sb.query(updatelocations)
-        }
-        res.sendStatus(200)
-        res.end();
-        return;
-    }
-    catch (error) {
-        console.log(error)
-        res.status(500).json(error);
-        return;
-    }
 
     // sb.getConnection(async function (error, tempCont) {
     //     if (error) {
@@ -249,7 +186,7 @@ const distribution_remove = (req, res) => {
 const distribution_view = async (req, res) => {
     let id = req.params.id
 
-    if (typeof id != "string") {
+    if(typeof id != "string"){
         res.sendStatus(400)
         res.end();
         return;
@@ -257,7 +194,7 @@ const distribution_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Status", "DeliveryMethod", "RequestDate", "CompletedDate", partner."Name", location."Name" as "Location"
+            let sqlGet = `SELECT "Status", "DeliveryMethod", "RequestDate", "CompletedDate", partner."Name", location."Name" as Location
             from public.distribution
             join public.partner on distribution."Partner_id" = partner."Partner_id"
             join public.orderitems on distribution."Order_id" = orderitems."Order_id"
@@ -266,11 +203,9 @@ const distribution_view = async (req, res) => {
             WHERE distribution."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
-            return
         }
     }
 
@@ -316,8 +251,8 @@ const distribution_view = async (req, res) => {
 
 const distribution_itemlist = async (req, res) => {
     let id = req.params.id
-
-    if (typeof id != "string") {
+    
+    if(typeof id != "string"){
         res.sendStatus(400)
         res.end();
         return;
@@ -325,18 +260,16 @@ const distribution_itemlist = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT orderitems."Quantity", item."Name" as "Item", "FairMarketValue", "PackageCount"
+            let sqlGet = `SELECT orderitems."Quantity", item."Name" as Item, "FairMarketValue", "Package Count"
             from public.orderitems
             join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
             join public.item on item."Item_id" = itemlocation."Item_id"
             WHERE orderitems."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
-            return
         }
     }
 
@@ -381,7 +314,7 @@ const distribution_itemlist = async (req, res) => {
 const distribution_edit = async (req, res) => {
     let id = req.params.id
 
-    if (typeof id != "string") {
+    if(typeof id != "string"){
         res.sendStatus(400)
         res.end();
         return;
@@ -389,18 +322,16 @@ const distribution_edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "DeliveryMethod", TO_CHAR("RequestDate", 'yyyy-mm-dd') as "RequestDate", TO_CHAR("CompletedDate", 'yyyy-mm-dd') as "CompletedDate", distribution."Partner_id", itemlocation."Location_id"
+            let sqlGet = `SELECT "Comments", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Partner_id", itemlocation."Location_id
             from public.distribution
             join public.orderitems on distribution."Order_id" = orderitems."Order_id"
             join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
             WHERE distribution."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
-            return
         }
     }
 
@@ -445,7 +376,7 @@ const distribution_edit = async (req, res) => {
 const distribution_edit_items = async (req, res) => {
     let id = req.params.id
 
-    if (typeof id != "string") {
+    if(typeof id != "string"){
         res.sendStatus(400)
         res.end();
         return;
@@ -453,17 +384,15 @@ const distribution_edit_items = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT orderitems."Quantity", itemlocation."Item_id" as "Item"
+            let sqlGet = `SELECT orderitems."Quantity", itemlocation."Item_id"
             from public.orderitems
             join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
             WHERE orderitems."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
-            return
+            res.sendStatus(500).json({ "message": error.message})
         }
     }
 
@@ -504,7 +433,7 @@ const distribution_edit_items = async (req, res) => {
 
 }
 
-const distribution_update = async (req, res) => {
+const distribution_update = (req, res) => {
 
     let id = req.params.id
     let Comments = req.body.Comments;
@@ -512,87 +441,6 @@ const distribution_update = async (req, res) => {
     let RequestDate = req.body.RequestDate;
     let CompletedDate = req.body.CompletedDate;
     let Partner_id = req.body.Partner_id;
-    let Items = req.body.Items
-    let Location = req.body.Location_id
-
-    if (typeof Comments != "string" && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number' && typeof Items != "object" && typeof Location != "string" && typeof id != "string") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
-
-    try {
-        const sqlUpdate = `UPDATE public.distribution SET "Comments" = '${Comments}', "DeliveryMethod" = '${DeliveryMethod}', "CompletedDate" = '{${CompletedDate}}', "RequestDate" = '{${RequestDate}}', "Partner_id" = ${Partner_id} WHERE "Order_id" = ${id}`
-        const update = await sb.query(sqlUpdate)
-        
-        let getdelete = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
-        from public.orderitems
-        join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
-        WHERE orderitems."Order_id" = ${id}`
-        const intakeitemsinfo = await sb.query(getdelete)
-
-        let deletionresults = intakeitemsinfo.rows
-        let deletionrows = []
-        for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({ Given: deletionresults[i].Quantity + deletionresults[i].Given, Id: deletionresults[i].ItemLocationFK })
-        }
-
-        for (let i = 0; i < deletionresults.length; i++) {
-            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
-            const reclaim = await sb.query(reclaiming)
-        }
-
-        const deleting = `DELETE from public.orderitems WHERE "Order_id" = ${id}`
-        const deletion = await sb.query(deleting)
-        let ids = []
-        Items.forEach(element => {
-            ids.push(element.Item);
-        });
-
-        let quantities = []
-        Items.forEach(element => {
-            quantities.push(element.Quantity);
-        });
-
-        let sqlGet = `SELECT "FairMarketValue"
-        from public.item
-        WHERE "Item_id" IN (${ids})`
-        const response = await sb.query(sqlGet);
-        let valueresults = response.rows
-        let values = []
-
-        for (let i = 0; i < Items.length; i++) {
-            values.push(Items[i].Quantity * valueresults[i].FairMarketValue)
-        }
-
-        const distributiontrack = `INSERT INTO public.orderitems ("Order_id", "Quantity", "Value", "ItemLocationFK")
-        SELECT ${id}, unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."ItemLocationFK")
-        from (SELECT array_agg("ItemLocation_id") "ItemLocationFK" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
-        const trackdistribution = await sb.query(distributiontrack)
-
-        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
-        const itemlocations = await sb.query(getitemlocations)
-        let results = itemlocations.rows
-        let rows = []
-        for (let i = 0; i < Items.length; i++) {
-            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity - parseInt(Items[i].Quantity)]
-        }
-        for (let i = 0; i < Items.length; i++) {
-            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
-            VALUES (${rows[i]})
-            ON CONFLICT ("ItemLocation_id") DO UPDATE
-            SET "Quantity" = excluded."Quantity"`
-            const locationsupdated = await sb.query(updatelocations)
-        }
-        res.sendStatus(200)
-        res.end();
-        return;
-    }
-    catch (error) {
-        console.log(error)
-        res.status(500).json(error);
-        return;
-    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -650,10 +498,8 @@ const distribution_find_ild = async (req, res) => {
             WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
-            return
         }
     }
 
@@ -703,7 +549,7 @@ const distribution_find_ild = async (req, res) => {
 const validation = async (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location_id
-
+    
     if (typeof Items != "object" && typeof Location != "string") {
         res.sendStatus(400)
         res.end();
@@ -717,22 +563,17 @@ const validation = async (req, res) => {
                 ids.push(element.Item_id);
             });
 
-            let sqlGet = `SELECT "ItemLocation_id", "Quantity", item."Name" as "Item", item."Item_id"
+            let sqlGet = `SELECT "ItemLocation_id", "Quantity", item."Name" as Item, item."Item_id"
             from public.itemlocation
             join public.item on itemlocation."Item_id" = item."Item_id"
             WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
-            console.log(sqlGet)
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         } catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
-            return
+            res.sendStatus(500).json({ "message": error.message})
         }
     }
-
     
-
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -776,90 +617,11 @@ const validation = async (req, res) => {
     // })
 
 }
-
-
-const edit_validation = async (req, res) => {
-    let Items = req.body.Items
-    let Location = req.body.Location_id
-
-    if (typeof Items != "object" && typeof Location != "string") {
-        res.sendStatus(400)
-        res.end();
-        return;
-    }
-
-    if (Items && Location) {
-        try {
-            let ids = []
-            Items.forEach(element => {
-                ids.push(element.Item);
-            });
-
-            let sqlGet = `SELECT "ItemLocation_id", "Quantity", item."Name" as "Item", item."Item_id"
-            from public.itemlocation
-            join public.item on itemlocation."Item_id" = item."Item_id"
-            WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
-            console.log(sqlGet)
-            const response = await sb.query(sqlGet);
-            res.send({ status: 'complete', data: response.rows })
-            return
-        } catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
-            return
-        }
-    }
-
-    
-
-    // sb.getConnection(function (error, tempCont) {
-    //     if (error) {
-    //         console.log('Error')
-    //         res.status(500).json({'message': error.message})
-    //     }
-    //     else {
-    //         if (typeof Items != "object" && typeof Location != "string") {
-    //             res.send("Invalid");
-    //             res.end();
-    //             return;
-    //         }
-
-    //         if (Items && Location) {
-    //             let ids = []
-    //             Items.forEach(element => {
-    //                 ids.push(element.Item_id);
-    //             });
-
-    //             const sqlGet = `SELECT il.ItemLocation_id, il.Quantity, i.Name as Item, i.Item_id
-    //             from sql5669328.itemlocation il
-    //             join sql5669328.item i on i.Item_id = il.Item_id
-    //             WHERE il.Item_id IN (?) AND il.Location_id = ?;`
-
-
-    //             tempCont.query(sqlGet, [ids, Location], (err, result) => {
-    //                 tempCont.release();
-    //                 if (err) {
-    //                     console.log(err);
-    //                 }
-    //                 else {
-    //                     console.log('Previous item location Quantities have been found')
-    //                     res.send(result);
-    //                     res.end();
-    //                     return;
-    //                 }
-
-    //             })
-
-    //         }
-    //     }
-    // })
-
-}
-
 
 
 const distribution_find_value = async (req, res) => {
     let Items = req.body.Items
-
+    
     if (typeof Items != "object") {
         res.sendStatus(400)
         res.end();
@@ -878,10 +640,8 @@ const distribution_find_value = async (req, res) => {
             WHERE "Item_id" IN (${ids})`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
-            return
         }
     }
 
@@ -929,17 +689,15 @@ const distribution_find_value = async (req, res) => {
 }
 
 const distribution_find_id = async (req, res) => {
-
+    
     try {
-        let sqlGet = `SELECT MAX("Order_id") as "Order_id"
+        let sqlGet = `SELECT MAX("Order_id") as Order_id
         from public.distribution`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
-        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
-        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -1148,8 +906,8 @@ const distribution_incomplete = (req, res) => {
 
 const distribution_cleanup = async (req, res) => {
     let id = req.params.id
-
-    if (typeof id != "string") {
+    
+    if(typeof id != "string"){
         res.sendStatus(400)
         res.end();
         return;
@@ -1157,20 +915,18 @@ const distribution_cleanup = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
+            let sqlGet = `SELECT orderitems."Quantity" as Given, orderitems."ItemLocationFK", itemlocation."Quantity"
             from public.orderitems
             join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
             WHERE orderitems."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
-            return
+            res.sendStatus(500).json({ "message": error.message})
         }
     }
-
+    
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -1208,49 +964,8 @@ const distribution_cleanup = async (req, res) => {
 
 }
 
-const distribution_reclaim = async (req, res) => {
-    let id = req.body.id
-
-
-    if (typeof id != "number") {
-        res.sendStatus(400)
-        res.end();
-        return;
-    }
-
-    try {
-        let getdelete = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
-        from public.orderitems
-        join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
-        WHERE orderitems."Order_id" = ${id}`
-        const intakeitemsinfo = await sb.query(getdelete)
-
-        let deletionresults = intakeitemsinfo.rows
-        let deletionrows = []
-        for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({ Given: deletionresults[i].Quantity + deletionresults[i].Given, Id: deletionresults[i].ItemLocationFK })
-        }
-
-        for (let i = 0; i < deletionresults.length; i++) {
-            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
-            const reclaim = await sb.query(reclaiming)
-        }
-
-        const deleting = `DELETE from public.orderitems WHERE "Order_id" = ${id}`
-        const deletion = await sb.query(deleting)
-
-        const deletingdistribution = `DELETE from public.distribution WHERE "Order_id" = ${id}`
-        const deletiondistribution = await sb.query(deletingdistribution)
-
-        res.sendStatus(200)
-        res.end();
-        return;
-    }
-    catch (error) {
-        console.log(error)
-        res.status(500).json(error);
-        return;
-    }
+const distribution_reclaim = (req, res) => {
+    let records = req.body.records
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -1330,7 +1045,7 @@ const distribution_update_delete = (req, res) => {
 const distribution_print = async (req, res) => {
     let id = req.params.id
     /* Add the total amount distributed to that specific partner */
-    if (typeof id != "string") {
+    if(typeof id != "string"){
         res.sendStatus(400)
         res.end();
         return;
@@ -1338,24 +1053,16 @@ const distribution_print = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "CompletedDate", partner."Name" as "Partner", SUM(orderitems."Quantity") AS "Total", SUM(orderitems."Value") AS "TotalValue", 
-            (SELECT SUM(orderitems."Quantity") as "PartnerTotal" 
-             from public.orderitems
-            join public.distribution on distribution."Order_id" = orderitems."Order_id"
+            let sqlGet = `SELECT "Comments", "CompletedDate", partner."Name" as Partner, SUM(orderitems."Quantity") AS Total, SUM(orderitems."Value") AS TotalValue
+            from public.distribution
             join public.partner on distribution."Partner_id" = partner."Partner_id"
-            WHERE partner."Partner_id" = (SELECT partner."Partner_id" from public.partner join public.distribution on distribution."Partner_id" = partner."Partner_id" WHERE distribution."Order_id" = ${id}))
-                        from public.distribution
-                        join public.partner on distribution."Partner_id" = partner."Partner_id"
-                        join public.orderitems on distribution."Order_id" = orderitems."Order_id"
-                        WHERE distribution."Order_id" = 9
-                        group by "Comments", "CompletedDate", partner."Name"`
+            join public.orderitems on distribution."Order_id" = orderitems."Order_id
+            where distribution."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
-            return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
-            return
+            res.sendStatus(500).json({ "message": error.message})
         }
     }
 
@@ -1421,8 +1128,7 @@ module.exports = {
     distribution_edit_items,
     distribution_update_delete,
     distribution_print,
-    validation,
-    edit_validation
+    validation
 }
 
 /* 

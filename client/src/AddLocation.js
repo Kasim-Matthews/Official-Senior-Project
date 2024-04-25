@@ -7,6 +7,7 @@ function AddLocation() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = React.useState(Location)
+  const [items, setItems] = React.useState([])
   const [formErrors, setFormErrors] = useState({})
 
 
@@ -22,8 +23,8 @@ function AddLocation() {
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]).*$/;
-    const regex_address = /^(?!.*SELECT|.*FROM|.*INSERT|.*UPDATE)(?=[a-zA-Z()\s]|[0-9]).*$/;
+    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+    const regex_address = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]|[0-9]).*$/;
 
 
     if (!regex_name.test(formData.Name)) {
@@ -31,18 +32,18 @@ function AddLocation() {
     }
 
     if (!regex_address.test(formData.Address)) {
-      errors.Address = "The address contains an SQL keyword !"
-    }
+        errors.Address = "The address contains an SQL keyword !"
+      }
     setFormErrors(errors)
     if (!errors.Name && !errors.Address) {
-      handleSubmit()
+        handleSubmit()
     }
     return;
-  }
-
+}
+  
   async function handleSubmit() {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/new", {
+      Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/new", {
         name: formData.Name,
         Address: formData.Address
       }, {
@@ -50,23 +51,26 @@ function AddLocation() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      
-
-      if(response.status == 400){
-        alert("Check the values you input. One of the values are not of the correct type.")
-      }
-
-      else if (response.status == 200){
-        window.location.href = "/location"
-      }
     }
-
     catch (error) {
-      alert("Server side error/Contact developer")
+      console.log(error.response.data);
     }
 
+    
+
+
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/partner", {name: formData.Name, address: formData.Address})
+    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/pair", {Items: items}).then(window.location.href ="/location")
+
+
+    
   }
 
+  React.useEffect(() => {
+    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
+        setItems(response.data.data);
+    })
+}, [])
 
   return (
     <form id="locations" onSubmit={validate}>
