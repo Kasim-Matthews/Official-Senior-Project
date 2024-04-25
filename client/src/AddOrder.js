@@ -186,7 +186,7 @@ function AddOrder() {
 
       </select><br />
       <label htmlFor="RequestDate">RequestDate</label>
-      <input type="date" name="RequestDate" id="RequestDate" value={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
+      <input type="date" name="RequestDate" id="RequestDate" value={formData.RequestDate} required onChange={handleChange} />
 
       <label htmlFor="CompletedDate">CompleteDate</label>
       <input type="date" name="CompletedDate" id="CompletedDate" value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange} />

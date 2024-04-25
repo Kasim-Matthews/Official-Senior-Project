@@ -201,10 +201,10 @@ function EditOrder() {
       </select><br />
 
       <label htmlFor="RequestDate">RequestDate</label>
-      <input type="date" name="RequestDate" id="RequestDate" defaultValue={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
+      <input type="date" name="RequestDate" id="RequestDate" Value={formData.RequestDate} required onChange={handleChange} />
 
       <label htmlFor="CompletedDate">CompleteDate</label>
-      <input type="date" name="CompletedDate" id="CompletedDate" defaultValue={formData.CompletedDate} min="2023-09-01" required onChange={handleChange} />
+      <input type="date" name="CompletedDate" id="CompletedDate" Value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange} />
 
       <h3>Delivery Method</h3>
 
