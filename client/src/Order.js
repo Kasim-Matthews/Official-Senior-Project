@@ -46,7 +46,7 @@ function Order() {
   const [filters, setFilters] = React.useState({
     Partner: "",
     Location: "",
-    Status: "",
+    DeliveryMethod: "",
     Date:{}
   })
 
@@ -81,7 +81,7 @@ function Order() {
       Partner: "",
       Location: "",
       DeliveryMethod: "",
-      Date:""
+      Date:{}
     })
     setRecords(distributionsList)
   }
