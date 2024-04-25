@@ -107,7 +107,7 @@ const distribution_creation = async (req, res) => {
         }
 
         const distributiontrack = `INSERT INTO public.orderitems ("Order_id", "Quantity", "Value", "ItemLocationFK")
-        SELECT p."ORder_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."ItemLocationFK")
+        SELECT p."Order_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."ItemLocationFK")
         from (SELECT MAX("Order_id") as "Order_id" from public.distribution)p,
              (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
         const trackdistribution = await sb.query(distributiontrack)
