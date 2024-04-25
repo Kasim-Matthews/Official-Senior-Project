@@ -116,7 +116,7 @@ function EditOrder() {
     var result = []
     for (let o1 of ild.data) {
       for (let o2 of items) {
-        if (o1.Item_id == o2.Item_id) {
+        if (o1.Item_id == o2.Item) {
           if (o1.Quantity < o2.Quantity) {
             result.push(o1.Item);
           }

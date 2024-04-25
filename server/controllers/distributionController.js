@@ -731,6 +731,8 @@ const validation = async (req, res) => {
         }
     }
 
+    
+
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -774,6 +776,8 @@ const validation = async (req, res) => {
     // })
 
 }
+
+
 
 
 const distribution_find_value = async (req, res) => {
