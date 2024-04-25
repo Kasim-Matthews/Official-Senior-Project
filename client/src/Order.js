@@ -247,7 +247,7 @@ function Order() {
               defaultValue="Partner"
               helperText="Please select a partner"
             >
-              <MenuItem value="">
+              <MenuItem value={filters.Partner}>
                 </MenuItem>
               {partners.map((option) => (
                 <MenuItem value={option.Name}>
