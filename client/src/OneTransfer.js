@@ -7,7 +7,7 @@ function ViewTransfer() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
-    const [info, setInfo] = React.useState([])
+    const [info, setInfo] = React.useState({})
 
 
     useEffect(() => {
@@ -53,7 +53,7 @@ function ViewTransfer() {
             <table>
                 <thead>
                     <tr>
-                        <h3>Transfer from {info.Taken[0]} to {info.Given[0]} on {info.Date}</h3>
+                        <h3>Transfer from {info.Taken} to {info.Given} on {info.Date}</h3>
                     </tr>
                     <tr>
                         <th>Item</th>
