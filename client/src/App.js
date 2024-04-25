@@ -121,7 +121,7 @@ function App() {
         <Route path='/donationsite/:id' element={<ViewDonationSite/>}/>
 
         {/* We want to protect these wrotes */}
-        <Route element={<RequireAuth />}>
+
           <Route path='/transfer' element={<TransferView/>}/>
           <Route path='/transfer/new' element={<AddTransfer/>}/>
           <Route path='/transfer/:id' element={<ViewTransfer/>}/>
@@ -129,6 +129,7 @@ function App() {
           <Route path='/audit' element={<AuditView/>}/>
           <Route path='/audit/new' element={<AddAudit/>}/>
           <Route path='/audit/:id' element={<ViewAudit />}/>
+          <Route element={<RequireAuth />}>
         </Route>
 
         {/* also want to add a "add new user" page that only the admin can access */}
