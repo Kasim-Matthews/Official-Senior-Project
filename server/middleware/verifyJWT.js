@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+/*const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const verifyJWT = (req, res, next) => {
@@ -12,10 +12,9 @@ const verifyJWT = (req, res, next) => {
         (err, decoded) => {
             if (err) return res.sendStatus(403); //invalid token
             req.user = decoded.UserInfo.username;
-            req.roles = decoded.UserInfo.roles;
             next();
         }
     );
 }
 
-module.exports = verifyJWT
+module.exports = verifyJWT*/
