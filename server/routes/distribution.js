@@ -22,4 +22,5 @@ router.put('/reclaim', distributionController.distribution_reclaim)
 router.delete('/:id/edit_delete', distributionController.distribution_update_delete)
 router.get('/:id/print', distributionController.distribution_print)
 router.post('/validation', distributionController.validation)
+router.post('/edit_validation', distributionController.edit_validation)
 module.exports = router;

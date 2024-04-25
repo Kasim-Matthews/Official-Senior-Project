@@ -779,6 +779,83 @@ const validation = async (req, res) => {
 }
 
 
+const edit_validation = async (req, res) => {
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Items != "object" && typeof Location != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (Items && Location) {
+        try {
+            let ids = []
+            Items.forEach(element => {
+                ids.push(element.Item);
+            });
+
+            let sqlGet = `SELECT "ItemLocation_id", "Quantity", item."Name" as "Item", item."Item_id"
+            from public.itemlocation
+            join public.item on itemlocation."Item_id" = item."Item_id"
+            WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
+            console.log(sqlGet)
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+            return
+        } catch (error) {
+            res.sendStatus(500).json({ "message": error.message })
+            return
+        }
+    }
+
+    
+
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof Items != "object" && typeof Location != "string") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
+
+    //         if (Items && Location) {
+    //             let ids = []
+    //             Items.forEach(element => {
+    //                 ids.push(element.Item_id);
+    //             });
+
+    //             const sqlGet = `SELECT il.ItemLocation_id, il.Quantity, i.Name as Item, i.Item_id
+    //             from sql5669328.itemlocation il
+    //             join sql5669328.item i on i.Item_id = il.Item_id
+    //             WHERE il.Item_id IN (?) AND il.Location_id = ?;`
+
+
+    //             tempCont.query(sqlGet, [ids, Location], (err, result) => {
+    //                 tempCont.release();
+    //                 if (err) {
+    //                     console.log(err);
+    //                 }
+    //                 else {
+    //                     console.log('Previous item location Quantities have been found')
+    //                     res.send(result);
+    //                     res.end();
+    //                     return;
+    //                 }
+
+    //             })
+
+    //         }
+    //     }
+    // })
+
+}
+
 
 
 const distribution_find_value = async (req, res) => {
@@ -1298,7 +1375,8 @@ module.exports = {
     distribution_edit_items,
     distribution_update_delete,
     distribution_print,
-    validation
+    validation,
+    edit_validation
 }
 
 /* 
