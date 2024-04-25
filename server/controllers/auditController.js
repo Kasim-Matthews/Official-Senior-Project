@@ -15,7 +15,7 @@ sb.on('error', error => {
 
 const index = async (req, res) => {
     try {
-        let sqlGet = `SELECT "Audit_id", "Date",  COUNT(CASE WHEN audititems."Changed" IS NULL THEN 1 END) as "Affected"
+        let sqlGet = `SELECT "Audit_id", "Date",  COUNT(CASE WHEN audititems."Changed" IS NOT NULL THEN 1 END) as "Affected"
         from public.audit
         join public.audititems on "Audit_id" = "Audit"
         group by "Date", "Audit_id"`
