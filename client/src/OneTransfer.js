@@ -31,7 +31,7 @@ function ViewTransfer() {
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/transfer/${id}/info`).then((response) => {
             if (response.data.status === 'complete') {
-                setInfo(response.data.data)
+                setInfo(response.data.data[0])
             }
             else if (response.data.status === 'error in query') {
                 navigate('/query')
