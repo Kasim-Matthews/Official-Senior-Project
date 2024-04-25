@@ -794,11 +794,13 @@ const transfer_reclaim = async (req, res) => {
 
         for (let i = 0; i < used.length; i++) {
             const give = `UPDATE public.itemlocation SET "Quantity" = ${giving[i].Quantity} WHERE "Location_id" = ${giving[i].Location} AND "Item_id" = ${giving[i].Item_id}`
+            console.log(give)
             const renounce = await sb.query(give)
         }
 
         for (let i = 0; i < used.length; i++) {
             const take = `UPDATE public.itemlocation SET "Quantity" = ${taking[i].Quantity} WHERE "ItemLocation_id" = ${taking[i].ItemLocation_id}`
+            console.log(take)
             const reclaim = await sb.query(take)
         }
 
