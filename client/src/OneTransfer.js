@@ -15,9 +15,7 @@ function ViewTransfer() {
         });
     }, [])
 
-    console.log(record.Taken)
-    console.log(record.Given)
-    console.log(record.Date)
+    console.log(record)
 
     return (
         <div>
