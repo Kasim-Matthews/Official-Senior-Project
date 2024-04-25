@@ -534,7 +534,7 @@ const distribution_update = async (req, res) => {
         let deletionresults = intakeitemsinfo.rows
         let deletionrows = []
         for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({ Given: deletionresults[i].Quantity + deletionresults[i].Given, Id: deletionresults[i].FKItemLocation })
+            deletionrows.push({ Given: deletionresults[i].Quantity + deletionresults[i].Given, Id: deletionresults[i].ItemLocationFK })
         }
 
         for (let i = 0; i < deletionresults.length; i++) {
