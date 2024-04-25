@@ -109,7 +109,7 @@ const dsite_list = async (req, res) => {
         let sqlGet = `SELECT "Name", "Partner_id" 
         FROM public.partner
         Join public.partnertype on "PartnerType_id" = "Type_id"
-        Where "Type" = 'Donation Site' "DeletedAt" IS NULL`
+        Where "Type" = 'Donation Site' AND "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
         return
