@@ -26,9 +26,11 @@ const distribution_index = async (req, res) => {
         group by distribution."Order_id", location."Name", partner."Name"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -255,7 +257,7 @@ const distribution_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Status", "DeliveryMethod", "RequestDate", "CompletedDate", partner."Name", location."Name" as Location
+            let sqlGet = `SELECT "Status", "DeliveryMethod", "RequestDate", "CompletedDate", partner."Name", location."Name" as "Location"
             from public.distribution
             join public.partner on distribution."Partner_id" = partner."Partner_id"
             join public.orderitems on distribution."Order_id" = orderitems."Order_id"
@@ -264,9 +266,11 @@ const distribution_view = async (req, res) => {
             WHERE distribution."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -321,16 +325,18 @@ const distribution_itemlist = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT orderitems."Quantity", item."Name" as Item, "FairMarketValue", "Package Count"
+            let sqlGet = `SELECT orderitems."Quantity", item."Name" as "Item", "FairMarketValue", "Package Count"
             from public.orderitems
             join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
             join public.item on item."Item_id" = itemlocation."Item_id"
             WHERE orderitems."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -383,16 +389,18 @@ const distribution_edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Partner_id", itemlocation."Location_id
+            let sqlGet = `SELECT "Comments", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Partner_id", itemlocation."Location_id"
             from public.distribution
             join public.orderitems on distribution."Order_id" = orderitems."Order_id"
             join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
             WHERE distribution."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -445,15 +453,17 @@ const distribution_edit_items = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT orderitems."Quantity", itemlocation."Item_id"
+            let sqlGet = `SELECT orderitems."Quantity", itemlocation."Item_id" as "Item"
             from public.orderitems
             join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
             WHERE orderitems."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -559,8 +569,10 @@ const distribution_find_ild = async (req, res) => {
             WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
+            return
         }
     }
 
@@ -703,8 +715,10 @@ const distribution_find_value = async (req, res) => {
             WHERE "Item_id" IN (${ids})`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
+            return
         }
     }
 
@@ -754,13 +768,15 @@ const distribution_find_value = async (req, res) => {
 const distribution_find_id = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT MAX("Order_id") as Order_id
+        let sqlGet = `SELECT MAX("Order_id") as "Order_id"
         from public.distribution`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -978,15 +994,17 @@ const distribution_cleanup = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT orderitems."Quantity" as Given, orderitems."ItemLocationFK", itemlocation."Quantity"
+            let sqlGet = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
             from public.orderitems
             join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
             WHERE orderitems."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -1116,16 +1134,18 @@ const distribution_print = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "CompletedDate", partner."Name" as Partner, SUM(orderitems."Quantity") AS Total, SUM(orderitems."Value") AS TotalValue
+            let sqlGet = `SELECT "Comments", "CompletedDate", partner."Name" as "Partner", SUM(orderitems."Quantity") AS "Total", SUM(orderitems."Value") AS "TotalValue"
             from public.distribution
             join public.partner on distribution."Partner_id" = partner."Partner_id"
             join public.orderitems on distribution."Order_id" = orderitems."Order_id
             where distribution."Order_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
