@@ -128,7 +128,7 @@ const give = async (req, res) => {
         let give = itemlocations.rows
         let giverows = []
         for (let i = 0; i < Items.length; i++) {
-            giverows[i] = [give[i].ItemLocation_id, give[i].Item_id, give[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+            giverows[i] = [give[i].ItemLocation_id, give[i].Item_id, give[i].Location_id, give[i].Quantity + parseInt(Items[i].Quantity)]
         }
 
         for (let i = 0; i < Items.length; i++) {
