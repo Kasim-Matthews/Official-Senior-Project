@@ -722,6 +722,7 @@ const validation = async (req, res) => {
             from public.itemlocation
             join public.item on itemlocation."Item_id" = item."Item_id"
             WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
+            console.log(sqlGet)
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
             return
