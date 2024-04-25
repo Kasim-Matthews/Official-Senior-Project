@@ -20,7 +20,7 @@ function AddPartner(){
         Email:"",
     })
 
-    const [formErrors, setFormErrors] = useState({})
+    const [formErrors, setFormErrors] = React.useState({})
 
     function handleChange(event){
         setFormData(prevFormData => {
