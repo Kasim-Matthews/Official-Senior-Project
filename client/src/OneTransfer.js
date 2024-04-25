@@ -15,6 +15,9 @@ function ViewTransfer() {
         });
     }, [])
 
+    console.log(record.Taken)
+    console.log(record.Given)
+    console.log(record.Date)
 
     return (
         <div>
@@ -22,7 +25,7 @@ function ViewTransfer() {
             <table>
                 <thead>
                     <tr>
-                        <h3>{`Transfer from ${record.Taken[0]} to ${record.Given[0]} on ${new Date(record[0].Date).toLocaleDateString()}`}</h3>
+                        <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${new Date(record.Date).toLocaleDateString()}`}</h3>
                     </tr>
                     <tr>
                         <th>Item</th>
