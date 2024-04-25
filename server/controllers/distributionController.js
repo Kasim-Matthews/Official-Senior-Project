@@ -523,7 +523,7 @@ const distribution_update = async (req, res) => {
     }
 
     try {
-        const sqlUpdate = `UPDATE public.distribution SET "Comments" = '${Comments}', "Status" = '${Status}', "DeliveryMethod" = '${DeliveryMethod}', "CompletedDate" = '{${CompletedDate}}', "RequestDate" = '{${RequestDate}}', "Partner_id" = ${Partner} WHERE "Order_id" = ${id}`
+        const sqlUpdate = `UPDATE public.distribution SET "Comments" = '${Comments}', "Status" = '${Status}', "DeliveryMethod" = '${DeliveryMethod}', "CompletedDate" = '{${CompletedDate}}', "RequestDate" = '{${RequestDate}}', "Partner_id" = ${Partner_id} WHERE "Order_id" = ${id}`
         const update = await sb.query(sqlUpdate)
         
         let getdelete = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
@@ -547,7 +547,7 @@ const distribution_update = async (req, res) => {
         const deletion = await sb.query(deleting)
         let ids = []
         Items.forEach(element => {
-            ids.push(element.Item_id);
+            ids.push(element.Item);
         });
 
         let quantities = []
