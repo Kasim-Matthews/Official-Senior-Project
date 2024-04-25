@@ -43,7 +43,10 @@ const login = async (req, res) => {
             console.log("hi")
             await sb.query('UPDATE claire.user SET RefreshToken = ? WHERE User_id = ?', [refreshToken, foundUser.User_id]);
 
+            //why isnt it storing in application storage
+            //name refresh token
             res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+            //name access token
             res.json({ accessToken });
         } else {
             res.sendStatus(401); // Unauthorized

@@ -11,6 +11,9 @@ const sb = require('mysql2/promise').createPool({
 
 const handleRefreshToken = async (req, res) => {
     const cookies = req.cookies;
+    console.log("Cookies:", cookies)
+    console.log(req.headers);
+
     if (!cookies?.jwt) return res.sendStatus(401);
     const refreshToken = cookies.jwt;
 
@@ -33,6 +36,11 @@ const handleRefreshToken = async (req, res) => {
                 { expiresIn: '5m' }
             );
 
+            console.log("New Access Token:", newAccessToken);
+            console.log("New Refresh Token:", newRefreshToken);
+
+               //why isnt it storing in application storage
+         
             // Update refresh token in the database
             await sb.query('UPDATE claire.user SET RefreshToken = ? WHERE User_id = ?', [newRefreshToken, foundUser.User_id]);
 

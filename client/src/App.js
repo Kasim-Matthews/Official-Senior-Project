@@ -51,7 +51,7 @@ import ViewLocation from './OneLocation';
 import Register from './register';
 import Missing from './components/Missing';
 import Layout from './components/Layout';
-import RequireAuth from './components/RequireAuth';
+import { AuthProvider } from './context/AuthProvider';
 
 
 import { Routes, Route } from 'react-router-dom';
@@ -67,7 +67,7 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/' element={<Home />} />
 
-        <Route element={<RequireAuth />}>
+        <Route element={<AuthProvider />}>
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/distribution" element={<Order />} />
         <Route path='/distribution/:id' element={<ViewOrder />} />

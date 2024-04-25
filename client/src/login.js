@@ -6,7 +6,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Axios from 'axios';
 
 const Login = () => {
-    const { setAuth } = useAuth();
+    //const { setAuth } = useAuth();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -39,7 +39,9 @@ const Login = () => {
             console.log(JSON.stringify(response?.data));
             //console.log(JSON.stringify(response));
             const accessToken = response?.data?.accessToken;
-            setAuth({ user, pwd, accessToken });
+            //setAuth({ user, pwd, accessToken });
+            localStorage.setItem("auth", response.data.accessToken)
+            console.log(accessToken)
             setUser('');
             setPwd('');
             const redirectTo = from === "/" ? "/Dashboard" : from;

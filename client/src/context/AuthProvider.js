@@ -8,11 +8,18 @@ export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({});
     const navigate = useNavigate();
 
+    // const login = (token) => setAuth({ token });
+    // const logout = () => setAuth(null);
+
     useEffect(() => {
         const verifySession = async () => {
             try {
                 const response = await axios.get('http://localhost:3001/refresh/verifySession', { withCredentials: true });
                 setAuth({ accessToken: response.data.accessToken });
+                //localStorage.setItem("auth", response.data.accessToken)
+                console.log("Local Storage: ", localStorage.getItem("auth"))
+                //console.log(response.data.accessToken)
+                
             } catch (error) {
                 console.error("Session verification failed:", error);
                 setAuth({});
@@ -24,7 +31,7 @@ export const AuthProvider = ({ children }) => {
     }, [navigate]);
 
     return (
-        <AuthContext.Provider value={{ auth, setAuth }}>
+        <AuthContext.Provider value={{ auth }}>
             {children}
         </AuthContext.Provider>
     );
