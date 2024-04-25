@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
 export default function ManufacturerList({ handleChange }) {
     const [manulist, setManuList] = React.useState([])
+    const navigate = useNavigate();
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/list").then((response) => {

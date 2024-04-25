@@ -4,6 +4,7 @@ import ItemInput from "./components/ItemInput";
 import DriveList from "./components/DriveList";
 import ManufacturerList from "./components/ManufacturerList";
 import DonationSiteList from "./components/DonationSiteList";
+import { useNavigate } from "react-router-dom";
 
 function AddIntake() {
 
@@ -30,6 +31,8 @@ function AddIntake() {
   ])
 
   const [formErrors, setFormErrors] = useState({})
+
+  const navigate = useNavigate()
 
   function listtype() {
     if (sourceType == "Product Drive") {
