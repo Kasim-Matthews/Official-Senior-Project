@@ -389,7 +389,7 @@ const distribution_edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Partner_id", itemlocation."Location_id"
+            let sqlGet = `SELECT "Comments", "DeliveryMethod", TO_CHAR("RequestDate", 'yyyy-mm-dd') as "RequestDate", TO_CHAR("CompletedDate", 'yyyy-mm-dd') as "CompletedDate", distribution."Partner_id", itemlocation."Location_id"
             from public.distribution
             join public.orderitems on distribution."Order_id" = orderitems."Order_id"
             join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
