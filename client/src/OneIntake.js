@@ -10,9 +10,20 @@ function ViewIntake() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/view`).then((response) => {
-            setRecord(response.data.data[0])
-            setItemList(response.data.data)
-        });
+            if (response.data.status === 'complete') {
+                setRecord(response.data.data[0])
+                setItemList(response.data.data)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
     }, [])
 
     const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
@@ -20,6 +31,7 @@ function ViewIntake() {
 
     return (
         <div>
+            <h3>Donation from {record.Partner}</h3>
             <table>
                 <thead>
                     <tr>

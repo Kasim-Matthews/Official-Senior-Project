@@ -98,15 +98,37 @@ function EditIntake() {
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edit`).then((response) => {
-      setFormData(response.data.data[0]);
-      setSourceType(response.data.data[0].Type)
+      if (response.data.status === 'complete') {
+        setFormData(response.data.data[0]);
+        setSourceType(response.data.data[0].Type)
+      }
+      else if (response.data.status === 'error in query') {
+        navigate('/query')
+        console.error("Fail in the query")
+        console.error(response.data.message)
+      }
+
+    }).catch(error => {
+      navigate('/error')
+      console.error(error.response.data.message)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edititems`).then((response) => {
-      setItems(response.data.data);
+      if (response.data.status === 'complete') {
+        setItems(response.data.data);
+      }
+      else if (response.data.status === 'error in query') {
+        navigate('/query')
+        console.error("Fail in the query")
+        console.error(response.data.message)
+      }
+
+    }).catch(error => {
+      navigate('/error')
+      console.error(error.response.data.message)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -114,7 +136,18 @@ function EditIntake() {
 
   useEffect(() => {
     Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-      setLocations(response.data.data);
+      if (response.data.status === 'complete') {
+        setLocations(response.data.data);
+      }
+      else if (response.data.status === 'error in query') {
+        navigate('/query')
+        console.error("Fail in the query")
+        console.error(response.data.message)
+      }
+
+    }).catch(error => {
+      navigate('/error')
+      console.error(error.response.data.message)
     })
   }, [])
 
@@ -142,7 +175,7 @@ function EditIntake() {
       handleSubmit()
     }
     return;
-}
+  }
 
   async function handleSubmit() {
     try {
@@ -151,12 +184,12 @@ function EditIntake() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      
-      if(response.status == 400){
+
+      if (response.status == 400) {
         alert("Check the values you input. One of the values are not of the correct type.")
       }
 
-      else if (response.status == 200){
+      else if (response.status == 200) {
         window.location.href = "/intake"
       }
     }
@@ -166,7 +199,7 @@ function EditIntake() {
     }
 
 
-    
+
 
 
   }

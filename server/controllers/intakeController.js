@@ -390,7 +390,7 @@ const intake_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "RecievedDate", partner."Name" as Partner, item."Name" as Item, location."Name" as Location, intakeitems."Quantity", item."FairMaketValue"
+            let sqlGet = `SELECT "RecievedDate", partner."Name" as "Partner", item."Name" as "Item", location."Name" as "Location", intakeitems."Quantity", item."FairMaketValue"
             from public.inatkeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             join public.intake on "Intake" = "Intake_id"
@@ -783,9 +783,46 @@ const intake_cleanup = async (req, res) => {
 
 }
 
-const intake_reclaim = (req, res) => {
-    let records = req.body.records
+const intake_reclaim = async (req, res) => {
+    let id = req.body.id
 
+
+    if (typeof id != "number") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity"
+            from public.intakeitems
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            WHERE intakeitems."Intake" = ${id}`
+        const intakeitemsinfo = await sb.query(sqlGet)
+
+        let deletionresults = intakeitemsinfo.rows
+        let deletionrows = []
+        for (let i = 0; i < deletionresults.length; i++) {
+            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
+        }
+
+        for (let i = 0; i < deletionresults.length; i++) {
+            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+            const reclaim = await sb.query(reclaiming)
+        }
+
+        const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
+        const deletion = await sb.query(deleting)
+
+        const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
+        const deletionintake = await sb.query(deletingintake)
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
