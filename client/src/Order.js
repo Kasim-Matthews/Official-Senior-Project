@@ -47,7 +47,7 @@ function Order() {
     Partner: "",
     Location: "",
     Status: "",
-    Date:""
+    Date:{}
   })
 
   const [distributionsList, setDistributionsList] = React.useState([])
