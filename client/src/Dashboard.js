@@ -42,7 +42,7 @@ function Dashboard() {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
-        axios.get('http://localhost:3306/item-location-data')
+        axios.get('http://localhost:3001/data')
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);

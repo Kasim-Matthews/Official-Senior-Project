@@ -2,28 +2,46 @@ const mysql = require('mysql2');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Piano2601!",
+    password: "Lindsey1!",
     database: 'claire',
     port: 3306
 });
 
 const data = (req, res) => {
-    const sqlGet = `
-    select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, SUM(ii.Quantity) as TotalItems, i.Intake_id, i.TotalValue as Total, l.Name as Location, p.Type
-    from claire.intake i
-    join claire.partner p on i.Partner = p.Partner_id
-    join claire.partnertype pt on p.Type = pt.PartnerType_id
-    join claire.intakeitems ii on i.Intake_id = ii.Intake_id
-    join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-    join claire. location l on l.Location_id = il.Location_id
-    WHERE pt.Type NOT IN ("Vendor", "Adjustment")
-    group by i.Intake_id, l.Name
-    `;
-    sb.query(sqlGet, (err, result) => {
-        res.send(result);
-        res.end();
-        return;
+
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            const sqlGet = `
+            select p.Name, i.Comments as Comments, Cast(i.RecievedDate as char(10)) as RecievedDate, SUM(ii.Quantity) as TotalItems, i.Intake_id, i.TotalValue as Total, l.Name as Location, p.Type
+            from claire.intake i
+            join claire.partner p on i.Partner = p.Partner_id
+            join claire.partnertype pt on p.Type = pt.PartnerType_id
+            join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+            join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+            join claire. location l on l.Location_id = il.Location_id
+            WHERE pt.Type NOT IN ("Vendor", "Adjustment")
+            group by i.Intake_id, l.Name
+            `;
+            tempCont.query(sqlGet, (err, result) => {
+                tempCont.release();
+                if (err) {
+                    console.log(err)
+                }
+
+                else {
+                    console.log('Donation data sent')
+                    res.send(result);
+                    res.end();
+                    return;
+                }
+            })
+        }
     })
+
 }
 
 const create = (req, res) => {
@@ -33,23 +51,39 @@ const create = (req, res) => {
     let Partner = req.body.Partner;
     let Value = req.body.Value
 
-    if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Partner != "number" && typeof Value != "number") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Partner != "number" && typeof Value != "number") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
 
 
-    if (Partner && RecievedDate) {
-        const sqlInsert = "INSERT INTO claire.intake (Comments, RecievedDate, Partner, TotalValue) VALUES (?,?,?,?);"
-        sb.query(sqlInsert, [Comments, RecievedDate, Partner, Value], (err, result) => {
-            console.log(err);
-            console.log("1")
-            res.send()
-            res.end()
-            return;
-        })
-    }
+            if (Partner && RecievedDate) {
+                const sqlInsert = "INSERT INTO claire.intake (Comments, RecievedDate, Partner, TotalValue) VALUES (?,?,?,?);"
+                tempCont.query(sqlInsert, [Comments, RecievedDate, Partner, Value], (err, result) => {
+                    tempCont.release();
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    else {
+                        console.log('Donation log created')
+                        res.send()
+                        res.end()
+                        return;
+                    }
+
+                })
+            }
+        }
+    })
+
 
 }
 
@@ -57,73 +91,120 @@ const location = (req, res) => {
     let Items = req.body.Items
     let Location = req.body.Location_id
 
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof Items != "object" && typeof Location != "string") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
 
-    if (typeof Items != "object" && typeof Location != "string") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
+            if (Items && Location) {
+                let ids = []
+                Items.forEach(element => {
+                    ids.push(element.Item_id);
+                });
 
-    if (Items && Location) {
-        let ids = []
-        Items.forEach(element => {
-            ids.push(element.Item_id);
-        });
+                const sqlGet = `SELECT il.ItemLocation_id
+                from claire.itemlocation il
+                WHERE il.Item_id IN (?) AND il.Location_id = ?;`
 
-        const sqlGet = `SELECT il.ItemLocation_id
-        from claire.itemlocation il
-        WHERE il.Item_id IN (?) AND il.Location_id = ?;`
+                tempCont.query(sqlGet, [ids, Location], (err, result) => {
+                    tempCont.release();
+                    if (err) {
+                        console.log(err);
+                    }
 
-        sb.query(sqlGet, [ids, Location], (err, result) => {
-            console.log(err);
-            console.log("5")
-            res.send(result);
-            res.end();
-            return;
-        })
+                    else {
+                        console.log('Donation item locations found')
+                        res.send(result);
+                        res.end();
+                        return;
+                    }
 
-    }
+                })
+
+            }
+        }
+    })
+
 }
 
 const find_id = (req, res) => {
-    const query = "SELECT MAX(Intake_id) as Intake_id FROM claire.intake;"
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            const query = "SELECT MAX(Intake_id) as Intake_id FROM claire.intake;"
 
-    sb.query(query, (err, result) => {
-        console.log("3")
-        res.send(result);
-        res.end()
-        return;
+            tempCont.query(query, (err, result) => {
+                tempCont.release();
+                if (err) {
+                    console.log(err)
+                }
+
+                else {
+                    console.log('Donation id found')
+                    res.send(result);
+                    res.end()
+                    return;
+                }
+
+            })
+        }
     })
+
 }
 
 const track = (req, res) => {
     let Items = req.body.Items
     let Values = req.body.Values
-    let Intake_id = req.body.Intake_id
     let FKItemLocation = req.body.FKItemLocation
 
-
-
-    if (typeof Items != "object" && typeof Values != "object" && typeof Intake_id != "number" && typeof FKItemLocation != "object") {
-        res.send("Invalid")
-        res.end();
-        return;
-    }
-
-    if (Items && Values && Intake_id && FKItemLocation) {
-        const sqlInsert = `INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES (?,?,?,?);`
-        for (var i = 0; i < Items.length; i++) {
-            let Value = Items[i].Quantity * Values[i].FairMarketValue
-            sb.query(sqlInsert, [Intake_id, Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
-                console.log(err);
-
-            })
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
         }
-        console.log("6")
-        res.send();
-        res.end();
-        return;
-    }
+        else {
+            if (typeof Items != "object" && typeof Values != "object" && typeof FKItemLocation != "object") {
+                res.send("Invalid")
+                res.end();
+                return;
+            }
+
+            if (Items && Values && FKItemLocation) {
+                const sqlInsert = `INSERT INTO claire.intakeitems (Intake_id, Quantity, Value, FKItemLocation) VALUES ((SELECT MAX(Intake_id) as Intake_id FROM claire.intake),?,?,?);`
+                for (var i = 0; i < Items.length; i++) {
+                    let Value = Items[i].Quantity * Values[i].FairMarketValue
+                    tempCont.query(sqlInsert, [Items[i].Quantity, Value, FKItemLocation[i].ItemLocation_id], (err, result) => {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
+
+                        else {
+                            console.log(`${i + 1} out of ${Items.length} complete`)
+                            res.send();
+                            res.end();
+                        }
+
+                    })
+                }
+                tempCont.release();
+                console.log('Tracking process done')
+                return;
+            }
+        }
+    })
+
+
 }
 
 
@@ -132,79 +213,132 @@ const update_item = (req, res) => {
     let ItemLocationFK = req.body.ItemLocationFK;
     let Items = req.body.Items;
 
-    if (typeof ItemLocationFK != "object" && typeof Items != "object") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
-
-    if (ItemLocationFK && Items) {
-        const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= Quantity + ? WHERE ItemLocation_id = ?;"
-        for (var i = 0; i < Items.length; i++) {
-            sb.query(sqlUpdate, [Items[i].Quantity, ItemLocationFK[i].ItemLocation_id], (err, result) => {
-                console.log("7");
-                console.log(err);
-                res.send()
-                res.end()
-                return;
-            })
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
         }
-    }
+        else {
+            if (typeof ItemLocationFK != "object" && typeof Items != "object") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
+
+            if (ItemLocationFK && Items) {
+                const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= Quantity + ? WHERE ItemLocation_id = ?;"
+                for (var i = 0; i < Items.length; i++) {
+                    tempCont.query(sqlUpdate, [Items[i].Quantity, ItemLocationFK[i].ItemLocation_id], (err, result) => {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
+
+                        else {
+                            console.log(`${i + 1} out of ${Items.length} quantities updated`)
+                            res.send()
+                            res.end()
+                            return;
+                        }
+                    })
+                }
+                tempCont.release();
+                console.log("All Location Items updated")
+                return;
+            }
+        }
+    })
+
 }
 
 const intake_view = (req, res) => {
     let id = req.params.id
 
-    if (typeof id != "string") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof id != "string") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
 
-    if (id) {
-        const sqlGet = `
-    select Cast(i.RecievedDate as char(10)) as RecievedDate, p.Name as Partner, it.Name as Item, it.FairMarketValue, l.Name as Location, ii.Quantity
-    from claire.intakeitems ii
-    join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-    join claire.intake i on ii.Intake_id = i.Intake_id
-    join claire.item it on it.Item_id = il.Item_id
-    join claire.location l on l.Location_id = il.Location_id
-    join claire.partner p on i.Partner = p.Partner_id
-    where ii.Intake_id = ?; 
-    `;
-        sb.query(sqlGet, [id], (err, result) => {
-            res.send(result);
-            res.end();
-            return
-        })
-    }
+            if (id) {
+                const sqlGet = `
+            select Cast(i.RecievedDate as char(10)) as RecievedDate, p.Name as Partner, it.Name as Item, it.FairMarketValue, l.Name as Location, ii.Quantity
+            from claire.intakeitems ii
+            join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+            join claire.intake i on ii.Intake_id = i.Intake_id
+            join claire.item it on it.Item_id = il.Item_id
+            join claire.location l on l.Location_id = il.Location_id
+            join claire.partner p on i.Partner = p.Partner_id
+            where ii.Intake_id = ?; 
+            `;
+                tempCont.query(sqlGet, [id], (err, result) => {
+                    tempCont.release();
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    else {
+                        console.log('Donation view data found')
+                        res.send(result);
+                        res.end();
+                        return
+                    }
+                })
+            }
+        }
+    })
+
 }
 
 const edit = (req, res) => {
     let id = req.params.id
 
-    if (typeof id != "string") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof id != "string") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
 
-    if (id) {
-        const sqlGet = `
-    select i.Comments, i.TotalValue, Cast(i.RecievedDate as char(10)) AS RecievedDate, i.Partner, il.Location_id, pt.Type
-    from claire.intake i
-    join claire.intakeitems ii on i.Intake_id = ii.Intake_id
-    join claire.partner p on i.Partner = p.Partner_id
-    join claire.partnertype pt on p.Type = pt.PartnerType_id
-    join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
-    where i.Intake_id = ?; 
-    `;
-        sb.query(sqlGet, [id], (err, result) => {
-            res.send(result);
-            res.end()
-            return;
-        })
-    }
+            if (id) {
+                const sqlGet = `
+            select i.Comments, i.TotalValue, Cast(i.RecievedDate as char(10)) AS RecievedDate, i.Partner, il.Location_id, pt.Type
+            from claire.intake i
+            join claire.intakeitems ii on i.Intake_id = ii.Intake_id
+            join claire.partner p on i.Partner = p.Partner_id
+            join claire.partnertype pt on p.Type = pt.PartnerType_id
+            join claire.itemlocation il on ii.FKItemLocation = il.ItemLocation_id
+            where i.Intake_id = ?; 
+            `;
+                tempCont.query(sqlGet, [id], (err, result) => {
+                    tempCont.release();
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    else {
+                        console.log('Donation edit data found')
+                        res.send(result);
+                        res.end()
+                        return;
+                    }
+
+                })
+            }
+        }
+    })
+
 }
 
 const update = (req, res) => {
@@ -214,177 +348,319 @@ const update = (req, res) => {
     let Partner = req.body.Partner;
     let Value = req.body.Value
 
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
+                res.send("Invalid");
+                console.log("err");
+                res.end();
+                return;
+            }
 
-    if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number') {
-        res.send("Invalid");
-        console.log("err");
-        res.end();
-        return;
-    }
+            if (RecievedDate && Partner) {
+                const sqlUpdate = "UPDATE claire.intake SET Comments= ?, RecievedDate= ?, Partner= ?, TotalValue= ? WHERE Intake_id = ?;"
+                tempCont.query(sqlUpdate, [Comments, RecievedDate, Partner, Value, id], (err, result) => {
+                    tempCont.release()
+                    if (err) {
+                        console.log(err);
+                    }
 
-    if (RecievedDate && Partner) {
-        const sqlUpdate = "UPDATE claire.intake SET Comments= ?, RecievedDate= ?, Partner= ?, TotalValue= ? WHERE Intake_id = ?;"
-        sb.query(sqlUpdate, [Comments, RecievedDate, Partner, Value, id], (err, result) => {
-            console.log(err);
-            res.send()
-            res.end()
-            return;
-        })
-    }
+                    else {
+                        console.log('Donation data updated')
+                        res.send()
+                        res.end()
+                        return;
+                    }
+
+                })
+            }
+        }
+    })
+
 }
 
 const intake_find_value = (req, res) => {
     let Items = req.body.Items
-    if (typeof Items != "object") {
-        res.send("Invalid")
-        res.end();
-        return;
-    }
 
-    if (Items) {
-        let ids = []
-        Items.forEach(element => {
-            ids.push(element.Item_id);
-        });
-        const sqlGet = `SELECT i.FairMarketValue
-        from claire.item i
-        WHERE i.Item_id IN (?);`
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof Items != "object") {
+                res.send("Invalid")
+                res.end();
+                return;
+            }
 
-        
-        console.log(sb.format(sqlGet, [ids]))
-        sb.query(sqlGet, [ids], (err, result, fields, query) => {
-            console.log(err);
-            res.send(result);
-            res.end();
-            return;
-        })
-    }
+            if (Items) {
+                let ids = []
+                Items.forEach(element => {
+                    ids.push(element.Item_id);
+                });
+                const sqlGet = `SELECT i.FairMarketValue
+                from claire.item i
+                WHERE i.Item_id IN (?);`
+
+
+
+                tempCont.query(sqlGet, [ids], (err, result, fields, query) => {
+                    tempCont.release();
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    else {
+                        console.log('Donation item values found')
+                        res.send(result);
+                        res.end();
+                        return;
+                    }
+
+                })
+            }
+        }
+    })
+
 
 }
 
 const intake_cleanup = (req, res) => {
     let id = req.params.id
 
-    if (typeof id != 'string') {
-        res.send('Invalid');
-        res.end();
-        return
-    }
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof id != 'string') {
+                res.send('Invalid');
+                res.end();
+                return
+            }
 
-    if (id) {
-        const sqlGet = `SELECT ii.Quantity as Given, ii.FKItemLocation, il.Quantity
-        from claire.intakeitems as ii
-        join claire.itemlocation il on ii.FKItemLocation = il. ItemLocation_id
-        where ii.Intake_id = ?;`
-        sb.query(sqlGet, [id], (err, result) => {
-            res.send(result)
-            res.end()
-            return;
-        })
-    }
+            if (id) {
+                const sqlGet = `SELECT ii.Quantity as Given, ii.FKItemLocation, il.Quantity
+                from claire.intakeitems as ii
+                join claire.itemlocation il on ii.FKItemLocation = il. ItemLocation_id
+                where ii.Intake_id = ?;`
+                tempCont.query(sqlGet, [id], (err, result) => {
+                    tempCont.release();
+                    if (err) {
+                        console.log(err)
+                    }
+
+                    else {
+                        console.log('Donation cleanup data found')
+                        res.send(result)
+                        res.end()
+                        return;
+                    }
+
+
+                })
+            }
+        }
+    })
+
 }
 
 const intake_reclaim = (req, res) => {
     let records = req.body.records
 
-
-    if (typeof records != "object") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
-
-    if (records) {
-        for (let record in records) {
-            Quantity = records[record].Quantity - records[record].Given
-            const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
-            sb.query(sqlUpdate, [Quantity, records[record].FKItemLocation], (err, result) => {
-                console.log(err);
-                res.send()
-                res.end()
-                return;
-            })
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
         }
+        else {
+            if (typeof records != "object") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
 
-    }
+            if (records) {
+                for (let record in records) {
+                    Quantity = records[record].Quantity - records[record].Given
+                    const sqlUpdate = "UPDATE claire.itemlocation SET Quantity= ? WHERE ItemLocation_id = ?;"
+                    tempCont.query(sqlUpdate, [Quantity, records[record].FKItemLocation], (err, result) => {
+                        if (err) {
+                            console.log(err);
+                            return
+                        }
+
+                        else {
+                            console.log(`Reclaim in progress`)
+                            res.send()
+                            res.end()
+                            return;
+                        }
+
+                    })
+                }
+                tempCont.release();
+                console.log('Reclaim procress done')
+                return;
+
+            }
+        }
+    })
+
 }
 
 const intake_remove = (req, res) => {
-
     let id = req.params.id;
-    if (typeof id != "string") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
 
-    if (id) {
-        const sqlDelete = 'DELETE FROM claire.intake WHERE Intake_id = ?;'
-        sb.query(sqlDelete, [id], (err, result) => {
-            console.log(err);
-            res.send()
-            res.end()
-            return;
-        })
-    }
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof id != "string") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
+
+            if (id) {
+                const sqlDelete = 'DELETE FROM claire.intake WHERE Intake_id = ?;'
+                tempCont.query(sqlDelete, [id], (err, result) => {
+                    tempCont.release();
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    else {
+                        console.log('Donation record deleted')
+                        res.send()
+                        res.end()
+                        return;
+                    }
+
+                })
+            }
+        }
+    })
+
+
 }
 
 const intake_edit_items = (req, res) => {
     let id = req.params.id
 
-    if (typeof id != "string") {
-        res.send("Invalid");
-        res.end();
-        return;
-    }
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof id != "string") {
+                res.send("Invalid");
+                res.end();
+                return;
+            }
 
-    if (id) {
-        const sqlGet = `
-        SELECT ii.Quantity, il.Item_id
-        from claire.intakeitems as ii
-        join claire.itemlocation il on ii.FKItemLocation= il.ItemLocation_id
-        where ii.Intake_id = ?;
-    `;
-        sb.query(sqlGet, [id], (err, result) => {
-            res.send(result);
-            res.end()
-            return;
-        })
-    }
+            if (id) {
+                const sqlGet = `
+                SELECT ii.Quantity, il.Item_id
+                from claire.intakeitems as ii
+                join claire.itemlocation il on ii.FKItemLocation= il.ItemLocation_id
+                where ii.Intake_id = ?;
+            `;
+                tempCont.query(sqlGet, [id], (err, result) => {
+                    tempCont.release()
+                    if (err) {
+                        console.log(err)
+                    }
+
+                    else {
+                        console.log('Donation edit items data found')
+                        res.send(result);
+                        res.end()
+                        return;
+                    }
+
+                })
+            }
+        }
+    })
+
 }
 
 const intake_update_delete = (req, res) => {
     let id = req.params.id
 
-    if (typeof id != "string") {
-        res.send("Invalid");
-        res.end();
-        return
-    }
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            if (typeof id != "string") {
+                res.send("Invalid");
+                res.end();
+                return
+            }
 
-    if (id) {
-        const sqlDelete = "DELETE FROM claire.intakeitems WHERE Intake_id = ?;"
-        sb.query(sqlDelete, [id], (err, result) => {
-            console.log(err);
-            res.send()
-            res.end()
-            return;
-        })
-    }
+            if (id) {
+                const sqlDelete = "DELETE FROM claire.intakeitems WHERE Intake_id = ?;"
+                tempCont.query(sqlDelete, [id], (err, result) => {
+                    tempCont.release()
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    else {
+                        console.log('Donation past records of items deleted')
+                        res.send()
+                        res.end()
+                        return;
+                    }
+
+                })
+            }
+        }
+    })
+
 }
 
 const intake_misc = (req, res) => {
-    const sqlGet = `SELECT p.Partner_id
-    from claire.partner p
-    join claire.partnertype pt on p.Type = pt.PartnerType_id
-    WHERE pt.Type = "Misc Donation";`
+    sb.getConnection(function (error, tempCont) {
+        if (error) {
+            tempCont.release();
+            console.log('Error')
+        }
+        else {
+            const sqlGet = `SELECT p.Partner_id
+            from claire.partner p
+            join claire.partnertype pt on p.Type = pt.PartnerType_id
+            WHERE pt.Type = "Misc Donation";`
 
-    sb.query(sqlGet, (err, result) => {
-        console.log(err);
-        res.send(result);
-        res.end()
-        return
+            tempCont.query(sqlGet, (err, result) => {
+                tempCont.release();
+                if (err) {
+                    console.log(err);
+                }
+
+                else {
+                    console.log("Misc Donor found")
+                    res.send(result);
+                    res.end()
+                    return
+                }
+
+            })
+        }
     })
+
 }
 
 module.exports = {
@@ -405,3 +681,7 @@ module.exports = {
     intake_update_delete,
     intake_misc
 }
+
+/*
+console.log(sb.format(sqlGet, [ids]))
+*/

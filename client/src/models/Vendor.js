@@ -2,8 +2,7 @@ const Vendor = {
     BusinessName:"",
     ContactName:"",
     Phone:"",
-    Email:"",
-    Type: 3
+    Email:""
 }
 
 export default Vendor

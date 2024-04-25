@@ -29,6 +29,37 @@ function AddPartner(){
         })
       }
 
+  const validate = (e) => {
+    e.preventDefault();
+    const errors = {};
+    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
+    const regex_email = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+    if (!regex_name.test(formData.Name) && formData.Name != "") {
+      errors.Name = "The name contains an SQL keyword !"
+    }
+
+    if (!regex_email.test(formData.Email) && formData.Email != "") {
+      errors.Email = "This is not a valid email format!";
+    }
+
+    setFormErrors(errors);
+    if (!errors.Name && !errors.Email) {
+      handleSubmit()
+    }
+  }
+
+  async function handleSubmit() {
+    await Axios.post("http://localhost:3001/partner/new", {
+      name: formData.Name,
+      email: formData.Email,
+    }, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+    window.location.href = "/partner";
+  }
       function handleSubmit(e){
         e.preventDefault();
         

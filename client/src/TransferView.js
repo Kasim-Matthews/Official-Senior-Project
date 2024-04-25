@@ -1,10 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-import { DateRangePicker } from 'react-date-range'
-import { addDays } from 'date-fns';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+
 
 function TransferView() {
     const navigate = useNavigate();
@@ -17,17 +14,13 @@ function TransferView() {
     const [filters, setFilters] = React.useState({
         From: "",
         To: "",
+        Date: ""
 
     })
 
-    const [state, setState] = React.useState([{
-        startDate: new Date(),
-        endDate: addDays(new Date(), 30),
-        key: 'selection'
-    }])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/transfer").then((response) => {
+        Axios.get("http://localhost:3001/transfer").then((response) => {
             setTransferList(response.data);
             setRecords(response.data);
         })
@@ -36,17 +29,17 @@ function TransferView() {
     const handleRemove = async (id, Name, Location) => {
         if (window.confirm(`Are you sure you want to delete ${Name}'s transfer from the transfer list?`) == true) {
             let GetData = async function (id) {
-                return await Axios.get(`http://localhost:3306/transfer/${id}/cleanup`).then((response) => {
+                return await Axios.get(`http://localhost:3001/transfer/${id}/cleanup`).then((response) => {
                     return response
                 });
             }
             let data = GetData(id)
             data.then(async (response) => {
-                await Axios.put("http://localhost:3306/transfer/reclaim", { records: response.data })
-                await Axios.put("http://localhost:3306/transfer/renounce", { records: response.data, Location: Location })
+                await Axios.put("http://localhost:3001/transfer/reclaim", { records: response.data })
+                await Axios.put("http://localhost:3001/transfer/renounce", { records: response.data, Location: Location })
             })
 
-            await Axios.delete(`http://localhost:3306/intake/remove/${id}`);
+            await Axios.delete(`http://localhost:3001/intake/remove/${id}`);
 
             window.location.reload(false);
         }
@@ -57,13 +50,13 @@ function TransferView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/transfer/adjustment").then((response) => {
+        Axios.get("http://localhost:3001/transfer/adjustment").then((response) => {
             setPartners(response.data);
         })
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location/use").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])
@@ -75,6 +68,17 @@ function TransferView() {
                 [event.target.name]: event.target.value
             }
         })
+    }
+
+    function clearFilters(e) {
+        e.preventDefault();
+
+        setFilters({
+            From: "",
+            To: "",
+            Date: ""
+        })
+        setRecords(transferList)
     }
 
     function handleSubmit(e) {
@@ -90,8 +94,8 @@ function TransferView() {
         }
 
 
-        if (state != null) {
-            temp = temp.filter(f => new Date(f.Date) >= state[0].startDate && new Date(f.Date) <= state[0].endDate)
+        if (filters.Date != "") {
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date))
         }
 
 
@@ -117,7 +121,7 @@ function TransferView() {
                 </label>
 
                 <label htmlFor="To">
-                To
+                    To
                     <select id="To" name="To" value={filters.To} onChange={handleChange}>
                         <option value=""></option>
                         {locations.map((val) => {
@@ -129,12 +133,15 @@ function TransferView() {
                     </select>
 
                 </label>
-
-                <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                <label>
+                    Date Range
+                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                </label>
 
 
 
                 <input type="submit" value="Filter" />
+                <button onClick={clearFilters}>Clear</button>
             </form>
             <button><Link to="/transfer/new">Add</Link></button>
             <table>

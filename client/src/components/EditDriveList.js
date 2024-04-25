@@ -5,7 +5,7 @@ export default function EditDriveList({handleChange, id}) {
     const [drives, setDrives] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/productdrive/list").then((response) => {
+        Axios.get("http://localhost:3001/productdrive/list").then((response) => {
             setDrives(response.data);
         })
     }, [])

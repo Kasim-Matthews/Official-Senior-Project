@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import Purchase from "./models/Purchase";
 import ItemInput from "./components/ItemInput";
+import { useNavigate } from "react-router-dom";
 
 function AddPurchase() {
     const [formData, setFormData] = useState(Purchase)
     const [vendor, setVendors] = React.useState([])
     const [locations, setLocations] = React.useState([])
     const [formErrors, setFormErrors] = useState({})
+    const navigate = useNavigate();
 
     const [index, setIndex] = React.useState(0);
     const [items, setItems] = React.useState([
@@ -74,12 +76,23 @@ function AddPurchase() {
 
     useEffect(() => {
         Axios.get("http://localhost:3306/vendor/list").then((response) => {
-            setVendors(response.data);
+            if (response.data.status === 'complete') {
+                setVendors(response.data);
+            }
+
+            else if (response.data.status === 'error in query'){
+                navigate('/query')
+                console.error("Fail in the query loading vendor options for the filter")
+                console.error(response.data.message)
+            }
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/location/use").then((response) => {
+        Axios.get("http://localhost:3001/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])
@@ -104,8 +117,7 @@ function AddPurchase() {
     const handleSubmit = async () => {
         await Axios.post("http://localhost:3306/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
         let IL_response = await Axios.post("http://localhost:3306/purchase/location", { Items: items, Location_id: formData.Location })
-        let IID_response = await Axios.get("http://localhost:3306/purchase/find_id");
-        await Axios.post("http://localhost:3306/purchase/track", { Intake_id: IID_response.data[0].Intake_id, Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
+        await Axios.post("http://localhost:3306/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
         await Axios.put("http://localhost:3306/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
         window.location.href = "/purchase";
 

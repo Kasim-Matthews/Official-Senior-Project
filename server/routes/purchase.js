@@ -12,7 +12,6 @@ router.post('/location', purchaseController.location);
 router.get('/:id/edit', purchaseController.edit);
 router.get('/find_id', purchaseController.find_id);
 router.post('/track', purchaseController.track);
-router.post('/find_q', purchaseController.find_q);
 router.put('/update_item', purchaseController.update_item);
 router.get('/:id/view', purchaseController.purchase_view);
 router.put('/:id/update', purchaseController.update)

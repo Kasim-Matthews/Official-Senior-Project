@@ -1,16 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 function EditVendor() {
   const { id } = useParams();
   const [formData, setFormData] = useState({})
   const [formErrors, setFormErrors] = useState({})
+  const navigate = useNavigate();
 
   useEffect(() => {
     Axios.get(`http://localhost:3306/vendor/${id}/edit`).then((response) => {
-      response.data.map((key, value) => { setFormData(key) });
+      if (response.data.status === 'complete') {
+        response.data.data.map((key, value) => { setFormData(key) });
+      }
+
+      else if (response.data.status === 'error in query') {
+        navigate('/query')
+        console.error("Fail in the query")
+        console.error(response.data.message)
+      }
+    }).catch(error => {
+      navigate('/error')
+      console.error(error.response.data.message)
     })
   }, [])
 
@@ -53,7 +66,7 @@ function EditVendor() {
   }
 
   async function handleSubmit() {
-    await Axios.put(`http://localhost:3306/vendor/${id}/update`, {
+    await Axios.put(`http://localhost:3001/vendor/${id}/update`, {
       name: formData.BusinessName,
       phone: formData.Phone,
       email: formData.Email,

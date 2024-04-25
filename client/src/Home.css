@@ -1,0 +1,30 @@
+/* Home.css */
+.home-container {
+    text-align: center;
+    margin: 20px;
+}
+
+.main-body {
+    margin: 20px 0;
+}
+
+.buttons-container {
+    margin-top: 20px;
+}
+
+/* Style the Link components like buttons */
+.login-button, .contact-button, .account-button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
+    color: white; /* Button text color */
+    background-color: #007bff; /* Button background color */
+    border: none;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Add more styling as needed */
+
+

@@ -43,7 +43,7 @@ function AddLocation() {
   
   async function handleSubmit() {
     try {
-      Axios.post("http://localhost:3306/location/new", {
+      Axios.post("http://localhost:3001/location/new", {
         name: formData.Name,
         Address: formData.Address
       }, {
@@ -57,8 +57,7 @@ function AddLocation() {
     }
 
     
-    let Location_id = await Axios.get("http://localhost:3306/location/last")
-    let ptype = await Axios.get("http://localhost:3306/location/adjustment");
+
 
     await Axios.post("http://localhost:3306/location/partner", {name: formData.Name, address: formData.Address, Type: ptype.data[0].PartnerType_id, Location: Location_id.data[0].Location_id})
     await Axios.post("http://localhost:3306/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items}).then(window.location.href ="/location")
@@ -68,7 +67,7 @@ function AddLocation() {
   }
 
   React.useEffect(() => {
-    Axios.get("http://localhost:3306/item").then((response) => {
+    Axios.get("http://localhost:3001/item").then((response) => {
         setItems(response.data);
     })
 }, [])

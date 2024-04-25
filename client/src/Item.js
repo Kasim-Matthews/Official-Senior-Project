@@ -8,13 +8,13 @@ function Item(){
     const [itemList, setItemList] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/item").then((response) =>{
+        Axios.get("http://localhost:3001/item").then((response) =>{
             setItemList(response.data);
         })
     })
 
     const handleRemove = (id) =>{
-        Axios.delete(`http://localhost:3306/item/remove/${id}`);
+        Axios.delete(`http://localhost:3001/item/remove/${id}`);
     }
 
     const handleEdit = (id) => {

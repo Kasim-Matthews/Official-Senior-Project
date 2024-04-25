@@ -9,7 +9,7 @@ function ViewDistribution(){
     const [record, setRecord] = React.useState([])
 
           useEffect(() => {
-            Axios.get(`http://localhost:3306/distribution/${id}/view`).then((response) => {
+            Axios.get(`http://localhost:3001/distribution/${id}/view`).then((response) => {
             setRecord(response.data)});
             }, [])
 

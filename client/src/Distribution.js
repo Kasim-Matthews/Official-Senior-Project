@@ -66,14 +66,14 @@ function Distribution() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/distribution").then((response) => {
+    Axios.get("http://localhost:3001/distribution").then((response) => {
       setDistributionsList(response.data);
       setRecords(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner").then((response) =>{
+    Axios.get("http://localhost:3001/partner").then((response) =>{
             setPartners(response.data);
         })
   }, [])
@@ -96,7 +96,7 @@ function Distribution() {
   }
 
   const handleRemove = (id) =>{
-    Axios.delete(`http://localhost:3306/remove/${id}`);
+    Axios.delete(`http://localhost:3001/remove/${id}`);
   }
 
   const handleEdit = (id) => {

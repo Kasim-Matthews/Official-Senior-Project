@@ -5,18 +5,45 @@ import { useNavigate, Link } from "react-router-dom";
 function ProductDriveView() {
     const navigate = useNavigate();
 
-    const [partners, setPartners] = React.useState([])
     const [driveList, setDriveList] = React.useState([])
     const [records, setRecords] = React.useState([])
-    const [filters, setFilters] = React.useState({
-        Drive: "",
-    })
+    const [nonActive, setNonActive] = React.useState(false)
 
+
+    const handleRemove = (id, Name) => {
+        if (window.confirm(`Are you sure you want to delete ${Name} from the product drive list?`) == true) {
+            let date = new Date().toLocaleDateString();
+            Axios.put(`http://localhost:3001/productdrive/remove/${id}`, { date: date });
+            window.location.reload(false);
+        }
+
+    }
+
+    const handleReactivate = (id, Name) => {
+        if (window.confirm(`Are you sure you want to reactivate ${Name} from the product drive list?`) == true) {
+            Axios.put(`http://localhost:3001/productdrive/reactivate/${id}`);
+            window.location.reload(false);
+        }
+    }
 
     useEffect(() => {
         Axios.get("http://localhost:3306/productdrive").then((response) => {
-            setDriveList(response.data);
-            setRecords(response.data);
+            if (response.data.status == 'complete') {
+                setDriveList(response.data.data);
+                setRecords(response.data.data.filter(function (currentObject) {
+                    return typeof (currentObject.DeletedAt) == "object";
+                }))
+            }
+
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
@@ -31,50 +58,32 @@ function ProductDriveView() {
     function handleSubmit(e) {
         e.preventDefault();
         var temp = driveList;
-
-        if (filters.Drive != "") {
-            temp = temp.filter(f => f.Drive == filters.Drive);
+        if (nonActive) {
+            setRecords(temp)
         }
 
-
-
-        setRecords(temp);
+        else {
+            setRecords(temp.filter(function (currentObject) {
+                return typeof (currentObject.DeletedAt) == "object";
+            }))
+        }
     }
 
-    function handleChange(event) {
-        setFilters(prevFilters => {
-            return {
-                ...prevFilters,
-                [event.target.name]: event.target.value
-            }
-        })
-    }
 
-    useEffect(() => {
-        Axios.get("http://localhost:3306/productdrive/list").then((response) => {
-          setPartners(response.data);
-        })
-      }, [])
-
-    return (
+    if (records.length == 0) {
         <div>
-            <button><Link to="/productdrive/new">Add</Link></button>
+
             <form onSubmit={handleSubmit}>
-                <label htmlFor="Drive">
-                Drive
-                    <select id="Drive" name="Drive" value={filters.Drive} onChange={handleChange}>
-                        <option value=""></option>
-                        {partners.map((val) => {
-                            return (
-                                <option value={val.Name}>{val.Name}</option>
-                            )
-                        })}
+                <div style={{ display: "flex" }}>
 
-                    </select>
+                    <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+                    <label htmlFor="non-active" >Also include inactive items</label>
 
-                </label>
-                <input type="submit" value="Filter" />
+                </div>
+                <input type="Submit" />
             </form>
+
+            <button><Link to="/productdrive/new">Add</Link></button>
 
             <table>
                 <thead>
@@ -86,26 +95,60 @@ function ProductDriveView() {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {records.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Drive}</td>
-                                <td>{val.Quantity}</td>
-                                <td>{val.Variety}</td>
-                                <td>{val.Total}</td>
-                                <td>
-                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
             </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
-    );
+    }
+
+
+    else {
+        return (
+            <div>
+
+                <form onSubmit={handleSubmit}>
+                    <div style={{ display: "flex" }}>
+
+                        <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+                        <label htmlFor="non-active" >Also include inactive items</label>
+
+                    </div>
+                    <input type="Submit" />
+                </form>
+
+                <button><Link to="/productdrive/new">Add</Link></button>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Drive Name</th>
+                            <th>Quantity of Items</th>
+                            <th>Variety of Items</th>
+                            <th>In-Kind Value</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {records.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.Drive}</td>
+                                    <td>{val.Quantity}</td>
+                                    <td>{val.Variety}</td>
+                                    <td>{val.Total}</td>
+                                    <td>
+                                        {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
+                                        <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+                                        <button onClick={() => handleView(val.Partner_id)}>View</button>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        );
+    }
 }
 
 export default ProductDriveView;

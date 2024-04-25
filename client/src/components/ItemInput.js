@@ -6,7 +6,7 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
     const [item, setItem] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/item/use").then((response) => {
+        Axios.get("http://localhost:3001/item/use").then((response) => {
             setItem(response.data);
         })
     }, [])
@@ -23,7 +23,7 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
                 })}
             </select>
 
-            <input type="number" name={objName} required onChange={(e) => handleQuantity(e, index)} />
+            <input type="number" name={objName} min="0" required onChange={(e) => handleQuantity(e, index)} />
 
             <div onClick={(e) => deleteField(e, index)}>X</div>
         </div>

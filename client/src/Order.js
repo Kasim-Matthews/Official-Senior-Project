@@ -3,11 +3,11 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import Pagination from "./components/Pagination";
 import OrderPosts from "./components/OrderPosts";
-import  Box  from '@mui/material/Box';
-import  AppBar  from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import  IconButton  from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -23,7 +23,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
-import './Order.css';import { DateRangePicker } from 'react-date-range'
+import './Order.css'; import { DateRangePicker } from 'react-date-range'
 import { addDays } from 'date-fns';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -47,13 +47,8 @@ function Order() {
     Partner: "",
     Location: "",
     Status: "",
+    Date:""
   })
-
-  const [state, setState] = React.useState([{
-    startDate: new Date(),
-    endDate: addDays(new Date(), 30),
-    key: 'selection'
-  }])
 
   const [distributionsList, setDistributionsList] = React.useState([])
   const [records, setRecords] = React.useState([]);
@@ -79,6 +74,18 @@ function Order() {
   //Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
+  function clearFilters(e){
+    e.preventDefault();
+
+    setFilters({
+      Partner: "",
+      Location: "",
+      Status: "",
+      Date:""
+    })
+    setRecords(distributionsList)
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
     var temp = distributionsList;
@@ -92,8 +99,8 @@ function Order() {
     }
 
 
-    if (state != null) {
-      temp = temp.filter(f => new Date(f.CompletedDate) >= state[0].startDate && new Date(f.CompletedDate) <= state[0].endDate)
+    if (filters.Date != "") {
+      temp = temp.filter(f => new Date(f.CompletedDate) >= new Date(filters.Date))
     }
 
     if (filters.Status != "") {
@@ -101,24 +108,25 @@ function Order() {
     }
 
     setRecords(temp);
+    console.log(filters)
   }
 
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/distribution").then((response) => {
+    Axios.get("http://localhost:3001/distribution").then((response) => {
       setDistributionsList(response.data);
       setRecords(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner/use").then((response) => {
+    Axios.get("http://localhost:3001/partner/use").then((response) => {
       setPartners(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location/use").then((response) => {
+    Axios.get("http://localhost:3001/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])
@@ -128,16 +136,16 @@ function Order() {
   const handleRemove = async (id) => {
     if (window.confirm("Are you sure you want to reclaim this distribution?") == true) {
       let GetData = async function (id) {
-        return await Axios.get(`http://localhost:3306/distribution/${id}/cleanup`).then((response) => {
+        return await Axios.get(`http://localhost:3001/distribution/${id}/cleanup`).then((response) => {
           return response
         });
       }
       let data = GetData(id)
       data.then(async (response) => {
-        await Axios.put("http://localhost:3306/distribution/reclaim", { records: response.data })
+        await Axios.put("http://localhost:3001/distribution/reclaim", { records: response.data })
       })
 
-      await Axios.delete(`http://localhost:3306/distribution/remove/${id}`);
+      await Axios.delete(`http://localhost:3001/distribution/remove/${id}`);
 
       window.location.reload(false);
     }
@@ -152,12 +160,12 @@ function Order() {
   }
 
   const handleComplete = (id) => {
-    Axios.put(`http://localhost:3306/distribution/${id}/complete`);
+    Axios.put(`http://localhost:3001/distribution/${id}/complete`);
     window.location.reload(false);
   }
 
   const handleIncomplete = (id) => {
-    Axios.put(`http://localhost:3306/distribution/${id}/incomplete`);
+    Axios.put(`http://localhost:3001/distribution/${id}/incomplete`);
     window.location.reload(false);
   }
 
@@ -239,9 +247,11 @@ function Order() {
               defaultValue="Partner"
               helperText="Please select a partner"
             >
+              <MenuItem value="">
+                </MenuItem>
               {partners.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+                <MenuItem value={option.Name}>
+                  {option.Name}
                 </MenuItem>
               ))}
             </TextField>

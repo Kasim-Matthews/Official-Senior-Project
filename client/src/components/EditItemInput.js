@@ -8,7 +8,7 @@ export default function EditItemInput({ record, handleItem, handleQuantity, inde
     const [item, setItem] = React.useState([])
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/item/use").then((response) => {
+        Axios.get("http://localhost:3001/item/use").then((response) => {
             setItem(response.data);
         })
     }, [])
@@ -32,7 +32,7 @@ export default function EditItemInput({ record, handleItem, handleQuantity, inde
                 })}
             </select>
 
-            <input type="number" defaultValue={record.Quantity} required onChange={(e) => handleQuantity(e, index)} />
+            <input type="number" defaultValue={record.Quantity} min="0" required onChange={(e) => handleQuantity(e, index)} />
             <br/>
 
             <div onClick={(e) => deleteField(e, index)}>X</div>
