@@ -102,7 +102,7 @@ function AddOrder() {
   const quantityCheck = async () => {
     let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/validation", { Items: items, Location_id: formData.Location });
     var result = []
-    for (let o1 of ild.data) {
+    for (let o1 of ild.data.data) {
       for (let o2 of items) {
         if (o1.Item_id == o2.Item_id) {
           if (o1.Quantity < o2.Quantity) {
