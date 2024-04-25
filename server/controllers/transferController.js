@@ -769,7 +769,7 @@ const transfer_reclaim = async (req, res) => {
     let id = req.params.id
     let Location = req.body.Location
 
-    if(typeof id != "string" && typeof Location != "number "){
+    if(typeof id != "string" && typeof Location != "number"){
         res.sendStatus(400)
         res.end();
         return;
