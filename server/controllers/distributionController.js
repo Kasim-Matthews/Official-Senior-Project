@@ -17,13 +17,13 @@ sb.on('error', error => {
 const distribution_index = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT "Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Order_id", partner."Name", SUM(orderitems."Quantity") as Total, location."Name" as Location
+        let sqlGet = `SELECT "Comments", "Status", "DeliveryMethod", "RequestDate", "CompletedDate", distribution."Order_id", partner."Name", SUM(orderitems."Quantity") as "Total", location."Name" as "Location", partner."Partner_id"
         from public.distribution
         join public.partner on distribution."Partner_id" = partner."Partner_id"
         join public.orderitems on distribution."Order_id" = orderitems."Order_id"
         join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
         join public.location on location."Location_id" = itemlocation."Location_id"
-        group by distribution."Order_id", location."Name", partner."Name"`
+        group by distribution."Order_id", location."Name", partner."Name", partner."Partner_id"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
         return
@@ -325,7 +325,7 @@ const distribution_itemlist = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT orderitems."Quantity", item."Name" as "Item", "FairMarketValue", "Package Count"
+            let sqlGet = `SELECT orderitems."Quantity", item."Name" as "Item", "FairMarketValue", "PackageCount"
             from public.orderitems
             join public.itemlocation on "ItemLocation_id" = "ItemLocationFK"
             join public.item on item."Item_id" = itemlocation."Item_id"
@@ -1208,8 +1208,49 @@ const distribution_cleanup = async (req, res) => {
 
 }
 
-const distribution_reclaim = (req, res) => {
-    let records = req.body.records
+const distribution_reclaim = async (req, res) => {
+    let id = req.body.id
+
+
+    if (typeof id != "number") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        let getdelete = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
+        from public.orderitems
+        join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
+        WHERE orderitems."Order_id" = ${id}`
+        const intakeitemsinfo = await sb.query(getdelete)
+
+        let deletionresults = intakeitemsinfo.rows
+        let deletionrows = []
+        for (let i = 0; i < deletionresults.length; i++) {
+            deletionrows.push({ Given: deletionresults[i].Quantity + deletionresults[i].Given, Id: deletionresults[i].ItemLocationFK })
+        }
+
+        for (let i = 0; i < deletionresults.length; i++) {
+            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+            const reclaim = await sb.query(reclaiming)
+        }
+
+        const deleting = `DELETE from public.orderitems WHERE "Order_id" = ${id}`
+        const deletion = await sb.query(deleting)
+
+        const deletingdistribution = `DELETE from public.distribution WHERE "Order_id" = ${id}`
+        const deletiondistribution = await sb.query(deletingdistribution)
+
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -1297,11 +1338,17 @@ const distribution_print = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "CompletedDate", partner."Name" as "Partner", SUM(orderitems."Quantity") AS "Total", SUM(orderitems."Value") AS "TotalValue"
-            from public.distribution
+            let sqlGet = `SELECT "Comments", "CompletedDate", partner."Name" as "Partner", SUM(orderitems."Quantity") AS "Total", SUM(orderitems."Value") AS "TotalValue", 
+            (SELECT SUM(orderitems."Quantity") as "PartnerTotal" 
+             from public.orderitems
+            join public.distribution on distribution."Order_id" = orderitems."Order_id"
             join public.partner on distribution."Partner_id" = partner."Partner_id"
-            join public.orderitems on distribution."Order_id" = orderitems."Order_id
-            where distribution."Order_id" = ${id}`
+            WHERE partner."Partner_id" = (SELECT partner."Partner_id" from public.partner join public.distribution on distribution."Partner_id" = partner."Partner_id" WHERE distribution."Order_id" = ${id}))
+                        from public.distribution
+                        join public.partner on distribution."Partner_id" = partner."Partner_id"
+                        join public.orderitems on distribution."Order_id" = orderitems."Order_id"
+                        WHERE distribution."Order_id" = 9
+                        group by "Comments", "CompletedDate", partner."Name"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
             return

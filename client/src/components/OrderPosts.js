@@ -42,7 +42,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                                                         <TableCell>{val.Status}</TableCell>
 
                                                         <TableCell>
-                                                            <Button onClick={() => handleRemove(val.Order_id)}>Reclaim</Button>
+                                                            <Button onClick={() => handleRemove(val.Order_id, val.Name)}>Reclaim</Button>
                                                             <Button onClick={() => handleprint(val.Order_id)}>Print</Button>
                                                             {val.Status == 'Draft' ? (<Button onClick={() => handleEdit(val.Order_id)}>Edit</Button>) : null}
                                                             <Button onClick={() => handleView(val.Order_id)}>View</Button>
