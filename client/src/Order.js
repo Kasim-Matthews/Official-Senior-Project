@@ -80,7 +80,7 @@ function Order() {
     setFilters({
       Partner: "",
       Location: "",
-      Status: "",
+      DeliveryMethod: "",
       Date:""
     })
     setRecords(distributionsList)
@@ -103,8 +103,8 @@ function Order() {
       temp = temp.filter(f => new Date(f.CompletedDate) >= new Date(filters.Date))
     }
 
-    if (filters.Status != "") {
-      temp = temp.filter(f => f.Status == filters.Status);
+    if (filters.DeliveryMethod != "") {
+      temp = temp.filter(f => f.DeliveryMethod == filters.DeliveryMethod);
     }
 
     setRecords(temp);
@@ -263,6 +263,7 @@ function Order() {
                 row
                 aria-labelledby="delivery-method-label"
                 name="delivery-method-group"
+                value={filters.Status}
               >
                 <FormControlLabel value="all" control={<Radio />} label="All" />
                 <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off" />
@@ -271,9 +272,9 @@ function Order() {
             </FormControl>
             </div>
             <div className='date'>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider  dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Date" />
+                <DatePicker value={filters.Date} label="Date" />
               </DemoContainer>
             </LocalizationProvider>
             </div>   
