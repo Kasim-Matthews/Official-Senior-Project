@@ -37,7 +37,7 @@ const PDFInfo = ({ record }) => (
 
         <View style={styles.primaryContact}>
             <Text style={styles.label}>Issued on:</Text>
-            <Text>{record.CompletedDate}</Text>
+            <Text>{new Date(record.CompletedDate).toLocaleDateString()}</Text>
         </View>
 
         <View style={styles.headerContainer}>
