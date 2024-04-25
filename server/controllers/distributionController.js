@@ -504,14 +504,96 @@ const distribution_edit_items = async (req, res) => {
 
 }
 
-const distribution_update = (req, res) => {
+const distribution_update = async (req, res) => {
 
     let id = req.params.id
     let Comments = req.body.Comments;
+    let Status = req.body.Status;
     let DeliveryMethod = req.body.DeliveryMethod;
     let RequestDate = req.body.RequestDate;
     let CompletedDate = req.body.CompletedDate;
     let Partner_id = req.body.Partner_id;
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Comments != "string" && typeof Status != 'string' && typeof DeliveryMethod != 'string' && typeof RequestDate != 'string' && typeof CompletedDate != 'string' && typeof Partner_id != 'number' && typeof Items != "object" && typeof Location != "string" && typeof id != "string") {
+        res.send("Invalid");
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.distribution SET "Comments" = '${Comments}', "Status" = '${Status}', "DeliveryMethod" = '${DeliveryMethod}', "CompletedDate" = '{${CompletedDate}}', "RequestDate" = '{${RequestDate}}', "Partner_id" = ${Partner} WHERE "Order_id" = ${id}`
+        const update = await sb.query(sqlUpdate)
+        
+        let getdelete = `SELECT orderitems."Quantity" as "Given", orderitems."ItemLocationFK", itemlocation."Quantity"
+        from public.orderitems
+        join public.itemlocation on "ItemLocationFK" = "ItemLocation_id"
+        WHERE orderitems."Order_id" = ${id}`
+        const intakeitemsinfo = await sb.query(getdelete)
+
+        let deletionresults = intakeitemsinfo.rows
+        let deletionrows = []
+        for (let i = 0; i < deletionresults.length; i++) {
+            deletionrows.push({ Given: deletionresults[i].Quantity + deletionresults[i].Given, Id: deletionresults[i].FKItemLocation })
+        }
+
+        for (let i = 0; i < deletionresults.length; i++) {
+            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+            const reclaim = await sb.query(reclaiming)
+        }
+
+        const deleting = `DELETE from public.orderitems WHERE "Order_id" = ${id}`
+        const deletion = await sb.query(deleting)
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+
+        let quantities = []
+        Items.forEach(element => {
+            quantities.push(element.Quantity);
+        });
+
+        let sqlGet = `SELECT "FairMarketValue"
+        from public.item
+        WHERE "Item_id" IN (${ids})`
+        const response = await sb.query(sqlGet);
+        let valueresults = response.rows
+        let values = []
+
+        for (let i = 0; i < Items.length; i++) {
+            values.push(Items[i].Quantity * valueresults[i].FairMarketValue)
+        }
+
+        const distributiontrack = `INSERT INTO public.orderitems ("Order_id", "Quantity", "Value", "ItemLocationFK")
+        SELECT ${id}, unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."ItemLocationFK")
+        from (SELECT array_agg("ItemLocation_id") "ItemLocationFK" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        const trackdistribution = await sb.query(distributiontrack)
+
+        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+        const itemlocations = await sb.query(getitemlocations)
+        let results = itemlocations.rows
+        let rows = []
+        for (let i = 0; i < Items.length; i++) {
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity - parseInt(Items[i].Quantity)]
+        }
+        for (let i = 0; i < Items.length; i++) {
+            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
+            VALUES (${rows[i]})
+            ON CONFLICT ("ItemLocation_id") DO UPDATE
+            SET "Quantity" = excluded."Quantity"`
+            const locationsupdated = await sb.query(updatelocations)
+        }
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {

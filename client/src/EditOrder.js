@@ -134,29 +134,21 @@ function EditOrder() {
   }
 
   async function handleSubmit() {
+    try {
+      const response = await await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id, Items: items, Location_id: formData.Location_id  });
+      
+      if(response.status == 400){
+        alert("Check the values you input. One of the values are not of the correct type.")
+      }
 
-
-    let GetData = async function (id) {
-      return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/cleanup`).then((response) => {
-        return response
-      });
+      else if (response.status == 200){
+        window.location.href = "/distribution"
+      }
     }
 
-    let data = GetData(id)
-    await data.then(async (response) => {
-      await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/reclaim", { records: response.data })
-    })
-
-    await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/edit_delete`)
-
-    await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id });
-
-    let IL_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_ild", { Items: items, Location_id: formData.Location  })
-    let V_response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/find_value", {Items: items })
-    await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/track", { Order_id: id, Items: items, Values: V_response.data, ItemLocationFK: IL_response.data});
-    await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/take", { Items: items, ItemLocationFK: IL_response.data});
-    navigate('/distribution')
-
+    catch (error) {
+      alert("Server side error/Contact developer")
+    }
 
   }
 
