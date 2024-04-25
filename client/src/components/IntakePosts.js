@@ -21,7 +21,8 @@ const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                         <tr>
                             <td>{val.Name}</td>
                             <td>{new Date(val.RecievedDate).toLocaleDateString()}</td>
-                            <td>{val.Comments}</td>
+                            {val.Comments == null ? <td></td>: <td>{val.Comments}</td>}
+                            
                             <td>{val.totalitems}</td>
                             <td>${val.total}</td>
                             <td>
