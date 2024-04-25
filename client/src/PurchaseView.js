@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import PurchasePosts from "./components/PurchasePosts";
 import Pagination from "./components/Pagination";
 import ErrorHandler from "./ErrorHandler";
-
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -39,6 +39,7 @@ function Purchase() {
     const [locations, setLocations] = React.useState([])
     const [intakeList, setIntakeList] = React.useState([])
     const [records, setRecords] = React.useState([])
+    const [state, setState] = React.useState({})
 
     const [filters, setFilters] = React.useState({
         Vendor: "",
@@ -260,7 +261,7 @@ function Purchase() {
                             </TextField>
                             </div>
                             <div className='date'>
-                            <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                            <DatePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
                             </div>   
                             <div className='submit'>
                             <DialogActions>

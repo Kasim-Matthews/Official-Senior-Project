@@ -59,8 +59,8 @@ function AddLocation() {
     
 
 
-    await Axios.post("http://localhost:3306/location/partner", {name: formData.Name, address: formData.Address, Type: ptype.data[0].PartnerType_id, Location: Location_id.data[0].Location_id})
-    await Axios.post("http://localhost:3306/location/pair", {Location_id: Location_id.data[0].Location_id, Items: items}).then(window.location.href ="/location")
+    await Axios.post("http://localhost:3306/location/partner", {name: formData.Name, address: formData.Address})
+    await Axios.post("http://localhost:3306/location/pair", {Items: items}).then(window.location.href ="/location")
 
 
     

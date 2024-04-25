@@ -148,7 +148,7 @@ function AddTransfer() {
         let ild = await Axios.post("http://localhost:3306/transfer/ild", {Items: items, Location: formData.To});
         let Values = await Axios.post('http://localhost:3306/transfer/values', {Items: items});
 
-       await Axios.post('http://localhost:3306/transfer/track', {Intake_id: id.data[0], Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
+       await Axios.post('http://localhost:3306/transfer/track', { Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
 
     }
 

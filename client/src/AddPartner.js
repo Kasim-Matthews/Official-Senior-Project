@@ -20,6 +20,8 @@ function AddPartner(){
         Email:"",
     })
 
+    const [formErrors, setFormErrors] = useState({})
+
     function handleChange(event){
         setFormData(prevFormData => {
           return{
