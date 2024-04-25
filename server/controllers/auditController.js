@@ -125,13 +125,13 @@ const log = async (req, res) => {
         for (let i = 0; i < Audits.length; i++) {
             if (Audits[i].Changed) {
                 const sqlInsert = `INSERT INTO public.audititems ("ItemLocation", "Past", "Changed", "Audit") 
-                VALUES (${Audits[i].ItemLocation_id}, ${Audits[i].Past}, ${Audits[i].Changed}, (SELECT Audit_id from public.audit ORDER BY Audit_id DESC Limit 1))`
+                VALUES (${Audits[i].ItemLocation_id}, ${Audits[i].Past}, ${Audits[i].Changed}, (SELECT "Audit_id" from public.audit ORDER BY "Audit_id" DESC Limit 1))`
                 const audititemscreation = await sb.query(sqlInsert)
             }
 
             else {
                 const sqlInsert = `INSERT INTO public.audititems ("ItemLocation", "Past", "Audit") 
-                VALUES (${Audits[i].ItemLocation_id}, ${Audits[i].Past}, (SELECT Audit_id from public.audit ORDER BY Audit_id DESC Limit 1))`
+                VALUES (${Audits[i].ItemLocation_id}, ${Audits[i].Past}, (SELECT "Audit_id" from public.audit ORDER BY "Audit_id" DESC Limit 1))`
                 const audititemscreation = await sb.query(sqlInsert)
             }
         }
