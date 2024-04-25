@@ -122,14 +122,13 @@ const give = async (req, res) => {
         Items.forEach(element => {
             ids.push(element.Item_id);
         });
-        console.log("i did it")
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${To}`
         const itemlocations = await sb.query(getitemlocations)
 
         let give = itemlocations.rows
         let giverows = []
         for (let i = 0; i < Items.length; i++) {
-            giverows[i] = [give[i].ItemLocation_id, give[i].Item_id, give[i].Location_id, give[i].Quantity + parseInt(Items[i].Quantity)]
+            giverows[i] = [give[i].ItemLocation_id, give[i].Item_id, To, give[i].Quantity + parseInt(Items[i].Quantity)]
         }
 
         for (let i = 0; i < Items.length; i++) {
@@ -137,6 +136,7 @@ const give = async (req, res) => {
             VALUES (${giverows[i]})
             ON CONFLICT ("ItemLocation_id") DO UPDATE
             SET "Quantity" = excluded."Quantity"`
+            console.log(updatelocations)
             const locationsupdated = await sb.query(updatelocations)
         }
 
@@ -146,7 +146,7 @@ const give = async (req, res) => {
         let take = itemlocationstake.rows
         let takerows = []
         for (let i = 0; i < Items.length; i++) {
-            takerows[i] = [take[i].ItemLocation_id, take[i].Item_id, take[i].Location_id, take[i].Quantity - parseInt(Items[i].Quantity)]
+            takerows[i] = [take[i].ItemLocation_id, take[i].Item_id, From, take[i].Quantity - parseInt(Items[i].Quantity)]
         }
 
         for (let i = 0; i < Items.length; i++) {
@@ -154,6 +154,7 @@ const give = async (req, res) => {
             VALUES (${takerows[i]})
             ON CONFLICT ("ItemLocation_id") DO UPDATE
             SET "Quantity" = excluded."Quantity"`
+            console.log(updatelocations)
             const locationsupdated = await sb.query(updatelocations)
         }
 
