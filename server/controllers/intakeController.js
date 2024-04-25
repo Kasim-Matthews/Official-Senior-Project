@@ -562,7 +562,7 @@ const update = async (req, res) => {
 
         let ids = []
         Items.forEach(element => {
-            ids.push(element.Item_id);
+            ids.push(element.Item);
         });
 
         let quantities = []
