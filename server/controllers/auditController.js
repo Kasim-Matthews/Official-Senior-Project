@@ -138,7 +138,7 @@ const log = async (req, res) => {
 
         for (let i = 0; i < Audits.length; i++) {
             if (Audits[i].Changed) {
-                const sqlUpdate = `UPDATE public.itemlocation "Quantity" = ${Audits[i].Changed} WHERE "ItemLocation_id" = ${Audits[i].ItemLocation_id}`
+                const sqlUpdate = `UPDATE public.itemlocation SET "Quantity" = ${Audits[i].Changed} WHERE "ItemLocation_id" = ${Audits[i].ItemLocation_id}`
                 const auditupdate = await sb.query(sqlUpdate)
             }
         }
