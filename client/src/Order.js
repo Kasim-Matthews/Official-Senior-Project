@@ -274,7 +274,6 @@ function Order() {
             <div className='date'>
             <LocalizationProvider  dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}>
-                <DatePicker value={filters.Date} label="Date" />
               </DemoContainer>
             </LocalizationProvider>
             </div>   
