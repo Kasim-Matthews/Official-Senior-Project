@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
 const PDFInfo = ({ record }) => (
     <Fragment>
         <View style={styles.Container}>
-            <Text style={styles.labelPrimary}>Partner Primary Contact:</Text>
-            <Text></Text>
+            <Text style={styles.labelPrimary}>Total Distributed to Partner:</Text>
+            <Text>{record.PartnerTotal}</Text>
         </View>
 
         <View style={styles.primaryContact}>
             <Text style={styles.label}>Issued on:</Text>
-            <Text>{record.CompletedDate}</Text>
+            <Text>{new Date(record.CompletedDate).toLocaleDateString()}</Text>
         </View>
 
         <View style={styles.headerContainer}>

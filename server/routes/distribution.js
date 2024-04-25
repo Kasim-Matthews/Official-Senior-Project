@@ -1,9 +1,5 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
 const distributionController = require('../controllers/distributionController')
-const cors = require('cors')
-
-router.use(cors())
 
 
 router.get('/', distributionController.distribution_index)
@@ -26,4 +22,5 @@ router.put('/reclaim', distributionController.distribution_reclaim)
 router.delete('/:id/edit_delete', distributionController.distribution_update_delete)
 router.get('/:id/print', distributionController.distribution_print)
 router.post('/validation', distributionController.validation)
+router.post('/edit_validation', distributionController.edit_validation)
 module.exports = router;

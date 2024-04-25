@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
+import { useNavigate } from "react-router-dom";
 
-export default function DriveList({handleChange}) {
+export default function DriveList({ handleChange }) {
     const [drives, setDrives] = React.useState([])
+    const navigate = useNavigate();
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/productdrive/list").then((response) => {
-            setDrives(response.data.data);
+            if (response.data.status === 'complete') {
+                setDrives(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 

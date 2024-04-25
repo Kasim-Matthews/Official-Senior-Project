@@ -44,8 +44,19 @@ function Intake() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake").then((response) => {
-            setIntakeList(response.data.data);
-            setRecords(response.data.data)
+            if (response.data.status === 'complete') {
+                setIntakeList(response.data.data);
+                setRecords(response.data.data)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
@@ -54,26 +65,31 @@ function Intake() {
 
 
 
-    const handleRemove = async (id) => {
-        let GetData = async function (id) {
-            return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/cleanup`).then((response) => {
-                return response
-            });
+    const handleRemove = async (id, Name) => {
+        if (window.confirm(`Are you sure you want to delete this donation from ${Name}?`) == true) {
+            try {
+                const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/intake/reclaim", { id: id })
+
+                if (response.status == 400) {
+                    alert("Contact developer")
+                }
+
+                else if (response.status == 200) {
+                    window.location.reload(false);
+                }
+            }
+
+            catch (error) {
+                console.log(error)
+                alert("Server side error/Contact developer")
+            }
         }
-        let data = GetData(id)
-        data.then(async (response) => {
-            await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/intake/reclaim", { records: response.data })
-        })
-
-        await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/intake/remove/${id}`);
-
-        window.location.reload(false);
 
 
     }
 
     const handleEdit = (id) => {
-        navigate(`/partner/${id}/edit`)
+        navigate(`/intake/${id}/edit`)
     }
 
     const handleView = (id) => {
@@ -123,13 +139,35 @@ function Intake() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/types").then((response) => {
-            setPartners(response.data.data);
+            if (response.data.status === 'complete') {
+                setPartners(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocations(response.data.data);
+            if (response.data.status === 'complete') {
+                setLocations(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 

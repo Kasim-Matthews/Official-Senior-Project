@@ -92,7 +92,7 @@ function AuditView() {
                     {records.map((val) => {
                         return (
                             <tr>
-                                <td>{val.Date}</td>
+                                <td>{new Date(val.Date).toLocaleDateString()}</td>
                                 <td>{val.Affected}</td>
                                 <td>
                                     <button onClick={() => handleView(val.Audit_id)}>View</button>

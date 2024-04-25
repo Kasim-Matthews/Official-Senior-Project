@@ -34,9 +34,21 @@ function Purchase() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/purchase").then((response) => {
-            setIntakeList(response.data.data);
-            setRecords(response.data.data)
+            if (response.data.status === 'complete') {
+                setIntakeList(response.data.data);
+                setRecords(response.data.data)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
+
     }, [])
 
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -44,20 +56,25 @@ function Purchase() {
 
 
 
-    const handleRemove = async (id) => {
-        let GetData = async function (id) {
-            return await Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/cleanup`).then((response) => {
-                return response
-            });
+    const handleRemove = async (id, Name) => {
+        if (window.confirm(`Are you sure you want to delete this purchase from ${Name}?`) == true) {
+            try {
+                const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { id: id })
+
+                if (response.status == 400) {
+                    alert("Contact developer")
+                }
+    
+                else if (response.status == 200) {
+                    window.location.reload(false);
+                }
+            }
+    
+            catch (error) {
+                console.log(error)
+                alert("Server side error/Contact developer")
+            }
         }
-        let data = GetData(id)
-        data.then(async (response) => {
-            await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/purchase/reclaim", { records: response.data })
-        })
-
-        await Axios.delete(`https://diaper-bank-inventory-management-system.onrender.com/purchase/remove/${id}`);
-
-        window.location.reload(false);
 
 
     }
@@ -89,8 +106,20 @@ function Purchase() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocations(response.data.data);
+            if (response.data.status === 'complete') {
+                setLocations(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
+
     }, [])
 
     function handleChange(event) {

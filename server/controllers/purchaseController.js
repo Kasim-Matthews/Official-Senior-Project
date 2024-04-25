@@ -15,7 +15,7 @@ sb.on('error', error => {
 
 const data = async (req, res) => {
     try {
-        let sqlGet = `SELECT partner."Name", intake."Comments", "RecievedDate", "TotalValue", intake."Intake_id", SUM(intakeitems."Quantity") as TotalItems, location."Name" as Location
+        let sqlGet = `SELECT partner."Name", intake."Comments", "RecievedDate", "TotalValue", intake."Intake_id", SUM(intakeitems."Quantity") as "TotalItems", location."Name" as "Location"
         from public.intake
         join public.partner on "Partner" = "Partner_id"
         join public.partnertype on "Type_id" = "PartnerType_id"
@@ -26,9 +26,11 @@ const data = async (req, res) => {
         group by intake."Intake_id", location."Name", partner."Name"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -67,12 +69,64 @@ const data = async (req, res) => {
 
 }
 
-const create = (req, res) => {
+const create = async (req, res) => {
 
     let Comments = req.body.Comments;
     let RecievedDate = req.body.Purchase_date;
     let Total = req.body.Total;
     let Partner = req.body.Vendor;
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Total != "number" && typeof Partner != "number" && typeof Items != "object" && typeof Location != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        const purchasecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES ('${Comments}', '{${RecievedDate}}', ${Total}, ${Partner})`
+        const createpurchase = await sb.query(purchasecreation)
+
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+
+        let quantities = []
+        Items.forEach(element => {
+            quantities.push(element.Quantity);
+        });
+
+        const purchasetrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
+        SELECT p."Intake_id", unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
+        from (SELECT MAX("Intake_id") as "Intake_id" from public.intake)p,
+             (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+        const trackpurchase = await sb.query(purchasetrack)
+
+        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+        const itemlocations = await sb.query(getitemlocations)
+        let results = itemlocations.rows
+        let rows = []
+        for (let i = 0; i < Items.length; i++) {
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+        }
+        for (let i = 0; i < Items.length; i++) {
+            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
+            VALUES (${rows[i]})
+            ON CONFLICT ("ItemLocation_id") DO UPDATE
+            SET "Quantity" = excluded."Quantity"`
+            const locationsupdated = await sb.query(updatelocations)
+        }
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     /*sb.getConnection(function (error, tempCont) {
         if (error) {
@@ -131,8 +185,10 @@ const location = async (req, res) => {
             WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
+            return
         }
     }
     /*sb.getConnection(function (error, tempCont) {
@@ -185,9 +241,11 @@ const find_id = async (req, res) => {
         from public.intake`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont) {
@@ -320,8 +378,8 @@ const purchase_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "RecievedDate" as PurchaseDate, partner."Name" as Vendor, item."Name" as Item, location."Name" as Location, intakeitems."Quantity"
-            from public.inatkeitems
+            let sqlGet = `SELECT "RecievedDate" as "PurchaseDate", partner."Name" as "Vendor", item."Name" as "Item", location."Name" as "Location", intakeitems."Quantity"
+            from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             join public.intake on "Intake" = "Intake_id"
             join public.item on item."Item_id" = itemlocation."Item_id"
@@ -330,9 +388,11 @@ const purchase_view = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -390,16 +450,18 @@ const edit = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "Comments", "TotalValue", "RecievedDate" as PurchaseDate, "Partner" as Vendor, itemlocation."Location_id" as Location
+            let sqlGet = `SELECT "Comments", "TotalValue", TO_CHAR("RecievedDate", 'yyyy-mm-dd') as "PurchaseDate", "Partner" as "Vendor", itemlocation."Location_id" as "Location"
             from public.intake
             join public.intakeitems on "Intake" = "Intake_id"
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             WHERE intake."Intake_id" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
     // sb.getConnection(function (error, tempCont) {
@@ -443,12 +505,88 @@ const edit = async (req, res) => {
 
 }
 
-const update = (req, res) => {
+const update = async (req, res) => {
     let id = req.params.id
     let Comments = req.body.Comments;
     let RecievedDate = req.body.RecievedDate;
-    let Value = req.body.Value;
+    let Total = req.body.Value;
     let Partner = req.body.Partner;
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Total != "number" && typeof Partner != "number" && typeof Items != "object" && typeof Location != "string" && typeof id != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.intake SET "Comments" = '${Comments}', "RecievedDate" = '{${RecievedDate}}', "Partner" = ${Partner}, "TotalValue" = ${Total} WHERE "Intake_id" = ${id}`
+        const update = await sb.query(sqlUpdate)
+
+        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity"
+            from public.intakeitems
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            WHERE intakeitems."Intake" = ${id}`
+        const intakeitemsinfo = await sb.query(sqlGet)
+
+        let deletionresults = intakeitemsinfo.rows
+        let deletionrows = []
+        for (let i = 0; i < deletionresults.length; i++) {
+            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
+        }
+
+        for (let i = 0; i < deletionresults.length; i++) {
+            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+            const reclaim = await sb.query(reclaiming)
+        }
+
+        const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
+        const deletion = await sb.query(deleting)
+
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item);
+        });
+
+        let quantities = []
+        Items.forEach(element => {
+            quantities.push(element.Quantity);
+        });
+
+        const purchasetrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
+        SELECT ${id}, unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
+        from (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
+   
+        const trackpurchase = await sb.query(purchasetrack)
+ 
+        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
+        const itemlocations = await sb.query(getitemlocations)
+
+        let results = itemlocations.rows
+        let rows = []
+        for (let i = 0; i < Items.length; i++) {
+            rows[i] = [results[i].ItemLocation_id, results[i].Item_id, results[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+        }
+        for (let i = 0; i < Items.length; i++) {
+            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
+            VALUES (${rows[i]})
+            ON CONFLICT ("ItemLocation_id") DO UPDATE
+            SET "Quantity" = excluded."Quantity"`
+            const locationsupdated = await sb.query(updatelocations)
+        }
+
+        res.sendStatus(200)
+        res.end();
+        return;
+
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
@@ -491,7 +629,7 @@ const update = (req, res) => {
 const purchase_cleanup = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -505,9 +643,11 @@ const purchase_cleanup = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -549,8 +689,50 @@ const purchase_cleanup = async (req, res) => {
 
 }
 
-const purchase_reclaim = (req, res) => {
-    let records = req.body.records
+const purchase_reclaim = async (req, res) => {
+    let id = req.body.id
+
+
+    if (typeof id != "number") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity"
+            from public.intakeitems
+            join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            WHERE intakeitems."Intake" = ${id}`
+        const intakeitemsinfo = await sb.query(sqlGet)
+
+        let deletionresults = intakeitemsinfo.rows
+        let deletionrows = []
+        for (let i = 0; i < deletionresults.length; i++) {
+            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
+        }
+
+        for (let i = 0; i < deletionresults.length; i++) {
+            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+            const reclaim = await sb.query(reclaiming)
+        }
+
+        const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
+        const deletion = await sb.query(deleting)
+
+        const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
+        const deletionintake = await sb.query(deletingintake)
+
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -634,7 +816,7 @@ const purchase_remove = (req, res) => {
 const purchase_edit_items = async (req, res) => {
     let id = req.params.id
 
-    if(typeof id != "string"){
+    if (typeof id != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -642,15 +824,17 @@ const purchase_edit_items = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT intakeitems."Quantity", itemlocation."Item_id" as Item
+            let sqlGet = `SELECT intakeitems."Quantity", itemlocation."Item_id" as "Item"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             WHERE intakeitems."Intake" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message})
+            res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 

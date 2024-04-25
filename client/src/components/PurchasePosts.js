@@ -1,7 +1,7 @@
 import React from "react";
 
 const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
-    const total = posts.reduce((sum, val) => sum + parseFloat(val.Total), 0);
+    const total = posts.reduce((sum, val) => sum + parseFloat(val.TotalValue), 0);
     const totalQuantity = posts.reduce((sum, val) => sum + parseInt(val.TotalItems), 0);
     return (
         <table>
@@ -20,12 +20,12 @@ const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                     return (
                         <tr>
                             <td>{val.Name}</td>
-                            <td>{val.RecievedDate}</td>
-                            <td>{val.totalitems}</td>
+                            <td>{new Date(val.RecievedDate).toLocaleDateString()}</td>
+                            <td>{val.TotalItems}</td>
                             <td>{val.Comments}</td>
-                            <td>${val.total}</td>
+                            <td>${val.TotalValue}</td>
                             <td>
-                                <button onClick={() => handleRemove(val.Intake_id)}>Delete</button>
+                                <button onClick={() => handleRemove(val.Intake_id, val.Name)}>Delete</button>
                                 <button onClick={() => handleEdit(val.Intake_id)}>Edit</button>
                                 <button onClick={() => handleView(val.Intake_id)}>View</button>
                             </td>

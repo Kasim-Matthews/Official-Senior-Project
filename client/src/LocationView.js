@@ -11,25 +11,67 @@ function LocationView() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
-            setLocationList(response.data.data);
-            setRecords(response.data.data.filter(function (currentObject) {
-                return typeof (currentObject.DeletedAt) == "object";
-            }))
+            
+            if (response.data.status === 'complete') {
+                setLocationList(response.data.data);
+                setRecords(response.data.data.filter(function (currentObject) {
+                    return typeof (currentObject.DeletedAt) == "object";
+                }))
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
-    const handleRemove = (id, Name) => {
+    const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the location list?`) == true) {
             let date = new Date().toLocaleDateString()
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/remove/${id}`, { date: date });
-            window.location.reload(false);
+            
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/remove/${id}`, { date: date }).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 
-    const handleReactivate = (id, Name) => {
+    const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the location list?`) == true) {
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/reactivate/${id}`);
-            window.location.reload(false);
+            
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/reactivate/${id}`).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 

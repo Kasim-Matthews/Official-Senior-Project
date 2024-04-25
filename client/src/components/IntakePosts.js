@@ -20,12 +20,13 @@ const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                     return (
                         <tr>
                             <td>{val.Name}</td>
-                            <td>{val.RecievedDate}</td>
-                            <td>{val.Comments}</td>
+                            <td>{new Date(val.RecievedDate).toLocaleDateString()}</td>
+                            {val.Comments == null ? <td></td>: <td>{val.Comments}</td>}
+                            
                             <td>{val.totalitems}</td>
                             <td>${val.total}</td>
                             <td>
-                                <button onClick={() => handleRemove(val.Intake_id)}>Delete</button>
+                                <button onClick={() => handleRemove(val.Intake_id, val.Name)}>Delete</button>
                                 <button onClick={() => handleEdit(val.Intake_id)}>Edit</button>
                                 <button onClick={() => handleView(val.Intake_id)}>View</button>
                             </td>

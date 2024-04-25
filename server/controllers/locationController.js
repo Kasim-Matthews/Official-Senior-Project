@@ -13,14 +13,16 @@ sb.on('error', error => {
 })
 
 const location_index = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT * from public.location`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -43,7 +45,7 @@ const location_index = async (req, res) => {
     //                 res.end();
     //                 return
     //             }
-                
+
     //         })
     //     }
     // })
@@ -51,14 +53,16 @@ const location_index = async (req, res) => {
 }
 
 const anything_else = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT * from public.location WHERE "DeletedAt" IS NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
 
     // sb.getConnection(function (error, tempCont){
@@ -80,16 +84,46 @@ const anything_else = async (req, res) => {
     //                 res.end();
     //                 return
     //             }
-                
+
     //         })
     //     }
     // })
 
 }
 
-const location_creation = (req, res) => {
+const location_creation = async (req, res) => {
     let Name = req.body.name;
     let Address = req.body.Address;
+
+    if (typeof Name != "string" && typeof Address != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const locationinsert = `INSERT INTO public.location ("Name", "Address") VALUES ('{${Name}}', '{${Address}')`
+        const locationcreation = await sb.query(locationinsert)
+
+        const partnercreation = `INSERT INTO public.partner ("Name", "Address", "Location", "Type_id") VALUES ('{${Name}}', '{${Address}', (SELECT "Location_id" from public.location ORDER BY "Location_id" DESC Limit 1), (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Adjustment'))`
+        const createpartner = await sb.query(partnercreation)
+
+        const locationpair = `INSERT INTO public.itemlocation ("Location_id", "Item_id")
+        SELECT p."Location_id", t."Item_id"
+        from (SELECT "Location_id" from public.location ORDER BY "Location_id" DESC Limit 1) p,
+             (SELECT "Item_id" from public.item Order by "Item_id") t`
+        const locationpairing = await sb.query(locationpair)
+
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -102,7 +136,7 @@ const location_creation = (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (Name && Address) {
     //             const sqlInsert = "INSERT INTO sql5669328.location (Name, Address) VALUES (?,?);"
     //             tempCont.query(sqlInsert, [Name, Address], (err, result) => {
@@ -111,14 +145,14 @@ const location_creation = (req, res) => {
     //                     console.log(err);
     //                     return
     //                 }
-                    
+
     //                 else {
     //                     console.log('Location created')
     //                     res.send();
     //                     res.end();
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -126,10 +160,29 @@ const location_creation = (req, res) => {
 
 }
 
-const location_delete = (req, res) => {
+const location_delete = async (req, res) => {
     let id = req.params.id;
     let date = req.body.date;
-    
+
+    if (typeof id != "string" && typeof date != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.location Set "DeletedAt" = '{${date}}' WHERE "Location_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
+
     // sb.getConnection(function (error, tempCont){
     //     if(error){
     //         console.log('Error')
@@ -141,7 +194,7 @@ const location_delete = (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (id) {
     //             const sqlDelete = `UPDATE sql5669328.location Set DeletedAt= STR_TO_Date(?, '%m/%d/%Y') WHERE Location_id = ?;`
     //             tempCont.query(sqlDelete, [date, id], (err, result) => {
@@ -150,14 +203,14 @@ const location_delete = (req, res) => {
     //                     console.log(err);
     //                     return
     //                 }
-                    
+
     //                 else {
     //                     console.log('Location deleted')
     //                     res.send();
     //                     res.end();
     //                     return;
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -165,8 +218,27 @@ const location_delete = (req, res) => {
 
 }
 
-const location_reactivate = (req, res) => {
+const location_reactivate = async (req, res) => {
     let id = req.params.id;
+
+    if (typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const sqlUpdate = `UPDATE public.location Set "DeletedAt" = NULL WHERE "Location_id" = ${id}`
+        const response = await sb.query(sqlUpdate)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -179,7 +251,7 @@ const location_reactivate = (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (id) {
     //             const sqlDelete = `UPDATE sql5669328.location Set DeletedAt= NULL WHERE Location_id = ?;`
     //             tempCont.query(sqlDelete, [id], (err, result) => {
@@ -195,7 +267,7 @@ const location_reactivate = (req, res) => {
     //                     res.end();
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -217,9 +289,11 @@ const location_edit = async (req, res) => {
             let sqlGet = `SELECT * FROM public.location WHERE "Location_id" = ${id};`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -235,7 +309,7 @@ const location_edit = async (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (id) {
     //             const sqlGet = 'SELECT * FROM sql5669328.location WHERE Location_id= ?;'
     //             tempCont.query(sqlGet, [id], (err, result) => {
@@ -251,7 +325,7 @@ const location_edit = async (req, res) => {
     //                     res.end();
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -277,9 +351,11 @@ const tab_1 = async (req, res) => {
             order by itemlocation."Item_id"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -294,7 +370,7 @@ const tab_1 = async (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (id) {
     //             const sqlGet = `SELECT i.Name as Item, il.Quantity
     //             from sql5669328.itemlocation il
@@ -314,7 +390,7 @@ const tab_1 = async (req, res) => {
     //                     res.end();
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -342,9 +418,11 @@ const tab_2 = async (req, res) => {
 			order by itemlocation."Item_id"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -359,7 +437,7 @@ const tab_2 = async (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (id) {
     //             const sqlGet = `SELECT i.Name as Item, SUM(oi.Quantity) as Quantity, il.Item_id
     //             from sql5669328.itemlocation il
@@ -381,7 +459,7 @@ const tab_2 = async (req, res) => {
     //                     res.end();
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -409,9 +487,11 @@ const tab_3 = async (req, res) => {
 			order by itemlocation."Item_id"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message })
+            return
         }
     }
 
@@ -426,7 +506,7 @@ const tab_3 = async (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (id) {
     //             const sqlGet = `SELECT i.Name as Item, SUM(ii.Quantity) as Quantity, il.Item_id
     //             from sql5669328.itemlocation il
@@ -448,7 +528,7 @@ const tab_3 = async (req, res) => {
     //                     res.end();
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -456,11 +536,30 @@ const tab_3 = async (req, res) => {
 
 }
 
-const location_update = (req, res) => {
+const location_update = async (req, res) => {
 
     let id = req.params.id
     let Name = req.body.name;
     let Address = req.body.Address;
+
+    if (typeof Name != "string" && typeof Address != "string" && typeof id != "string") {
+        res.sendStatus(400);
+        res.end();
+        return;
+    }
+
+    try {
+        const updatelocation = `UPDATE public.location "Name" = '{${Name}}', "Address" = '{${Address}}' WHERE "Location_id" = ${id}`
+        const locationupdate = await sb.query(updatelocation)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -473,7 +572,7 @@ const location_update = (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if (Name && Address && id) {
     //             const sqlUpdate = "UPDATE sql5669328.location SET Name= ?, Address= ? WHERE Location_id = ?;"
     //             tempCont.query(sqlUpdate, [Name, Address, id], (err, result) => {
@@ -488,7 +587,7 @@ const location_update = (req, res) => {
     //                     res.end()
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }
@@ -497,7 +596,7 @@ const location_update = (req, res) => {
 }
 
 const last = async (req, res) => {
-    
+
     try {
         let sqlGet = `SELECT "Location_id" 
         from public.location
@@ -505,9 +604,11 @@ const last = async (req, res) => {
         Limit 1`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message })
+        return
     }
     // sb.getConnection(function (error, tempCont){
     //     if(error){
@@ -530,7 +631,7 @@ const last = async (req, res) => {
     //                 res.end();
     //                 return
     //             }
-                
+
     //         })
     //     }
     // })
@@ -539,7 +640,7 @@ const last = async (req, res) => {
 
 const pair = (req, res) => {
     let Items = req.body.Items;
-    
+
     // sb.getConnection(function (error, tempCont){
     //     if(error){
     //         console.log('Error')
@@ -566,7 +667,7 @@ const pair = (req, res) => {
     //                         res.end()
     //                         return
     //                     }
-        
+
     //                 })
     //             }
     //             tempCont.release()
@@ -594,7 +695,7 @@ const partner = (req, res) => {
     //             res.end();
     //             return;
     //         }
-        
+
     //         if(name && address){
     //             const sqlInsert = `INSERT INTO sql5669328.partner (Name, Address, Location, Type) VALUES (?,?,(SELECT Location_id as Type from sql5669328.location ORDER BY Location_id DESC Limit 1),(SELECT PartnerType_id as Type from sql5669328.partnertype WHERE Type = 'Adjustment'));`
     //             tempCont.query(sqlInsert, [name, address], (err, result) =>{
@@ -604,14 +705,14 @@ const partner = (req, res) => {
     //                     console.log(err)
     //                     return
     //                 }
-                    
+
     //                 else {
     //                     console.log('Adjustment Partner added')
     //                     res.send();
     //                     res.end();
     //                     return
     //                 }
-                    
+
     //             })
     //         }
     //     }

@@ -14,38 +14,99 @@ function ItemView() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocationList(response.data.data);
+            if (response.data.status === 'complete') {
+                setLocationList(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
 
-        })
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })    
     }, [])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
-            setItemList(response.data.data);
-            setRecords(response.data.data.filter(function (currentObject) {
-                return typeof (currentObject.DeletedAt) == "object";
-            }))
+            if (response.data.status === 'complete') {
+                setItemList(response.data.data);
+                setRecords(response.data.data.filter(function (currentObject) {
+                    return typeof (currentObject.DeletedAt) == "object";
+                }))
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item/tab2").then((response) => {
-            setTab2(response.data.data);
+            if (response.data.status === 'complete') {
+                setTab2(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
-    const handleRemove = (id, Name) => {
+    const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the item list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/remove/${id}`, { date: date });
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/remove/${id}`, { date: date }).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 
-    const handleReactivate = (id, Name) => {
+    const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the item list?`) == true) {
-            Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/reactivate/${id}`);
-            window.location.reload(false);
+            try {
+                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/reactivate/${id}`).then((response) => {
+
+                    if (response.status == 400) {
+                        alert("Contact developer")
+                    }
+
+                    else if (response.status == 200) {
+                        window.location.reload(false);
+                    }
+                })
+
+            }
+            catch (error) {
+                alert("Server side error/Contact developer")
+            }
         }
     }
 
@@ -57,37 +118,33 @@ function ItemView() {
         navigate(`/item/${id}`)
     }
 
-    const row2 = tab2.reduce(function (rows, key, index) {
-        return (index % 2 == 0 ? rows.push([key])
-            : rows[rows.length - 1].push(key)) && rows;
-    }, [])
 
-    function handleSubmit(e){
+
+    function handleSubmit(e) {
         e.preventDefault();
         var temp = itemList;
 
-        if(nonActive){
+        if (nonActive) {
             setRecords(temp)
         }
 
-        else{
+        else {
             setRecords(temp.filter(function (currentObject) {
                 return typeof (currentObject.DeletedAt) == "object";
             }))
         }
     }
 
-
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <div style={{display: "flex"}}>
+                <div style={{ display: "flex" }}>
 
                     <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
                     <label htmlFor="non-active" >Also include inactive items</label>
 
                 </div>
-                <input type="Submit"/>
+                <input type="Submit" />
             </form>
             <Tabs>
                 <TabList>
@@ -136,13 +193,13 @@ function ItemView() {
                         </thead>
 
                         <tbody>
-                            {row2.map((row) => {
+                            {tab2.map((val) => {
                                 return (
                                     <tr>
-                                        <td>{row[0].Item}</td>
-                                        {row.map((val) => {
-                                            return (
-                                                <td>{val.Quantity}</td>
+                                        <td>{val.Item}</td>
+                                        {val.Quantities.map((quantity) => {
+                                            return(
+                                                <td>{quantity}</td>
                                             )
                                         })}
                                     </tr>
