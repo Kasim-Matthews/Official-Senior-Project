@@ -10,7 +10,7 @@ import { TableFooter } from '@mui/material';
 import Button from '@mui/material/Button';
 
 const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncomplete, handleRemove, handleprint }) => {
-    const total = posts.reduce((sum, val) => sum + parseInt(val.total), 0);
+    const total = posts.reduce((sum, val) => sum + parseInt(val.Total), 0);
     return (
         <div>
             <div>
@@ -36,7 +36,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                                                         <TableCell>{val.Name}</TableCell>
                                                         <TableCell>{new Date(val.RequestDate).toLocaleDateString()}</TableCell>
                                                         <TableCell>{new Date(val.CompletedDate).toLocaleDateString()}</TableCell>
-                                                        <TableCell>{val.total}</TableCell>
+                                                        <TableCell>{val.Total}</TableCell>
                                                         <TableCell>{val.DeliveryMethod}</TableCell>
                                                         <TableCell>{val.Comments}</TableCell>
                                                         <TableCell>{val.Status}</TableCell>
