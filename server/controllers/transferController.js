@@ -21,9 +21,11 @@ const adjustment = async (req, res) => {
         WHERE "Location" IS NOT NULL`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.send({ status: 'error', message: error.message })
+        return
     }
 
     /*sb.getConnection(function (error, tempCont){
@@ -58,6 +60,9 @@ const adjustment = async (req, res) => {
 const takeaway = (req, res) => {
     let Location = req.body.Location
     let Items = req.body.Items
+
+
+
 
     /*sb.getConnection(function (error, tempCont){
         if(error){
@@ -98,9 +103,94 @@ const takeaway = (req, res) => {
 
 }
 
-const give = (req, res) => {
-    let Location = req.body.Location
+const give = async (req, res) => {
+    let To = req.body.To
     let Items = req.body.Items
+    let Comments = req.body.Comments;
+    let RecievedDate = req.body.RecievedDate;
+    let Partner = req.body.Partner;
+    let From = req.body.From;
+
+    if (typeof Comments != "string" && typeof RecievedDate != "string" && typeof Partner != "number" && typeof From != "number" && typeof Items != "object" && typeof To != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        let ids = []
+        Items.forEach(element => {
+            ids.push(element.Item_id);
+        });
+        const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${To}`
+        const itemlocations = await sb.query(getitemlocations)
+
+        let give = itemlocations.rows
+        let giverows = []
+        for (let i = 0; i < Items.length; i++) {
+            giverows[i] = [give[i].ItemLocation_id, give[i].Item_id, give[i].Location_id, results[i].Quantity + parseInt(Items[i].Quantity)]
+        }
+
+        for (let i = 0; i < Items.length; i++) {
+            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
+            VALUES (${giverows[i]})
+            ON CONFLICT ("ItemLocation_id") DO UPDATE
+            SET "Quantity" = excluded."Quantity"`
+            const locationsupdated = await sb.query(updatelocations)
+        }
+
+        const getitemlocationstake = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${From}`
+        const itemlocationstake = await sb.query(getitemlocations)
+
+        let take = itemlocationstake.rows
+        let takerows = []
+        for (let i = 0; i < Items.length; i++) {
+            takerows[i] = [take[i].ItemLocation_id, take[i].Item_id, take[i].Location_id, take[i].Quantity - parseInt(Items[i].Quantity)]
+        }
+
+        for (let i = 0; i < Items.length; i++) {
+            const updatelocations = `INSERT INTO public.itemlocation ("ItemLocation_id", "Item_id", "Location_id", "Quantity")
+            VALUES (${takerows[i]})
+            ON CONFLICT ("ItemLocation_id") DO UPDATE
+            SET "Quantity" = excluded."Quantity"`
+            const locationsupdated = await sb.query(updatelocations)
+        }
+
+        let quantities = []
+        Items.forEach(element => {
+            quantities.push(element.Quantity);
+        });
+
+        const intakecreation = `INSERT INTO public.intake ("Comments", "RecievedDate", "TotalValue", "Partner") VALUES ('${Comments}', '{${RecievedDate}}', 0.00, ${Partner})`
+        const createintake = await sb.query(intakecreation)
+
+        let sqlGet = `SELECT "FairMarketValue"
+            from public.item
+            WHERE "Item_id" IN (${ids})`
+        const response = await sb.query(sqlGet);
+        let valueresults = response.rows
+        let values = []
+
+        for (let i = 0; i < Items.length; i++) {
+            values.push(Items[i].Quantity * valueresults[i].FairMarketValue)
+        }
+
+
+        const intaketrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
+        SELECT p."Intake_id", unnest(array[${quantities}]), unnest(array[${values}]), unnest(t."FKItemLocation")
+        from (SELECT MAX("Intake_id") as "Intake_id" from public.intake)p,
+             (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${To})t`
+        const trackintake = await sb.query(intaketrack)
+
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
 
     /*sb.getConnection(function (error, tempCont){
         if(error){
@@ -161,8 +251,10 @@ const find_value = async (req, res) => {
             WHERE "Item_id" IN (${ids})`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
+            return
         }
     }
     /*sb.getConnection(function (error, tempCont){
@@ -232,8 +324,10 @@ const find_ild = async (req, res) => {
             WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         } catch (error) {
             res.send({ status: 'error', message: error.message })
+            return
         }
     }
     /*sb.getConnection(function (error, tempCont){
@@ -286,7 +380,7 @@ const validation = async (req, res) => {
     let Location = req.body.Location
 
     
-    if (typeof Items != "object" && typeof Location != "string") {
+    if (typeof Items != "object" && typeof Location != "number") {
         res.sendStatus(400)
         res.end();
         return;
@@ -305,8 +399,10 @@ const validation = async (req, res) => {
             WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         } catch (error) {
             res.sendStatus(500).json({ "message": error.message})
+            return
         }
     }
     /*sb.getConnection(function (error, tempCont){
@@ -406,7 +502,7 @@ const track_intake = (req, res) => {
 const transfer = async (req, res) => {
     
     try {
-        let sqlGet = `SELECT partner."Name" as Taken, location."Name" as Given, "RecievedDate" as Date, "Intake_id", SUM(intakeitems."Quantity") as TotalMoved, intake."Comments", partner."Location"
+        let sqlGet = `SELECT partner."Name" as "Taken", location."Name" as "Given", "RecievedDate" as "Date", "Intake_id", SUM(intakeitems."Quantity") as "TotalMoved", intake."Comments", partner."Location"
         from public.intake
         join public.partner on "Partner" = "Partner_id"
         join public.partnertype on partner."Type_id" = "PartnerType_id"
@@ -417,9 +513,11 @@ const transfer = async (req, res) => {
         group by partner."Name", location."Name", "RecievedDate", intake."Intake_id", partner."Location"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
+        return
     }
     catch (error) {
         res.sendStatus(500).json({ "message": error.message})
+        return
     }
     
     /*sb.getConnection(function (error, tempCont){
@@ -468,7 +566,7 @@ const transfer_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT partner."Name" as Taken, location."Name" as Given, "RecievedDate" as Date, intakeitems."Quantity", item."Name" as Item
+            let sqlGet = `SELECT partner."Name" as "Taken", location."Name" as "Given", "RecievedDate" as "Date", intakeitems."Quantity", item."Name" as "Item"
             from public.intake
             join public.partner on "Partner" = "Partner_id"
             join public.intakeitems on "Intake" = "Intake_id"
@@ -479,9 +577,11 @@ const transfer_view = async (req, res) => {
             group by partner."Name", location."Name", "RecievedDate", item."Name", intakeitems."Quantity"`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message})
+            return
         }
     }
     /*sb.getConnection(function (error, tempCont){
@@ -545,9 +645,11 @@ const transfer_cleanup = async (req, res) => {
             WHERE intakeitems."Intake" = ${id}`
             const response = await sb.query(sqlGet);
             res.send({ status: 'complete', data: response.rows })
+            return
         }
         catch (error) {
             res.sendStatus(500).json({ "message": error.message})
+            return
         }
     }
 

@@ -119,9 +119,9 @@ function AddTransfer() {
     }
 
     const quantityCheck = async() => {
-        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/validation", {Items: items, Location: formData.To});
+        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/validation", {Items: items, Location: formData.From.Location});
         var result = []
-        for(let o1 of ild.data){
+        for(let o1 of ild.data.data){
             for(let o2 of items){
                 if(o1.Item_id == o2.Item_id){
                     if(o1.Quantity < o2.Quantity){
@@ -142,14 +142,23 @@ function AddTransfer() {
 
 
     const handleSubmit = async () => {
-        await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/give', {Location:formData.To, Items: items})
-        await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/take', {Location:formData.From.Location, Items: items})
-        await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
-        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/ild", {Items: items, Location: formData.To});
-        let Values = await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/values', {Items: items});
+        try {
+            const response = await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/give', {To:formData.To, Items: items, Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id, From:formData.From.Location})
 
-       await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/transfer/track', { Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
-
+            
+      
+            if(response.status == 400){
+              alert("Check the values you input. One of the values are not of the correct type.")
+            }
+      
+            else if (response.status == 200){
+              window.location.href = "/transfer"
+            }
+          }
+      
+          catch (error) {
+            alert("Server side error/Contact developer")
+          }
     }
 
     return (
