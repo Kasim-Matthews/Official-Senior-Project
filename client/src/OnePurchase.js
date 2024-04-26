@@ -42,7 +42,7 @@ function ViewPurchase() {
                 <tbody>
                     <tr>
                         <td>{record.Vendor}</td>
-                        <td>{record.PurchaseDate}</td>
+                        <td>{new Date(record.PurchaseDate).toLocaleDateString()}</td>
                         <td>{record.Location}</td>
                     </tr>
                 </tbody>
