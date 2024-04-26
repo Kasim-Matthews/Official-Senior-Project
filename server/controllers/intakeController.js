@@ -390,7 +390,7 @@ const intake_view = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT "RecievedDate", partner."Name" as "Partner", item."Name" as "Item", location."Name" as "Location", intakeitems."Quantity", item."FairMaketValue"
+            let sqlGet = `SELECT "RecievedDate", partner."Name" as "Partner", item."Name" as "Item", location."Name" as "Location", intakeitems."Quantity", item."FairMarketValue"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             join public.intake on "Intake" = "Intake_id"
