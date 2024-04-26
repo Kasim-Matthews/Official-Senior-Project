@@ -78,7 +78,7 @@ function EditDonationSite() {
     catch (error) {
       alert("Server side error/Contact developer")
     }
-    
+
   }
 
   return (

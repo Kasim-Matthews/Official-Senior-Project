@@ -15,7 +15,7 @@ sb.on('error', error => {
 const data = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT partner."Name", "Comments", "RecievedDate", SUM(intakeitems."Quantity") as TotalItems, "Intake_id", "TotalValue" as Total, location."Name" as Location, partner."Type_id" 
+        let sqlGet = `SELECT partner."Name", "Comments", "RecievedDate", SUM(intakeitems."Quantity") as TotalItems, "Intake_id", "TotalValue" as Total, location."Name" as "Location", partner."Type_id" 
         FROM public.intake
         join public.partner on "Partner" = "Partner_id"
         join public.intakeitems on "Intake" = "Intake_id"

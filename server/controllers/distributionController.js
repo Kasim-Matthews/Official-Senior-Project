@@ -1074,8 +1074,28 @@ const distribution_update_item = (req, res) => {
 
 }
 
-const distribution_complete = (req, res) => {
+const distribution_complete = async (req, res) => {
     let id = req.params.id
+
+    if (typeof id != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        const change = `UPDATE public.distribution SET "Status" = 'Submitted' WHERE "Order_id" = ${id}`
+        const complete = await sb.query(change)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
+
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -1110,8 +1130,28 @@ const distribution_complete = (req, res) => {
 
 }
 
-const distribution_incomplete = (req, res) => {
+const distribution_incomplete = async (req, res) => {
     let id = req.params.id
+
+    if (typeof id != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    try {
+        const change = `UPDATE public.distribution SET "Status" = 'Draft' WHERE "Order_id" = ${id}`
+        const incomplete = await sb.query(change)
+        res.sendStatus(200)
+        res.end();
+        return;
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json(error);
+        return;
+    }
+    
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')

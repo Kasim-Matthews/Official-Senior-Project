@@ -92,13 +92,35 @@ function AddTransfer() {
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setTo(response.data.data);
+            if (response.data.status === 'complete') {
+                setTo(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/transfer/adjustment").then((response) => {
-            setFrom(response.data.data);
+            if (response.data.status === 'complete') {
+                setFrom(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
@@ -106,10 +128,10 @@ function AddTransfer() {
         e.preventDefault();
         const errors = {};
         const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
-    
-    
+
+
         if (!regex_comments.test(formData.Comments)) {
-          errors.Comments = "The comments contains an SQL keyword !"
+            errors.Comments = "The comments contains an SQL keyword !"
         }
         setFormErrors(errors)
         if (!errors.Comments) {
@@ -118,23 +140,23 @@ function AddTransfer() {
         return;
     }
 
-    const quantityCheck = async() => {
-        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/validation", {Items: items, Location: formData.From.Location});
+    const quantityCheck = async () => {
+        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/validation", { Items: items, Location: formData.From.Location });
         var result = []
-        for(let o1 of ild.data.data){
-            for(let o2 of items){
-                if(o1.Item_id == o2.Item_id){
-                    if(o1.Quantity < o2.Quantity){
+        for (let o1 of ild.data.data) {
+            for (let o2 of items) {
+                if (o1.Item_id == o2.Item_id) {
+                    if (o1.Quantity < o2.Quantity) {
                         result.push(o1.Item);
                     }
                 }
             }
         }
-        if(result.length == 0){
+        if (result.length == 0) {
             handleSubmit()
             return
         }
-        else{
+        else {
             alert(`There is not a sufficient amount of ${result.toString()} to complete the transfer`)
             return
         }
@@ -143,25 +165,24 @@ function AddTransfer() {
 
     const handleSubmit = async () => {
         try {
-            const response = await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/give', {To:formData.To, Items: items, Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id, From:formData.From.Location})
+            const response = await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/give', { To: formData.To, Items: items, Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id, From: formData.From.Location })
 
-            
-      
-            if(response.status == 400){
-              alert("Check the values you input. One of the values are not of the correct type.")
+
+
+            if (response.status == 400) {
+                alert("Check the values you input. One of the values are not of the correct type.")
             }
-      
-            else if (response.status == 200){
-              window.location.href = "/transfer"
+
+            else if (response.status == 200) {
+                window.location.href = "/transfer"
             }
-          }
-      
-          catch (error) {
+        }
+
+        catch (error) {
             alert("Server side error/Contact developer")
-          }
+        }
     }
 
-    console.log(formData)
 
     return (
         <form onSubmit={validate}>
@@ -180,10 +201,10 @@ function AddTransfer() {
             <select id="To" name="To" onChange={handleChange}>
                 <option value="" >--Please choose an option--</option>
                 {to.map((val) => {
-                    if(val.Location_id == formData.From.Location){
-                        return(null);
+                    if (val.Location_id == formData.From.Location) {
+                        return (null);
                     }
-                    else{
+                    else {
                         return (
                             <option value={val.Location_id}>{val.Name}</option>
                         )

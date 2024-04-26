@@ -7,7 +7,6 @@ function AddItem() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = React.useState(Item)
-  const [locations, setLocations] = React.useState([])
   const [formErrors, setFormErrors] = useState({})
 
 

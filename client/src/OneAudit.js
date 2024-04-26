@@ -12,9 +12,20 @@ function ViewAudit() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/audit/${id}/view`).then((response) => {
-            setRecord(response.data.data)
-            setDate(response.data.data[0].Date)
-        });
+            if (response.data.status === 'complete') {
+                setRecord(response.data.data)
+                setDate(response.data.data[0].Date)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
     }, [])
 
 

@@ -67,27 +67,71 @@ function EditPurchase() {
     };
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor/list").then((response) => {
-            setVendors(response.data.data);
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor/list").then((response) => { 
+            if (response.data.status === 'complete') {
+                setVendors(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
     useEffect(() => {
         Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
-            setLocations(response.data.data);
+            if (response.data.status === 'complete') {
+                setLocations(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
     }, [])
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/edit`).then((response) => {
-            setFormData(response.data.data[0]);
+            if (response.data.status === 'complete') {
+                setFormData(response.data.data[0]);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/edititems`).then((response) => {
-            setItems(response.data.data);
+            if (response.data.status === 'complete') {
+                setItems(response.data.data);
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

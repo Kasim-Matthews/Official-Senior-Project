@@ -121,7 +121,7 @@ function Intake() {
         var temp = intakeList;
 
         if (filters.PartnerType != 0) {
-            temp = temp.filter(f => f.Type == filters.PartnerType);
+            temp = temp.filter(f => f.Type_id == filters.PartnerType);
         }
 
         if (filters.Location != "") {
@@ -130,7 +130,7 @@ function Intake() {
 
 
         if (filters.Date != "") {
-            temp = temp.filter(f => new Date(f.RecievedDate) >= new Date(filters.Date))
+            temp = temp.filter(f => new Date(f.RecievedDate) > new Date(filters.Date))
         }
 
 

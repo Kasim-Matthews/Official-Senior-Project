@@ -91,7 +91,7 @@ function Order() {
 
 
     if (filters.Date != "") {
-      temp = temp.filter(f => new Date(f.CompletedDate) >= new Date(filters.Date))
+      temp = temp.filter(f => new Date(f.CompletedDate) > new Date(filters.Date))
     }
 
     if (filters.Status != "") {
@@ -186,14 +186,42 @@ function Order() {
     navigate(`/distribution/${id}`)
   }
 
-  const handleComplete = (id) => {
-    Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/complete`);
-    window.location.reload(false);
+  const handleComplete = async (id) => {
+    try {
+      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/complete`);
+
+      if (response.status == 400) {
+        alert("Contact developer")
+      }
+
+      else if (response.status == 200) {
+        window.location.reload(false);
+      }
+    }
+
+    catch (error) {
+      console.log(error)
+      alert("Server side error/Contact developer")
+    }
   }
 
-  const handleIncomplete = (id) => {
-    Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/incomplete`);
-    window.location.reload(false);
+  const handleIncomplete = async (id) => {
+    try {
+      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/incomplete`);;
+
+      if (response.status == 400) {
+        alert("Contact developer")
+      }
+
+      else if (response.status == 200) {
+        window.location.reload(false);
+      }
+    }
+
+    catch (error) {
+      console.log(error)
+      alert("Server side error/Contact developer")
+    }
   }
 
   const handleprint = (id) => {

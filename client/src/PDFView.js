@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import {PDFViewer} from '@react-pdf/renderer'
+import { PDFViewer } from '@react-pdf/renderer'
 import PDF from './components/PDF'
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
@@ -11,17 +11,39 @@ function PDFView() {
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/print`).then((response) => {
-            setRecord(response.data.data[0])
-        });
+            if (response.data.status === 'complete') {
+                setRecord(response.data.data[0])
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
     }, [])
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/itemlist`).then((response) => {
-            setItemList(response.data.data)
-        });
+            if (response.data.status === 'complete') {
+                setItemList(response.data.data)
+            }
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
+            }
+
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
     }, [])
 
-    return(
+    return (
         <Fragment>
             <PDFViewer width="100%" height="966">
                 <PDF record={record} itemList={itemList}></PDF>
