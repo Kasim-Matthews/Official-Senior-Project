@@ -4,10 +4,11 @@ import "./navbar.css";
 import { navItems } from './navitems';
 import Button from "./button";
 import Dropdown from './dropdown';
+import InventoryDropdown from './inventoryDropdown';
 
 function Navbar() {
   const [dropdown, setDropdown] = useState(false);
-  const [inventoryDropdown, setInvDropdown] = useState(false);
+  const [invDropdown, setInvDropdown] = useState(false);
   return (
     <>
       <nav className="navbar">
@@ -25,7 +26,7 @@ function Navbar() {
               return (
                 <li key={item.id} className={item.cName} onMouseEnter1={() => setInvDropdown(true)} onMouseLeave1={() => setInvDropdown(false)}>
                   <Link to={item.path}>{item.title}</Link>
-                    {inventoryDropdown && <inventoryDropdown />}
+                    {invDropdown && <InventoryDropdown />}
                 </li>
               );
             }

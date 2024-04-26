@@ -1,14 +1,14 @@
 import React, {useState} from 'react'
-import { collectionsDropdown } from './navitems';
+import { inventoryDropdown } from './navitems';
 import { Link } from 'react-router-dom';
-import "./dropdown.css";
+import "./inventoryDropdown.css";
 
-function Dropdown() {
-    const [inventoryDropdown, setInvDropdown] = useState(false);
+function InventoryDropdown() {
+    const [invDropdown, setInvDropdown] = useState(false);
 
   return (
     <>
-        <ul className={inventoryDropdown ? "inventorySubmenu clicked" : "inventorySubmenu"} onClick={() => setInvDropdown(!inventoryDropdown)}>
+        <ul className={invDropdown ? "inventorySubmenu clicked" : "inventorySubmenu"} onClick={() => setInvDropdown(!invDropdown)}>
             {inventoryDropdown.map(item => {
                 return (
                     <li key={item.id}>
@@ -21,4 +21,4 @@ function Dropdown() {
   )
 }
 
-export default Dropdown
+export default InventoryDropdown
