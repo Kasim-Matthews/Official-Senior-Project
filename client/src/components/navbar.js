@@ -7,6 +7,7 @@ import Dropdown from './dropdown';
 
 function Navbar() {
   const [dropdown, setDropdown] = useState(false);
+  const [inventoryDropdown, setInvDropdown] = useState(false);
   return (
     <>
       <nav className="navbar">
@@ -17,6 +18,14 @@ function Navbar() {
                 <li key={item.id} className={item.cName} onMouseEnter={() => setDropdown(true)} onMouseLeave={() => setDropdown(false)}>
                   <Link to={item.path}>{item.title}</Link>
                     {dropdown && <Dropdown />}
+                </li>
+              );
+            }
+            if(item.title === "Inventory"){
+              return (
+                <li key={item.id} className={item.cName} onMouseEnter={() => setInvDropdown(true)} onMouseLeave={() => setInvDropdown(false)}>
+                  <Link to={item.path}>{item.title}</Link>
+                    {inventoryDropdown && <Dropdown />}
                 </li>
               );
             }

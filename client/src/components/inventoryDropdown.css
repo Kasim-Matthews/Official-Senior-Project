@@ -1,0 +1,29 @@
+.inventorySubmenu{
+    width: 10rem;
+    position: absolute;
+    top: 70px;
+    left: 920px;
+    list-style: none;
+    text-align: start;
+}
+
+.inventorySubmenu li{
+    background: #00B4D8;
+    cursor: pointer;
+}
+
+.inventorySubmenu.clicked{
+    display: none;
+}
+
+.inventory-menu-item{
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: white;
+    padding: 16px;
+}
+
+.inventory-menu-item li a:hover{
+    background: #0077B6;
+}
