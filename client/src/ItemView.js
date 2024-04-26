@@ -13,7 +13,7 @@ function ItemView() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
             if (response.data.status === 'complete') {
                 setLocationList(response.data.data);
             }
@@ -30,7 +30,7 @@ function ItemView() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/item`).then((response) => {
             if (response.data.status === 'complete') {
                 setItemList(response.data.data);
                 setRecords(response.data.data.filter(function (currentObject) {
@@ -50,7 +50,7 @@ function ItemView() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item/tab2").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/item/tab2`).then((response) => {
             if (response.data.status === 'complete') {
                 setTab2(response.data.data);
             }
@@ -70,7 +70,7 @@ function ItemView() {
         if (window.confirm(`Are you sure you want to delete ${Name} from the item list?`) == true) {
             let date = new Date().toLocaleDateString();
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/remove/${id}`, { date: date }).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/item/remove/${id}`, { date: date }).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -92,7 +92,7 @@ function ItemView() {
     const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the item list?`) == true) {
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/item/reactivate/${id}`).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/item/reactivate/${id}`).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")

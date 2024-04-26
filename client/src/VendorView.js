@@ -14,7 +14,7 @@ function VendorView() {
         if (window.confirm(`Are you sure you want to delete ${Name} from the vendor list?`) == true) {
             let date = new Date().toLocaleDateString();
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/remove/${id}`, { date: date }).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/vendor/remove/${id}`, { date: date }).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -37,7 +37,7 @@ function VendorView() {
     const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the vendor list?`) == true) {
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/vendor/reactivate/${id}`).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/vendor/reactivate/${id}`).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -79,7 +79,7 @@ function VendorView() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor`).then((response) => {
             if (response.data.status === 'complete') {
                 setVendorList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {

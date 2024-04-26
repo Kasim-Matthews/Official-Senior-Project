@@ -10,7 +10,7 @@ function ViewOrder() {
   const [itemList, setItemList] = React.useState([])
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/view`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/view`).then((response) => {
       if (response.data.status === 'complete') {
         setRecord(response.data.data[0])
       }
@@ -27,7 +27,7 @@ function ViewOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/itemlist`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/itemlist`).then((response) => {
       if (response.data.status === 'complete') {
         setItemList(response.data.data)
       }

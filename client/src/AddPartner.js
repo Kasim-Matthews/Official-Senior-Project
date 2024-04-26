@@ -44,7 +44,7 @@ function AddPartner() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/partner/new", {
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/partner/new`, {
         name: formData.Name,
         email: formData.Email,
       }, {

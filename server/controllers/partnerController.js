@@ -23,7 +23,7 @@ const partner_index = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -68,7 +68,7 @@ const anything_else = async (req, res) => {
         res.send({ status: 'complete', data: response.rows })
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -110,7 +110,7 @@ const partner_list = async (req, res) => {
         res.send({ status: 'complete', data: response.rows })
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -153,7 +153,7 @@ const partner_options = async (req, res) => {
         res.send({ status: 'complete', data: response.rows })
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -377,7 +377,7 @@ const partner_edit = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -500,7 +500,7 @@ const partner_view = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -557,7 +557,7 @@ const partner_types = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 

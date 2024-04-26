@@ -24,7 +24,7 @@ const adjustment = async (req, res) => {
         return
     }
     catch (error) {
-        res.send({ status: 'error', message: error.message })
+        console.log(error)
         return
     }
 
@@ -255,7 +255,7 @@ const find_value = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            console.log(error)
             return
         }
     }
@@ -328,7 +328,7 @@ const find_ild = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            console.log(error)
             return
         }
     }

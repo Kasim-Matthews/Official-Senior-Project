@@ -27,7 +27,7 @@ const manu_index = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -81,7 +81,7 @@ const anything_else = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -132,7 +132,7 @@ const manu_list = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -357,7 +357,7 @@ const manu_edit = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -479,7 +479,7 @@ const manu_view = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }

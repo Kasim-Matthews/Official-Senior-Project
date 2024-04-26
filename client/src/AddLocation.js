@@ -48,7 +48,7 @@ function AddLocation() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/location/new", {
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/location/new`, {
         name: formData.Name,
         Address: formData.Address
       }, {

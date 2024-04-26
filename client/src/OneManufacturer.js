@@ -11,7 +11,7 @@ function ViewManufacturer() {
 
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/edit`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/manufacturers/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data[0])
             }
@@ -29,7 +29,7 @@ function ViewManufacturer() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/${id}/view`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/manufacturers/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setIntakeList(response.data.data)
             }

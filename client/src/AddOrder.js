@@ -100,7 +100,7 @@ function AddOrder() {
   }
 
   const quantityCheck = async () => {
-    let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/validation", { Items: items, Location_id: formData.Location });
+    let ild = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/distribution/validation`, { Items: items, Location_id: formData.Location });
     var result = []
     for (let o1 of ild.data.data) {
       for (let o2 of items) {
@@ -124,7 +124,7 @@ function AddOrder() {
 
   const handleSubmit = async () => {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/distribution/new`, { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -147,7 +147,7 @@ function AddOrder() {
   }
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/list").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/partner/list`).then((response) => {
       if (response.data.status === 'complete') {
         setPartners(response.data.data);
       }
@@ -164,7 +164,7 @@ function AddOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
       if (response.data.status === 'complete') {
         setLocations(response.data.data);
       }

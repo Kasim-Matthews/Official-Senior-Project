@@ -38,7 +38,7 @@ function AddDrive() {
 
     async function handleSubmit() {
         try {
-            const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/productdrive/new", {
+            const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/productdrive/new`, {
                 name: formData.Name
             }, {
                 headers: {

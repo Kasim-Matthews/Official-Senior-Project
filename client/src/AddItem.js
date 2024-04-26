@@ -43,7 +43,7 @@ function AddItem() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/item/new", {
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/item/new`, {
         name: formData.Name,
         FairMarketValue: formData.FairMarketValue,
         PackageCount: formData.PackageCount

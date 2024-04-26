@@ -97,7 +97,7 @@ function AddTransfer() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
             if (response.data.status === 'complete') {
                 setTo(response.data.data);
             }
@@ -114,7 +114,7 @@ function AddTransfer() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/transfer/adjustment").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/adjustment`).then((response) => {
             if (response.data.status === 'complete') {
                 setFrom(response.data.data);
             }
@@ -147,7 +147,7 @@ function AddTransfer() {
     }
 
     const quantityCheck = async () => {
-        let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/transfer/validation", { Items: items, Location: formData.From.Location });
+        let ild = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/transfer/validation`, { Items: items, Location: formData.From.Location });
         var result = []
         for (let o1 of ild.data.data) {
             for (let o2 of items) {
@@ -171,7 +171,7 @@ function AddTransfer() {
 
     const handleSubmit = async () => {
         try {
-            const response = await Axios.put('https://diaper-bank-inventory-management-system.onrender.com/transfer/give', { To: formData.To, Items: items, Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id, From: formData.From.Location })
+            const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/transfer/give`, { To: formData.To, Items: items, Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id, From: formData.From.Location })
 
 
 

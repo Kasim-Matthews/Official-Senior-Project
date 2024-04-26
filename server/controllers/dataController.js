@@ -31,7 +31,7 @@ const data = async (req, res) => {
         res.send({ status: 'ok', data: response.rows })
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
     }
 
     // const query = `

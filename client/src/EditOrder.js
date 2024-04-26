@@ -78,7 +78,7 @@ function EditOrder() {
 
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/edit`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         setFormData(response.data.data[0]);
       }
@@ -95,7 +95,7 @@ function EditOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/edititems`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/edititems`).then((response) => {
       if (response.data.status === 'complete') {
         setItems(response.data.data);
       }
@@ -112,7 +112,7 @@ function EditOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/list").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/partner/list`).then((response) => {
       if (response.data.status === 'complete') {
         setPartners(response.data.data);
       }
@@ -129,7 +129,7 @@ function EditOrder() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
       if (response.data.status === 'complete') {
         setLocations(response.data.data);
       }
@@ -162,7 +162,7 @@ function EditOrder() {
   }
 
   const quantityCheck = async () => {
-    let ild = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/distribution/edit_validation", { Items: items, Location_id: formData.Location_id });
+    let ild = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/distribution/edit_validation`, { Items: items, Location_id: formData.Location_id });
     var result = []
     for (let o1 of ild.data.data) {
       for (let o2 of items) {
@@ -185,7 +185,7 @@ function EditOrder() {
 
   async function handleSubmit() {
     try {
-      const response = await await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id, Items: items, Location_id: formData.Location_id });
+      const response = await await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/update`, { Comments: formData.Comments, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner_id, Items: items, Location_id: formData.Location_id });
 
       if (response.status == 400) {
         alert("Check the values you input. One of the values are not of the correct type.")

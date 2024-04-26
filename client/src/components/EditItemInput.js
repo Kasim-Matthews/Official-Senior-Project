@@ -8,7 +8,7 @@ export default function EditItemInput({ record, handleItem, handleQuantity, inde
     const [item, setItem] = React.useState([])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/item").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/item`).then((response) => {
             setItem(response.data.data);
         })
     }, [])

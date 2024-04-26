@@ -7,7 +7,7 @@ export default function DriveList({ handleChange }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/productdrive/list").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/productdrive/list`).then((response) => {
             if (response.data.status === 'complete') {
                 setDrives(response.data.data);
             }

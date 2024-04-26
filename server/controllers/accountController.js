@@ -97,7 +97,7 @@ const sb = mysql.createPool({
     database: 'sql5669328',
     port: 3306
 });
-https://diaper-bank-inventory-management-system.onrender.com
+${process.env.REACT_APP_BACKEND_URL}
 */
 
 module.exports = {

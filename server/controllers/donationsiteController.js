@@ -24,7 +24,7 @@ const dsite_index = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -70,7 +70,7 @@ const anything_else = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -115,7 +115,7 @@ const dsite_list = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -338,7 +338,7 @@ const dsite_edit = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -464,7 +464,7 @@ const dsite_view = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }

@@ -10,7 +10,7 @@ function LocationView() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location`).then((response) => {
             
             if (response.data.status === 'complete') {
                 setLocationList(response.data.data);
@@ -35,7 +35,7 @@ function LocationView() {
             let date = new Date().toLocaleDateString()
             
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/remove/${id}`, { date: date }).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/location/remove/${id}`, { date: date }).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -57,7 +57,7 @@ function LocationView() {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the location list?`) == true) {
             
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/reactivate/${id}`).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/location/reactivate/${id}`).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")

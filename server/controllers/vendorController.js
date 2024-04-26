@@ -22,7 +22,7 @@ const vendor_index = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
     /*sb.getConnection(function (error, tempCont) {
@@ -65,7 +65,7 @@ const anything_else = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -109,7 +109,7 @@ const vendor_list = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -334,7 +334,7 @@ const vendor_edit = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -461,7 +461,7 @@ const vendor_view = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }

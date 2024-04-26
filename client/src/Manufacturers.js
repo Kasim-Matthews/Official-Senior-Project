@@ -11,7 +11,7 @@ function Manufacturers() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/manufacturers").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/manufacturers`).then((response) => {
             if (response.data.status === 'complete') {
                 setManuList(response.data.data);
                 setRecords(response.data.data.filter(function (currentObject) {
@@ -35,7 +35,7 @@ function Manufacturers() {
         if (window.confirm(`Are you sure you want to delete ${Name} from the manufacturer list?`) == true) {
             let date = new Date().toLocaleDateString();
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/remove/${id}`, { date: date }).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/manufacturers/remove/${id}`, { date: date }).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -58,7 +58,7 @@ function Manufacturers() {
     const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the manufacturer list?`) == true) {
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/manufacturers/reactivate/${id}`).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/manufacturers/reactivate/${id}`).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")

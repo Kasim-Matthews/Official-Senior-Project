@@ -43,7 +43,7 @@ function Intake() {
     const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake`).then((response) => {
             if (response.data.status === 'complete') {
                 setIntakeList(response.data.data);
                 setRecords(response.data.data)
@@ -68,7 +68,7 @@ function Intake() {
     const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete this donation from ${Name}?`) == true) {
             try {
-                const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/intake/reclaim", { id: id })
+                const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/intake/reclaim`, { id: id })
 
                 if (response.status == 400) {
                     alert("Contact developer")
@@ -138,7 +138,7 @@ function Intake() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/types").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/partner/types`).then((response) => {
             if (response.data.status === 'complete') {
                 setPartners(response.data.data);
             }
@@ -155,7 +155,7 @@ function Intake() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
             if (response.data.status === 'complete') {
                 setLocations(response.data.data);
             }

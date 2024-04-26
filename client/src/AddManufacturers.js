@@ -41,7 +41,7 @@ function AddManufacturers() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/manufacturers/new", { name: formData.Name }, {
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/manufacturers/new`, { name: formData.Name }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

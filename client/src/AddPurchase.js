@@ -81,7 +81,7 @@ function AddPurchase() {
     };
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor/list").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor/list`).then((response) => {
             if (response.data.status === 'complete') {
                 setVendors(response.data.data);
             }
@@ -98,7 +98,7 @@ function AddPurchase() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
             if (response.data.status === 'complete') {
                 setLocations(response.data.data);
             }
@@ -133,7 +133,7 @@ function AddPurchase() {
 
     const handleSubmit = async () => {
         try {
-            const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor, Items: items, Location_id: formData.Location });
+            const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/purchase/new`, { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor, Items: items, Location_id: formData.Location });
             if (response.status == 400) {
                 alert("Check the values you input. One of the values are not of the correct type.")
             }

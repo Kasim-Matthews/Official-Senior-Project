@@ -27,7 +27,7 @@ const drive_index = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -80,7 +80,7 @@ const anything_else = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -130,7 +130,7 @@ const drive_list = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -356,7 +356,7 @@ const drive_edit = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -481,7 +481,7 @@ const drive_view = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }

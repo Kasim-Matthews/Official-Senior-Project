@@ -29,7 +29,7 @@ const data = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
     /*sb.getConnection(function (error, tempCont) {
@@ -187,7 +187,7 @@ const location = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            console.log(error)
             return
         }
     }
@@ -244,7 +244,7 @@ const find_id = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -391,7 +391,7 @@ const purchase_view = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -460,7 +460,7 @@ const edit = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -646,7 +646,7 @@ const purchase_cleanup = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -833,7 +833,7 @@ const purchase_edit_items = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }

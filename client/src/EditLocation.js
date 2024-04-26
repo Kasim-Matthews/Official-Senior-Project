@@ -28,7 +28,7 @@ function EditLocation() {
   }
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/edit`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         response.data.data.map((key, value) => { setFormData(key) });
       }
@@ -69,7 +69,7 @@ function EditLocation() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/update`, {
+      const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/location/${id}/update`, {
         name: formData.Name,
         Address: formData.Address
       }, {

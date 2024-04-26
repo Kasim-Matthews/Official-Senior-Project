@@ -102,7 +102,7 @@ function EditIntake() {
   }
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edit`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         setFormData(response.data.data[0]);
         setSourceType(response.data.data[0].Type)
@@ -121,7 +121,7 @@ function EditIntake() {
   }, [])
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/edititems`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake/${id}/edititems`).then((response) => {
       if (response.data.status === 'complete') {
         setItems(response.data.data);
       }
@@ -140,7 +140,7 @@ function EditIntake() {
 
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
       if (response.data.status === 'complete') {
         setLocations(response.data.data);
       }
@@ -159,7 +159,7 @@ function EditIntake() {
   const typechecker = async (e) => {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
-      await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/misc").then((response) => {
+      await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake/misc`).then((response) => {
         formData.Partner = response.data.data[0].Partner_id
       })
     }
@@ -184,7 +184,7 @@ function EditIntake() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.TotalValue, Items: items, Location_id: formData.Location_id }, {
+      const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/intake/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.TotalValue, Items: items, Location_id: formData.Location_id }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

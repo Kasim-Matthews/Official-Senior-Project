@@ -29,7 +29,7 @@ const data = async (req, res) => {
         return;
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return;
     }
 
@@ -201,7 +201,7 @@ const location = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return;
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            console.log(error)
             return;
         }
     }
@@ -259,7 +259,7 @@ const find_id = async (req, res) => {
         return;
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return;
     }
 
@@ -403,7 +403,7 @@ const intake_view = async (req, res) => {
             return;
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return;
         }
     }
@@ -473,7 +473,7 @@ const edit = async (req, res) => {
             return;
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return;
         }
     }
@@ -671,7 +671,7 @@ const intake_find_value = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return;
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            console.log(error)
             return;
         }
     }
@@ -740,7 +740,7 @@ const intake_cleanup = async (req, res) => {
             return;
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return;
         }
     }
@@ -926,7 +926,7 @@ const intake_edit_items = async (req, res) => {
             return;
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return;
         }
     }
@@ -1019,7 +1019,7 @@ const intake_misc = async (req, res) => {
         return;
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return;
     }
 

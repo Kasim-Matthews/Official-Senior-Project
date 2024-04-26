@@ -14,7 +14,7 @@ function DonationSiteView() {
         if (window.confirm(`Are you sure you want to delete ${Name} from the donation site list?`) == true) {
             let date = new Date().toLocaleDateString();
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/remove/${id}`, { date: date }).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/donationsite/remove/${id}`, { date: date }).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -37,7 +37,7 @@ function DonationSiteView() {
     const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the donation site list?`) == true) {
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/reactivate/${id}`).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/donationsite/reactivate/${id}`).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -79,7 +79,7 @@ function DonationSiteView() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/donationsite").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/donationsite`).then((response) => {
             if (response.data.status === 'complete') {
                 setDsiteList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {

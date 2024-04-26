@@ -9,7 +9,7 @@ function EditDonationSite() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/${id}/edit`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/donationsite/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         response.data.data.map((key, value) => { setFormData(key) });
       }
@@ -62,7 +62,7 @@ function EditDonationSite() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/donationsite/${id}/update`, {
+      const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/donationsite/${id}/update`, {
         name: formData.Name,
         address: formData.Address
       }, {

@@ -23,7 +23,7 @@ function AddAudit() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/audit/log", { date: date, Audits: inventory });
+            const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/audit/log`, { date: date, Audits: inventory });
 
             if (response.status == 400) {
                 alert("Check the values you input. One of the values are not of the correct type.")
@@ -40,7 +40,7 @@ function AddAudit() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/audit/inventory").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/audit/inventory`).then((response) => {
             if (response.data.status === 'complete') {
                 setInventory(response.data.data)
             }

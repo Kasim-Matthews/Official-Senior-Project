@@ -20,7 +20,7 @@ function TransferView() {
 
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/transfer").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer`).then((response) => {
             setTransferList(response.data.data);
             setRecords(response.data.data);
         })
@@ -29,7 +29,7 @@ function TransferView() {
     const handleRemove = async (id, Name, Location) => {
         if (window.confirm(`Are you sure you want to delete ${Name}'s transfer from the transfer list?`) == true) {
             try {
-                const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/transfer/reclaim", { id: id, Location: Location })
+                const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/transfer/reclaim`, { id: id, Location: Location })
 
 
                 if (response.status == 400) {
@@ -52,7 +52,7 @@ function TransferView() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/transfer/adjustment").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/adjustment`).then((response) => {
             if (response.data.status === 'complete') {
                 setPartners(response.data.data);
             }
@@ -69,7 +69,7 @@ function TransferView() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
             if (response.data.status === 'complete') {
                 setLocations(response.data.data);
             }

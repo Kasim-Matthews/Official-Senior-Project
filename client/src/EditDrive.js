@@ -12,7 +12,7 @@ function EditDrive() {
 
 
   useEffect(() => {
-    Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/productdrive/${id}/edit`).then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/productdrive/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         response.data.data.map((key, value) => { setFormData(key) });
       }
@@ -61,7 +61,7 @@ function EditDrive() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/productdrive/${id}/update`, {
+      const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/productdrive/${id}/update`, {
         name: formData.Name
       }, {
         headers: {

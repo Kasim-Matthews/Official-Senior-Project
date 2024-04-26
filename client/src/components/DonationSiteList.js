@@ -7,7 +7,7 @@ export default function DonationSiteList({ handleChange }) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/donationsite/list").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/donationsite/list`).then((response) => {
             if (response.data.status === 'complete') {
                 setDSites(response.data.data);
             }

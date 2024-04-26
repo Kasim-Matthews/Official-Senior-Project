@@ -123,7 +123,7 @@ function AddIntake() {
 
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
       if (response.data.status === 'complete') {
         setLocations(response.data.data);
       }
@@ -142,7 +142,7 @@ function AddIntake() {
  const typechecker = async (e) => {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
-      await Axios.get("https://diaper-bank-inventory-management-system.onrender.com/intake/misc").then((response) => {
+      await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake/misc`).then((response) => {
       formData.Partner = response.data.data[0].Partner_id
       })
     }
@@ -166,7 +166,7 @@ function AddIntake() {
 }
   const submitDonation = async () => {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location })
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/intake/new`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location })
 
       if(response.status == 400){
         alert("Check the values you input. One of the values are not of the correct type.")

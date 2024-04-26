@@ -32,7 +32,7 @@ function PartnerView() {
         if (window.confirm(`Are you sure you want to delete ${Name} from the partner list?`) == true) {
             let date = new Date().toLocaleDateString();
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/remove/${id}`, { date: date }).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/partner/remove/${id}`, { date: date }).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -78,7 +78,7 @@ function PartnerView() {
     const handleReactivate = async (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the partner list?`) == true) {
             try {
-                await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/partner/reactivate/${id}`).then((response) => {
+                await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/partner/reactivate/${id}`).then((response) => {
 
                     if (response.status == 400) {
                         alert("Contact developer")
@@ -97,7 +97,7 @@ function PartnerView() {
     }
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/partner`).then((response) => {
             if (response.data.status === 'complete') {
                 setPartnerList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {

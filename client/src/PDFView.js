@@ -12,7 +12,7 @@ function PDFView() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/print`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/print`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data[0])
             }
@@ -29,7 +29,7 @@ function PDFView() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/itemlist`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/itemlist`).then((response) => {
             if (response.data.status === 'complete') {
                 setItemList(response.data.data)
             }

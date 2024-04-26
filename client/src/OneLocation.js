@@ -12,7 +12,7 @@ function ViewLocation() {
     const [incoming, setIncoming] = React.useState([])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/edit`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
                 response.data.data.map((key, value) => { setRecord(key) });
             }
@@ -29,7 +29,7 @@ function ViewLocation() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/tab1`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/${id}/tab1`).then((response) => {
             if (response.data.status === 'complete') {
                 setList(response.data.data)
             }
@@ -46,7 +46,7 @@ function ViewLocation() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/tab2`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/${id}/tab2`).then((response) => {
             if (response.data.status === 'complete') {
                 setOutgoing(response.data.data)
             }
@@ -63,7 +63,7 @@ function ViewLocation() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/location/${id}/tab3`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/${id}/tab3`).then((response) => {
             if (response.data.status === 'complete') {
                 setIncoming(response.data.data)
             }

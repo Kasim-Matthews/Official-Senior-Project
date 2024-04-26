@@ -29,7 +29,7 @@ const distribution_index = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -269,7 +269,7 @@ const distribution_view = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -335,7 +335,7 @@ const distribution_itemlist = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -399,7 +399,7 @@ const distribution_edit = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -462,7 +462,7 @@ const distribution_edit_items = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -652,7 +652,7 @@ const distribution_find_ild = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            console.log(error)
             return
         }
     }
@@ -726,7 +726,7 @@ const validation = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return
         } catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -804,7 +804,7 @@ const edit_validation = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return
         } catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -880,7 +880,7 @@ const distribution_find_value = async (req, res) => {
             res.send({ status: 'complete', data: response.rows })
             return
         } catch (error) {
-            res.send({ status: 'error', message: error.message })
+            console.log(error)
             return
         }
     }
@@ -938,7 +938,7 @@ const distribution_find_id = async (req, res) => {
         return
     }
     catch (error) {
-        res.sendStatus(500).json({ "message": error.message })
+        console.log(error)
         return
     }
 
@@ -1206,7 +1206,7 @@ const distribution_cleanup = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }
@@ -1394,7 +1394,7 @@ const distribution_print = async (req, res) => {
             return
         }
         catch (error) {
-            res.sendStatus(500).json({ "message": error.message })
+            console.log(error)
             return
         }
     }

@@ -104,7 +104,7 @@ function Order() {
 
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/distribution").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/distribution`).then((response) => {
       if (response.data.status === 'complete') {
         setDistributionsList(response.data.data);
         setRecords(response.data.data);
@@ -122,7 +122,7 @@ function Order() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/partner/use").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/partner/use`).then((response) => {
       if (response.data.status === 'complete') {
         setPartners(response.data.data);
       }
@@ -139,7 +139,7 @@ function Order() {
   }, [])
 
   useEffect(() => {
-    Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+    Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
       if (response.data.status === 'complete') {
         setLocations(response.data.data);
       }
@@ -160,7 +160,7 @@ function Order() {
   const handleRemove = async (id, Name) => {
     if (window.confirm(`Are you sure you want to reclaim this distribution from ${Name}?`) == true) {
       try {
-        const response = await Axios.put("https://diaper-bank-inventory-management-system.onrender.com/distribution/reclaim", { id: id })
+        const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/distribution/reclaim`, { id: id })
 
         if (response.status == 400) {
           alert("Contact developer")
@@ -188,7 +188,7 @@ function Order() {
 
   const handleComplete = async (id) => {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/complete`);
+      const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/complete`);
 
       if (response.status == 400) {
         alert("Contact developer")
@@ -207,7 +207,7 @@ function Order() {
 
   const handleIncomplete = async (id) => {
     try {
-      const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/incomplete`);;
+      const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/distribution/${id}/incomplete`);;
 
       if (response.status == 400) {
         alert("Contact developer")

@@ -24,7 +24,7 @@ const index = async (req, res) => {
         return
     }
     catch (error) {
-        res.send({ status: 'error', message: error.message })
+        console.log(error)
         return
     }
 
@@ -73,7 +73,7 @@ const inventory = async (req, res) => {
         return
     }
     catch (error) {
-        res.send({ status: 'error', message: error.message })
+        console.log(error)
         return
     }
 

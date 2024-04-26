@@ -11,7 +11,7 @@ function ViewTransfer() {
 
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/transfer/${id}/view`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data)
             }
@@ -29,7 +29,7 @@ function ViewTransfer() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/transfer/${id}/info`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`).then((response) => {
             if (response.data.status === 'complete') {
                 setInfo(response.data.data[0])
             }

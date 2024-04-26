@@ -34,7 +34,7 @@ function Dashboard() {
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     useEffect(() => {
-        axios.get('https://diaper-bank-inventory-management-system.onrender.com/data')
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/data`)
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);

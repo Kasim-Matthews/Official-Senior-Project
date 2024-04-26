@@ -43,7 +43,7 @@ function AddDonationSite() {
 
   async function handleSubmit() {
     try {
-      const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/donationsite/new", {
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/donationsite/new`, {
         name: formData.Name,
         address: formData.Address
       }, {

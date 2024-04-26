@@ -10,7 +10,7 @@ function ViewIntake() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/intake/${id}/view`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data[0])
                 setItemList(response.data.data)

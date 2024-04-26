@@ -76,7 +76,7 @@ function EditPurchase() {
     };
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/vendor/list").then((response) => { 
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor/list`).then((response) => { 
             if (response.data.status === 'complete') {
                 setVendors(response.data.data);
             }
@@ -93,7 +93,7 @@ function EditPurchase() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
             if (response.data.status === 'complete') {
                 setLocations(response.data.data);
             }
@@ -110,7 +110,7 @@ function EditPurchase() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/edit`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/purchase/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
                 setFormData(response.data.data[0]);
             }
@@ -128,7 +128,7 @@ function EditPurchase() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/edititems`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/purchase/${id}/edititems`).then((response) => {
             if (response.data.status === 'complete') {
                 setItems(response.data.data);
             }
@@ -164,7 +164,7 @@ function EditPurchase() {
 
     const handleSubmit = async () => {
         try {
-            const response = await Axios.put(`https://diaper-bank-inventory-management-system.onrender.com/purchase/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.PurchaseDate, Partner: formData.Vendor, Value: parseFloat(formData.TotalValue), Items: items, Location_id: formData.Location }, {
+            const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/purchase/${id}/update`, { Comments: formData.Comments, RecievedDate: formData.PurchaseDate, Partner: formData.Vendor, Value: parseFloat(formData.TotalValue), Items: items, Location_id: formData.Location }, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
