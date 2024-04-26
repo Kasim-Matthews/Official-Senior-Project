@@ -26,7 +26,7 @@ const data = async (req, res) => {
         FROM public.itemlocation
         Join public.item on item."Item_id" = itemlocation."Item_id"
         join public.location on location."Location_id" = itemlocation."Location_id"
-        order by location."Name"`
+        order by location."Name", item."Name"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'ok', data: response.rows })
     }
