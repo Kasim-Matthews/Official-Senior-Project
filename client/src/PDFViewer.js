@@ -4,7 +4,7 @@ import PDFFile from "./components/PDFFile";
 
 const PDFView = () => {
     return(
-        <PDFViewer width="100%">
+        <PDFViewer>
             <PDFFile/>
         </PDFViewer>
     )
