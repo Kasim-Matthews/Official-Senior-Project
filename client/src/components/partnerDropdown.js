@@ -1,9 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react';
 import { partnerDropdown } from './navitems';
 import { Link } from 'react-router-dom';
 import "./partnerDropdown.css";
 
-function partnerDropdown() {
+function PartnerDropdown() {
     const [parDropdown, setParDropdown] = useState(false);
   return (
     <div>
@@ -22,4 +22,4 @@ function partnerDropdown() {
   )
 }
 
-export default partnerDropdown
+export default PartnerDropdown
