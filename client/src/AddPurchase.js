@@ -21,6 +21,12 @@ function AddPurchase() {
         }
     ])
 
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/purchase";
+        }
+    }
+
     function handleChange(event) {
         setFormData(prevFormData => {
             return {
@@ -80,7 +86,7 @@ function AddPurchase() {
                 setVendors(response.data.data);
             }
 
-            else if (response.data.status === 'error in query'){
+            else if (response.data.status === 'error in query') {
                 navigate('/query')
                 console.error("Fail in the query loading vendor options for the filter")
                 console.error(response.data.message)
@@ -92,7 +98,7 @@ function AddPurchase() {
     }, [])
 
     useEffect(() => {
-        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => { 
+        Axios.get("https://diaper-bank-inventory-management-system.onrender.com/location/use").then((response) => {
             if (response.data.status === 'complete') {
                 setLocations(response.data.data);
             }
@@ -113,10 +119,10 @@ function AddPurchase() {
         e.preventDefault();
         const errors = {};
         const regex_comments = /^(?!.*SELECT|.*FROM|.*WHERE|.*UPDATE|.*INSERT).*$/;
-    
-    
+
+
         if (!regex_comments.test(formData.Comments)) {
-          errors.Comments = "The comments contains an SQL keyword !"
+            errors.Comments = "The comments contains an SQL keyword !"
         }
         setFormErrors(errors)
         if (!errors.Comments) {
@@ -128,19 +134,19 @@ function AddPurchase() {
     const handleSubmit = async () => {
         try {
             const response = await Axios.post("https://diaper-bank-inventory-management-system.onrender.com/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor, Items: items, Location_id: formData.Location });
-            if(response.status == 400){
-              alert("Check the values you input. One of the values are not of the correct type.")
+            if (response.status == 400) {
+                alert("Check the values you input. One of the values are not of the correct type.")
             }
-      
-            else if (response.status == 200){
+
+            else if (response.status == 200) {
                 window.location.href = "/purchase";
             }
-          }
-      
-          catch (error) {
+        }
+
+        catch (error) {
             alert("Server side error/Contact developer")
-          }
-        
+        }
+
     }
 
     return (
@@ -202,6 +208,7 @@ function AddPurchase() {
 
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

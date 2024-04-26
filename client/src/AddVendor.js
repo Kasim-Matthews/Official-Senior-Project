@@ -16,6 +16,12 @@ function AddVendor() {
     })
   }
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/vendor";
+    }
+}
+
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
@@ -90,6 +96,7 @@ function AddVendor() {
 
 
         <input type="submit" value="Submit" />
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   )

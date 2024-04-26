@@ -28,6 +28,12 @@ function EditVendor() {
   }, [])
 
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/vendor";
+    }
+}
+
   function handleChange(event) {
     setFormData(prevFormData => {
       return {
@@ -110,6 +116,7 @@ function EditVendor() {
 
 
         <input type="submit" value="Submit" />
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   )

@@ -25,6 +25,11 @@ function EditDonationSite() {
     })
   }, [])
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/donationsite";
+    }
+}
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -93,6 +98,7 @@ function EditDonationSite() {
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
         <input type="submit" value="Submit" />
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   )

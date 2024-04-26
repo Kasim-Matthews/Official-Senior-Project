@@ -39,6 +39,12 @@ function AddTransfer() {
         setItems(values)
     }
 
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/transfer";
+        }
+    }
+
     const handleAddField = (e) => {
         e.preventDefault();
         setIndex(index + 1);
@@ -232,6 +238,7 @@ function AddTransfer() {
             </button>
 
             <input type="submit" value="Submit" />
+            <button onClick={handleCancel}>Cancel</button>
         </form>
     )
 }

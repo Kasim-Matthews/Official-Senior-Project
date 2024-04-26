@@ -14,6 +14,11 @@ function AddAudit() {
         setInventory(values);
     }
 
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/audit";
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,6 +71,7 @@ function AddAudit() {
                 })}
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

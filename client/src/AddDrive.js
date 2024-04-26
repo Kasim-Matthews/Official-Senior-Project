@@ -15,6 +15,12 @@ function AddDrive() {
         })
     }
 
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/productdrive";
+        }
+    }
+
     const validate = (e) => {
         e.preventDefault();
         const errors = {};
@@ -63,6 +69,7 @@ function AddDrive() {
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

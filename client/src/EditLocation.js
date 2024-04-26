@@ -12,7 +12,11 @@ function EditLocation() {
   const navigate = useNavigate();
 
 
-
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/location";
+    }
+}
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -99,6 +103,7 @@ function EditLocation() {
       {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

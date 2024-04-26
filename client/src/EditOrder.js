@@ -16,6 +16,12 @@ function EditOrder() {
 
   const [items, setItems] = React.useState([])
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/distribution";
+    }
+}
+
   const handleItem = (e, index) => {
     const values = [...items];
     values[index].Item = e.target.value;
@@ -272,6 +278,7 @@ function EditOrder() {
 
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

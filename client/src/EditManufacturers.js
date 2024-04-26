@@ -10,7 +10,11 @@ function EditManufacturers() {
   const [formErrors, setFormErrors] = React.useState({})
   const navigate = useNavigate();
 
-
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/manufacturers";
+    }
+}
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -82,6 +86,7 @@ function EditManufacturers() {
       <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} />
       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

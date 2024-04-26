@@ -20,6 +20,13 @@ function EditItem() {
     })
   }
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/item";
+    }
+}
+
+
   useEffect(() => {
     Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/item/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
@@ -97,6 +104,7 @@ function EditItem() {
       <input type="number" name="PackageCount" id="PackageCount" defaultValue={formData.PackageCount == null ? 0 : formData.PackageCount} step="1" onChange={handleChange} />
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

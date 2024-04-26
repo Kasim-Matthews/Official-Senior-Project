@@ -24,6 +24,13 @@ function EditPurchase() {
         })
     }
 
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/purchase";
+        }
+    }
+
+
     const handleItem = (e, index) => {
         const values = [...items];
         values[index].Item_id = e.target.value;
@@ -254,6 +261,7 @@ function EditPurchase() {
 
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

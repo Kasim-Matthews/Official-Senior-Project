@@ -15,6 +15,13 @@ function AddPartner() {
     setFormData({ ...formData, [name]: value });
   }
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+      window.location.href = "/partner";
+    }
+  }
+
+
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
@@ -45,13 +52,13 @@ function AddPartner() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });;
-      
 
-      if(response.status == 400){
+
+      if (response.status == 400) {
         alert("Check the values you input. One of the values are not of the correct type.")
       }
 
-      else if (response.status == 200){
+      else if (response.status == 200) {
         window.location.href = "/partner";
       }
     }
@@ -78,6 +85,7 @@ function AddPartner() {
       {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
       <button type="submit">Submit</button>
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   );
 }

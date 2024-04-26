@@ -34,6 +34,12 @@ function AddIntake() {
 
   const navigate = useNavigate()
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/intake";
+    }
+}
+
   function listtype() {
     if (sourceType == "Product Drive") {
       return (
@@ -229,7 +235,7 @@ function AddIntake() {
         </button>
 
         <input type="submit" value="Submit" />
-
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
 

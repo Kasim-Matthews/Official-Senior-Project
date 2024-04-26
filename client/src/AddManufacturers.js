@@ -17,6 +17,12 @@ function AddManufacturers() {
     })
   }
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/manufacturers";
+    }
+}
+
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
@@ -60,6 +66,7 @@ function AddManufacturers() {
       <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange} />
       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

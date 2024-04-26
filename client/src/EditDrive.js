@@ -28,6 +28,13 @@ function EditDrive() {
     })
   }, [])
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/productdrive";
+    }
+}
+
+
   function handleChange(event) {
     setFormData(prevFormData => {
       return {
@@ -84,6 +91,7 @@ function EditDrive() {
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
         <input type="submit" value="Submit" />
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   )

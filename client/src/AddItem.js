@@ -19,6 +19,12 @@ function AddItem() {
     })
   }
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/item";
+    }
+}
+
   const validate = (e) => {
     e.preventDefault();
     const errors = {};
@@ -79,6 +85,7 @@ function AddItem() {
 
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
       
     </form>
     
