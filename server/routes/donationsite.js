@@ -1,8 +1,6 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
 const dsiteController = require('../controllers/donationsiteController')
-const cors = require('cors')
-router.use(cors())
+
 
 
 router.get('/', dsiteController.dsite_index)

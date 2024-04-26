@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
+import { useNavigate, Link } from "react-router-dom";
 
 function EditPurchase() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [formData, setFormData] = useState([])
     const [vendor, setVendors] = React.useState([])
     const [locations, setLocations] = React.useState([])

@@ -3,11 +3,13 @@ import { PDFViewer } from '@react-pdf/renderer'
 import PDF from './components/PDF'
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 function PDFView() {
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
     const [itemList, setItemList] = React.useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         Axios.get(`https://diaper-bank-inventory-management-system.onrender.com/distribution/${id}/print`).then((response) => {

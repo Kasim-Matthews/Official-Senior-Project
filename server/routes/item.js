@@ -1,9 +1,6 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
 const itemController = require('../controllers/itemController')
-const cors = require('cors')
 
-router.use(cors())
 
 
 router.get('/', itemController.item_index)

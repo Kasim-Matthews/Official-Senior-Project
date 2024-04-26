@@ -1,9 +1,6 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
 const transferController = require('../controllers/transferController')
-const cors = require('cors')
 
-router.use(cors())
 
 
 router.get('/', transferController.transfer)

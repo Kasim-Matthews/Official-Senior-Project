@@ -1,8 +1,6 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
 const driveController = require('../controllers/productdriveController')
-const cors = require('cors')
-router.use(cors())
+
 
 router.get('/', driveController.drive_index)
 router.get('/use', driveController.anything_else)

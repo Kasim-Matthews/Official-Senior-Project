@@ -1,9 +1,7 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
 const registerController = require('../controllers/registerController')
 
-const cors = require('cors')
-router.use(cors())
+
 
 router.post('/register', registerController.register);
 

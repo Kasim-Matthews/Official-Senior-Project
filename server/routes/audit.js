@@ -1,9 +1,8 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
+
 const auditController = require('../controllers/auditController')
 
-const cors = require('cors')
-router.use(cors())
+
 
 router.get('/', auditController.index);
 router.get('/:id/view', auditController.view)

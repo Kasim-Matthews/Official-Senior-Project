@@ -1,9 +1,7 @@
-const express = require("express");
-const router = express.Router();
+const router = require('./router')
 const intakeController = require('../controllers/intakeController')
 
-const cors = require('cors')
-router.use(cors())
+
 
 router.get('/', intakeController.data);
 router.post('/new', intakeController.create);
