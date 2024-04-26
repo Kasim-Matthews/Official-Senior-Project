@@ -795,11 +795,11 @@ const transfer_reclaim = async (req, res) => {
             taking.push({Quantity: used[i].Quantity - used[i].Given, ItemLocation_id: used[i].FKItemLocation})
         }
 
-        // for (let i = 0; i < used.length; i++) {
-        //     const give = `UPDATE public.itemlocation SET "Quantity" = ${giving[i].Quantity} WHERE "Location_id" = ${giving[i].Location} AND "Item_id" = ${giving[i].Item_id}`
-        //     console.log(give)
-        //     const renounce = await sb.query(give)
-        // }
+        for (let i = 0; i < used.length; i++) {
+            const give = `UPDATE public.itemlocation SET "Quantity" = ${giving[i].Quantity} WHERE "Location_id" = ${giving[i].Location} AND "Item_id" = ${giving[i].Item_id}`
+            console.log(give)
+            //const renounce = await sb.query(give)
+        }
 
         // for (let i = 0; i < used.length; i++) {
         //     const take = `UPDATE public.itemlocation SET "Quantity" = ${taking[i].Quantity} WHERE "ItemLocation_id" = ${taking[i].ItemLocation_id}`
