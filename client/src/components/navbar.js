@@ -24,7 +24,7 @@ function Navbar() {
             }
             if(item.title === "Inventory"){
               return (
-                <li key={item.id} className={item.cName} onMouseEnter1={() => setInvDropdown(true)} onMouseLeave1={() => setInvDropdown(false)}>
+                <li key={item.id} className={item.cName} onMouseEnter={() => setInvDropdown(true)} onMouseLeave={() => setInvDropdown(false)}>
                   <Link to={item.path}>{item.title}</Link>
                     {invDropdown && <InventoryDropdown />}
                 </li>
