@@ -1,0 +1,29 @@
+.partnerSubmenu{
+    width: 10rem;
+    position: absolute;
+    top: 70px;
+    left: 920px;
+    list-style: none;
+    text-align: start;
+}
+
+.partnerSubmenu li{
+    background: #00B4D8;
+    cursor: pointer;
+}
+
+.partnerSubmenu.clicked{
+    display: none;
+}
+
+.partner-menu-item{
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: white;
+    padding: 16px;
+}
+
+.partner-menu-item li a:hover{
+    background: #0077B6;
+}

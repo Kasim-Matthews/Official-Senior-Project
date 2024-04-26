@@ -24,6 +24,7 @@ export const navItems = [
     {
         id: 5,
         title: "Partners",
+        path: "/partner",
         cName: "nav-item",
     },
     {
@@ -92,13 +93,7 @@ export const partnerDropdown = [
     {
         id: 4,
         title: "Donation Sites",
-        path: "/donationSite",
+        path: "/donationsite",
         cName: "partner-menu-item",
     },
-    {
-        id: 5,
-        title: "Partners",
-        path: "/partner",
-        cName: "partner-menu-item",
-    }
 ]
