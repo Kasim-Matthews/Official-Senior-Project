@@ -788,27 +788,28 @@ const transfer_reclaim = async (req, res) => {
         let giving = []
         let taking = []
         for (let i = 0; i < used.length; i++) {
+            console.log(used[i].Quantity + used[i].Given)
             giving.push({Quantity: used[i].Quantity + used[i].Given, Location: Location, Item_id: used[i].Item_id})
             taking.push({Quantity: used[i].Quantity - used[i].Given, ItemLocation_id: used[i].FKItemLocation})
         }
 
-        for (let i = 0; i < used.length; i++) {
-            const give = `UPDATE public.itemlocation SET "Quantity" = ${giving[i].Quantity} WHERE "Location_id" = ${giving[i].Location} AND "Item_id" = ${giving[i].Item_id}`
-            console.log(give)
-            const renounce = await sb.query(give)
-        }
+        // for (let i = 0; i < used.length; i++) {
+        //     const give = `UPDATE public.itemlocation SET "Quantity" = ${giving[i].Quantity} WHERE "Location_id" = ${giving[i].Location} AND "Item_id" = ${giving[i].Item_id}`
+        //     console.log(give)
+        //     const renounce = await sb.query(give)
+        // }
 
-        for (let i = 0; i < used.length; i++) {
-            const take = `UPDATE public.itemlocation SET "Quantity" = ${taking[i].Quantity} WHERE "ItemLocation_id" = ${taking[i].ItemLocation_id}`
-            console.log(take)
-            const reclaim = await sb.query(take)
-        }
+        // for (let i = 0; i < used.length; i++) {
+        //     const take = `UPDATE public.itemlocation SET "Quantity" = ${taking[i].Quantity} WHERE "ItemLocation_id" = ${taking[i].ItemLocation_id}`
+        //     console.log(take)
+        //     const reclaim = await sb.query(take)
+        // }
 
-        const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
-        const deletion = await sb.query(deleting)
+        // const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
+        // const deletion = await sb.query(deleting)
 
-        const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
-        const deletionintake = await sb.query(deletingintake)
+        // const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
+        // const deletionintake = await sb.query(deletingintake)
 
         res.sendStatus(200)
         res.end();
