@@ -46,8 +46,8 @@ function Order() {
   const [filters, setFilters] = React.useState({
     Partner: "",
     Location: "",
-    Status: "",
-    Date:""
+    DeliveryMethod: "",
+    Date:{}
   })
 
   const [distributionsList, setDistributionsList] = React.useState([])
@@ -65,7 +65,7 @@ function Order() {
     setFilters(prevFilters => {
       return {
         ...prevFilters,
-        [event.target.name]: event.target.value
+        [event.target.className]: event.target.value
       }
     })
   }
@@ -80,8 +80,8 @@ function Order() {
     setFilters({
       Partner: "",
       Location: "",
-      Status: "",
-      Date:""
+      DeliveryMethod: "",
+      Date:{}
     })
     setRecords(distributionsList)
   }
@@ -103,8 +103,8 @@ function Order() {
       temp = temp.filter(f => new Date(f.CompletedDate) >= new Date(filters.Date))
     }
 
-    if (filters.Status != "") {
-      temp = temp.filter(f => f.Status == filters.Status);
+    if (filters.DeliveryMethod != "") {
+      temp = temp.filter(f => f.DeliveryMethod == filters.DeliveryMethod);
     }
 
     setRecords(temp);
@@ -247,7 +247,7 @@ function Order() {
               defaultValue="Partner"
               helperText="Please select a partner"
             >
-              <MenuItem value="">
+              <MenuItem className="Partner" onChange={handleChange}>
                 </MenuItem>
               {partners.map((option) => (
                 <MenuItem value={option.Name}>
@@ -263,17 +263,17 @@ function Order() {
                 row
                 aria-labelledby="delivery-method-label"
                 name="delivery-method-group"
+                value={filters.DeliveryMethod}
               >
-                <FormControlLabel value="all" control={<Radio />} label="All" />
-                <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off" />
-                <FormControlLabel value="other" control={<Radio />} label="Other" />
+                <FormControlLabel value="" control={<Radio />} label="All" />
+                <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" />
+                <FormControlLabel value="Other" control={<Radio />} label="Other" />
               </RadioGroup>
             </FormControl>
             </div>
             <div className='date'>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <LocalizationProvider  dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Date" />
               </DemoContainer>
             </LocalizationProvider>
             </div>   

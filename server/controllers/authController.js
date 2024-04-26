@@ -20,18 +20,16 @@ const login = async (req, res) => {
     try {
         // Query the database for the user
         const [rows] = await sb.query('SELECT * FROM claire.user WHERE Username = ?', [user]);
-        const foundUser = rows[0]; // Assuming usernames are unique, so we take the first result
+        console.log("done")
+        const foundUser = rows[0]; // usernames are unique
         if (!foundUser) return res.sendStatus(401); // Unauthorized
 
-        const match = await bcrypt.compare(pwd, foundUser.Password); // Ensure the column name matches your DB schema
+        const match = await bcrypt.compare(pwd, foundUser.Password);
         if (match) {
-            const roles = Object.values(foundUser.Role);
-            // Here you would create JWTs or perform other login success actions
             const accessToken = jwt.sign(
                 { 
                     "UserInfo": {
                         "username": foundUser.Username,
-                        "roles": roles
                 }
             },
                 process.env.ACCESS_TOKEN_SECRET,
@@ -42,10 +40,13 @@ const login = async (req, res) => {
                 process.env.REFRESH_TOKEN_SECRET,
                 { expiresIn: '1d' }
             );
+            console.log("hi")
+            await sb.query('UPDATE claire.user SET RefreshToken = ? WHERE User_id = ?', [refreshToken, foundUser.User_id]);
 
-            await sb.query('UPDATE user SET RefreshToken = ? WHERE User_id = ?', [refreshToken, foundUser.User_id]);
-
+            //why isnt it storing in application storage
+            //name refresh token
             res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+            //name access token
             res.json({ accessToken });
         } else {
             res.sendStatus(401); // Unauthorized

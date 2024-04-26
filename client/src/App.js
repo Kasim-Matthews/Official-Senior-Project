@@ -51,7 +51,7 @@ import ViewLocation from './OneLocation';
 import Register from './register';
 import Missing from './components/Missing';
 import Layout from './components/Layout';
-import RequireAuth from './components/RequireAuth';
+import { AuthProvider } from './context/AuthProvider';
 
 
 import { Routes, Route } from 'react-router-dom';
@@ -62,13 +62,13 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route path="/Dashboard" element={<Dashboard />} />
+        
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
         <Route path='/' element={<Home />} />
 
-
-        
+        <Route element={<AuthProvider />}>
+        <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/distribution" element={<Order />} />
         <Route path='/distribution/:id' element={<ViewOrder />} />
         <Route path='/distribution/:id/edit' element={<EditOrder />} />
@@ -121,7 +121,7 @@ function App() {
         <Route path='/donationsite/:id' element={<ViewDonationSite/>}/>
 
         {/* We want to protect these wrotes */}
-        <Route element={<RequireAuth />}>
+
           <Route path='/transfer' element={<TransferView/>}/>
           <Route path='/transfer/new' element={<AddTransfer/>}/>
           <Route path='/transfer/:id' element={<ViewTransfer/>}/>
@@ -129,6 +129,7 @@ function App() {
           <Route path='/audit' element={<AuditView/>}/>
           <Route path='/audit/new' element={<AddAudit/>}/>
           <Route path='/audit/:id' element={<ViewAudit />}/>
+          <Route element={<RequireAuth />}>
         </Route>
 
         {/* also want to add a "add new user" page that only the admin can access */}
