@@ -103,130 +103,7 @@ function Dashboard() {
 
     return (
         <div className="dashboard-container">
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
-                    <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    <React.Fragment>
-                            <ButtonGroup
-                                variant="text"
-                                ref={anchorRef}
-                                aria-label="collections-options"
-                            >
-                                <Button><Link to="/collections" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link></Button>
-                                <Button
-                                size="small"
-                                aria-controls={open ? 'split-button-menu' : undefined}
-                                aria-expanded={open ? 'true' : undefined}
-                                aria-label="select-collections-option"
-                                aria-haspopup="collections"
-                                onClick={handleToggle}
-                                >
-                                <ArrowDropDownIcon />
-                                </Button>
-                            </ButtonGroup>
-                            <Popper
-                                sx={{
-                                zIndex: 1,
-                                }}
-                                open={open}
-                                anchorEl={anchorRef.current}
-                                role={undefined}
-                                transition
-                                disablePortal
-                            >
-                                {({ TransitionProps, placement }) => (
-                                <Grow
-                                    {...TransitionProps}
-                                    style={{
-                                    transformOrigin:
-                                        placement === 'bottom' ? 'center top' : 'center bottom',
-                                    }}
-                                >
-                                    <Paper>
-                                    <ClickAwayListener onClickAway={handleMenuClose}>
-                                        <MenuList id="split-button-menu" autoFocusItem>
-                                            <MenuItem><Link to="/location" style={{ textDecoration: 'none', color: '#065AB0' }}>Location</Link></MenuItem>
-                                        </MenuList>
-                                    </ClickAwayListener>
-                                    </Paper>
-                                </Grow>
-                                )}
-                            </Popper>
-                            </React.Fragment>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <React.Fragment>
-                            <ButtonGroup
-                                variant="text"
-                                ref={anchorRef}
-                                aria-label="partner-options"
-                            >
-                                <Button><Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link></Button>
-                                <Button
-                                size="small"
-                                aria-controls={open ? 'split-button-menu' : undefined}
-                                aria-expanded={open ? 'true' : undefined}
-                                aria-label="select-partner-option"
-                                aria-haspopup="partner"
-                                onClick={handleToggle}
-                                >
-                                <ArrowDropDownIcon />
-                                </Button>
-                            </ButtonGroup>
-                            <Popper
-                                sx={{
-                                zIndex: 1,
-                                }}
-                                open={open}
-                                anchorEl={anchorRef.current}
-                                role={undefined}
-                                transition
-                                disablePortal
-                            >
-                                {({ TransitionProps, placement }) => (
-                                <Grow
-                                    {...TransitionProps}
-                                    style={{
-                                    transformOrigin:
-                                        placement === 'bottom' ? 'center top' : 'center bottom',
-                                    }}
-                                >
-                                    <Paper>
-                                    <ClickAwayListener onClickAway={handleMenuClose}>
-                                        <MenuList id="split-button-menu" autoFocusItem>
-                                            <MenuItem><Link to="/vendor" style={{ textDecoration: 'none', color: '#065AB0' }}>Vendor</Link></MenuItem>
-                                            <MenuItem><Link to="/manufacturer" style={{ textDecoration: 'none', color: '#065AB0' }}>Manufacturer</Link></MenuItem>
-                                            <MenuItem><Link to="#" style={{ textDecoration: 'none', color: '#065AB0' }}>Product Drive</Link></MenuItem>
-                                            <MenuItem><Link to="#" style={{ textDecoration: 'none', color: '#065AB0' }}>Donation Site</Link></MenuItem>
-                                        </MenuList>
-                                    </ClickAwayListener>
-                                    </Paper>
-                                </Grow>
-                                )}
-                            </Popper>
-                            </React.Fragment>
-                    </Typography>
-                        <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                </Box>
+            <Navbar />
             <div className="main-content">
                     <h1>Welcome, DBNF Admin!</h1>
                 <div className="boxes">
@@ -289,6 +166,7 @@ function Dashboard() {
             </div>
         </div>
     </div>
+
     );
 }
 

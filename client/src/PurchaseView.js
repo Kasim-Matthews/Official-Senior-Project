@@ -260,7 +260,7 @@ function Purchase() {
                             </TextField>
                             </div>
                             <div className='date'>
-                            <DateRangePicker onChange={item => setState([item.selection])} ranges={state} months={2} showSelectionPreview={true} />
+                            
                             </div>   
                             <div className='submit'>
                             <DialogActions>
