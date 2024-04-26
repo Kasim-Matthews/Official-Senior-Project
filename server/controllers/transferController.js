@@ -785,6 +785,8 @@ const transfer_reclaim = async (req, res) => {
 
         let used = response.rows
 
+        console.log(used)
+
         let giving = []
         let taking = []
         for (let i = 0; i < used.length; i++) {
