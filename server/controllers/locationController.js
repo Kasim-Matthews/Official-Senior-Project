@@ -409,7 +409,7 @@ const tab_2 = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT item."Name" as Item, SUM(orderitems."Quantity") as Quantity, itemlocation."Item_id" 
+            let sqlGet = `SELECT item."Name" as "Item", SUM(orderitems."Quantity") as "Quantity", itemlocation."Item_id" 
             FROM public.itemlocation 
             join public.item on item."Item_id" = itemlocation."Item_id"
             join public.orderitems on "ItemLocationFK" = "ItemLocation_id"
@@ -478,7 +478,7 @@ const tab_3 = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT item."Name" as Item, SUM(intakeitems."Quantity") as Quantity, itemlocation."Item_id" 
+            let sqlGet = `SELECT item."Name" as "Item", SUM(intakeitems."Quantity") as "Quantity", itemlocation."Item_id" 
             FROM public.itemlocation 
             join public.item on item."Item_id" = itemlocation."Item_id"
             join public.intakeitems on "FKItemLocation" = "ItemLocation_id"
