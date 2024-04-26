@@ -1,5 +1,5 @@
 import Login from './login';
-import Home from './Home';
+import Home from './home';
 import Order from './Order';
 import AddOrder from './AddOrder';
 import AddPartner from'./AddPartner';
@@ -67,7 +67,6 @@ function App() {
         <Route path='/register' element={<Register />} />
         <Route path='/' element={<Home />} />
 
-        <Route element={<AuthProvider />}>
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/distribution" element={<Order />} />
         <Route path='/distribution/:id' element={<ViewOrder />} />
@@ -129,12 +128,12 @@ function App() {
           <Route path='/audit' element={<AuditView/>}/>
           <Route path='/audit/new' element={<AddAudit/>}/>
           <Route path='/audit/:id' element={<ViewAudit />}/>
-          <Route element={<RequireAuth />}>
-        </Route>
+
+
 
         {/* also want to add a "add new user" page that only the admin can access */}
-
         </Route>
+
         {/* catch all/404 */}
         <Route path="*" element={<Missing />} />
 

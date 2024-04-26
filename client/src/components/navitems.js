@@ -8,37 +8,34 @@ export const navItems = [
     {
         id: 2,
         title: "Distributions",
-        path: "/Distributions",
+        path: "/distributions",
         cName: "nav-item",
     },
     {
         id: 3,
         title: "Collections",
-        path: "/Intake",
         cName: "nav-item",
     },
     {
         id: 4,
         title: "Inventory",
-        path: "/Inventory",
         cName: "nav-item",
     },
     {
         id: 5,
         title: "Partners",
-        path: "/Partner",
         cName: "nav-item",
     },
     {
         id: 6,
         title: "Transfers",
-        path: "/Transfer",
+        path: "/transfer",
         cName: "nav-item",
     },
     {
         id: 7,
         title: "Audit",
-        path: "/Audit",
+        path: "/audit",
         cName: "nav-item",
     }
 ]
@@ -47,22 +44,28 @@ export const collectionsDropdown = [
     {
         id: 1,
         title: "Purchases",
-        path: "/Purchase",
+        path: "/purchase",
         cName: "collections-menu-item"
-    }
+    },
+    {
+        id: 2,
+        title: "Donation",
+        path: "/intake",
+        cName: "collections-menu-item",
+    },
 ]
 
 export const inventoryDropdown = [
     {
         id: 1,
         title: "Items",
-        path: "/Item",
+        path: "/item",
         cName: "inventory-menu-item"
     },
     {
         id: 2,
         title: "Locations",
-        path: "/Location",
+        path: "/location",
         cName: "inventory-menu-item",
     }
 ]
@@ -71,25 +74,31 @@ export const partnerDropdown = [
     {
         id: 1,
         title: "Vendors",
-        path: "/Vendor",
+        path: "/vendor",
         cName: "partner-menu-item",
     },
     {
         id: 2,
         title: "Manufacturers",
-        path: "/Manufacturer",
+        path: "/manufacturers",
         cName: "partner-menu-item",
     },
     {
         id: 3,
         title: "Product Drives",
-        path: "/ProductDrive",
+        path: "/productdrive",
         cName: "partner-menu-item",
     },
     {
         id: 4,
         title: "Donation Sites",
-        path: "/DonationSite",
+        path: "/donationSite",
+        cName: "partner-menu-item",
+    },
+    {
+        id: 5,
+        title: "Partners",
+        path: "/partner",
         cName: "partner-menu-item",
     }
 ]

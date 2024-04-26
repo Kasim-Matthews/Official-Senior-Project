@@ -19,6 +19,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ErrorHandler from "./ErrorHandler";
+import AppBar from '@mui/material/AppBar';
 
 function PartnerView() {
 
@@ -97,7 +98,7 @@ function PartnerView() {
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
                         </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>**
                             <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

@@ -1,7 +1,8 @@
 .collectionsSubmenu{
     width: 10rem;
     position: absolute;
-    top: 65px;
+    top: 70px;
+    left: 920px;
     list-style: none;
     text-align: start;
 }
@@ -17,13 +18,12 @@
 
 .collections-menu-item{
     display: block;
-    width: 100%;
     height: 100%;
     text-decoration: none;
     color: white;
     padding: 16px;
 }
 
-.collections-menu-item li a:hover{
+.collections-menu-item:hover{
     background: #0077B6;
 }

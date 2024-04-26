@@ -3,8 +3,8 @@ import { collectionsDropdown } from './navitems';
 import { Link } from 'react-router-dom';
 import "./dropdown.css";
 
-function dropdown() {
-    const [dropdown, setDtopdown] = useState(false);
+function Dropdown() {
+    const [dropdown, setDropdown] = useState(false);
 
   return (
     <>
@@ -12,7 +12,7 @@ function dropdown() {
             {collectionsDropdown.map(item => {
                 return (
                     <li key={item.id}>
-                        <Link to={item.path} className={item.cName}>{item.title} onClick={() => setDropdown(false)}</Link>
+                        <Link to={item.path} className={item.cName} onClick={() => setDropdown(false)}>{item.title} </Link>
                     </li>
                 )
             })}
@@ -21,4 +21,4 @@ function dropdown() {
   )
 }
 
-export default dropdown
+export default Dropdown

@@ -32,6 +32,7 @@ import Grow from '@mui/material/Grow';
 import Popper from '@mui/material/Popper';
 import MenuList from '@mui/material/MenuList';
 import Button from '@mui/material/Button';
+import Navbar from './components/navbar';
 
 function Dashboard() {
 
