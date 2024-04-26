@@ -65,7 +65,7 @@ function ViewItem() {
                 <table>
                     <thead>
                         <tr>
-                            <header>This Item Is Contained In These Inventories</header>
+                            <header>This Item Is Stored at these Locations</header>
                         </tr>
                     </thead>
                     <thead>
@@ -111,7 +111,7 @@ function ViewItem() {
                 <table>
                     <thead>
                         <tr>
-                            <header>This Item Is Contained In These Inventories</header>
+                            <header>This Item Is Stored at these Locations</header>
                         </tr>
                     </thead>
                     <thead>
