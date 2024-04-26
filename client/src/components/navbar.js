@@ -25,7 +25,7 @@ function Navbar() {
               return (
                 <li key={item.id} className={item.cName} onMouseEnter={() => setInvDropdown(true)} onMouseLeave={() => setInvDropdown(false)}>
                   <Link to={item.path}>{item.title}</Link>
-                    {inventoryDropdown && <Dropdown />}
+                    {inventoryDropdown && <inventoryDropdown />}
                 </li>
               );
             }
