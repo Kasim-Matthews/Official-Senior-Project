@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useParams, Link } from "react-router-dom";
+import Navbar from "./components/navbar";
 
 function ViewIntake() {
 

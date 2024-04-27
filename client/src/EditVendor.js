@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
 
 
 function EditVendor() {

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import {useNavigate, useParams, Link} from "react-router-dom";
+import Navbar from "./components/navbar";
 
 function ViewDistribution(){
     

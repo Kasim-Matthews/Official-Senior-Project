@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
-import DonationSite from './models/DonationSite'
+import DonationSite from './models/DonationSite';
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function AddDonationSite(){
     const [formData, setFormData] = useState(DonationSite)
@@ -49,16 +51,15 @@ function AddDonationSite(){
 
     return(
         <div>
+            <Navbar />
             <form onSubmit={validate}>
-                <label htmlFor="Name">Name</label>
-                <input type="text" name="Name" id="Name" value={formData.Name} required onChange={handleChange}/>
+                <TextField id="outlined-basic" label="Name" variant="outlined" value={formData.Name} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-                <label htmlFor="Address">Address</label>
-                <input type="text" name="Address" id="Address" value={formData.Address} required onChange={handleChange}/>
+                <TextField id="outlined-basic" label="Address" variant="outlined" value={formData.Address} required onChange={handleChange}/>
                 {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
-                <input type="submit" value="Submit" />
+                <Button variant="contained" type="submit" value="Submit" />
             </form>
         </div>
     )

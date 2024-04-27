@@ -17,6 +17,7 @@ import { addDays } from 'date-fns';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { te } from "date-fns/locale";
+import Navbar from "./components/navbar";
 
 function Intake() {
     const navigate = useNavigate();

@@ -20,6 +20,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ErrorHandler from "./ErrorHandler";
 import AppBar from '@mui/material/AppBar';
+import Navbar from "./components/navbar";
 
 function PartnerView() {
 

@@ -29,7 +29,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-
+import Navbar from "./components/navbar";
 
 function Purchase() {
     const navigate = useNavigate();

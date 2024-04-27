@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+
 
 function AddAudit() {
 
@@ -31,7 +34,7 @@ function AddAudit() {
 
     return (
         <div>
-
+            <Navbar />
             <form onSubmit={handleSubmit}>
                 {inventory.map((val, index) => {
                     return(
@@ -42,7 +45,7 @@ function AddAudit() {
                     )
                 })}
 
-                <input type="submit" value="Submit" />
+                <Button variant="contained" type="submit" value="Submit"></Button>
             </form>
         </div>
     )

@@ -3,6 +3,8 @@ import Axios from 'axios';
 import Purchase from "./models/Purchase";
 import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function AddPurchase() {
     const [formData, setFormData] = useState(Purchase)
@@ -127,33 +129,31 @@ function AddPurchase() {
 
     return (
         <div>
+            <Navbar />
             <h2>Purchase</h2>
             <form onSubmit={validate}>
-                <label htmlFor="Vendor">Vendor</label>
-                <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
+                <Textfield select defaultValue="Vendor" helperText="Please select a vendor" id="Vendor" label="Vendor" value={formData.Vendor} onChange={handleChange}/>
                     {vendor.map((val) => {
                         return (
                             <option value={val.Partner_id}>{val.Name}</option>
                         )
                     })}
-                </select>
                 <br />
 
-                <label htmlFor="Location">Location</label>
-                <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
+                <Textfield select defaultValue="Location" helperText="Please select a location"  id="Location" name="Location" value={formData.Location} onChange={handleChange}/>
                     {locations.map((val) => {
                         return (
                             <option value={val.Location_id}>{val.Name}</option>
                         )
                     })}
-
-                </select><br />
+                <br />
 
                 <div>
-                    <label htmlFor="Purchase_date">Purchase date</label>
-                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                        <DatePicker label="Purchase Date" value={formData.Purchase_date} onChange={handleChange}/>
+                    </DemoContainer>
+                </LocalizationProvider>
                 </div>
 
                 <div>
@@ -162,9 +162,16 @@ function AddPurchase() {
                 </div>
 
                 <div>
-                    <label htmlFor="Comments">Comments</label><br />
-                    <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
-                    {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+                <TextField
+                    id="outlined-Comments-static"
+                    label="Comments"
+                    multiline
+                    rows={4}
+                    defaultValue="Comments"
+                    value={formData.Comments}
+                    onChange={handleChange} 
+                    placeholder="Comments"
+                    />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
                 </div>
 
                 <h2>Items</h2>
@@ -178,12 +185,12 @@ function AddPurchase() {
                         deleteField={handleDeleteField}
                     />
                 ))}
-                <button name="add-btn" onClick={handleAddField}>
+                <Button variant='outline' name="add-btn" onClick={handleAddField}>
                     Add
-                </button>
+                </Button>
 
 
-                <input type="submit" value="Submit" />
+                <Button variant="contained" type="submit" value="Submit" />
             </form>
         </div>
     )
