@@ -5,7 +5,7 @@ import { navItems } from './navitems';
 import Button from "./button";
 import Dropdown from './dropdown';
 import InventoryDropdown from './inventoryDropdown';
-import partnerDropdown from './partnerDropdown';
+import PartnerDropdown from './partnerDropdown';
 
 function Navbar() {
   const [dropdown, setDropdown] = useState(false);
@@ -36,7 +36,7 @@ function Navbar() {
               return (
                 <li key={item.id} className={item.cName} onMouseEnter={() => setParDropdown(true)} onMouseLeave={() => setParDropdown(false)}>
                   <Link to={item.path}>{item.title}</Link>
-                    {parDropdown && <partnerDropdown />}
+                    {parDropdown && <PartnerDropdown />}
                 </li>
               );
             }
