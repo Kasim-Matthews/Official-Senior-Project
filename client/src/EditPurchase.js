@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
+import Navbar from "./components/navbar";
 
 function EditPurchase() {
     const { id } = useParams();
@@ -146,6 +147,7 @@ function EditPurchase() {
 
     return (
         <div>
+            <Navbar />
             <h2>Purchase</h2>
             <form onSubmit={validate}>
                 <label htmlFor="Vendor">Vendor</label>

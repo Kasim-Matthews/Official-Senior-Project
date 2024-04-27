@@ -38,6 +38,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Stack from '@mui/material/Stack';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function AddOrder() {
   const navigate = useNavigate();
@@ -195,38 +197,7 @@ function AddOrder() {
 
   return (
     <div className="dashboard-container">
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
-                    <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
-                    </Typography>
-                        <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                </Box>
+    <Navbar />
     <form id="distribution" onSubmit={validate}>
           <div className='partner'>
             <TextField
@@ -235,6 +206,8 @@ function AddOrder() {
               label="Partner"
               defaultValue="Partner"
               helperText="Please select a partner"
+              value={formData.Partner} 
+              onChange={handleChange}
             >
               {partners.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -250,6 +223,8 @@ function AddOrder() {
               label="Location"
               defaultValue="Location"
               helperText="Please select a location"
+              value={formData.Location} 
+              onChange={handleChange}
             >
               {locations.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
@@ -261,14 +236,14 @@ function AddOrder() {
             <div className='requestDate'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Request Date" min="2023-09-01" required onChange={handleChange}/>
+                <DatePicker label="Request Date" value={formData.RequestDate}  min="2023-09-01" required onChange={handleChange}/>
               </DemoContainer>
             </LocalizationProvider>
             </div> 
             <div className='completeDate'>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Complete Date" min={formData.RequestDate} required onChange={handleChange}/>
+                <DatePicker label="Complete Date" value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange}/>
               </DemoContainer>
             </LocalizationProvider>
             </div> 
@@ -294,45 +269,6 @@ function AddOrder() {
               onChange={handleChange} 
               placeholder="Comments"
             />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
-      <label htmlFor="Partner">Partner</label>
-      <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
-        <option value="">--Please choose an option--</option>
-        {partners.map((val) => {
-          return (
-            <option value={val.Partner_id}>{val.Name}</option>
-          )
-        })}
-
-      </select><br />
-
-      <label htmlFor="Location">Location</label>
-      <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-        <option value="">--Please choose an option--</option>
-        {locations.map((val) => {
-          return (
-            <option value={val.Location_id}>{val.Name}</option>
-          )
-        })}
-
-      </select><br />
-      <label htmlFor="RequestDate">RequestDate</label>
-      <input type="date" name="RequestDate" id="RequestDate" value={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
-
-      <label htmlFor="CompletedDate">CompleteDate</label>
-      <input type="date" name="CompletedDate" id="CompletedDate" value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange} />
-
-
-
-
-      <h3>Delivery Method</h3>
-
-      <label htmlFor="Drop-off">Drop Off</label>
-      <input type="radio" id="Drop-off" name="DeliveryMethod" value="Drop-off" checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange} />
-      <label htmlFor="Other">Other</label>
-      <input type="radio" id="Other" name="DeliveryMethod" value="Other" checked={formData.DeliveryMethod === "Other"} onChange={handleChange} />
-
-      <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
-      {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
       <h2>Items</h2>
       {items.map((obj, index) => (

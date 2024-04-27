@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
+import Navbar from "./components/navbar";
 
 function EditOrder() {
 
@@ -169,6 +170,8 @@ function EditOrder() {
   }
 
   return (
+    <>
+    <Navbar/>
     <form id="edit distribution" onSubmit={validate}>
       <label htmlFor="Partner">Partner</label>
       <select id="Partner_id" name="Partner_id" onChange={handleChange}>
@@ -245,6 +248,7 @@ function EditOrder() {
       <input type="submit" value="Submit" />
       <button onClick={handleCancel}>Cancel</button>
     </form>
+    </>
   )
 }
 

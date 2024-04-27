@@ -3,7 +3,6 @@ import {PDFViewer} from '@react-pdf/renderer'
 import PDF from './components/PDF'
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
-
 function PDFView() {
     const { id } = useParams();
     const [record, setRecord] = React.useState([])

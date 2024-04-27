@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import Vendor from "./models/Vendor";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 
 function AddVendor() {
@@ -67,18 +69,15 @@ function AddVendor() {
 
     return(
         <div>
+          <Navbar />
             <form onSubmit={validate}>
-                <label htmlFor="BusinessName">Business Name</label>
-                <input type="text" name="BusinessName" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
+                <Textfield variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-                <label htmlFor="ContactName">Contact Name</label>
-                <input type="text" name="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange}/>
+                <Textfield variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange}/>
                 {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
-                <label htmlFor="Phone">Phone</label>
-                <input type="text" name="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange}/>
+                <Textfield variant="outlined" label="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange}/>
                 {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
-                <label htmlFor="Email">Email</label>
-                <input type="text" name="Email" id="Email" value={formData.Email} onChange={handleChange}/>
+                <Textfeild variant="outlined" name="Email" id="Email" value={formData.Email} onChange={handleChange}/>
                 {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
 

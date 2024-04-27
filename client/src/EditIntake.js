@@ -4,7 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
 import EditDriveList from "./components/EditDriveList";
 import EditDonationSiteList from './components/EditDonationSiteList';
-import EditManufacturerList from './components/EditManufacturerList'
+import EditManufacturerList from './components/EditManufacturerList';
+import Navbar from "./components/navbar";
 
 function EditIntake() {
 
@@ -193,12 +194,11 @@ function EditIntake() {
 
   return (
     <div>
+      <Navbar />
       <h2>Intake</h2>
       <form id="intake" onSubmit={typechecker}>
 
-        <label htmlFor="Source">Source</label>
-        <select id="Source" onChange={sourceChange}>
-          <option value="" disabled></option>
+        <Textfield select defaultValue="Source" helperText="Please select a source" id="Source" onChange={sourceChange}/>
           {Types.map((type) => {
             if (formData.Type == type) {
               return (
@@ -211,7 +211,6 @@ function EditIntake() {
               )
             }
           })}
-        </select>
         <br />
 
         {sourceType != "" ? listtype() : null}

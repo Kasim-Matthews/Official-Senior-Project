@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 
 function AddTransfer() {
@@ -160,21 +162,18 @@ function AddTransfer() {
     }
 
     return (
+        <>
+        <Navbar />
         <form onSubmit={validate}>
-            <label htmlFor="From">From storage location</label>
-            <select id="From" name="From" onChange={handleFrom}>
-                <option value="">--Please choose an option--</option>
+            <Textfield defaultValue="From" helperText="Please select a location" select id="From" name="From" onChange={handleFrom}/>
                 {from.map((val, index) => {
                     return (
                         <option value={index}>{val.Name}</option>
                     )
                 })}
+            <br />
 
-            </select><br />
-
-            <label htmlFor="To">To storage location</label>
-            <select id="To" name="To" onChange={handleChange}>
-                <option value="" >--Please choose an option--</option>
+            <Textfield select defaultValue="To" helperText="Please select a location" id="To" name="To" onChange={handleChange}/>
                 {to.map((val) => {
                     if(val.Location_id == formData.From.Location){
                         return(null);
@@ -185,11 +184,17 @@ function AddTransfer() {
                         )
                     }
                 })}
+            <br />
 
-            </select><br />
-
-            <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
-            {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+            <TextField
+              id="outlined-Comments-static"
+              label="Comments"
+              multiline
+              rows={4}
+              defaultValue="Comments"
+              onChange={handleChange} 
+              placeholder="Comments"
+            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
             <h2>Items</h2>
             {items.map((obj, index) => (
@@ -202,13 +207,14 @@ function AddTransfer() {
                     deleteField={handleDeleteField}
                 />
             ))}
-            <button name="add-btn" onClick={handleAddField}>
+            <Button variant="outlined" name="add-btn" onClick={handleAddField}>
                 Add
-            </button>
+            </Button>
 
             <input type="submit" value="Submit" />
             <button onClick={handleCancel}>Cancel</button>
         </form>
+        </>
     )
 }
 

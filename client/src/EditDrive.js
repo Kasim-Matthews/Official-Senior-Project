@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
 
 
 function EditDrive() {
@@ -72,9 +73,9 @@ function EditDrive() {
 
   return (
     <div>
+      <Navbar />
       <form onSubmit={validate}>
-        <label htmlFor="Name">Name</label>
-        <input type="text" name="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
         <input type="submit" value="Submit" />

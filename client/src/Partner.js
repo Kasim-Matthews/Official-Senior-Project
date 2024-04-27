@@ -10,6 +10,7 @@ import Menu from '@mui/material/Menu';
 import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
+import Navbar from "./components/navbar";
 
 function Partner(){
     const navigate = useNavigate();

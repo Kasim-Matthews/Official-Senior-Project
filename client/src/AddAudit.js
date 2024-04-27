@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+
 
 function AddAudit() {
 
@@ -13,14 +16,11 @@ function AddAudit() {
         setInventory(values);
       }
 
-
       function handleCancel() {
         if (window.confirm("Are you sure you want to cancel") == true) {
             window.location.href = "/audit";
         }
     }
-    
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         await Axios.post("http://localhost:3001/audit/log", {date: date});
@@ -38,7 +38,7 @@ function AddAudit() {
 
     return (
         <div>
-
+            <Navbar />
             <form onSubmit={handleSubmit}>
                 {inventory.map((val, index) => {
                     return(
