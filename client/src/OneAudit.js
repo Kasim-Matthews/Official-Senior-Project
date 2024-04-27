@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ViewAudit() {
 
@@ -20,6 +21,7 @@ function ViewAudit() {
 
     return (
         <div>
+            <Navbar />
             <header>Audit was created on {new Date(date).toLocaleDateString()}</header>
             <table>
                 <thead>

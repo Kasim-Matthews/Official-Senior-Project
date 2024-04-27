@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Navbar from './components/navbar';
 
 function ViewLocation() {
     const navigate = useNavigate();
@@ -44,6 +45,7 @@ function ViewLocation() {
     const incomingTotal = incoming.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
     return (
         <div>
+            <Navbar />
             <h2> Storage Location Info for {record.Name}</h2>
             <table>
                 <thead>

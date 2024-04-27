@@ -4,9 +4,11 @@ const dbconfig = require('../database');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Lindsey1!",
+    password: "WebVoyage2023!",
     database: 'claire',
-    port: 3306
+    port: 3006,
+    connectionLimit: 50,
+    multipleStatements: true
 });
 
 const vendor_index = async (req, res) => {

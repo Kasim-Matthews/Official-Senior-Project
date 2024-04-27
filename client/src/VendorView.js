@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 
 function VendorView() {
@@ -50,7 +51,7 @@ function VendorView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/vendor").then((response) => {
+        Axios.get("http://localhost:3001/vendor").then((response) => {
             if (response.data.status === 'complete') {
                 setVendorList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {
@@ -73,6 +74,7 @@ function VendorView() {
     if (records.length == 0) {
         return (
             <div>
+                <Navbar />
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 
@@ -102,6 +104,7 @@ function VendorView() {
     else {
         return (
             <div>
+                <Navbar />
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 

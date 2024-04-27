@@ -21,6 +21,13 @@ function AddPurchase() {
         }
     ])
 
+
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/purchase";
+        }
+    }
+    
     function handleChange(event) {
         setFormData(prevFormData => {
             return {
@@ -75,7 +82,7 @@ function AddPurchase() {
     };
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/vendor/list").then((response) => {
+        Axios.get("http://localhost:3001/vendor/list").then((response) => {
             if (response.data.status === 'complete') {
                 setVendors(response.data);
             }
@@ -115,10 +122,10 @@ function AddPurchase() {
     }
 
     const handleSubmit = async () => {
-        await Axios.post("http://localhost:3306/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
-        let IL_response = await Axios.post("http://localhost:3306/purchase/location", { Items: items, Location_id: formData.Location })
-        await Axios.post("http://localhost:3306/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
-        await Axios.put("http://localhost:3306/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
+        await Axios.post("http://localhost:3001/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
+        let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Items: items, Location_id: formData.Location })
+        await Axios.post("http://localhost:3001/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
+        await Axios.put("http://localhost:3001/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
         window.location.href = "/purchase";
 
 
@@ -184,6 +191,7 @@ function AddPurchase() {
 
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

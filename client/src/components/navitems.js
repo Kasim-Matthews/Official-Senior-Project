@@ -8,7 +8,7 @@ export const navItems = [
     {
         id: 2,
         title: "Distributions",
-        path: "/distributions",
+        path: "/distribution",
         cName: "nav-item",
     },
     {

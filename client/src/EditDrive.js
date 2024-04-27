@@ -12,7 +12,7 @@ function EditDrive() {
 
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/productdrive/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3001/productdrive/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         response.data.data.map((key, value) => { setFormData(key) });
       }
@@ -27,6 +27,14 @@ function EditDrive() {
       console.error(error.response.data.message)
     })
   }, [])
+
+
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/productdrive";
+    }
+}
+
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -70,6 +78,7 @@ function EditDrive() {
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
         <input type="submit" value="Submit" />
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   )

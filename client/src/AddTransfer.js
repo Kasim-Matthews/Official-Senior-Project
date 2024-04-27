@@ -15,6 +15,13 @@ function AddTransfer() {
         Comments: ""
     })
 
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/transfer";
+        }
+    }
+
+
     const [index, setIndex] = React.useState(1);
 
     const [items, setItems] = React.useState([
@@ -142,13 +149,13 @@ function AddTransfer() {
 
 
     const handleSubmit = async () => {
-        await Axios.put('http://localhost:3306/transfer/give', {Location:formData.To, Items: items})
-        await Axios.put('http://localhost:3306/transfer/take', {Location:formData.From.Location, Items: items})
-        await Axios.post("http://localhost:3306/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
-        let ild = await Axios.post("http://localhost:3306/transfer/ild", {Items: items, Location: formData.To});
-        let Values = await Axios.post('http://localhost:3306/transfer/values', {Items: items});
+        await Axios.put('http://localhost:3001/transfer/give', {Location:formData.To, Items: items})
+        await Axios.put('http://localhost:3001/transfer/take', {Location:formData.From.Location, Items: items})
+        await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
+        let ild = await Axios.post("http://localhost:3001/transfer/ild", {Items: items, Location: formData.To});
+        let Values = await Axios.post('http://localhost:3001/transfer/values', {Items: items});
 
-       await Axios.post('http://localhost:3306/transfer/track', { Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
+       await Axios.post('http://localhost:3001/transfer/track', { Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
 
     }
 
@@ -200,6 +207,7 @@ function AddTransfer() {
             </button>
 
             <input type="submit" value="Submit" />
+            <button onClick={handleCancel}>Cancel</button>
         </form>
     )
 }

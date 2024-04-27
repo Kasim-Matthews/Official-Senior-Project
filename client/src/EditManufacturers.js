@@ -10,6 +10,12 @@ function EditManufacturers() {
   const navigate = useNavigate();
 
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/manufacturers";
+    }
+}
+
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -21,7 +27,7 @@ function EditManufacturers() {
   }
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/manufacturers/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3001/manufacturers/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         response.data.data.map((key, value) => { setFormData(key) });
       }
@@ -56,6 +62,7 @@ function EditManufacturers() {
       <label htmlFor="Name">Name</label>
       <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} />
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

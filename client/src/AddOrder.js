@@ -57,6 +57,9 @@ function AddOrder() {
     }
   ])
 
+
+
+
   const handleItem = (e, index) => {
     const values = [...items];
     values[index].Item_id = e.target.value;
@@ -160,7 +163,7 @@ function AddOrder() {
   const handleSubmit = async () => {
 
     try {
-      Axios.post("http://localhost:3306/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
+      Axios.post("http://localhost:3001/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

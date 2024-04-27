@@ -15,6 +15,13 @@ function AddDonationSite(){
         })
     }
 
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/donationsite";
+        }
+    }
+    
+
     const validate = (e) => {
         e.preventDefault();
         const errors = {};
@@ -59,6 +66,7 @@ function AddDonationSite(){
                 {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

@@ -50,7 +50,7 @@ function DonationSiteView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/donationsite").then((response) => {
+        Axios.get("http://localhost:3001/donationsite").then((response) => {
             if (response.data.status === 'complete') {
                 setDsiteList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {

@@ -22,6 +22,12 @@ function EditIntake() {
   const Types = ["Product Drive", "Donation Site", "Manufacturer", "Misc Donation"]
 
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/intake";
+    }
+}
+
   function listtype() {
     if (sourceType == "Product Drive") {
       return (
@@ -258,6 +264,7 @@ function EditIntake() {
 
 
         <input type="submit" value="Submit" />
+        <button onClick={handleCancel}>Cancel</button>
 
       </form>
     </div>

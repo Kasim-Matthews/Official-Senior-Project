@@ -20,6 +20,13 @@ function AddPartner(){
         Email:"",
     })
 
+
+    function handleCancel() {
+      if (window.confirm("Are you sure you want to cancel") == true) {
+          window.location.href = "/partner";
+      }
+  }
+
     const [formErrors, setFormErrors] = React.useState({})
 
     function handleChange(event){
@@ -65,7 +72,7 @@ function AddPartner(){
       function handleSubmit(e){
         e.preventDefault();
         
-        Axios.post("http://localhost:3306/partner/new", {name:formData.Name,
+        Axios.post("http://localhost:3001/partner/new", {name:formData.Name,
         email:formData.Email},{
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -114,6 +121,7 @@ function AddPartner(){
           <TextField id="email" label="Email" variant="outlined" value={formData.Email} onChange={handleChange} required/><br></br>
           
             <Button type="submit">Submit</Button>
+            <Button onClick={handleCancel}>Cancel</Button>
         
         </form>
         </div>

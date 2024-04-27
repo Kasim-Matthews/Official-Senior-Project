@@ -11,6 +11,13 @@ function AddLocation() {
   const [formErrors, setFormErrors] = useState({})
 
 
+
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/location";
+    }
+}
+
   function handleChange(event) {
     setFormData(prevFormData => {
       return {
@@ -59,8 +66,8 @@ function AddLocation() {
     
 
 
-    await Axios.post("http://localhost:3306/location/partner", {name: formData.Name, address: formData.Address})
-    await Axios.post("http://localhost:3306/location/pair", {Items: items}).then(window.location.href ="/location")
+    await Axios.post("http://localhost:3001/location/partner", {name: formData.Name, address: formData.Address})
+    await Axios.post("http://localhost:3001/location/pair", {Items: items}).then(window.location.href ="/location")
 
 
     
@@ -82,6 +89,7 @@ function AddLocation() {
       {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

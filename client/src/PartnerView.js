@@ -20,6 +20,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ErrorHandler from "./ErrorHandler";
 import AppBar from '@mui/material/AppBar';
+import Navbar from './components/navbar';
 
 function PartnerView() {
 
@@ -77,8 +78,8 @@ function PartnerView() {
     }, [])
 
 
-    if (partnerList[0] == "error"){
-        return(
+    if (partnerList[0] == "error") {
+        return (
             <ErrorHandler />
         )
     }
@@ -86,59 +87,28 @@ function PartnerView() {
 
     return (
         <div>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0' }}>
-                    <Toolbar>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>**
-                            <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
-                        </Typography>
-                        <div>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                </Box>
+            <Navbar />
             <Button variant="contained"><Link to="/partner/new" style={{ textDecoration: 'none', color: 'white' }}>Add Partner</Link></Button>
             <TableContainer component={Paper}>
-                                        <Table sx={{ minWidth: 450 }} aria-label="a simple table">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell align="left">Name</TableCell>
-                                                    <TableCell align="left">Email</TableCell>
-                                                    <TableCell align="left">Actions</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                            {partnerList.map((val) => {
-                                                return (
-                                                    <TableRow>
-                                                        <TableCell>{val.Name}</TableCell>
-                                                        <TableCell>{val.Email}</TableCell>
-                                                        <TableCell>
-                                                            <Button onClick={() => handleRemove(val.Partner_id)}>Delete</Button>
-                                                            <Button onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
-                                                            <Button onClick={() => handleView(val.Partner_id)}>View</Button>
-                                                        </TableCell>
+                <Table sx={{ minWidth: 450 }} aria-label="a simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="left">Name</TableCell>
+                            <TableCell align="left">Email</TableCell>
+                            <TableCell align="left">Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {partnerList.map((val) => {
+                            return (
+                                <TableRow>
+                                    <TableCell>{val.Name}</TableCell>
+                                    <TableCell>{val.Email}</TableCell>
+                                    <TableCell>
+                                        <Button onClick={() => handleRemove(val.Partner_id)}>Delete</Button>
+                                        <Button onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
+                                        <Button onClick={() => handleView(val.Partner_id)}>View</Button>
+                                    </TableCell>
 
                                 </TableRow>
                             );

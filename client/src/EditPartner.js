@@ -9,7 +9,11 @@ function EditPartner() {
   const [formErrors, setFormErrors] = React.useState({})
 
 
-
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/partner";
+    }
+}
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -77,6 +81,7 @@ function EditPartner() {
       {formErrors.Email ? <p>{formErrors.Email}</p> : null}
       
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

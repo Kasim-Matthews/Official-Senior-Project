@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ViewDonationSite() {
 
@@ -15,7 +16,7 @@ function ViewDonationSite() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/donationsite/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/donationsite/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data[0])
             }
@@ -33,7 +34,7 @@ function ViewDonationSite() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/donationsite/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/donationsite/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setIntakeList(response.data.data)
             }
@@ -54,6 +55,7 @@ function ViewDonationSite() {
     if (intakeList.length === 0) {
         return (
             <div>
+                <Navbar />
                 <table>
                     <thead>
                         <tr>
@@ -86,6 +88,7 @@ function ViewDonationSite() {
     else {
         return (
             <div>
+                <Navbar />
                 <table>
                     <thead>
                         <tr>

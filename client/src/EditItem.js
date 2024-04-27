@@ -9,6 +9,11 @@ function EditItem() {
   const [formErrors, setFormErrors] = useState({})
 
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/item";
+    }
+}
 
 
   function handleChange(event) {
@@ -71,6 +76,7 @@ function EditItem() {
       <input type="number" name="PackageCount" id="PackageCount" defaultValue={formData.PackageCount == null ? 0 : formData.PackageCount} step="1" onChange={handleChange} />
 
       <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

@@ -5,6 +5,7 @@ import { DateRangePicker } from 'react-date-range'
 import { addDays } from 'date-fns';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import Navbar from './components/navbar';
 
 function AuditView() {
     const navigate = useNavigate();
@@ -66,7 +67,7 @@ function AuditView() {
 
     return (
         <div>
-
+            <Navbar />
             <form onSubmit={handleSubmit}>
 
                 <label>

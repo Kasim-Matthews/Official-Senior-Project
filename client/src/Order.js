@@ -35,6 +35,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Stack from '@mui/material/Stack';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import Navbar from './components/navbar';
 
 
 
@@ -47,7 +48,7 @@ function Order() {
     Partner: "",
     Location: "",
     DeliveryMethod: "",
-    Date:{}
+    Date: {}
   })
 
   const [distributionsList, setDistributionsList] = React.useState([])
@@ -74,14 +75,14 @@ function Order() {
   //Change page
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
-  function clearFilters(e){
+  function clearFilters(e) {
     e.preventDefault();
 
     setFilters({
       Partner: "",
       Location: "",
       DeliveryMethod: "",
-      Date:{}
+      Date: {}
     })
     setRecords(distributionsList)
   }
@@ -182,111 +183,80 @@ function Order() {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   return (
     <div>
-      <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
-                    <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
-                    </Typography>
-                        <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                </Box>
+      <Navbar />
       <h2>Distributions Table</h2>
       <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Filters</Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: 'form',
-          onSubmit: (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
-            handleClose();
-          },
-        }}
-      >
-        <DialogTitle>Filters</DialogTitle>
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Filters</Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          }}
+        >
+          <DialogTitle>Filters</DialogTitle>
           <DialogContent>
-          <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
               <div className='partner'>
-            <TextField
-              id="outlined-select-partner"
-              select
-              label="Partner"
-              defaultValue="Partner"
-              helperText="Please select a partner"
-            >
-              <MenuItem className="Partner" onChange={handleChange}>
-                </MenuItem>
-              {partners.map((option) => (
-                <MenuItem value={option.Name}>
-                  {option.Name}
-                </MenuItem>
-              ))}
-            </TextField>
-            </div>
-            <div className='delivery'>
-            <FormControl>
-              <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="delivery-method-label"
-                name="delivery-method-group"
-                value={filters.DeliveryMethod}
-              >
-                <FormControlLabel value="" control={<Radio />} label="All" />
-                <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" />
-                <FormControlLabel value="Other" control={<Radio />} label="Other" />
-              </RadioGroup>
-            </FormControl>
-            </div>
-            <div className='date'>
-            <LocalizationProvider  dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']}>
-              </DemoContainer>
-            </LocalizationProvider>
-            </div>   
-            <div className='submit'>
-            <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Submit</Button>
-        </DialogActions>
-            </div>
+                <TextField
+                  id="outlined-select-partner"
+                  select
+                  label="Partner"
+                  defaultValue="Partner"
+                  helperText="Please select a partner"
+                >
+                  <MenuItem className="Partner" onChange={handleChange}>
+                  </MenuItem>
+                  {partners.map((option) => (
+                    <MenuItem value={option.Name}>
+                      {option.Name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+              <div className='delivery'>
+                <FormControl>
+                  <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="delivery-method-label"
+                    name="delivery-method-group"
+                    value={filters.DeliveryMethod}
+                  >
+                    <FormControlLabel value="" control={<Radio />} label="All" />
+                    <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" />
+                    <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className='date'>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker']}>
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+              <div className='submit'>
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <Button type="submit">Submit</Button>
+                </DialogActions>
+              </div>
             </form>
           </DialogContent>
-      </Dialog>
-    </React.Fragment>
+        </Dialog>
+      </React.Fragment>
       <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
       <Button variant="contained"><Link to="/distribution/new" style={{ textDecoration: 'none', color: 'white' }}>Add</Link></Button>
       <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />

@@ -14,6 +14,14 @@ function AddIntake() {
     Partner: 0,
     Location: 0
   })
+
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/intake";
+    }
+}
+
+
   const [sourceType, setSourceType] = React.useState("")
   const [locations, setLocations] = React.useState([])
 
@@ -150,13 +158,13 @@ function AddIntake() {
     return;
 }
   const submitDonation = async () => {
-    await Axios.post("http://localhost:3306/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
+    await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value })
 
-    let V_response = await Axios.post("http://localhost:3306/intake/find_value", { Items: items })
-    let IL_response = await Axios.post("http://localhost:3306/intake/location", { Items: items, Location_id: formData.Location })
+    let V_response = await Axios.post("http://localhost:3001/intake/find_value", { Items: items })
+    let IL_response = await Axios.post("http://localhost:3001/intake/location", { Items: items, Location_id: formData.Location })
 
-    await Axios.post("http://localhost:3306/intake/track", { Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
-    await Axios.put("http://localhost:3306/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
+    await Axios.post("http://localhost:3001/intake/track", { Items: items, Values: V_response.data, FKItemLocation: IL_response.data });
+    await Axios.put("http://localhost:3001/intake/update_item", { Items: items, ItemLocationFK: IL_response.data });
     window.location.href = "/intake";
   }
 
@@ -213,7 +221,7 @@ function AddIntake() {
         </button>
 
         <input type="submit" value="Submit" />
-
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
 

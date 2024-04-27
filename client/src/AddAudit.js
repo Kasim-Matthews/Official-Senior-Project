@@ -14,11 +14,18 @@ function AddAudit() {
       }
 
 
+      function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/audit";
+        }
+    }
+    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await Axios.post("http://localhost:3306/audit/log", {date: date});
-        await Axios.post("http://localhost:3306/audit/new", {Audits: inventory});
-        await Axios.put("http://localhost:3306/audit/update", {Audits: inventory});
+        await Axios.post("http://localhost:3001/audit/log", {date: date});
+        await Axios.post("http://localhost:3001/audit/new", {Audits: inventory});
+        await Axios.put("http://localhost:3001/audit/update", {Audits: inventory});
         window.location.href = `/audit`;
     }
 
@@ -43,6 +50,7 @@ function AddAudit() {
                 })}
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ViewVendor() {
 
@@ -15,7 +16,7 @@ function ViewVendor() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/vendor/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/vendor/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data[0])
             }
@@ -33,7 +34,7 @@ function ViewVendor() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/vendor/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/vendor/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setIntakeList(response.data.data)
             }
@@ -54,6 +55,7 @@ function ViewVendor() {
     if (intakeList.length === 0) {
         return (
             <div>
+                <Navbar />
                 <h3>Vendor Information for {record.BusinessName}</h3>
                 <table>
                     <thead>
@@ -91,6 +93,7 @@ function ViewVendor() {
     else {
         return (
             <div>
+                <Navbar />
                 <h3>Vendor Information for {record.BusinessName}</h3>
                 <table>
                     <thead>

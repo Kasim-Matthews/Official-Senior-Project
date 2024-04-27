@@ -13,6 +13,13 @@ function EditPurchase() {
     const [index, setIndex] = React.useState(0);
     const [items, setItems] = React.useState([])
 
+
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/purchase";
+        }
+    }
+
     function handleChange(event) {
         setFormData(prevFormData => {
             return {
@@ -212,6 +219,7 @@ function EditPurchase() {
 
 
                 <input type="submit" value="Submit" />
+                <button onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

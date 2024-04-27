@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function LocationView() {
     const navigate = useNavigate();
@@ -58,6 +59,7 @@ function LocationView() {
 
     return (
         <div>
+            <Navbar />
             <form onSubmit={handleSubmit}>
                 <div style={{ display: "flex" }}>
 

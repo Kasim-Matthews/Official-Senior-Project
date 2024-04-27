@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ViewManufacturer() {
 
@@ -10,7 +11,7 @@ function ViewManufacturer() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/manufacturers/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/manufacturers/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data)
             }
@@ -35,7 +36,7 @@ function ViewManufacturer() {
 
     return (
         <div>
-
+            <Navbar />
             <table>
                 <thead>
                     <tr>

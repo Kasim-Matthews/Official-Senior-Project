@@ -29,6 +29,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
+import Navbar from './components/navbar';
 
 
 function Purchase() {
@@ -97,19 +98,19 @@ function Purchase() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/vendor/list").then((response) => {
+        Axios.get("http://localhost:3001/vendor/list").then((response) => {
             if (response.data.status === 'complete') {
                 setPartners(response.data.data);
             }
 
-            else if (response.data.status === 'error in query'){
+            else if (response.data.status === 'error in query') {
                 navigate('/query')
                 console.error("Fail in the query loading vendor options for the filter")
                 console.error(response.data.message)
             }
         }).catch(error => {
             navigate('/error')
-            console.error(error.response.data.message)
+            console.error(error)
         })
     }, [])
 
@@ -145,12 +146,12 @@ function Purchase() {
 
         if (filters.Vendor != "") {
             temp = temp.filter(f => f.Name == filters.Vendor);
-            
+
         }
 
         if (filters.Location != "") {
             temp = temp.filter(f => f.Location == filters.Location);
-            
+
         }
 
 
@@ -162,60 +163,29 @@ function Purchase() {
         setRecords(temp);
     }
 
-  const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+    const handleClose = () => {
+        setOpen(false);
+    };
 
 
 
     return (
         <div>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
-                    <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
-                    </Typography>
-                        <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                </Box>
-                <h2>Purchases</h2>
-                    <React.Fragment>
-                    <Button variant="outlined" onClick={handleClickOpen}>
-                        Filters</Button>
-                    <Dialog
-                        open={open}
-                        onClose={handleClose}
-                        PaperProps={{
+            <Navbar />
+            <h2>Purchases</h2>
+            <React.Fragment>
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    Filters</Button>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
                         component: 'form',
                         onSubmit: (event) => {
                             event.preventDefault();
@@ -225,55 +195,55 @@ function Purchase() {
                             console.log(email);
                             handleClose();
                         },
-                        }}
-                    >
-                        <DialogTitle>Filters</DialogTitle>
-                        <DialogContent>
+                    }}
+                >
+                    <DialogTitle>Filters</DialogTitle>
+                    <DialogContent>
                         <form onSubmit={handleSubmit}>
                             <div className='vendor'>
-                            <TextField
-                            id="outlined-select-vendor"
-                            select
-                            label="Vendor"
-                            defaultValue="Vendor"
-                            helperText="Please select a vendor"
-                            >
-                            {partners.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                                </MenuItem>
-                            ))}
-                            </TextField>
+                                <TextField
+                                    id="outlined-select-vendor"
+                                    select
+                                    label="Vendor"
+                                    defaultValue="Vendor"
+                                    helperText="Please select a vendor"
+                                >
+                                    {partners.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                             </div>
                             <div className='location'>
-                            <TextField
-                            id="outlined-select-location"
-                            select
-                            label="Location"
-                            defaultValue="Location"
-                            helperText="Please select a location"
-                            >
-                            {locations.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                                </MenuItem>
-                            ))}
-                            </TextField>
+                                <TextField
+                                    id="outlined-select-location"
+                                    select
+                                    label="Location"
+                                    defaultValue="Location"
+                                    helperText="Please select a location"
+                                >
+                                    {locations.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
                             </div>
                             <div className='date'>
-                            
-                            </div>   
-                            <div className='submit'>
-                            <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit">Submit</Button>
-                        </DialogActions>
+
                             </div>
-                            </form>
-                        </DialogContent>
-                    </Dialog>
-                    </React.Fragment>
-            
+                            <div className='submit'>
+                                <DialogActions>
+                                    <Button onClick={handleClose}>Cancel</Button>
+                                    <Button type="submit">Submit</Button>
+                                </DialogActions>
+                            </div>
+                        </form>
+                    </DialogContent>
+                </Dialog>
+            </React.Fragment>
+
             <button><Link to="/purchase/new">Add</Link></button>
 
             <PurchasePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />

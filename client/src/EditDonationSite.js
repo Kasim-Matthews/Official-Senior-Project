@@ -9,7 +9,7 @@ function EditDonationSite() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/donationsite/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3001/donationsite/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         response.data.data.map((key, value) => { setFormData(key) });
       }
@@ -24,6 +24,12 @@ function EditDonationSite() {
       console.error(error.response.data.message)
     })
   }, [])
+
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/donationsite";
+    }
+}
 
 
   function handleChange(event) {
@@ -56,7 +62,7 @@ function EditDonationSite() {
   }
 
   async function handleSubmit() {
-    await Axios.put(`http://localhost:3306/donationsite/${id}/update`, {
+    await Axios.put(`http://localhost:3001/donationsite/${id}/update`, {
       name: formData.Name,
       address: formData.Address
     }, {
@@ -78,6 +84,7 @@ function EditDonationSite() {
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
         <input type="submit" value="Submit" />
+        <button onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   )
