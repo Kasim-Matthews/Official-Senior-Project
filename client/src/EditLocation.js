@@ -103,7 +103,7 @@ function EditLocation() {
       {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
       <input type="submit" value="Submit" />
-      <button onClick={handleCancel}>Cancel</button>
+      <button type="button" onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

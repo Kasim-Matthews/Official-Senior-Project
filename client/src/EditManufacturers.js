@@ -86,7 +86,7 @@ function EditManufacturers() {
       <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} />
       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
       <input type="submit" value="Submit" />
-      <button onClick={handleCancel}>Cancel</button>
+      <button type="button" onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

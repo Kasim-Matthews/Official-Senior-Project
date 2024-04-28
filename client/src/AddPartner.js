@@ -85,7 +85,7 @@ function AddPartner() {
       {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
       <button type="submit">Submit</button>
-      <button onClick={handleCancel}>Cancel</button>
+      <button type="button" onClick={handleCancel}>Cancel</button>
     </form>
   );
 }
