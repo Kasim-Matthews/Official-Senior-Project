@@ -122,7 +122,7 @@ function AddIntake() {
 
 
   useEffect(() => {
-    Axios.get("http://localhost:33001/location/use").then((response) => {
+    Axios.get("http://localhost:3001/location/use").then((response) => {
       setLocations(response.data);
     })
   }, [])

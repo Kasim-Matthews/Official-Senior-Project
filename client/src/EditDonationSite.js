@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function EditDonationSite() {
   const { id } = useParams();
@@ -77,10 +78,10 @@ function EditDonationSite() {
     <div>
       <Navbar />
       <form onSubmit={validate}>
-        <Textfield variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-        <Textfield variant="outlined" label="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} />
+        <TextField variant="outlined" label="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} />
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
         <input type="submit" value="Submit" />

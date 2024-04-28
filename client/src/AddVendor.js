@@ -71,13 +71,13 @@ function AddVendor() {
         <div>
           <Navbar />
             <form onSubmit={validate}>
-                <Textfield variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
+                <TextField variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-                <Textfield variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange}/>
+                <TextField variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange}/>
                 {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
-                <Textfield variant="outlined" label="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange}/>
+                <TextField variant="outlined" label="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange}/>
                 {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
-                <Textfeild variant="outlined" name="Email" id="Email" value={formData.Email} onChange={handleChange}/>
+                <TextField variant="outlined" name="Email" id="Email" value={formData.Email} onChange={handleChange}/>
                 {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
 

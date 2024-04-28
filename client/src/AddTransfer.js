@@ -4,6 +4,11 @@ import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
 
 
 function AddTransfer() {
@@ -165,7 +170,7 @@ function AddTransfer() {
         <>
         <Navbar />
         <form onSubmit={validate}>
-            <Textfield defaultValue="From" helperText="Please select a location" select id="From" name="From" onChange={handleFrom}/>
+            <TextField defaultValue="From" helperText="Please select a location" select id="From" name="From" onChange={handleFrom}/>
                 {from.map((val, index) => {
                     return (
                         <option value={index}>{val.Name}</option>
@@ -173,7 +178,7 @@ function AddTransfer() {
                 })}
             <br />
 
-            <Textfield select defaultValue="To" helperText="Please select a location" id="To" name="To" onChange={handleChange}/>
+            <TextField select defaultValue="To" helperText="Please select a location" id="To" name="To" onChange={handleChange}/>
                 {to.map((val) => {
                     if(val.Location_id == formData.From.Location){
                         return(null);

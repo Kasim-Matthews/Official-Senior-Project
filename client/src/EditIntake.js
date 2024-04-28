@@ -6,6 +6,7 @@ import EditDriveList from "./components/EditDriveList";
 import EditDonationSiteList from './components/EditDonationSiteList';
 import EditManufacturerList from './components/EditManufacturerList';
 import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function EditIntake() {
 
@@ -198,7 +199,7 @@ function EditIntake() {
       <h2>Intake</h2>
       <form id="intake" onSubmit={typechecker}>
 
-        <Textfield select defaultValue="Source" helperText="Please select a source" id="Source" onChange={sourceChange}/>
+        <TextField select defaultValue="Source" helperText="Please select a source" id="Source" onChange={sourceChange}/>
           {Types.map((type) => {
             if (formData.Type == type) {
               return (

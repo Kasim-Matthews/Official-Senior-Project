@@ -5,6 +5,11 @@ import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
 
 
 function AddPurchase() {
@@ -139,7 +144,7 @@ function AddPurchase() {
             <Navbar />
             <h2>Purchase</h2>
             <form onSubmit={validate}>
-                <Textfield select defaultValue="Vendor" helperText="Please select a vendor" id="Vendor" label="Vendor" value={formData.Vendor} onChange={handleChange}/>
+                <TextField select defaultValue="Vendor" helperText="Please select a vendor" id="Vendor" label="Vendor" value={formData.Vendor} onChange={handleChange}/>
                     {vendor.map((val) => {
                         return (
                             <option value={val.Partner_id}>{val.Name}</option>
@@ -147,7 +152,7 @@ function AddPurchase() {
                     })}
                 <br />
 
-                <Textfield select defaultValue="Location" helperText="Please select a location"  id="Location" name="Location" value={formData.Location} onChange={handleChange}/>
+                <TextField select defaultValue="Location" helperText="Please select a location"  id="Location" name="Location" value={formData.Location} onChange={handleChange}/>
                     {locations.map((val) => {
                         return (
                             <option value={val.Location_id}>{val.Name}</option>
