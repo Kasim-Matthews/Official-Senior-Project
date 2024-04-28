@@ -286,7 +286,7 @@ function AddOrder() {
       </button>
 
       <input type="submit" value="Submit" />
-      <button onClick={handleCancel}>Cancel</button>
+      <button type="button" onClick={handleCancel}>Cancel</button>
     </form>
     </div>
   )
