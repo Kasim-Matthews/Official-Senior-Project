@@ -25,6 +25,7 @@ const login = async (req, res) => {
     try {
         // Query the database for the user
         const rows = await sb.query(`SELECT * FROM public.user WHERE "Username" = '{${user}}'`);
+        console.log(rows.rows);
         const foundUser = rows.rows[0]; // Assuming usernames are unique, so we take the first result
         if (!foundUser) return res.sendStatus(401); // Unauthorized
 
