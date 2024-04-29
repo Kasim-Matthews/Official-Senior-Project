@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ProductDriveView() {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ function ProductDriveView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/productdrive").then((response) => {
+        Axios.get("http://localhost:3001/productdrive").then((response) => {
             if (response.data.status == 'complete') {
                 setDriveList(response.data.data);
                 setRecords(response.data.data.filter(function (currentObject) {
@@ -72,7 +73,7 @@ function ProductDriveView() {
 
     if (records.length == 0) {
         <div>
-
+            <Navbar />
             <form onSubmit={handleSubmit}>
                 <div style={{ display: "flex" }}>
 
@@ -104,7 +105,7 @@ function ProductDriveView() {
     else {
         return (
             <div>
-
+                <Navbar />
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 

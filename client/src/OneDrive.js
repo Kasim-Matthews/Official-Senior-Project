@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ViewDrive() {
 
@@ -15,7 +16,7 @@ function ViewDrive() {
 
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/productdrive/${id}/edit`).then((response) => {
+        Axios.get(`http://localhost:3001/productdrive/${id}/edit`).then((response) => {
             if (response.data.status === 'complete') {
                 setRecord(response.data.data[0])
             }
@@ -32,7 +33,7 @@ function ViewDrive() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`http://localhost:3306/productdrive/${id}/view`).then((response) => {
+        Axios.get(`http://localhost:3001/productdrive/${id}/view`).then((response) => {
             if (response.data.status === 'complete') {
                 setIntakeList(response.data.data)
             }
@@ -53,6 +54,7 @@ function ViewDrive() {
     if (intakeList.length === 0) {
         return (
             <div>
+                <Navbar />
                 <table>
                     <thead>
                         <tr>
@@ -85,6 +87,7 @@ function ViewDrive() {
     else {
         return (
             <div>
+                <Navbar />
                 <table>
                     <thead>
                         <tr>

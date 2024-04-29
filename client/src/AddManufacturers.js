@@ -7,6 +7,13 @@ function AddManufacturers() {
   const [formData, setFormData] = React.useState(Manufacturer)
   const [formErrors, setFormErrors] = useState({})
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/manufacturers";
+    }
+}
+
+
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -35,7 +42,7 @@ function AddManufacturers() {
 
   function handleSubmit() {
     try {
-      Axios.post("http://localhost:3306/manufacturers/new", { name: formData.Name}, {
+      Axios.post("http://localhost:3001/manufacturers/new", { name: formData.Name}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -53,6 +60,7 @@ function AddManufacturers() {
       <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange} />
       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
       <input type="submit" value="Submit" />
+      <button type="button" onClick={handleCancel}>Cancel</button>
     </form>
   )
 }

@@ -4,7 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
 import EditDriveList from "./components/EditDriveList";
 import EditDonationSiteList from './components/EditDonationSiteList';
-import EditManufacturerList from './components/EditManufacturerList'
+import EditManufacturerList from './components/EditManufacturerList';
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function EditIntake() {
 
@@ -21,6 +23,12 @@ function EditIntake() {
 
   const Types = ["Product Drive", "Donation Site", "Manufacturer", "Misc Donation"]
 
+
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/intake";
+    }
+}
 
   function listtype() {
     if (sourceType == "Product Drive") {
@@ -187,12 +195,11 @@ function EditIntake() {
 
   return (
     <div>
+      <Navbar />
       <h2>Intake</h2>
       <form id="intake" onSubmit={typechecker}>
 
-        <label htmlFor="Source">Source</label>
-        <select id="Source" onChange={sourceChange}>
-          <option value="" disabled></option>
+        <TextField select defaultValue="Source" helperText="Please select a source" id="Source" onChange={sourceChange}/>
           {Types.map((type) => {
             if (formData.Type == type) {
               return (
@@ -205,7 +212,6 @@ function EditIntake() {
               )
             }
           })}
-        </select>
         <br />
 
         {sourceType != "" ? listtype() : null}
@@ -258,6 +264,7 @@ function EditIntake() {
 
 
         <input type="submit" value="Submit" />
+        <button type="button" onClick={handleCancel}>Cancel</button>
 
       </form>
     </div>

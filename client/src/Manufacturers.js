@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import ErrorHandler from "./ErrorHandler";
+import Navbar from './components/navbar';
 
 function Manufacturers() {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ function Manufacturers() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/manufacturers").then((response) => {
+        Axios.get("http://localhost:3001/manufacturers").then((response) => {
             if (response.data.status === 'complete') {
                 setManuList(response.data.data);
                 setRecords(response.data.data.filter(function (currentObject) {
@@ -74,6 +75,7 @@ function Manufacturers() {
     if (records.length == 0) {
         return (
             <div>
+                <Navbar />
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 
@@ -101,6 +103,7 @@ function Manufacturers() {
     else {
         return (
             <div>
+                <Navbar />
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 

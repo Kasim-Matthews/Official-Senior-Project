@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Navbar from './components/navbar';
 
 function ItemView() {
     const navigate = useNavigate();
@@ -80,6 +81,7 @@ function ItemView() {
 
     return (
         <div>
+            <Navbar />
             <form onSubmit={handleSubmit}>
                 <div style={{display: "flex"}}>
 

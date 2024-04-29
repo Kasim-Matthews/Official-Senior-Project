@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
 
 
 function EditVendor() {
@@ -11,7 +12,7 @@ function EditVendor() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    Axios.get(`http://localhost:3306/vendor/${id}/edit`).then((response) => {
+    Axios.get(`http://localhost:3001/vendor/${id}/edit`).then((response) => {
       if (response.data.status === 'complete') {
         response.data.data.map((key, value) => { setFormData(key) });
       }
@@ -26,6 +27,13 @@ function EditVendor() {
       console.error(error.response.data.message)
     })
   }, [])
+
+
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/vendor";
+    }
+}
 
 
   function handleChange(event) {
@@ -97,6 +105,7 @@ function EditVendor() {
 
 
         <input type="submit" value="Submit" />
+        <button type="button" onClick={handleCancel}>Cancel</button>
       </form>
     </div>
   )

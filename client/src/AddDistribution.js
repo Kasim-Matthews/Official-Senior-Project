@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import {useNavigate} from "react-router-dom";
 import Partner from "./Partner";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function AddDistribution(){
     const navigate = useNavigate();
@@ -100,17 +102,27 @@ function AddDistribution(){
           
 
           return(
+            <>
+            <Navbar />
             <form id="distribution" onSubmit={handleSubmit}>
                 <label htmlFor="Partner">Partner</label>
-                <select id="Partner" name="Partner" value={formData.Partner} onChange={handleChange}>
-                  <option value="">--Please choose an option--</option>
+                <TextField
+                  select
+                  label="Partner"
+                  defaultValue="Partner"
+                  helperText="Please select a partner" 
+                  id="Partner" 
+                  value={formData.Partner} 
+                  onChange={handleChange}/>
                   {partners.map((val) =>{
                     return(
                       <option value={val.Partner_id}>{val.Name}</option>
                     )
-                  })}
-          
-                </select><br/>
+                  })}<br/>
+                  <LocalizationProvider  dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                    </DemoContainer>
+                  </LocalizationProvider>
                 <label htmlFor="RequestDate">RequestDate</label>
                 <input type="date" name="RequestDate" id="RequestDate" value={formData.RequestDate} min="2023-09-01" required onChange={handleChange}/>
                 
@@ -129,28 +141,25 @@ function AddDistribution(){
 
                   <h2>Items</h2>
                   <div style={{display: "flex"}}>
-                    <select id="item" name="item" value={formData.item} onChange={handleChange}>
-                      <option value="">--Please choose an option--</option>
+                    <Textfield select defaultValue="Item Name" helperText="Please select an item" id="item" name="item-name" value={formData.item} onChange={handleChange}/>
                       {items.map((val) =>{
                               return(
                                 <option value={val.Item_id}>{val.Name}</option>
                               )
                       })}
-                    </select>
 
-                    <select id="location" name="location" value={formData.location} onChange={handleChange}>
-                      <option value="">--Please choose an option--</option>
+                    <Textfield select defaultValue="Location" helperText="Please select a location" id="location" name="location" value={formData.location} onChange={handleChange}/>
                       {locations.map((val) =>{
                               return(
                                 <option value={val.Location_id}>{val.Name}</option>
                               )
                             })}
-                    </select>
           
                     <input type="number" name="Quantity" id="Quantity" required onChange={handleChange} value={formData.Quantity}/>
                   </div>
-                <input type="submit" value="Submit"/>
+                <Button variant="contained" type="submit" value="Submit"/>
             </form>
+          </>
           )
 }
 

@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link
 import './Home.css';
+import Navbar from './components/navbar';
 
 
 function Home() {

@@ -1,8 +1,4 @@
 /* General Styles */
-.dashboard-container {
-    margin: 0;
-    font-family: 'Open Sans', sans-serif;
-  }
 
 .header{
   background-color: white;
@@ -12,35 +8,6 @@
   font-size: 15px;
 }
   
-.navbar{
-  background-color: white;
-  color: #373a41;
-  margin-left: 600px;
-}
-
-.navbar ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background-color: white;
-}
-
-.navbar ul li {
-  float: left;
-}
-
-.navbar ul li a {
-  display: block;
-  color: #373a41;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-.navbar ul li a:hover {
-  color: black;
-}
 
 h1{
   text-align: center;

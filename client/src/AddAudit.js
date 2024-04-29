@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+
 
 function AddAudit() {
 
@@ -13,12 +16,16 @@ function AddAudit() {
         setInventory(values);
       }
 
-
+      function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/audit";
+        }
+    }
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await Axios.post("http://localhost:3306/audit/log", {date: date});
-        await Axios.post("http://localhost:3306/audit/new", {Audits: inventory});
-        await Axios.put("http://localhost:3306/audit/update", {Audits: inventory});
+        await Axios.post("http://localhost:3001/audit/log", {date: date});
+        await Axios.post("http://localhost:3001/audit/new", {Audits: inventory});
+        await Axios.put("http://localhost:3001/audit/update", {Audits: inventory});
         window.location.href = `/audit`;
     }
 
@@ -31,7 +38,7 @@ function AddAudit() {
 
     return (
         <div>
-
+            <Navbar />
             <form onSubmit={handleSubmit}>
                 {inventory.map((val, index) => {
                     return(
@@ -43,6 +50,7 @@ function AddAudit() {
                 })}
 
                 <input type="submit" value="Submit" />
+                <button type="button" onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

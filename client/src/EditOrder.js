@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
+import Navbar from "./components/navbar";
 
 function EditOrder() {
 
@@ -11,6 +12,14 @@ function EditOrder() {
   const [partners, setPartners] = React.useState([])
   const [locations, setLocations] = React.useState([])
   const [formErrors, setFormErrors] = useState({})
+
+
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/distribution";
+    }
+}
+
 
   const [index, setIndex] = React.useState(0);
 
@@ -161,6 +170,8 @@ function EditOrder() {
   }
 
   return (
+    <>
+    <Navbar/>
     <form id="edit distribution" onSubmit={validate}>
       <label htmlFor="Partner">Partner</label>
       <select id="Partner_id" name="Partner_id" onChange={handleChange}>
@@ -235,7 +246,9 @@ function EditOrder() {
 
 
       <input type="submit" value="Submit" />
+      <button type="button" onClick={handleCancel}>Cancel</button>
     </form>
+    </>
   )
 }
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ViewItem() {
 
@@ -25,6 +26,7 @@ function ViewItem() {
 
     return (
         <div>
+            <Navbar />
             <h2>Item Information for {record.Name}</h2>
             <table>
                 <thead>

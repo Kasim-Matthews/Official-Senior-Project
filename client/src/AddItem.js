@@ -11,6 +11,12 @@ function AddItem() {
   const [formErrors, setFormErrors] = useState({})
 
 
+  function handleCancel() {
+    if (window.confirm("Are you sure you want to cancel") == true) {
+        window.location.href = "/item";
+    }
+}
+
   function handleChange(event) {
     setFormData(prevFormData => {
       return {
@@ -80,6 +86,7 @@ function AddItem() {
 
 
       <input type="submit" value="Submit" />
+      <button type="button" onClick={handleCancel}>Cancel</button>
       
     </form>
     

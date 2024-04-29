@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-
+import Navbar from "./components/navbar";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
 function DonationSiteView() {
 
@@ -50,7 +58,7 @@ function DonationSiteView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/donationsite").then((response) => {
+        Axios.get("http://localhost:3001/donationsite").then((response) => {
             if (response.data.status === 'complete') {
                 setDsiteList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {
@@ -74,6 +82,7 @@ function DonationSiteView() {
     if (records.length === 0) {
         return (
             <div>
+                <Navbar/>
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 
@@ -84,16 +93,17 @@ function DonationSiteView() {
                     <input type="Submit" />
                 </form>
                 <button><Link to="/donationsite/new">Add</Link></button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Donation Site</th>
-                            <th>Address</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                </table>
-                <button><Link to="/Dashboard">Dasboard</Link></button>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableRow>Donation Site</TableRow>
+                            <TableRow>Address</TableRow>
+                            <TableRow>Actions</TableRow>
+                        </TableRow>
+                    </TableHead>
+                </Table>
+                </TableContainer>
             </div>
         )
     }
@@ -101,6 +111,7 @@ function DonationSiteView() {
     else {
         return (
             <div>
+                <Navbar/>
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 
@@ -110,7 +121,7 @@ function DonationSiteView() {
                     </div>
                     <input type="Submit" />
                 </form>
-                <button><Link to="/donationsite/new">Add</Link></button>
+                <Button variant="contained"><Link to="/donationsite/new">Add</Link></Button>
                 <table>
                     <thead>
                         <tr>

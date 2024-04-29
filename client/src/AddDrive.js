@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ProductDrive from "./models/ProductDrive";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
 
 function AddDrive(){
     const [formData, setFormData] = useState(ProductDrive)
@@ -13,6 +15,12 @@ function AddDrive(){
                 [event.target.name]: event.target.value
             }
         })
+    }
+
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/productdrive";
+        }
     }
 
     const validate = (e) => {
@@ -31,7 +39,7 @@ function AddDrive(){
     }
 
     async function handleSubmit() {
-        await Axios.post("http://localhost:3306/productdrive/new", {
+        await Axios.post("http://localhost:3001/productdrive/new", {
           name: formData.Name
         }, {
           headers: {
@@ -43,12 +51,13 @@ function AddDrive(){
 
     return(
         <div>
+            <Navbar />
             <form onSubmit={validate}>
-                <label htmlFor="Name">Name</label>
-                <input type="text" name="Name" id="Name" value={formData.Name} required onChange={handleChange}/>
+            <TextField id="name" label="Name" variant="outlined" type="text" value={formData.Name} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
                 <input type="submit" value="Submit" />
+                <button type="button" onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import {useNavigate, useParams} from "react-router-dom";
+import Navbar from "./components/navbar";
 
 function EditDistribution(){
     
@@ -47,9 +48,10 @@ function EditDistribution(){
       
           }
     return(
+      <>
+        <Navbar />
         <form id="edit distribution" onSubmit={handleSubmit}>
-                <label htmlFor="Partner">Partner</label>
-                <select id="Partner" name="Partner" defaultValue={formData.Partner} onChange={handleChange}>
+                <select id="Partner" label="Partner" defaultValue={formData.Partner} onChange={handleChange}>
                   <option value="">--Please choose an option--</option>
                   {partners.map((val) =>{
                     return(
@@ -75,6 +77,7 @@ function EditDistribution(){
 
                 <input type="submit" value="Submit"/>
             </form>
+          </>
     )
 }
 

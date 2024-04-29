@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
 
 
 function AddTransfer() {
@@ -14,6 +21,13 @@ function AddTransfer() {
         Date: new Date().toJSON().slice(0, 10),
         Comments: ""
     })
+
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/transfer";
+        }
+    }
+
 
     const [index, setIndex] = React.useState(1);
 
@@ -142,32 +156,29 @@ function AddTransfer() {
 
 
     const handleSubmit = async () => {
-        await Axios.put('http://localhost:3306/transfer/give', {Location:formData.To, Items: items})
-        await Axios.put('http://localhost:3306/transfer/take', {Location:formData.From.Location, Items: items})
-        await Axios.post("http://localhost:3306/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
-        let ild = await Axios.post("http://localhost:3306/transfer/ild", {Items: items, Location: formData.To});
-        let Values = await Axios.post('http://localhost:3306/transfer/values', {Items: items});
+        await Axios.put('http://localhost:3001/transfer/give', {Location:formData.To, Items: items})
+        await Axios.put('http://localhost:3001/transfer/take', {Location:formData.From.Location, Items: items})
+        await Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.Date, Partner: formData.From.Partner_id })
+        let ild = await Axios.post("http://localhost:3001/transfer/ild", {Items: items, Location: formData.To});
+        let Values = await Axios.post('http://localhost:3001/transfer/values', {Items: items});
 
-       await Axios.post('http://localhost:3306/transfer/track', { Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
+       await Axios.post('http://localhost:3001/transfer/track', { Values: Values.data, Items: items, FKItemLocation: ild.data}).then(window.location.href = '/transfer');
 
     }
 
     return (
+        <>
+        <Navbar />
         <form onSubmit={validate}>
-            <label htmlFor="From">From storage location</label>
-            <select id="From" name="From" onChange={handleFrom}>
-                <option value="">--Please choose an option--</option>
+            <TextField defaultValue="From" helperText="Please select a location" select id="From" name="From" onChange={handleFrom}/>
                 {from.map((val, index) => {
                     return (
                         <option value={index}>{val.Name}</option>
                     )
                 })}
+            <br />
 
-            </select><br />
-
-            <label htmlFor="To">To storage location</label>
-            <select id="To" name="To" onChange={handleChange}>
-                <option value="" >--Please choose an option--</option>
+            <TextField select defaultValue="To" helperText="Please select a location" id="To" name="To" onChange={handleChange}/>
                 {to.map((val) => {
                     if(val.Location_id == formData.From.Location){
                         return(null);
@@ -178,11 +189,17 @@ function AddTransfer() {
                         )
                     }
                 })}
+            <br />
 
-            </select><br />
-
-            <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
-            {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+            <TextField
+              id="outlined-Comments-static"
+              label="Comments"
+              multiline
+              rows={4}
+              defaultValue="Comments"
+              onChange={handleChange} 
+              placeholder="Comments"
+            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
             <h2>Items</h2>
             {items.map((obj, index) => (
@@ -195,12 +212,14 @@ function AddTransfer() {
                     deleteField={handleDeleteField}
                 />
             ))}
-            <button name="add-btn" onClick={handleAddField}>
+            <Button variant="outlined" name="add-btn" onClick={handleAddField}>
                 Add
-            </button>
+            </Button>
 
             <input type="submit" value="Submit" />
+            <button type="button" onClick={handleCancel}>Cancel</button>
         </form>
+        </>
     )
 }
 

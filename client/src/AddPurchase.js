@@ -3,6 +3,14 @@ import Axios from 'axios';
 import Purchase from "./models/Purchase";
 import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Button from '@mui/material/Button';
+
 
 function AddPurchase() {
     const [formData, setFormData] = useState(Purchase)
@@ -20,6 +28,12 @@ function AddPurchase() {
 
         }
     ])
+
+    function handleCancel() {
+        if (window.confirm("Are you sure you want to cancel") == true) {
+            window.location.href = "/purchase";
+        }
+    }
 
     function handleChange(event) {
         setFormData(prevFormData => {
@@ -75,7 +89,7 @@ function AddPurchase() {
     };
 
     useEffect(() => {
-        Axios.get("http://localhost:3306/vendor/list").then((response) => {
+        Axios.get("http://localhost:3001/vendor/list").then((response) => {
             if (response.data.status === 'complete') {
                 setVendors(response.data);
             }
@@ -115,10 +129,10 @@ function AddPurchase() {
     }
 
     const handleSubmit = async () => {
-        await Axios.post("http://localhost:3306/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
-        let IL_response = await Axios.post("http://localhost:3306/purchase/location", { Items: items, Location_id: formData.Location })
-        await Axios.post("http://localhost:3306/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
-        await Axios.put("http://localhost:3306/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
+        await Axios.post("http://localhost:3001/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
+        let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Items: items, Location_id: formData.Location })
+        await Axios.post("http://localhost:3001/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
+        await Axios.put("http://localhost:3001/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
         window.location.href = "/purchase";
 
 
@@ -127,33 +141,31 @@ function AddPurchase() {
 
     return (
         <div>
+            <Navbar />
             <h2>Purchase</h2>
             <form onSubmit={validate}>
-                <label htmlFor="Vendor">Vendor</label>
-                <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
+                <TextField select defaultValue="Vendor" helperText="Please select a vendor" id="Vendor" label="Vendor" value={formData.Vendor} onChange={handleChange}/>
                     {vendor.map((val) => {
                         return (
                             <option value={val.Partner_id}>{val.Name}</option>
                         )
                     })}
-                </select>
                 <br />
 
-                <label htmlFor="Location">Location</label>
-                <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
+                <TextField select defaultValue="Location" helperText="Please select a location"  id="Location" name="Location" value={formData.Location} onChange={handleChange}/>
                     {locations.map((val) => {
                         return (
                             <option value={val.Location_id}>{val.Name}</option>
                         )
                     })}
-
-                </select><br />
+                <br />
 
                 <div>
-                    <label htmlFor="Purchase_date">Purchase date</label>
-                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                        <DatePicker label="Purchase Date" value={formData.Purchase_date} onChange={handleChange}/>
+                    </DemoContainer>
+                </LocalizationProvider>
                 </div>
 
                 <div>
@@ -162,9 +174,16 @@ function AddPurchase() {
                 </div>
 
                 <div>
-                    <label htmlFor="Comments">Comments</label><br />
-                    <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
-                    {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+                <TextField
+                    id="outlined-Comments-static"
+                    label="Comments"
+                    multiline
+                    rows={4}
+                    defaultValue="Comments"
+                    value={formData.Comments}
+                    onChange={handleChange} 
+                    placeholder="Comments"
+                    />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
                 </div>
 
                 <h2>Items</h2>
@@ -178,12 +197,13 @@ function AddPurchase() {
                         deleteField={handleDeleteField}
                     />
                 ))}
-                <button name="add-btn" onClick={handleAddField}>
+                <Button variant='outline' name="add-btn" onClick={handleAddField}>
                     Add
-                </button>
+                </Button>
 
 
                 <input type="submit" value="Submit" />
+                <button type="button" onClick={handleCancel}>Cancel</button>
             </form>
         </div>
     )

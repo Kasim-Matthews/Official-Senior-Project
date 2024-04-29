@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
+import Navbar from './components/navbar';
 
 function ViewTransfer() {
 
@@ -18,7 +19,7 @@ function ViewTransfer() {
 
     return (
         <div>
-
+            <Navbar />
             <table>
                 <thead>
                     <tr>
