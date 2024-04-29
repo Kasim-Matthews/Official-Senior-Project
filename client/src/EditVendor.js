@@ -3,6 +3,8 @@ import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 
 function EditVendor() {
@@ -89,23 +91,20 @@ function EditVendor() {
 
   return (
     <div>
+      <Navbar/>
       <form onSubmit={validate}>
-        <label htmlFor="BusinessName">Business Name</label>
-        <input type="text" name="BusinessName" id="BusinessName" defaultValue={formData.BusinessName} required onChange={handleChange} />
+        <TextField  variant="outlined" name="BusinessName" id="BusinessName" defaultValue={formData.BusinessName} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-        <label htmlFor="ContactName">Contact Name</label>
-        <input type="text" name="ContactName" id="ContactName" defaultValue={formData.ContactName} onChange={handleChange} />
+        <TextField  variant="outlined" name="ContactName" id="ContactName" defaultValue={formData.ContactName} onChange={handleChange} />
         {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
-        <label htmlFor="Phone">Phone</label>
-        <input type="text" name="Phone" id="Phone" defaultValue={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} />
+        <TextField  variant="outlined" name="Phone" id="Phone" defaultValue={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} />
         {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
-        <label htmlFor="Email">Email</label>
-        <input type="text" name="Email" id="Email" defaultValue={formData.Email} onChange={handleChange} />
+        <TextField  variant="outlined" name="Email" id="Email" defaultValue={formData.Email} onChange={handleChange} />
         {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
 
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        <Button variant="contained" type="submit" value="Submit" />
+        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>
     </div>
   )

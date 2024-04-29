@@ -7,6 +7,13 @@ import EditDonationSiteList from './components/EditDonationSiteList';
 import EditManufacturerList from './components/EditManufacturerList';
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 function EditIntake() {
 
@@ -199,8 +206,15 @@ function EditIntake() {
       <h2>Intake</h2>
       <form id="intake" onSubmit={typechecker}>
 
-        <TextField select defaultValue="Source" helperText="Please select a source" id="Source" onChange={sourceChange}/>
-          {Types.map((type) => {
+      <FormControl size="small">
+            <InputLabel id="type">Type</InputLabel>
+            <NativeSelect
+              placeholder="Type"
+              inputProps={{
+                name: 'type',
+                id: 'type',
+              }}>
+              {Types.map((type) => {
             if (formData.Type == type) {
               return (
                 <option value={type} selected>{type}</option>
@@ -212,16 +226,21 @@ function EditIntake() {
               )
             }
           })}
+            </NativeSelect>
+          </FormControl>
         <br />
 
         {sourceType != "" ? listtype() : null}
 
-
-
-        <label htmlFor="Location">Location</label>
-        <select id="Location_id" name="Location_id" value={formData.Location_id} onChange={handleChange}>
-          <option value="">--Please choose an option--</option>
-          {locations.map((val) => {
+        <FormControl size="small">
+            <InputLabel id="location">Location</InputLabel>
+            <NativeSelect
+              placeholder="Location"
+              inputProps={{
+                name: 'location',
+                id: 'location',
+              }}>
+            {locations.map((val) => {
             if (val.Location_id == formData.Location_id) {
 
               return (
@@ -234,8 +253,9 @@ function EditIntake() {
               )
             }
           })}
-
-        </select><br />
+            </NativeSelect>
+          </FormControl>
+          <br />
 
         <label htmlFor="RecievedDate">Issued On</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
@@ -263,8 +283,8 @@ function EditIntake() {
         </button>
 
 
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        <Button variant="contained" type="submit" value="Submit" />
+        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
 
       </form>
     </div>

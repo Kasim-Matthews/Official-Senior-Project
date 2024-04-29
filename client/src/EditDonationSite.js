@@ -3,6 +3,8 @@ import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
 
 function EditDonationSite() {
   const { id } = useParams();
@@ -84,8 +86,8 @@ function EditDonationSite() {
         <TextField variant="outlined" label="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} />
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        <Button variant="contained" type="submit" value="Submit" />
+        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>
     </div>
   )

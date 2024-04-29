@@ -3,6 +3,19 @@ import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
 import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 function EditOrder() {
 
@@ -173,10 +186,15 @@ function EditOrder() {
     <>
     <Navbar/>
     <form id="edit distribution" onSubmit={validate}>
-      <label htmlFor="Partner">Partner</label>
-      <select id="Partner_id" name="Partner_id" onChange={handleChange}>
-        <option value="">--Please choose an option--</option>
-        {partners.map((val) => {
+    <FormControl size="small">
+            <InputLabel id="partner">Partner</InputLabel>
+            <NativeSelect
+              placeholder="Partner"
+              inputProps={{
+                name: 'partner',
+                id: 'partner',
+              }}>
+             {partners.map((val) => {
           if (val.value == formData.Partner_id) {
 
             return (
@@ -189,13 +207,19 @@ function EditOrder() {
             )
           }
         })}
+            </NativeSelect>
+          </FormControl>
+        <br />
 
-      </select><br />
-
-      <label htmlFor="Location">Location</label>
-      <select id="Location_id" name="Location_id" value={formData.Location_id} onChange={handleChange}>
-        <option value="">--Please choose an option--</option>
-        {locations.map((val) => {
+        <FormControl size="small">
+            <InputLabel id="location">Location</InputLabel>
+            <NativeSelect
+              placeholder="Location"
+              inputProps={{
+                name: 'location',
+                id: 'location',
+              }}>
+             {locations.map((val) => {
           if (val.Location_id == formData.Location_id) {
 
             return (
@@ -208,8 +232,9 @@ function EditOrder() {
             )
           }
         })}
-
-      </select><br />
+            </NativeSelect>
+          </FormControl>
+          <br />
 
       <label htmlFor="RequestDate">RequestDate</label>
       <input type="date" name="RequestDate" id="RequestDate" defaultValue={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
@@ -217,15 +242,28 @@ function EditOrder() {
       <label htmlFor="CompletedDate">CompleteDate</label>
       <input type="date" name="CompletedDate" id="CompletedDate" defaultValue={formData.CompletedDate} min="2023-09-01" required onChange={handleChange} />
 
-      <h3>Delivery Method</h3>
+      <FormControl>
+              <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="delivery-method-label"
+                name="delivery-method-group"
+              >
+                <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off"  checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange}/>
+                <FormControlLabel value="other" control={<Radio />} label="Other"  checked={formData.DeliveryMethod === "Other"} onChange={handleChange}/>
+              </RadioGroup>
+            </FormControl>
+      
+      <TextField
+              id="outlined-Comments-static"
+              label="Comments"
+              multiline
+              rows={4}
+              defaultValue="Comments"
+              onChange={handleChange} 
+              placeholder={formData.Comments}
+            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
-      <label htmlFor="Drop-off">Drop Off</label>
-      <input type="radio" id="Drop-off" name="DeliveryMethod" value="Drop-off" checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange} />
-      <label htmlFor="Other">Other</label>
-      <input type="radio" id="Other" name="DeliveryMethod" value="Other" checked={formData.DeliveryMethod === "Other"} onChange={handleChange} />
-
-      <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder={formData.Comments}></textarea>
-      {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
       <h2>Items</h2>
       {items.map((record, index) => (
         <div>
@@ -245,8 +283,8 @@ function EditOrder() {
       </button>
 
 
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
+      <Button variant="contained" type="submit" value="Submit" />
+      <Button varaint="outlined" type="button" onClick={handleCancel}>Cancel</Button>
     </form>
     </>
   )

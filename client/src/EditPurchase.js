@@ -3,6 +3,14 @@ import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
 import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 function EditPurchase() {
     const { id } = useParams();
@@ -150,10 +158,15 @@ function EditPurchase() {
             <Navbar />
             <h2>Purchase</h2>
             <form onSubmit={validate}>
-                <label htmlFor="Vendor">Vendor</label>
-                <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
-                    {vendor.map((val) => {
+            <FormControl size="small">
+            <InputLabel id="vendor">Vendor</InputLabel>
+            <NativeSelect
+              placeholder="Vendor"
+              inputProps={{
+                name: 'vendor',
+                id: 'vendor',
+              }}>
+                 {vendor.map((val) => {
                         if (val.Partner_id == formData.Vendor) {
 
                             return (
@@ -166,13 +179,19 @@ function EditPurchase() {
                             )
                         }
                     })}
-                </select>
+            </NativeSelect>
+          </FormControl>
                 <br />
 
-                <label htmlFor="Location">Location</label>
-                <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
-                    {locations.map((val) => {
+                <FormControl size="small">
+                    <InputLabel id="location">Location</InputLabel>
+                    <NativeSelect
+                    placeholder="Location"
+                    inputProps={{
+                        name: 'location',
+                        id: 'location',
+                    }}>
+                        {locations.map((val) => {
                         if (val.Location_id == formData.Location) {
 
                             return (
@@ -185,8 +204,9 @@ function EditPurchase() {
                             )
                         }
                     })}
-
-                </select><br />
+                    </NativeSelect>
+                </FormControl>
+                    <br />
 
                 <div>
                     <label htmlFor="Purchase_date">Purchase date</label>
@@ -198,11 +218,15 @@ function EditPurchase() {
                     <input type="number" name="TotalValue" id="TotalValue" defaultValue={formData.TotalValue} min="0.00" step="0.01" onChange={handleChange} />
                 </div>
 
-                <div>
-                    <label htmlFor="Comments">Comments</label><br />
-                    <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
-                    {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
-                </div>
+                <TextField
+                    id="outlined-Comments-static"
+                    label="Comments"
+                    multiline
+                    rows={4}
+                    defaultValue={formData.Comments}
+                    onChange={handleChange} 
+                    placeholder="Comments"
+                    />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
                 <h2>Items</h2>
                 {items.map((record, index) => (
@@ -220,8 +244,8 @@ function EditPurchase() {
                 </button>
 
 
-                <input type="submit" value="Submit" />
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <Button variant="contained" type="submit" value="Submit" />
+                <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
         </div>
     )

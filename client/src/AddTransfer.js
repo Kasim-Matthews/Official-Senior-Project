@@ -9,6 +9,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
+
 
 
 function AddTransfer() {
@@ -170,16 +177,33 @@ function AddTransfer() {
         <>
         <Navbar />
         <form onSubmit={validate}>
-            <TextField defaultValue="From" helperText="Please select a location" select id="From" name="From" onChange={handleFrom}/>
-                {from.map((val, index) => {
+        <FormControl size="small">
+            <InputLabel id="from">From</InputLabel>
+            <NativeSelect
+              placeholder="From"
+              inputProps={{
+                name: 'from',
+                id: 'from',
+              }}>
+              <option disabled></option>
+              {from.map((val, index) => {
                     return (
                         <option value={index}>{val.Name}</option>
                     )
                 })}
+            </NativeSelect>
+          </FormControl>
             <br />
 
-            <TextField select defaultValue="To" helperText="Please select a location" id="To" name="To" onChange={handleChange}/>
-                {to.map((val) => {
+            <FormControl size="small">
+            <InputLabel id="to">To</InputLabel>
+            <NativeSelect
+              placeholder="To"
+              inputProps={{
+                name: 'to',
+                id: 'to',
+              }}>
+              {to.map((val) => {
                     if(val.Location_id == formData.From.Location){
                         return(null);
                     }
@@ -189,6 +213,8 @@ function AddTransfer() {
                         )
                     }
                 })}
+            </NativeSelect>
+          </FormControl>
             <br />
 
             <TextField

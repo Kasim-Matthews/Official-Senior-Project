@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 
 function EditDrive() {
@@ -79,8 +80,8 @@ function EditDrive() {
         <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        <Button varirant="contained" type="submit" value="Submit" />
+        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>
     </div>
   )
