@@ -80,7 +80,7 @@ function AddIntake() {
       <h2>Intake</h2>
       <form id="intake" onSubmit={submitPurchase}>
       <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+      <FormControl size="small">
         <InputLabel id="Partner">Partner</InputLabel>
         <NativeSelect>
         {partners.map((val) => {
@@ -91,13 +91,6 @@ function AddIntake() {
         </NativeSelect>
       </FormControl>
     </Box>
-        <TextField select defaultValue="Partner" helperText="Please select a partner" id="Partner" label="Partner" variant="outlined" value={formData.Partner} onChange={handleChange}/>
-          {partners.map((val) => {
-            return (
-              <option value={val.Partner_id}>{val.Name}</option>
-            )
-          })}
-        <br></br>
 
         <label htmlFor="RecievedDate">Recieved Date</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange} /><br></br>
@@ -108,19 +101,27 @@ function AddIntake() {
 
         <h2>Items</h2>
         <div style={{ display: "flex" }}>
-          <Textfield select defaultValue="Item Name" helperText="Please select an item" id="item" name="item" value={formData.item} onChange={handleChange}/>
+        <FormControl size="small">
+            <InputLabel id="items">Items</InputLabel>
+            <NativeSelect>
             {items.map((val) => {
               return (
                 <option value={val.Item_id}>{val.Name}</option>
               )
             })}
+          </NativeSelect>
+        </FormControl>
 
-          <Textfield select defaultValue="Location" helperText="Please select a location" id="location" name="location" value={formData.location} onChange={handleChange}/>
+        <FormControl size="small">
+            <InputLabel id="location">Locations</InputLabel>
+            <NativeSelect>
             {locations.map((val) => {
               return (
                 <option value={val.Location_id}>{val.Name}</option>
               )
             })}
+            </NativeSelect>
+        </FormControl>
 
           <input type="number" name="Quantity" id="Quantity" required onChange={handleChange} value={formData.Quantity} />
         </div>
