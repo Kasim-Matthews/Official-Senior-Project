@@ -137,7 +137,7 @@ function App() {
         {/* catch all/404 */}
         <Route path="*" element={<Missing />} />
         
-        </Route>
+   
 </Routes>
   );
 }
