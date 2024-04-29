@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Pagination from "./components/Pagination";
 import OrderPosts from "./components/OrderPosts";
-import  Box  from '@mui/material/Box';
-import  AppBar  from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import  IconButton  from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -26,7 +26,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
-import './Order.css';import { DateRangePicker } from 'react-date-range'
+import './Order.css'; import { DateRangePicker } from 'react-date-range'
 import { addDays } from 'date-fns';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
@@ -197,97 +197,91 @@ function AddOrder() {
 
   return (
     <div className="dashboard-container">
-    <Navbar />
-    <form id="distribution" onSubmit={validate}>
-          <div className='partner'>
-            <TextField
-              id="outlined-select-partner"
-              select
-              label="Partner"
-              defaultValue="Partner"
-              helperText="Please select a partner"
-              value={formData.Partner} 
-              onChange={handleChange}
+      <Navbar />
+      <form id="distribution" onSubmit={validate}>
+        <div className='partner'>
+          <TextField
+            id="outlined-select-partner"
+            select
+            label="Partner"
+            defaultValue="Partner"
+            helperText="Please select a partner"
+            value={formData.Partner}
+            onChange={handleChange}
+          >
+            {partners.map((option) => (
+              <MenuItem key={option.Partner_id} value={option.Partner_id}>
+                {option.Name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </div>
+        <div className='location'>
+          <TextField
+            id="outlined-select-location"
+            select
+            label="Location"
+            defaultValue="Location"
+            helperText="Please select a location"
+            value={formData.Location}
+            onChange={handleChange}
+          >
+            {locations.map((option) => (
+              <MenuItem key={option.Location_id} value={option.Location_id}>
+                {option.Name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </div>
+        <div className='requestDate'>
+          <label htmlFor="Purchase_date">Purchase date</label>
+          <input type="date" name="Purchase_date" id="Purchase_date" value={formData.RequestDate} onChange={handleChange} />
+        </div>
+        <div className='completeDate'>
+        <label htmlFor="Purchase_date">Purchase date</label>
+          <input type="date" name="Purchase_date" id="Purchase_date" value={formData.CompletedDate} min={formData.RequestDate} onChange={handleChange} />
+        </div>
+        <div className='delivery'>
+          <FormControl>
+            <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="delivery-method-label"
+              name="delivery-method-group"
             >
-              {partners.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            </div>
-          <div className='location'>
-            <TextField
-              id="outlined-select-location"
-              select
-              label="Location"
-              defaultValue="Location"
-              helperText="Please select a location"
-              value={formData.Location} 
-              onChange={handleChange}
-            >
-              {locations.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            </div>
-            <div className='requestDate'>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Request Date" value={formData.RequestDate}  min="2023-09-01" required onChange={handleChange}/>
-              </DemoContainer>
-            </LocalizationProvider>
-            </div> 
-            <div className='completeDate'>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={['DatePicker']}>
-                <DatePicker label="Complete Date" value={formData.CompletedDate} min={formData.RequestDate} required onChange={handleChange}/>
-              </DemoContainer>
-            </LocalizationProvider>
-            </div> 
-            <div className='delivery'>
-            <FormControl>
-              <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="delivery-method-label"
-                name="delivery-method-group"
-              >
-                <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off"  checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange}/>
-                <FormControlLabel value="other" control={<Radio />} label="Other"  checked={formData.DeliveryMethod === "Other"} onChange={handleChange}/>
-              </RadioGroup>
-            </FormControl>
-            </div>
-            <TextField
-              id="outlined-Comments-static"
-              label="Comments"
-              multiline
-              rows={4}
-              defaultValue="Comments"
-              onChange={handleChange} 
-              placeholder="Comments"
-            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+              <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange} />
+              <FormControlLabel value="Shipped" control={<Radio />} label="Shipped" checked={formData.DeliveryMethod === "Shipped"} onChange={handleChange} />
+              <FormControlLabel value="Pick-up" control={<Radio />} label="Pick-up" checked={formData.DeliveryMethod === "Pick-up"} onChange={handleChange} />
+            </RadioGroup>
+          </FormControl>
+        </div>
+        <TextField
+          id="outlined-Comments-static"
+          label="Comments"
+          multiline
+          rows={4}
+          onChange={handleChange}
+          placeholder="Comments"
+        />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
-      <h2>Items</h2>
-      {items.map((obj, index) => (
-        <ItemInput
-          key={index}
-          objName={obj.name}
-          handleItem={handleItem}
-          handleQuantity={handleQuantity}
-          index={index}
-          deleteField={handleDeleteField}
-        />
-      ))}
-      <button name="add-btn" onClick={handleAddField}>
-        Add
-      </button>
+        <h2>Items</h2>
+        {items.map((obj, index) => (
+          <ItemInput
+            key={index}
+            objName={obj.name}
+            handleItem={handleItem}
+            handleQuantity={handleQuantity}
+            index={index}
+            deleteField={handleDeleteField}
+          />
+        ))}
+        <button name="add-btn" onClick={handleAddField}>
+          Add
+        </button>
 
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
-    </form>
+        <input type="submit" value="Submit" />
+        <button type="button" onClick={handleCancel}>Cancel</button>
+      </form>
     </div>
   )
 }

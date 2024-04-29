@@ -91,7 +91,7 @@ function AddPurchase() {
     useEffect(() => {
         Axios.get("http://localhost:3001/vendor/list").then((response) => {
             if (response.data.status === 'complete') {
-                setVendors(response.data);
+                setVendors(response.data.data);
             }
 
             else if (response.data.status === 'error in query'){
@@ -161,11 +161,8 @@ function AddPurchase() {
                 <br />
 
                 <div>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DatePicker']}>
-                        <DatePicker label="Purchase Date" value={formData.Purchase_date} onChange={handleChange}/>
-                    </DemoContainer>
-                </LocalizationProvider>
+                <label htmlFor="Purchase_date">Purchase date</label>
+                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
                 </div>
 
                 <div>
