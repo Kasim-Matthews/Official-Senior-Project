@@ -22,22 +22,16 @@ const register = async (req, res) => {
 
     try {
         // Check for duplicate usernames in the database
-        const [rows] = await sb.query('SELECT User_id FROM claire.user WHERE Username = ?', [user]);
-        if (rows.length) return res.sendStatus(409); // Conflict
+        const rows = await sb.query(`SELECT "User_id" FROM public.user WHERE "Username" = '{${user}}'`);
+        if (rows.rows.length) return res.sendStatus(409); // Conflict
 
         // Encrypt the password
         const hashedPwd = await bcrypt.hash(pwd, 10);
 
-        //default role in string format
-        const rolesJson = JSON.stringify({
-            "roles": [
-              { "User": 2001 }
-            ]
-          });
 
 
         // Store the new user in the database
-        await sb.query('INSERT INTO claire.user (Username, Password, Role) VALUES (?, ?, ?)', [user, hashedPwd, rolesJson]);
+        await sb.query(`INSERT INTO public.user ("Username", "Password") VALUES ('{${user}}', '{${hashedPwd}}')`);
 
         console.log(`New user ${user} created!`);
         res.status(201).json({ 'success': `New user ${user} created!` });

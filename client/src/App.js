@@ -128,9 +128,7 @@ function App() {
         <Route path='/audit/:id' element={<ViewAudit />} />
 {/* Remember to move this junk back  */}
         {/* We want to protect these wrotes */}
-        <Route element={<RequireAuth />}>
 
-        </Route>
 
         {/* also want to add a "add new user" page that only the admin can access */}
 
