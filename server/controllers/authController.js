@@ -29,7 +29,7 @@ const login = async (req, res) => {
         const foundUser = rows.rows[0]; // Assuming usernames are unique, so we take the first result
         if (!foundUser) return res.sendStatus(401); // Unauthorized
 
-        const match = await bcrypt.compare(pwd, foundUser.Password); // Ensure the column name matches your DB schema
+        const match = await bcrypt.compare(pwd, foundUser.Password[0]); // Ensure the column name matches your DB schema
         // if (match) {
         //     const roles = Object.values(foundUser.Role);
         //     // Here you would create JWTs or perform other login success actions
