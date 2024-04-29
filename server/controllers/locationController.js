@@ -549,7 +549,7 @@ const location_update = async (req, res) => {
     }
 
     try {
-        const updatelocation = `UPDATE public.location "Name" = '{${Name}}', "Address" = '{${Address}}' WHERE "Location_id" = ${id}`
+        const updatelocation = `UPDATE public.location SET "Name" = '{${Name}}', "Address" = '{${Address}}' WHERE "Location_id" = ${id}`
         const locationupdate = await sb.query(updatelocation)
         res.sendStatus(200)
         res.end();

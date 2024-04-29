@@ -369,7 +369,7 @@ const item_update = async (req, res) => {
 
     try {
         if (PackageCount > 0) {
-            const updateitem = `UPDATE public.item "Name" = '{${Name}}', "FairMarketValue" = ${FairMarketValue}, "PackageCount" = ${PackageCount} WHERE "Item_id" = ${id}`
+            const updateitem = `UPDATE public.item SET "Name" = '{${Name}}', "FairMarketValue" = ${FairMarketValue}, "PackageCount" = ${PackageCount} WHERE "Item_id" = ${id}`
             const itemupdate = await sb.query(updateitem)
         }
 
