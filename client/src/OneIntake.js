@@ -44,7 +44,7 @@ function ViewIntake() {
                 <tbody>
                     <tr>
                         <td>{record.Partner}</td>
-                        <td>{new Date(record.RecievedDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</td>
+                        <td>{new Date(record.RecievedDate).toISOString().slice(0, 10)}</td>
                         <td>{record.Location}</td>
                     </tr>
                 </tbody>

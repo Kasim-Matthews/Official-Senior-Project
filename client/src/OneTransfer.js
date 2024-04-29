@@ -53,7 +53,7 @@ function ViewTransfer() {
             <table>
                 <thead>
                     <tr>
-                        <h3>Transfer from {info.Taken} to {info.Given} on {new Date(info.Date).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</h3>
+                        <h3>Transfer from {info.Taken} to {info.Given} on {new Date(info.Date).toISOString().slice(0, 10)}</h3>
                     </tr>
                     <tr>
                         <th>Item</th>

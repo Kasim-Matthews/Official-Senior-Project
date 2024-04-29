@@ -42,7 +42,7 @@ function ViewPurchase() {
                 <tbody>
                     <tr>
                         <td>{record.Vendor}</td>
-                        <td>{new Date(record.PurchaseDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</td>
+                        <td>{new Date(record.PurchaseDate).toISOString().slice(0, 10)}</td>
                         <td>{record.Location}</td>
                     </tr>
                 </tbody>

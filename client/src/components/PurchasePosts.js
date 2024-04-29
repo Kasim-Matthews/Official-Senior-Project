@@ -20,7 +20,7 @@ const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                     return (
                         <tr>
                             <td>{val.Name}</td>
-                            <td>{new Date(val.RecievedDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</td>
+                            <td>{new Date(val.RecievedDate).toISOString().slice(0, 10)}</td>
                             <td>{val.TotalItems}</td>
                             <td>{val.Comments}</td>
                             <td>${val.TotalValue}</td>

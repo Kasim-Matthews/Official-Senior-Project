@@ -20,7 +20,7 @@ const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                     return (
                         <tr>
                             <td>{val.Name}</td>
-                            <td>{new Date(val.RecievedDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})/*console.log(new Date("2020/04/30").toLocaleDateString('en-US', {timeZone: 'America/New_York'})) */}</td>
+                            <td>{new Date(val.RecievedDate).toISOString().slice(0, 10)/*console.log(new Date("2020/04/30").toLocaleDateString('en-US', {timeZone: 'America/New_York'})) */}</td>
                             {val.Comments == null ? <td></td>: <td>{val.Comments}</td>}
                             
                             <td>{val.totalitems}</td>

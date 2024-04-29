@@ -34,8 +34,8 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                                                 return (
                                                     <TableRow>
                                                         <TableCell>{val.Name}</TableCell>
-                                                        <TableCell>{new Date(val.RequestDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</TableCell>
-                                                        <TableCell>{new Date(val.CompletedDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</TableCell>
+                                                        <TableCell>{new Date(val.RequestDate).toISOString().slice(0, 10)}</TableCell>
+                                                        <TableCell>{new Date(val.CompletedDate).toISOString().slice(0, 10)}</TableCell>
                                                         <TableCell>{val.Total}</TableCell>
                                                         <TableCell>{val.DeliveryMethod}</TableCell>
                                                         <TableCell>{val.Comments}</TableCell>

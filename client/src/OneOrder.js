@@ -62,8 +62,8 @@ function ViewOrder() {
         <tbody>
           <tr>
             <td>{record.Name}</td>
-            <td>{new Date(record.RequestDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</td>
-            <td>{new Date(record.CompletedDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</td>
+            <td>{new Date(record.RequestDate).toISOString().slice(0, 10)}</td>
+            <td>{new Date(record.CompletedDate).toISOString().slice(0, 10)}</td>
             <td>{record.DeliveryMethod}</td>
             <td>{record.Location}</td>
             <td>{record.Status}</td>
