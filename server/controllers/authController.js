@@ -57,6 +57,7 @@ const login = async (req, res) => {
         //     res.sendStatus(401); // Unauthorized
         // }
     } catch (err) {
+        console.log(err);
         res.status(500).json({ 'message': err.message });
     }
 };
