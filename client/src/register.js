@@ -72,6 +72,7 @@ const Register = () => {
                 setErrMsg('Username Taken');
             } else {
                 setErrMsg('Registration Failed')
+                console.log(err)
             }
             errRef.current.focus();
         }
