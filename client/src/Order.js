@@ -91,7 +91,7 @@ function Order() {
 
 
     if (filters.Date != "") {
-      temp = temp.filter(f => new Date(f.CompletedDate) > new Date(filters.Date))
+      temp = temp.filter(f => new Date(f.CompletedDate) >= new Date(filters.Date))
     }
 
     if (filters.Status != "") {

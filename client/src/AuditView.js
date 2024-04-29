@@ -68,7 +68,7 @@ function AuditView() {
 
 
         if (filters.Date != "") {
-            temp = temp.filter(f => new Date(f.Date) > new Date(filters.Date))
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date))
         }
 
 

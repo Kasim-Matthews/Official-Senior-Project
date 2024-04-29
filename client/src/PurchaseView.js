@@ -158,7 +158,7 @@ function Purchase() {
 
 
         if (filters.Date != "") {
-            temp = temp.filter(f => new Date(f.RecievedDate) > new Date(filters.Date))
+            temp = temp.filter(f => new Date(f.RecievedDate) >= new Date(filters.Date))
         }
 
 
