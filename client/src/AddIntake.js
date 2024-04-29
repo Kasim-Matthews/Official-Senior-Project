@@ -7,6 +7,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 
 function AddIntake() {
@@ -27,7 +29,7 @@ function AddIntake() {
   const [locations, setLocations] = React.useState([])
   const [itemLocation, setItemLocation] = React.useState([])
 
-  
+
 
   function handleChange(event) {
     setFormData(prevFormData => {
@@ -39,104 +41,107 @@ function AddIntake() {
   }
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/partner").then((response) => {
+    Axios.get("http://localhost:3001/partner").then((response) => {
       setPartners(response.data);
     })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/item").then((response) =>{
-            setItems(response.data);
-        })
+    Axios.get("http://localhost:3001/item").then((response) => {
+      setItems(response.data);
+    })
   }, [])
 
   useEffect(() => {
-    Axios.get("http://localhost:3306/location").then((response) =>{
-            setLocations(response.data);
-        })
+    Axios.get("http://localhost:3001/location").then((response) => {
+      setLocations(response.data);
+    })
   }, [])
 
   const submitPurchase = async (e) => {
     e.preventDefault()
 
-    Axios.post("http://localhost:3306/intake/new", {Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
-    
-    let IL_response = await Axios.post("http://localhost:3306/distribution/find_ild", {Item_id: formData.item, Location_id: formData.location})
+    Axios.post("http://localhost:3001/intake/new", { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Value: formData.Value, Partner: formData.Partner })
 
-    let IID_response = await Axios.get("http://localhost:3306/intake/find_id");
+    let IL_response = await Axios.post("http://localhost:3001/distribution/find_ild", { Item_id: formData.item, Location_id: formData.location })
 
-    Axios.post("http://localhost:3306/intake/track", {Intake_id: IID_response.data[0].Intake_id, Quantity: formData.Quantity, Value: formData.Value, FKItemLocation: IL_response.data[0].ItemLocation_id});
+    let IID_response = await Axios.get("http://localhost:3001/intake/find_id");
 
-    let current = await Axios.post("http://localhost:3306/intake/find_q", {ItemLocationFK: IL_response.data[0].ItemLocation_id})
+    Axios.post("http://localhost:3001/intake/track", { Intake_id: IID_response.data[0].Intake_id, Quantity: formData.Quantity, Value: formData.Value, FKItemLocation: IL_response.data[0].ItemLocation_id });
 
-    Axios.put("http://localhost:3306/intake/update_item", {Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity});
+    let current = await Axios.post("http://localhost:3001/intake/find_q", { ItemLocationFK: IL_response.data[0].ItemLocation_id })
+
+    Axios.put("http://localhost:3001/intake/update_item", { Quantity: formData.Quantity, ItemLocationFK: IL_response.data[0].ItemLocation_id, CurrentQ: current.data[0].Quantity });
 
     window.location.href = "/intake";
   }
 
   return (
     <div>
-      <Navbar /> 
+      <Navbar />
       <h2>Intake</h2>
       <form id="intake" onSubmit={submitPurchase}>
-      <Box sx={{ minWidth: 120 }}>
-      <FormControl size="small">
-        <InputLabel id="Partner">Partner</InputLabel>
-        <NativeSelect 
-        defaultValue={Partner}
-        inputProps={{
-          name: 'partner',
-          id: 'partner',
-        }}>
-        {partners.map((val) => {
-          return (
-            <option value={val.Partner_id}>{val.Name}</option>
-          )
-        })}
-        </NativeSelect>
-      </FormControl>
-    </Box>
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl size="small">
+            <InputLabel id="Partner">Partner</InputLabel>
+            <NativeSelect
+              placeholder="Partner"
+              inputProps={{
+                name: 'partner',
+                id: 'partner',
+              }}>
+              <option disabled></option>
+              {partners.map((val) => {
+                return (
+                  <option value={val.Partner_id}>{val.Name}</option>
+                )
+              })}
+            </NativeSelect>
+          </FormControl>
+        </Box>
 
         <label htmlFor="RecievedDate">Recieved Date</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange} /><br></br>
 
         <label htmlFor="Value">Value</label>
-        <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange}/>
+        <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment"></textarea><br></br>
 
         <h2>Items</h2>
         <div style={{ display: "flex" }}>
-        <FormControl size="small">
+          <FormControl size="small">
             <InputLabel id="items">Items</InputLabel>
             <NativeSelect
-            defaultValue={Items}
-            inputProps={{
-              name: 'item',
-              id: 'item',
-            }}>
-            {items.map((val) => {
-              return (
-                <option value={val.Item_id}>{val.Name}</option>
-              )
-            })}
-          </NativeSelect>
-        </FormControl>
+              placeholder="Items"
+              inputProps={{
+                name: 'item',
+                id: 'item',
+              }}>
+              <option disabled></option>
+              {items.map((val) => {
+                return (
+                  <option value={val.Item_id}>{val.Name}</option>
+                )
+              })}
+            </NativeSelect>
+          </FormControl>
 
-        <FormControl size="small">
+          <FormControl size="small">
             <InputLabel id="location">Locations</InputLabel>
             <NativeSelect
-            defaultValue={Locations}
-            inputProps={{
-              name: 'location',
-              id: 'location',
-            }}>
-            {locations.map((val) => {
-              return (
-                <option value={val.Location_id}>{val.Name}</option>
-              )
-            })}
+              placeholder="Locations"
+              inputProps={{
+                name: 'location',
+                id: 'location',
+              }}>
+              <option disabled></option>
+              {locations.map((val) => {
+                return (
+                  <option value={val.Location_id}>{val.Name}</option>
+                )
+              })}
             </NativeSelect>
-        </FormControl>
+          </FormControl>
 
           <input type="number" name="Quantity" id="Quantity" required onChange={handleChange} value={formData.Quantity} />
         </div>
