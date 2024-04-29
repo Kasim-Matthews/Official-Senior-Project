@@ -15,7 +15,7 @@ sb.on('error', error => {
 const location_index = async (req, res) => {
 
     try {
-        let sqlGet = `SELECT * from public.location`
+        let sqlGet = `SELECT * from public.location ORDER BY "Location_id"`
         const response = await sb.query(sqlGet);
         res.send({ status: 'complete', data: response.rows })
         return

@@ -91,6 +91,8 @@ function EditItem() {
     
 
   }
+
+if (formData.PackageCount == null) {
   return (
     <form id="edit item" onSubmit={validate}>
       <label htmlFor="Name">Name</label>
@@ -101,12 +103,34 @@ function EditItem() {
       <input type="number" name="FairMarketValue" id="FairMarketValue" defaultValue={formData.FairMarketValue} step="0.01" required onChange={handleChange} />
 
       <label htmlFor="PackageCount">Package Count</label>
-      <input type="number" name="PackageCount" id="PackageCount" defaultValue={formData.PackageCount == null ? 0 : formData.PackageCount} step="1" onChange={handleChange} />
+      <input type="number" name="PackageCount" id="PackageCount" value="0" step="1" onChange={handleChange} />
 
       <input type="submit" value="Submit" />
       <button type="button" onClick={handleCancel}>Cancel</button>
     </form>
   )
+}
+
+else {
+  return (
+    <form id="edit item" onSubmit={validate}>
+      <label htmlFor="Name">Name</label>
+      <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} />
+      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+
+      <label htmlFor="FairMarketValue">Fair Market Value</label>
+      <input type="number" name="FairMarketValue" id="FairMarketValue" defaultValue={formData.FairMarketValue} step="0.01" required onChange={handleChange} />
+
+      <label htmlFor="PackageCount">Package Count</label>
+      <input type="number" name="PackageCount" id="PackageCount" value={formData.PackageCount} step="1" onChange={handleChange} />
+
+      <input type="submit" value="Submit" />
+      <button type="button" onClick={handleCancel}>Cancel</button>
+    </form>
+  )
+}
+
+
 }
 
 export default EditItem;

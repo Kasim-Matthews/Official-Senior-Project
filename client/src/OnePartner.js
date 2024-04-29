@@ -111,7 +111,7 @@ function ViewPartner() {
                         {distributionList.map((val) => {
                             return (
                                 <tr>
-                                    <td>{new Date(val.CompletedDate).toLocaleDateString()}</td>
+                                    <td>{new Date(val.CompletedDate).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</td>
                                     <td>{val.Location}</td>
                                     <td>{val.Total}</td>
                                     <td>

@@ -185,7 +185,7 @@ function TransferView() {
                             <tr>
                                 <td>{val.Taken}</td>
                                 <td>{val.Given}</td>
-                                <td>{new Date(val.Date).toLocaleDateString()}</td>
+                                <td>{new Date(val.Date).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</td>
                                 <td>{val.Comments}</td>
                                 <td>{val.TotalMoved}</td>
                                 <td>

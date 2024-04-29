@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 
 const PDFTableRow = ({ itemList }) => {
     const rows = itemList.map(item => {
-        if (item.PackageCount != null) {
+        if (item.PackageCount != null || item.PackageCount != 0) {
             return (
                 <View style={styles.row}>
                     <Text style={styles.item}>{item.Item}</Text>

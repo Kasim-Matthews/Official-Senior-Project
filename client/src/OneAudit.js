@@ -31,7 +31,7 @@ function ViewAudit() {
 
     return (
         <div>
-            <header>Audit was created on {new Date(date).toLocaleDateString()}</header>
+            <header>Audit was created on {new Date(date).toLocaleDateString('en-US', {timeZone: 'America/New_York'})}</header>
             <table>
                 <thead>
                     <tr>

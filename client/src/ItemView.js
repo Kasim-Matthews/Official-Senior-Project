@@ -13,7 +13,7 @@ function ItemView() {
     const [nonActive, setNonActive] = React.useState(false)
 
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location`).then((response) => {
             if (response.data.status === 'complete') {
                 setLocationList(response.data.data);
             }
