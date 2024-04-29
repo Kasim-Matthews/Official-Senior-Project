@@ -129,15 +129,16 @@ function App() {
           <Route path='/audit' element={<AuditView/>}/>
           <Route path='/audit/new' element={<AddAudit/>}/>
           <Route path='/audit/:id' element={<ViewAudit />}/>
-          <Route element={<RequireAuth />}>
-        </Route>
+          
 
         {/* also want to add a "add new user" page that only the admin can access */}
 
         </Route>
+        
         {/* catch all/404 */}
         <Route path="*" element={<Missing />} />
-
+        
+        </Route>
 </Routes>
   );
 }
