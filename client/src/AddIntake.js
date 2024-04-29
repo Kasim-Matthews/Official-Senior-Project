@@ -82,7 +82,12 @@ function AddIntake() {
       <Box sx={{ minWidth: 120 }}>
       <FormControl size="small">
         <InputLabel id="Partner">Partner</InputLabel>
-        <NativeSelect>
+        <NativeSelect 
+        defaultValue={Partner}
+        inputProps={{
+          name: 'partner',
+          id: 'partner',
+        }}>
         {partners.map((val) => {
           return (
             <option value={val.Partner_id}>{val.Name}</option>
@@ -103,7 +108,12 @@ function AddIntake() {
         <div style={{ display: "flex" }}>
         <FormControl size="small">
             <InputLabel id="items">Items</InputLabel>
-            <NativeSelect>
+            <NativeSelect
+            defaultValue={Items}
+            inputProps={{
+              name: 'item',
+              id: 'item',
+            }}>
             {items.map((val) => {
               return (
                 <option value={val.Item_id}>{val.Name}</option>
@@ -114,7 +124,12 @@ function AddIntake() {
 
         <FormControl size="small">
             <InputLabel id="location">Locations</InputLabel>
-            <NativeSelect>
+            <NativeSelect
+            defaultValue={Locations}
+            inputProps={{
+              name: 'location',
+              id: 'location',
+            }}>
             {locations.map((val) => {
               return (
                 <option value={val.Location_id}>{val.Name}</option>
