@@ -53,7 +53,9 @@ function ViewTransfer() {
 
     }, [])
 
-    console.log(record)
+    useEffect(() => {
+        console.log("ran")
+    }, [])
 
     return (
         <div>
