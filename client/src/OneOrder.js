@@ -39,12 +39,12 @@ function ViewOrder() {
 
     }).catch(error => {
       navigate('/error')
-      console.error(error)
+      console.log(error)
     })
   }, [])
 
 
-  if (record.length == 0 && itemList.length == 0) {
+  if ((record.length == 0 && itemList.length == 0) || (record.length == 0 || itemList.length == 0)) {
     return (
       <div>
         <table>
