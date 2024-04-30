@@ -8,7 +8,7 @@ const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
             <thead>
                 <tr>
                     <th>Partner</th>
-                    <th>Recieved Date</th>
+                    <th>Purchase Date</th>
                     <th>Total Items</th>
                     <th>Comments</th>
                     <th>Amount Spent</th>
