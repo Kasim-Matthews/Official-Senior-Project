@@ -32,15 +32,16 @@ function ViewTransfer() {
         const getInfo = async () => {
             try {
                 const response = await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`)
-                console.log(response)
                 if (response.data.status === 'complete') {
-                    setInfo(response.data.data)
+                    const information = response.data.data
+                    return (information)
 
                 }
                 else if (response.data.status === 'error in query') {
                     navigate('/query')
                     console.error("Fail in the query")
                     console.error(response.data.message)
+                    return({})
                 }
             }
             catch (error) {
@@ -48,7 +49,7 @@ function ViewTransfer() {
                 console.error(error.response.data.message)
             }
         }
-        getInfo()
+        setInfo(getInfo())
 
     }, [])
 
