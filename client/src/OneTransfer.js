@@ -51,7 +51,7 @@ function ViewTransfer() {
         }
         setInfo(getInfo())
 
-    }, [])
+    })
 
     console.log(info)
 
