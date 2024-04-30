@@ -53,7 +53,7 @@ function ViewTransfer() {
 
     }, [])
 
-    console.log(info)
+    console.log(record)
 
     return (
         <div>
