@@ -29,21 +29,24 @@ function ViewTransfer() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`).then((response) => {
-            if (response.data.status === 'complete') {
-                setInfo(response.data.data)
-                
-            }
-            else if (response.data.status === 'error in query') {
-                navigate('/query')
-                console.error("Fail in the query")
-                console.error(response.data.message)
-            }
+        const getInfo = async () => {
+            try {
+                const response = await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`)
+                if (response.data.status === 'complete') {
+                    setInfo(response.data.data)
 
-        }).catch(error => {
-            navigate('/error')
-            console.error(error.response.data.message)
-        })
+                }
+                else if (response.data.status === 'error in query') {
+                    navigate('/query')
+                    console.error("Fail in the query")
+                    console.error(response.data.message)
+                }
+            }
+            catch (error) {
+                navigate('/error')
+                console.error(error.response.data.message)
+            }
+        }
 
     }, {})
 
