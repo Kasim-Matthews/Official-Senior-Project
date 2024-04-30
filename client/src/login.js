@@ -36,8 +36,7 @@ const Login = () => {
             pwd: pwd,
     }
             );
-            const redirectTo = from === "/" ? "/Dashboard" : from;
-            navigate(redirectTo, { replace: true });
+            navigate("/dashboard"); 
             console.log(JSON.stringify(response?.data));
             //setUser('');
             //setPwd('');
