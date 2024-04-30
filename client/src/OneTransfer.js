@@ -32,7 +32,7 @@ function ViewTransfer() {
         Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`).then((response) => {
             if (response.data.status === 'complete') {
                 setInfo(response.data.data[0])
-                console.log(response.data.data[0])
+                
             }
             else if (response.data.status === 'error in query') {
                 navigate('/query')
@@ -47,6 +47,7 @@ function ViewTransfer() {
 
     }, [])
 
+    console.log(info.Date)
 
     return (
         <div>
