@@ -7,7 +7,7 @@ function ViewTransfer() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
-    const [info, setInfo] = React.useState([])
+    const [info, setInfo] = React.useState({})
 
 
     useEffect(() => {
@@ -29,61 +29,72 @@ function ViewTransfer() {
     }, [])
 
     useEffect(() => {
-        const getInfo = async () => {
-            try {
-                const response = await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`)
-                if (response.data.status === 'complete') {
-                    const information = response.data.data
-                    return (information)
-
-                }
-                else if (response.data.status === 'error in query') {
-                    navigate('/query')
-                    console.error("Fail in the query")
-                    console.error(response.data.message)
-                    return({})
-                }
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`).then((response) => {
+            if (response.data.status === 'complete') {
+                response.data.data.map((key, value) => { setInfo(key) });
             }
-            catch (error) {
-                navigate('/error')
-                console.error(error.response.data.message)
+            else if (response.data.status === 'error in query') {
+                navigate('/query')
+                console.error("Fail in the query")
+                console.error(response.data.message)
             }
-        }
-        setInfo(getInfo())
 
+        }).catch(error => {
+            navigate('/error')
+            console.error(error.response.data.message)
+        })
     }, [])
 
-    useEffect(() => {
-        console.log("ran")
-    }, [])
+    if (!info && record.length == 0) {
+        return (
+            <div>
 
-    return (
-        <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <h3>Transfer from to  on </h3>
+                        </tr>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
 
-            <table>
-                <thead>
-                    <tr>
-                        <h3>Transfer from {info.Taken} to {info.Given} on {new Date(info.Date).toISOString().slice(0, 10)}</h3>
-                    </tr>
-                    <tr>
-                        <th>Item</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {record.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Item}</td>
-                                <td>{val.Quantity}</td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
-        </div>
-    )
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
+
+    else {
+        return (
+            <div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <h3>Transfer from {info.Taken} to {info.Given} on {new Date(info.Date).toISOString().slice(0, 10)}</h3>
+                        </tr>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {record.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.Item}</td>
+                                    <td>{val.Quantity}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
 }
 
 
