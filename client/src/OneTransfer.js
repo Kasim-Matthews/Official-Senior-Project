@@ -45,7 +45,7 @@ function ViewTransfer() {
         })
     }, [])
 
-    if (!info && record.length == 0) {
+    if (Object.keys(info) == 0 && record.length == 0) {
         return (
             <div>
 
