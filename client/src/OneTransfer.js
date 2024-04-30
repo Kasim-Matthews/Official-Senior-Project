@@ -31,7 +31,7 @@ function ViewTransfer() {
     useEffect(() => {
         Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`).then((response) => {
             if (response.data.status === 'complete') {
-                setInfo(response.data.data[0])
+                setInfo(response.data.data)
                 
             }
             else if (response.data.status === 'error in query') {
