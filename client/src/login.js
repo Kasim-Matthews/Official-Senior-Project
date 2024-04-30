@@ -36,11 +36,12 @@ const Login = () => {
             pwd: pwd,
     }
             );
-            console.log(JSON.stringify(response?.data));
-            setUser('');
-            setPwd('');
             const redirectTo = from === "/" ? "/Dashboard" : from;
             navigate(redirectTo, { replace: true });
+            console.log(JSON.stringify(response?.data));
+            //setUser('');
+            //setPwd('');
+
         } catch (err) {
           console.log(err)
             if (!err?.response) {
