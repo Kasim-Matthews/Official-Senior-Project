@@ -30,6 +30,8 @@ const login = async (req, res) => {
         if (!foundUser) return res.sendStatus(401); // Unauthorized
 
         const match = await bcrypt.compare(pwd, foundUser.Password[0]); // Ensure the column name matches your DB schema
+
+        //SAres.json({ accessToken });
         // if (match) {
         //     const roles = Object.values(foundUser.Role);
         //     // Here you would create JWTs or perform other login success actions
@@ -52,7 +54,7 @@ const login = async (req, res) => {
         //     await sb.query(`UPDATE public.user SET "RefreshToken" = '${refreshToken}' WHERE "User_id" = ${foundUser.User_id}`);
 
         //     res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
-        //     res.json({ accessToken });
+        //     
         // } else {
         //     res.sendStatus(401); // Unauthorized
         // }
