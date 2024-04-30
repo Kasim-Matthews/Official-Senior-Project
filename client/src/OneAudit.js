@@ -28,48 +28,70 @@ function ViewAudit() {
         })
     }, [])
 
+    if ((record.length == 0 && date == "") || (record.length == 0 || date == "")) {
+        return (
+            <div>
+                <header>Audit was created on </header>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Location</th>
+                            <th>Previous Value</th>
+                            <th>Changed Value</th>
+                        </tr>
+                    </thead>
 
-    return (
-        <div>
-            <header>Audit was created on {new Date(date).toISOString().slice(0, 10)}</header>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Location</th>
-                        <th>Previous Value</th>
-                        <th>Changed Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {record.map((val) => {
-                        if(val.Changed != null){
-                            return (
-                                <tr>
-                                    <td>{val.Item}</td>
-                                    <td>{val.Location}</td>
-                                    <td>{val.Past}</td>
-                                    <td>{val.Changed}</td>
-                                </tr>
-                            )
-                        }
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
 
-                        else{
-                            return (
-                                <tr>
-                                    <td>{val.Item}</td>
-                                    <td>{val.Location}</td>
-                                    <td>{val.Past}</td>
-                                    <td></td>
-                                </tr>
-                            )
-                        }
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
-        </div>
-    )
+
+    else {
+        return (
+            <div>
+                <header>Audit was created on {new Date(date).toISOString().slice(0, 10)}</header>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Location</th>
+                            <th>Previous Value</th>
+                            <th>Changed Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {record.map((val) => {
+                            if (val.Changed != null) {
+                                return (
+                                    <tr>
+                                        <td>{val.Item}</td>
+                                        <td>{val.Location}</td>
+                                        <td>{val.Past}</td>
+                                        <td>{val.Changed}</td>
+                                    </tr>
+                                )
+                            }
+
+                            else {
+                                return (
+                                    <tr>
+                                        <td>{val.Item}</td>
+                                        <td>{val.Location}</td>
+                                        <td>{val.Past}</td>
+                                        <td></td>
+                                    </tr>
+                                )
+                            }
+                        })}
+                    </tbody>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
 }
 
 
