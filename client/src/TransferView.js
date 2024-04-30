@@ -69,7 +69,7 @@ function TransferView() {
     }, [])
 
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location/use`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/location`).then((response) => {
             if (response.data.status === 'complete') {
                 setLocations(response.data.data);
             }
