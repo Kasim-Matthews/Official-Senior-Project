@@ -577,7 +577,7 @@ const transfer_info = async (req, res) => {
             WHERE intake."Intake_id" = ${id}
             group by partner."Name", location."Name", "RecievedDate"`
             const response = await sb.query(sqlGet);
-            res.send({ status: 'complete', data: response.rows[0] })
+            res.send({ status: 'complete', data: response.rows })
             return
         }
         catch (error) {
