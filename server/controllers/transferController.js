@@ -581,6 +581,7 @@ const transfer_info = async (req, res) => {
             return
         }
         catch (error) {
+            console.log(error)
             res.sendStatus(500).json({ "message": error.message})
             return
         }

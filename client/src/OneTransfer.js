@@ -7,7 +7,7 @@ function ViewTransfer() {
     const navigate = useNavigate();
     const { id } = useParams();
     const [record, setRecord] = React.useState([])
-    const [info, setInfo] = React.useState({})
+    const [info, setInfo] = React.useState([])
 
 
     useEffect(() => {
@@ -51,7 +51,7 @@ function ViewTransfer() {
         }
         setInfo(getInfo())
 
-    })
+    }, [])
 
     console.log(info)
 
