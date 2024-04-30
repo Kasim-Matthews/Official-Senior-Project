@@ -45,13 +45,26 @@ function PDFView() {
         })
     }, [])
 
-    return (
-        <Fragment>
-            <PDFViewer width="100%" height="966">
-                <PDF record={record} itemList={itemList}></PDF>
-            </PDFViewer>
-        </Fragment>
-    )
+    if ((record.length == 0 && itemList.length == 0) || (record.length == 0 || itemList.length == 0)) {
+        return (
+            <Fragment>
+
+            </Fragment>
+        )
+    }
+
+
+    else {
+        return (
+            <Fragment>
+                <PDFViewer width="100%" height="966">
+                    <PDF record={record} itemList={itemList}></PDF>
+                </PDFViewer>
+            </Fragment>
+        )
+    }
+
+
 }
 
 export default PDFView;
