@@ -27,53 +27,89 @@ function ViewPurchase() {
         })
     }, [])
 
-    const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+    if (record.length == 0 && itemList.length == 0) {
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vendor</th>
+                            <th>Received Date</th>
+                            <th>Storage Location</th>
+                        </tr>
+                    </thead>
 
-    return (
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Vendor</th>
-                        <th>Received Date</th>
-                        <th>Storage Location</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{record.Vendor}</td>
-                        <td>{new Date(record.PurchaseDate).toISOString().slice(0, 10)}</td>
-                        <td>{record.Location}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {itemList.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Item}</td>
-                                <td>{val.Quantity}</td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Total</th>
-                        <td>${totalQuantity}</td>
-                    </tr>
-                </tfoot>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
-        </div>
-    )
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
+
+
+    else {
+        const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vendor</th>
+                            <th>Received Date</th>
+                            <th>Storage Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{record.Vendor}</td>
+                            <td>{new Date(record.PurchaseDate).toISOString().slice(0, 10)}</td>
+                            <td>{record.Location}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {itemList.map((val) => {
+                            return (
+                                <tr>
+                                    <td>{val.Item}</td>
+                                    <td>{val.Quantity}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Total</th>
+                            <td>${totalQuantity}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <button><Link to="/Dashboard">Dasboard</Link></button>
+            </div>
+        )
+    }
+
 }
 
 export default ViewPurchase;

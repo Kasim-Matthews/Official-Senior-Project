@@ -43,67 +43,112 @@ function ViewOrder() {
     })
   }, [])
 
-  const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
-  const total = itemList.reduce((sum, val) => sum + (parseFloat(val.Quantity) * parseFloat(val.FairMarketValue)), 0);
 
-  return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Partner</th>
-            <th>Requested Date</th>
-            <th>Completed Date</th>
-            <th>Delivery Method</th>
-            <th>Location</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{record.Name}</td>
-            <td>{new Date(record.RequestDate).toISOString().slice(0, 10)}</td>
-            <td>{new Date(record.CompletedDate).toISOString().slice(0, 10)}</td>
-            <td>{record.DeliveryMethod}</td>
-            <td>{record.Location}</td>
-            <td>{record.Status}</td>
-          </tr>
-        </tbody>
-      </table>
+  if (record.length == 0 && itemList.length == 0) {
+    return (
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Partner</th>
+              <th>Requested Date</th>
+              <th>Completed Date</th>
+              <th>Delivery Method</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Item Name</th>
-            <th>Value/item</th>
-            <th>In-kind Value</th>
-            <th>Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          {itemList.map((val) => {
-            return (
-              <tr>
-                <td>{val.Item}</td>
-                <td>{val.FairMarketValue}</td>
-                <td>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
-                <td>{val.Quantity}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Total</td>
-            <td></td>
-            <td>${total}</td>
-            <td>{totalQuantity}</td>
-          </tr>
-        </tfoot>
-      </table>
-      <button><Link to="/Dashboard">Dasboard</Link></button>
-    </div>
-  )
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Value/item</th>
+              <th>In-kind Value</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+
+          <tfoot>
+            <tr>
+              <td>Total</td>
+
+            </tr>
+          </tfoot>
+        </table>
+        <button><Link to="/Dashboard">Dasboard</Link></button>
+      </div>
+    )
+  }
+
+
+  else {
+    const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+    const total = itemList.reduce((sum, val) => sum + (parseFloat(val.Quantity) * parseFloat(val.FairMarketValue)), 0);
+
+    return (
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>Partner</th>
+              <th>Requested Date</th>
+              <th>Completed Date</th>
+              <th>Delivery Method</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{record.Name}</td>
+              <td>{new Date(record.RequestDate).toISOString().slice(0, 10)}</td>
+              <td>{new Date(record.CompletedDate).toISOString().slice(0, 10)}</td>
+              <td>{record.DeliveryMethod}</td>
+              <td>{record.Location}</td>
+              <td>{record.Status}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Value/item</th>
+              <th>In-kind Value</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {itemList.map((val) => {
+              return (
+                <tr>
+                  <td>{val.Item}</td>
+                  <td>{val.FairMarketValue}</td>
+                  <td>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
+                  <td>{val.Quantity}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td>Total</td>
+              <td></td>
+              <td>${total}</td>
+              <td>{totalQuantity}</td>
+            </tr>
+          </tfoot>
+        </table>
+        <button><Link to="/Dashboard">Dasboard</Link></button>
+      </div>
+    )
+  }
+
+
 }
 
 export default ViewOrder;
