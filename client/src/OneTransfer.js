@@ -32,6 +32,7 @@ function ViewTransfer() {
         const getInfo = async () => {
             try {
                 const response = await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/transfer/${id}/info`)
+                console.log(response)
                 if (response.data.status === 'complete') {
                     setInfo(response.data.data)
 
