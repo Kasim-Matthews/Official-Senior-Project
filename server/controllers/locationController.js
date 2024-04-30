@@ -102,10 +102,10 @@ const location_creation = async (req, res) => {
     }
 
     try {
-        const locationinsert = `INSERT INTO public.location ("Name", "Address") VALUES ('{${Name}}', '{${Address}')`
+        const locationinsert = `INSERT INTO public.location ("Name", "Address") VALUES ('{${Name}}', '{${Address}}')`
         const locationcreation = await sb.query(locationinsert)
 
-        const partnercreation = `INSERT INTO public.partner ("Name", "Address", "Location", "Type_id") VALUES ('{${Name}}', '{${Address}', (SELECT "Location_id" from public.location ORDER BY "Location_id" DESC Limit 1), (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Adjustment'))`
+        const partnercreation = `INSERT INTO public.partner ("Name", "Address", "Location", "Type_id") VALUES ('{${Name}}', '{${Address}}', (SELECT "Location_id" from public.location ORDER BY "Location_id" DESC Limit 1), (SELECT partnertype."PartnerType_id" from public.partnertype WHERE "Type" = 'Adjustment'))`
         const createpartner = await sb.query(partnercreation)
 
         const locationpair = `INSERT INTO public.itemlocation ("Location_id", "Item_id")
