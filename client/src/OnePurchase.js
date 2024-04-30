@@ -69,7 +69,7 @@ function ViewPurchase() {
                     <thead>
                         <tr>
                             <th>Vendor</th>
-                            <th>Received Date</th>
+                            <th>Purchase Date</th>
                             <th>Storage Location</th>
                         </tr>
                     </thead>
@@ -101,7 +101,7 @@ function ViewPurchase() {
                     <tfoot>
                         <tr>
                             <th>Total</th>
-                            <td>${totalQuantity}</td>
+                            <td>{totalQuantity}</td>
                         </tr>
                     </tfoot>
                 </table>
