@@ -22,7 +22,7 @@ function ViewOrder() {
 
     }).catch(error => {
       navigate('/error')
-      console.error(error.response.data.message)
+      console.error(error)
     })
   }, [])
 
@@ -39,7 +39,7 @@ function ViewOrder() {
 
     }).catch(error => {
       navigate('/error')
-      console.error(error.response.data.message)
+      console.error(error)
     })
   }, [])
 
