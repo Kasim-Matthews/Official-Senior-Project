@@ -393,7 +393,7 @@ const dsite_update = async (req, res) => {
     }
 
     try {
-        const sqlUpdate = `UPDATE public.partner Set "Name" = '{${Name}}', Set "Address" = '{${Address}}' WHERE "Partner_id" = ${id}`
+        const sqlUpdate = `UPDATE public.partner Set "Name" = '{${Name}}', "Address" = '{${Address}}' WHERE "Partner_id" = ${id}`
         const response = await sb.query(sqlUpdate)
         res.sendStatus(200)
         res.end();
