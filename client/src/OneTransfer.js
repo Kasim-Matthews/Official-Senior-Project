@@ -49,7 +49,7 @@ function ViewTransfer() {
         }
         getInfo()
 
-    }, {})
+    }, [])
 
     console.log(info)
 
