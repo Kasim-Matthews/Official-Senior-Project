@@ -47,6 +47,7 @@ function ViewTransfer() {
                 console.error(error.response.data.message)
             }
         }
+        getInfo()
 
     }, {})
 
