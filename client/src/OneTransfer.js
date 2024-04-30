@@ -47,7 +47,7 @@ function ViewTransfer() {
 
     }, [])
 
-    console.log(info.Date)
+    console.log(info)
 
     return (
         <div>
