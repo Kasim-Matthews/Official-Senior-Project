@@ -23,7 +23,7 @@ function ViewTransfer() {
 
         }).catch(error => {
             navigate('/error')
-            console.error(error.response.data.message)
+            console.error(error)
         })
 
     }, [])
@@ -41,11 +41,11 @@ function ViewTransfer() {
 
         }).catch(error => {
             navigate('/error')
-            console.error(error.response.data.message)
+            console.error(error)
         })
     }, [])
 
-    if (Object.keys(info) == 0 && record.length == 0) {
+    if ((Object.keys(info) == 0 && record.length == 0) || (Object.keys(info) == 0 || record.length == 0)) {
         return (
             <div>
 
