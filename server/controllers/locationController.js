@@ -344,7 +344,7 @@ const tab_1 = async (req, res) => {
 
     if (id) {
         try {
-            let sqlGet = `SELECT item."Name" as Item, itemlocation."Quantity" 
+            let sqlGet = `SELECT item."Name" as "Item", itemlocation."Quantity" 
             FROM public.itemlocation 
             join public.item on item."Item_id" = itemlocation."Item_id"
             WHERE itemlocation."Location_id" = ${id}
