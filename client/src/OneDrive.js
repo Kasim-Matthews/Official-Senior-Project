@@ -10,7 +10,7 @@ function ViewDrive() {
     const [intakeList, setIntakeList] = React.useState([])
 
     const handleView = (id) => {
-        navigate(`/intake/${id}`)
+        navigate(`/donation/${id}`)
     }
 
 

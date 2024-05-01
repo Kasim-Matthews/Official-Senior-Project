@@ -43,7 +43,7 @@ function Intake() {
     const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake`).then((response) => {
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/donation`).then((response) => {
             if (response.data.status === 'complete') {
                 setIntakeList(response.data.data);
                 setRecords(response.data.data)
@@ -68,7 +68,7 @@ function Intake() {
     const handleRemove = async (id, Name) => {
         if (window.confirm(`Are you sure you want to delete this donation from ${Name}?`) == true) {
             try {
-                const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/intake/reclaim`, { id: id })
+                const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/donation/reclaim`, { id: id })
 
                 if (response.status == 400) {
                     alert("Contact developer")
@@ -89,11 +89,11 @@ function Intake() {
     }
 
     const handleEdit = (id) => {
-        navigate(`/intake/${id}/edit`)
+        navigate(`/donation/${id}/edit`)
     }
 
     const handleView = (id) => {
-        navigate(`/intake/${id}`)
+        navigate(`/donation/${id}`)
     }
 
     function handleChange(event) {
@@ -184,7 +184,7 @@ function Intake() {
                             <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+                            <Link to="/donation" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
                         </Typography>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                             <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
@@ -251,7 +251,7 @@ function Intake() {
             </form>
 
 
-            <button><Link to="/intake/new">Add</Link></button>
+            <button><Link to="/donation/new">Add</Link></button>
 
             <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />

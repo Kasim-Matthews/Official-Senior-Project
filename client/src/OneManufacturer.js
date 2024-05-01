@@ -47,7 +47,7 @@ function ViewManufacturer() {
     }, [])
 
     const handleView = (id) => {
-        navigate(`/intake/${id}`)
+        navigate(`/donation/${id}`)
     }
 
     if (intakeList.length === 0) {

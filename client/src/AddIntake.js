@@ -36,7 +36,7 @@ function AddIntake() {
 
   function handleCancel() {
     if (window.confirm("Are you sure you want to cancel") == true) {
-        window.location.href = "/intake";
+        window.location.href = "/donation";
     }
 }
 
@@ -142,7 +142,7 @@ function AddIntake() {
  const typechecker = async (e) => {
     e.preventDefault()
     if (sourceType == "Misc Donation") {
-      await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/intake/misc`).then((response) => {
+      await Axios.get(`${process.env.REACT_APP_BACKEND_URL}/donation/misc`).then((response) => {
       formData.Partner = response.data.data[0].Partner_id
       })
     }
@@ -166,14 +166,14 @@ function AddIntake() {
 }
   const submitDonation = async () => {
     try {
-      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/intake/new`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location })
+      const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/donation/new`, { Comments: formData.Comments, RecievedDate: formData.RecievedDate, Partner: formData.Partner, Value: formData.Value, Items: items, Location_id: formData.Location })
 
       if(response.status == 400){
         alert("Check the values you input. One of the values are not of the correct type.")
       }
 
       else if (response.status == 200){
-        window.location.href = "/intake";
+        window.location.href = "/donation";
       }
     }
 

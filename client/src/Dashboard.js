@@ -84,7 +84,7 @@ function Dashboard() {
                         <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/intake" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+                        <Link to="/donation" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
                     </Typography>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>

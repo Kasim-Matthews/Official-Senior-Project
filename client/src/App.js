@@ -95,10 +95,10 @@ function App() {
         <Route path='/manufacturers/new' element={<AddManufacturers />} />
         <Route path='/manufacturers/:id' element={<ViewManufacturer />} />
 
-        <Route path="/intake" element={<Intake />} />
-        <Route path="/intake/new" element={<AddIntake />} />
-        <Route path='/intake/:id/edit' element={<EditIntake />} />
-        <Route path="/intake/:id" element={<ViewIntake />} />
+        <Route path="/donation" element={<Intake />} />
+        <Route path="/donation/new" element={<AddIntake />} />
+        <Route path='/donation/:id/edit' element={<EditIntake />} />
+        <Route path="/donation/:id" element={<ViewIntake />} />
 
         <Route path="/purchase" element={<Purchase />} />
         <Route path="/purchase/new" element={<AddPurchase />} />
