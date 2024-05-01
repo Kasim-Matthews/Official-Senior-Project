@@ -21,7 +21,7 @@ const IntakePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                         <tr>
                             <td>{val.Name}</td>
                             <td>{new Date(val.RecievedDate).toISOString().slice(0, 10)/*console.log(new Date("2020/04/30").toLocaleDateString('en-US', {timeZone: 'America/New_York'})) */}</td>
-                            {val.Comments == null ? <td></td>: <td>{val.Comments}</td>}
+                            {val.Comments == null || val.Comments == "undefined" ? <td></td>: <td>{val.Comments}</td>}
                             
                             <td>{val.totalitems}</td>
                             <td>${val.total}</td>

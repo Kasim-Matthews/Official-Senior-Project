@@ -181,19 +181,37 @@ function TransferView() {
                 </thead>
                 <tbody>
                     {records.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Taken}</td>
-                                <td>{val.Given}</td>
-                                <td>{new Date(val.Date).toISOString().slice(0, 10)}</td>
-                                <td>{val.Comments}</td>
-                                <td>{val.TotalMoved}</td>
-                                <td>
-                                    <button onClick={() => handleRemove(val.Intake_id, val.Taken, val.Location)}>Delete</button>
-                                    <button onClick={() => handleView(val.Intake_id)}>View</button>
-                                </td>
-                            </tr>
-                        );
+                        if (val.Comments == null || val.Comments == "undefined") {
+                            return (
+                                <tr>
+                                    <td>{val.Taken}</td>
+                                    <td>{val.Given}</td>
+                                    <td>{new Date(val.Date).toISOString().slice(0, 10)}</td>
+                                    <td></td>
+                                    <td>{val.TotalMoved}</td>
+                                    <td>
+                                        <button onClick={() => handleRemove(val.Intake_id, val.Taken, val.Location)}>Delete</button>
+                                        <button onClick={() => handleView(val.Intake_id)}>View</button>
+                                    </td>
+                                </tr>
+                            );
+                        }
+
+                        else {
+                            return (
+                                <tr>
+                                    <td>{val.Taken}</td>
+                                    <td>{val.Given}</td>
+                                    <td>{new Date(val.Date).toISOString().slice(0, 10)}</td>
+                                    <td>{val.Comments}</td>
+                                    <td>{val.TotalMoved}</td>
+                                    <td>
+                                        <button onClick={() => handleRemove(val.Intake_id, val.Taken, val.Location)}>Delete</button>
+                                        <button onClick={() => handleView(val.Intake_id)}>View</button>
+                                    </td>
+                                </tr>
+                            );
+                        }
                     })}
                 </tbody>
             </table>

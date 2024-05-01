@@ -22,7 +22,7 @@ const PurchasePosts = ({ posts, handleView, handleEdit, handleRemove }) => {
                             <td>{val.Name}</td>
                             <td>{new Date(val.RecievedDate).toISOString().slice(0, 10)}</td>
                             <td>{val.TotalItems}</td>
-                            <td>{val.Comments}</td>
+                            {val.Comments == null || val.Comments == "undefined" ? <td></td>: <td>{val.Comments}</td>}
                             <td>${val.TotalValue}</td>
                             <td>
                                 <button onClick={() => handleRemove(val.Intake_id, val.Name)}>Delete</button>

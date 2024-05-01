@@ -38,7 +38,7 @@ const OrderPosts = ({ posts, handleView, handleEdit, handleComplete, handleIncom
                                                         <TableCell>{new Date(val.CompletedDate).toISOString().slice(0, 10)}</TableCell>
                                                         <TableCell>{val.Total}</TableCell>
                                                         <TableCell>{val.DeliveryMethod}</TableCell>
-                                                        <TableCell>{val.Comments}</TableCell>
+                                                        {val.Comments == null || val.Comments == "undefined" ? <TableCell></TableCell>: <TableCell>{val.Comments}</TableCell>}
                                                         <TableCell>{val.Status}</TableCell>
 
                                                         <TableCell>
