@@ -71,6 +71,7 @@ function Intake() {
                 const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/donation/reclaim`, { id: id })
 
                 if(response.data.status == 409){
+                    console.log(response.data)
                     alert(`These items: ${response.data.data} quantities are lower than what you want to take away`)
                 }
 
