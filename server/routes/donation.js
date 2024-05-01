@@ -23,5 +23,6 @@ router.put('/reclaim', donationController.intake_reclaim)
 router.get('/:id/edititems', donationController.intake_edit_items)
 router.delete('/:id/edit_delete', donationController.intake_update_delete)
 router.get('/misc', donationController.intake_misc)
+router.post('/validation', donationController.validation)
 
 module.exports = router

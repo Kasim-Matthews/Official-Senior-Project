@@ -530,7 +530,7 @@ const update = async (req, res) => {
     let Location = req.body.Location_id
 
 
-    if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number'&& typeof Items != "object" && typeof Location != "string") {
+    if (typeof id != "string" && typeof Comments != "string" && typeof RecievedtDate != 'string' && typeof Partner != 'number' && typeof Value != 'number' && typeof Items != "object" && typeof Location != "string") {
         res.sendStatus(400)
         res.end();
         return;
@@ -549,7 +549,7 @@ const update = async (req, res) => {
         let deletionresults = intakeitemsinfo.rows
         let deletionrows = []
         for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
+            deletionrows.push({ Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation })
         }
 
         for (let i = 0; i < deletionresults.length; i++) {
@@ -612,7 +612,7 @@ const update = async (req, res) => {
         res.status(500).json(error);
         return;
     }
-    
+
     // sb.getConnection(function (error, tempCont) {
     //     if (error) {
     //         console.log('Error')
@@ -797,29 +797,44 @@ const intake_reclaim = async (req, res) => {
         let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            join public.item on itemlocation."Item_id" = item."Item_id"
             WHERE intakeitems."Intake" = ${id}`
         const intakeitemsinfo = await sb.query(sqlGet)
 
         let deletionresults = intakeitemsinfo.rows
-        let deletionrows = []
+        quantitychecker = []
         for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
+            if (deletionresults[i].Quantity < deletionresults[i].Given) {
+                quantitychecker.push(deletionresults[i].Name)
+            }
         }
 
-        for (let i = 0; i < deletionresults.length; i++) {
-            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
-            const reclaim = await sb.query(reclaiming)
+        if (quantitychecker.length != 0) {
+            res.send({status: 409, data: quantitychecker.toString()})
+            res.end();
+            return;
         }
+        else {
+            let deletionrows = []
+            for (let i = 0; i < deletionresults.length; i++) {
+                deletionrows.push({ Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation })
+            }
 
-        const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
-        const deletion = await sb.query(deleting)
+            for (let i = 0; i < deletionresults.length; i++) {
+                const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+                const reclaim = await sb.query(reclaiming)
+            }
 
-        const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
-        const deletionintake = await sb.query(deletingintake)
+            const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
+            const deletion = await sb.query(deleting)
 
-        res.sendStatus(200)
-        res.end();
-        return;
+            const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
+            const deletionintake = await sb.query(deletingintake)
+
+            res.sendStatus(200)
+            res.end();
+            return;
+        }
     }
 
     catch (error) {
@@ -1053,6 +1068,82 @@ const intake_misc = async (req, res) => {
 
 }
 
+const validation = async (req, res) => {
+    let Items = req.body.Items
+    let Location = req.body.Location_id
+
+    if (typeof Items != "object" && typeof Location != "string") {
+        res.sendStatus(400)
+        res.end();
+        return;
+    }
+
+    if (Items && Location) {
+        try {
+            let ids = []
+            Items.forEach(element => {
+                ids.push(element.Item_id);
+            });
+
+            let sqlGet = `SELECT "ItemLocation_id", "Quantity", item."Name" as "Item", item."Item_id"
+            from public.itemlocation
+            join public.item on itemlocation."Item_id" = item."Item_id"
+            WHERE itemlocation."Item_id" IN (${ids}) AND itemlocation."Location_id" = ${Location}`
+            const response = await sb.query(sqlGet);
+            res.send({ status: 'complete', data: response.rows })
+            return
+        } catch (error) {
+            console.log(error)
+            return
+        }
+    }
+
+
+
+    // sb.getConnection(function (error, tempCont) {
+    //     if (error) {
+    //         console.log('Error')
+    //         res.status(500).json({'message': error.message})
+    //     }
+    //     else {
+    //         if (typeof Items != "object" && typeof Location != "string") {
+    //             res.send("Invalid");
+    //             res.end();
+    //             return;
+    //         }
+
+    //         if (Items && Location) {
+    //             let ids = []
+    //             Items.forEach(element => {
+    //                 ids.push(element.Item_id);
+    //             });
+
+    //             const sqlGet = `SELECT il.ItemLocation_id, il.Quantity, i.Name as Item, i.Item_id
+    //             from sql5669328.itemlocation il
+    //             join sql5669328.item i on i.Item_id = il.Item_id
+    //             WHERE il.Item_id IN (?) AND il.Location_id = ?;`
+
+
+    //             tempCont.query(sqlGet, [ids, Location], (err, result) => {
+    //                 tempCont.release();
+    //                 if (err) {
+    //                     console.log(err);
+    //                 }
+    //                 else {
+    //                     console.log('Previous item location Quantities have been found')
+    //                     res.send(result);
+    //                     res.end();
+    //                     return;
+    //                 }
+
+    //             })
+
+    //         }
+    //     }
+    // })
+
+}
+
 module.exports = {
     data,
     create,
@@ -1069,7 +1160,8 @@ module.exports = {
     intake_remove,
     intake_edit_items,
     intake_update_delete,
-    intake_misc
+    intake_misc,
+    validation
 }
 
 /*
