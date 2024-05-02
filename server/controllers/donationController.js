@@ -794,7 +794,7 @@ const intake_reclaim = async (req, res) => {
     }
 
     try {
-        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity"
+        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity", item."Name"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
             join public.item on itemlocation."Item_id" = item."Item_id"

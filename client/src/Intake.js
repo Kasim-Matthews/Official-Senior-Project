@@ -72,7 +72,7 @@ function Intake() {
 
                 if(response.data.status == 409){
                     console.log(response.data.data)
-                    alert(`These items: ${response.data.data} quantities are lower than what you want to take away`)
+                    alert(`These items: ${response.data.data.toString()} quantities are lower than what you want to take away`)
                 }
 
                 else if (response.status == 400) {
