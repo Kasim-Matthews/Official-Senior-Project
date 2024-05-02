@@ -75,13 +75,13 @@ function Intake() {
                     alert(`These items: ${response.data.data} quantities are lower than what you want to take away`)
                 }
 
-                if (response.status == 400) {
+                else if (response.status == 400) {
                     alert("Contact developer")
                 }
 
-                else if (response.status == 200) {
-                    window.location.reload(false);
-                }
+                // else if (response.status == 200) {
+                //     window.location.reload(false);
+                // }
             }
 
             catch (error) {
