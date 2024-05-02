@@ -79,9 +79,9 @@ function Intake() {
                     alert("Contact developer")
                 }
 
-                // else if (response.status == 200) {
-                //     window.location.reload(false);
-                // }
+                else if (response.status == 200 && response.data.status != 409) {
+                    window.location.reload(false);
+                }
             }
 
             catch (error) {
