@@ -533,7 +533,7 @@ const update = async (req, res) => {
         let deletionresults = intakeitemsinfo.rows
         let deletionrows = []
         for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
+            deletionrows.push({ Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation })
         }
 
         for (let i = 0; i < deletionresults.length; i++) {
@@ -557,9 +557,9 @@ const update = async (req, res) => {
         const purchasetrack = `INSERT INTO public.intakeitems ("Intake", "Quantity", "Value", "FKItemLocation")
         SELECT ${id}, unnest(array[${quantities}]), ${Total}, unnest(t."FKItemLocation")
         from (SELECT array_agg("ItemLocation_id") "FKItemLocation" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location})t`
-   
+
         const trackpurchase = await sb.query(purchasetrack)
- 
+
         const getitemlocations = `SELECT "ItemLocation_id", "Item_id", "Location_id", "Quantity" from public.itemlocation WHERE "Item_id" IN (${ids}) AND "Location_id" = ${Location}`
         const itemlocations = await sb.query(getitemlocations)
 
@@ -700,32 +700,47 @@ const purchase_reclaim = async (req, res) => {
     }
 
     try {
-        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity"
+        let sqlGet = `SELECT intakeitems."Quantity" as "Given", intakeitems."FKItemLocation", itemlocation."Quantity", item."Name"
             from public.intakeitems
             join public.itemlocation on "FKItemLocation" = "ItemLocation_id"
+            join public.item on itemlocation."Item_id" = item."Item_id"
             WHERE intakeitems."Intake" = ${id}`
         const intakeitemsinfo = await sb.query(sqlGet)
 
         let deletionresults = intakeitemsinfo.rows
-        let deletionrows = []
+        quantitychecker = []
         for (let i = 0; i < deletionresults.length; i++) {
-            deletionrows.push({Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation})
+            if (deletionresults[i].Quantity < deletionresults[i].Given) {
+                quantitychecker.push(deletionresults[i].Name)
+            }
         }
 
-        for (let i = 0; i < deletionresults.length; i++) {
-            const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
-            const reclaim = await sb.query(reclaiming)
+        if (quantitychecker.length != 0) {
+            res.send({ status: 409, data: quantitychecker })
+            res.end();
+            return;
         }
+        else {
+            let deletionrows = []
+            for (let i = 0; i < deletionresults.length; i++) {
+                deletionrows.push({ Given: deletionresults[i].Quantity - deletionresults[i].Given, Id: deletionresults[i].FKItemLocation })
+            }
 
-        const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
-        const deletion = await sb.query(deleting)
+            for (let i = 0; i < deletionresults.length; i++) {
+                const reclaiming = `UPDATE public.itemlocation SET "Quantity" = ${deletionrows[i].Given} WHERE "ItemLocation_id" = ${deletionrows[i].Id}`
+                const reclaim = await sb.query(reclaiming)
+            }
 
-        const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
-        const deletionintake = await sb.query(deletingintake)
+            const deleting = `DELETE from public.intakeitems WHERE "Intake" = ${id}`
+            const deletion = await sb.query(deleting)
 
-        res.sendStatus(200)
-        res.end();
-        return;
+            const deletingintake = `DELETE from public.intake WHERE "Intake_id" = ${id}`
+            const deletionintake = await sb.query(deletingintake)
+
+            res.sendStatus(200)
+            res.end();
+            return;
+        }
     }
 
     catch (error) {

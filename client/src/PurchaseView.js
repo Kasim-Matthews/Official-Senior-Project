@@ -61,11 +61,16 @@ function Purchase() {
             try {
                 const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/purchase/reclaim`, { id: id })
 
-                if (response.status == 400) {
+                if(response.data.status == 409){
+                    console.log(response.data.data)
+                    alert(`These items: ${response.data.data.toString()} quantities are lower than what you want to take away`)
+                }
+
+                else if (response.status == 400) {
                     alert("Contact developer")
                 }
-    
-                else if (response.status == 200) {
+
+                else if (response.status == 200 && response.data.status != 409) {
                     window.location.reload(false);
                 }
             }
