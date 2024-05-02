@@ -810,6 +810,7 @@ const intake_reclaim = async (req, res) => {
         }
 
         if (quantitychecker.length != 0) {
+            console.log(quantitychecker.toString())
             res.send({status: 409, data: quantitychecker.toString()})
             res.sendStatus(409)
             res.end();
