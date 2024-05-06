@@ -76,6 +76,7 @@ function AuditView() {
         e.preventDefault();
         var temp = auditList;
 
+        console.log(filters)
 
         if (filters.Date.start != "" && filters.Date.end == "") {
             temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date.start))
@@ -99,9 +100,9 @@ function AuditView() {
                 <label>
                     Date Range
                     <div>
-                    <input type="date" name="start" value={filters.Date.start} />
+                    <input type="date" name="Date.start" value={filters.Date.start} onChange={handleChange} />
                     -
-                    <input type="date" name="end" value={filters.Date.end} />
+                    <input type="date" name="Date.end" value={filters.Date.end} onChange={(event) => filters.Date.end = event.target.value} />
                     </div>
                 </label>
 
