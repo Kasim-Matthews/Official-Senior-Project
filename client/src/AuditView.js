@@ -75,7 +75,6 @@ function AuditView() {
         e.preventDefault();
         var temp = auditList;
 
-        console.log(filters)
 
         if (filters.start != "" && filters.end == "") {
             temp = temp.filter(f => new Date(f.Date) >= new Date(filters.start))

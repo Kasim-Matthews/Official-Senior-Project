@@ -18,7 +18,8 @@ function Purchase() {
     const [filters, setFilters] = React.useState({
         Vendor: "",
         Location: "",
-        Date: ""
+        start: "",
+        end: ""
 
     })
 
@@ -61,7 +62,7 @@ function Purchase() {
             try {
                 const response = await Axios.put(`${process.env.REACT_APP_BACKEND_URL}/purchase/reclaim`, { id: id })
 
-                if(response.data.status == 409){
+                if (response.data.status == 409) {
                     console.log(response.data.data)
                     alert(`These items: ${response.data.data.toString()} quantities are lower than what you want to take away`)
                 }
@@ -74,7 +75,7 @@ function Purchase() {
                     window.location.reload(false);
                 }
             }
-    
+
             catch (error) {
                 console.log(error)
                 alert("Server side error/Contact developer")
@@ -142,7 +143,8 @@ function Purchase() {
         setFilters({
             Vendor: "",
             Location: "",
-            Date: ""
+            start: "",
+            end: ""
         })
         setRecords(intakeList)
     }
@@ -161,9 +163,14 @@ function Purchase() {
 
         }
 
-
-        if (filters.Date != "") {
-            temp = temp.filter(f => new Date(f.RecievedDate) >= new Date(filters.Date))
+        if (filters.start != "" && filters.end == "") {
+            temp = temp.filter(f => new Date(f.RecievedDate) >= new Date(filters.start))
+        }
+        if (filters.end != "" && filters.start == "") {
+            temp = temp.filter(f => new Date(f.RecievedDate) <= new Date(filters.end))
+        }
+        if (filters.start != "" && filters.end != "") {
+            temp = temp.filter(f => (new Date(f.RecievedDate) >= new Date(filters.start)) && (new Date(f.RecievedDate) <= new Date(filters.end)))
         }
 
 
@@ -204,7 +211,11 @@ function Purchase() {
 
                     <label>
                         Date Range
-                        <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                        <div>
+                            <input type="date" name="start" value={filters.start} onChange={handleChange} />
+                            -
+                            <input type="date" name="end" value={filters.end} onChange={handleChange} />
+                        </div>
                     </label>
 
 
@@ -274,7 +285,11 @@ function Purchase() {
 
                 <label>
                     Date Range
-                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                    <div>
+                        <input type="date" name="start" value={filters.start} onChange={handleChange} />
+                        -
+                        <input type="date" name="end" value={filters.end} onChange={handleChange} />
+                    </div>
                 </label>
 
 

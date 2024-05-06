@@ -38,7 +38,8 @@ function Order() {
     Partner: "",
     Location: "",
     Status: "",
-    Date: ""
+    start: "",
+    end: ""
   })
 
   const [distributionsList, setDistributionsList] = React.useState([])
@@ -72,7 +73,8 @@ function Order() {
       Partner: "",
       Location: "",
       Status: "",
-      Date: ""
+      start: "",
+      end: ""
     })
     setRecords(distributionsList)
   }
@@ -89,9 +91,14 @@ function Order() {
       temp = temp.filter(f => f.Location == filters.Location);
     }
 
-
-    if (filters.Date != "") {
-      temp = temp.filter(f => new Date(f.CompletedDate) >= new Date(filters.Date))
+    if (filters.start != "" && filters.end == "") {
+      temp = temp.filter(f => new Date(f.CompletedDate) >= new Date(filters.start))
+    }
+    if (filters.end != "" && filters.start == "") {
+      temp = temp.filter(f => new Date(f.CompletedDate) <= new Date(filters.end))
+    }
+    if (filters.start != "" && filters.end != "") {
+      temp = temp.filter(f => (new Date(f.CompletedDate) >= new Date(filters.start)) && (new Date(f.CompletedDate) <= new Date(filters.end)))
     }
 
     if (filters.Status != "") {
@@ -99,7 +106,6 @@ function Order() {
     }
 
     setRecords(temp);
-    console.log(filters)
   }
 
 
@@ -306,7 +312,11 @@ function Order() {
 
             <label>
               Date Range
-              <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+              <div>
+                <input type="date" name="start" value={filters.start} onChange={handleChange} />
+                -
+                <input type="date" name="end" value={filters.end} onChange={handleChange} />
+              </div>
             </label>
 
 

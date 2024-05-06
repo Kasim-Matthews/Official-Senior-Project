@@ -15,7 +15,8 @@ function TransferView() {
     const [filters, setFilters] = React.useState({
         From: "",
         To: "",
-        Date: ""
+        start: "",
+        end:""
 
     })
     const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -109,7 +110,8 @@ function TransferView() {
         setFilters({
             From: "",
             To: "",
-            Date: ""
+            start:"",
+            end:""
         })
         setRecords(transferList)
     }
@@ -127,8 +129,14 @@ function TransferView() {
         }
 
 
-        if (filters.Date != "") {
-            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date))
+        if (filters.start != "" && filters.end == "") {
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.start))
+        }
+        if (filters.end != "" && filters.start == "") {
+            temp = temp.filter(f => new Date(f.Date) <= new Date(filters.end))
+        }
+        if (filters.start != "" && filters.end != "") {
+            temp = temp.filter(f => (new Date(f.Date) >= new Date(filters.start)) && (new Date(f.Date) <= new Date(filters.end)))
         }
 
 
@@ -168,7 +176,11 @@ function TransferView() {
                 </label>
                 <label>
                     Date Range
-                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                    <div>
+                    <input type="date" name="start" value={filters.start} onChange={handleChange} />
+                    -
+                    <input type="date" name="end" value={filters.end} onChange={handleChange} />
+                    </div>
                 </label>
 
 
