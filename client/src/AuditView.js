@@ -14,7 +14,9 @@ function AuditView() {
     const [auditList, setAuditList] = React.useState([])
     const [records, setRecords] = React.useState([])
     const [filters, setFilters] = React.useState({
-        Date: ""
+        Date: {start:"",
+            end:""
+        }
 
     })
 
@@ -64,7 +66,7 @@ function AuditView() {
         e.preventDefault();
 
         setFilters({
-            Date: ""
+            Date: {start:"", end:""}
         })
         setRecords(auditList)
     }
@@ -75,8 +77,14 @@ function AuditView() {
         var temp = auditList;
 
 
-        if (filters.Date != "") {
-            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date))
+        if (filters.Date.start != "" && filters.Date.end == "") {
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date.start))
+        }
+        if (filters.Date.end != "" && filters.Date.start == "") {
+            temp = temp.filter(f => new Date(f.Date) <= new Date(filters.Date.end))
+        }
+        if (filters.Date.start != "" && filters.Date.end != "") {
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date) && new Date(f.Date) <= new Date(filters.Date.end))
         }
 
 
@@ -90,7 +98,11 @@ function AuditView() {
 
                 <label>
                     Date Range
-                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                    <div>
+                    <input type="date" name="Date" value={filters.Date.start} onChange={handleChange} />
+                    -
+                    <input type="date" name="Date" value={filters.Date.end} onChange={handleChange} />
+                    </div>
                 </label>
 
 
