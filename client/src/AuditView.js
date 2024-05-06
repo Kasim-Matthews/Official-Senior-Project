@@ -84,7 +84,7 @@ function AuditView() {
             temp = temp.filter(f => new Date(f.Date) <= new Date(filters.Date.end))
         }
         if (filters.Date.start != "" && filters.Date.end != "") {
-            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date) && new Date(f.Date) <= new Date(filters.Date.end))
+            temp = temp.filter(f => (new Date(f.Date) >= new Date(filters.Date)) && (new Date(f.Date) <= new Date(filters.Date.end)))
         }
 
 
@@ -99,9 +99,9 @@ function AuditView() {
                 <label>
                     Date Range
                     <div>
-                    <input type="date" name="Date" value={filters.Date.start} onChange={handleChange} />
+                    <input type="date" name="start" value={filters.Date.start} />
                     -
-                    <input type="date" name="Date" value={filters.Date.end} onChange={handleChange} />
+                    <input type="date" name="end" value={filters.Date.end} />
                     </div>
                 </label>
 
