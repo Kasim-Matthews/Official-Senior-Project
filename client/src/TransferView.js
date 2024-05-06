@@ -17,6 +17,14 @@ function TransferView() {
         Date: ""
 
     })
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [postsPerPage] = React.useState(3);
+
+    //Get current posts
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
 
     useEffect(() => {
@@ -180,7 +188,7 @@ function TransferView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {records.map((val) => {
+                    {currentPosts.map((val) => {
                         if (val.Comments == null || val.Comments == "undefined") {
                             return (
                                 <tr>
@@ -216,6 +224,7 @@ function TransferView() {
                 </tbody>
             </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
+            <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
         </div>
     );
 }

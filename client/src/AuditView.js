@@ -17,7 +17,14 @@ function AuditView() {
 
     })
 
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const [postsPerPage] = React.useState(3);
 
+    //Get current posts
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = records.slice(indexOfFirstPost, indexOfLastPost)
 
 
     useEffect(() => {
@@ -100,7 +107,7 @@ function AuditView() {
                     </tr>
                 </thead>
                 <tbody>
-                    {records.map((val) => {
+                    {currentPosts.map((val) => {
                         return (
                             <tr>
                                 <td>{new Date(val.Date).toISOString().slice(0, 10)}</td>
@@ -114,6 +121,7 @@ function AuditView() {
                 </tbody>
             </table>
             <button><Link to="/Dashboard">Dasboard</Link></button>
+            <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
         </div>
     );
 }
