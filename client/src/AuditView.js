@@ -14,9 +14,8 @@ function AuditView() {
     const [auditList, setAuditList] = React.useState([])
     const [records, setRecords] = React.useState([])
     const [filters, setFilters] = React.useState({
-        Date: {start:"",
-            end:""
-        }
+        start:"",
+        end:""
 
     })
 
@@ -78,14 +77,14 @@ function AuditView() {
 
         console.log(filters)
 
-        if (filters.Date.start != "" && filters.Date.end == "") {
-            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.Date.start))
+        if (filters.start != "" && filters.end == "") {
+            temp = temp.filter(f => new Date(f.Date) >= new Date(filters.start))
         }
-        if (filters.Date.end != "" && filters.Date.start == "") {
-            temp = temp.filter(f => new Date(f.Date) <= new Date(filters.Date.end))
+        if (filters.end != "" && filters.start == "") {
+            temp = temp.filter(f => new Date(f.Date) <= new Date(filters.end))
         }
-        if (filters.Date.start != "" && filters.Date.end != "") {
-            temp = temp.filter(f => (new Date(f.Date) >= new Date(filters.Date)) && (new Date(f.Date) <= new Date(filters.Date.end)))
+        if (filters.start != "" && filters.end != "") {
+            temp = temp.filter(f => (new Date(f.Date) >= new Date(filters.start)) && (new Date(f.Date) <= new Date(filters.end)))
         }
 
 
@@ -100,9 +99,9 @@ function AuditView() {
                 <label>
                     Date Range
                     <div>
-                    <input type="date" name="Date.start" value={filters.Date.start} onChange={handleChange} />
+                    <input type="date" name="start" value={filters.start} onChange={handleChange} />
                     -
-                    <input type="date" name="Date.end" value={filters.Date.end} onChange={(event) => filters.Date.end = event.target.value} />
+                    <input type="date" name="end" value={filters.end} onChange={handleChange} />
                     </div>
                 </label>
 
