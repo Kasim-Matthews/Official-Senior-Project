@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
+import {
+    Unstable_NumberInput as BaseNumberInput,
+    numberInputClasses,
+  } from '@mui/base/Unstable_NumberInput';
 
 export default function ItemInput({ objName, handleItem, handleQuantity, index, deleteField }) {
 
@@ -14,14 +18,24 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
 
     return (
         <div style={{ display: "flex" }}>
-            <select name={objName} onChange={(e) => handleItem(e, index)}>
-                <option value="">--Please choose an option--</option>
-                {item.map((val) => {
-                    return (
-                        <option value={val.Item_id}>{val.Name}</option>
-                    )
-                })}
-            </select>
+            <FormControl size="small">
+            <InputLabel id="item">Item</InputLabel>
+            <NativeSelect
+              placeholder="Please select an option"
+              name={objName} onChange={(e) => handleItem(e, index)}
+              inputProps={{
+                name: 'item',
+                id: 'item',
+              }}>
+             {partners.map((val) => {
+           {item.map((val) => {
+            return (
+                <option value={val.Item_id}>{val.Name}</option>
+            )
+        })}
+        })}
+            </NativeSelect>
+          </FormControl>
 
             <input type="number" name={objName} min="0" required onChange={(e) => handleQuantity(e, index)} />
 

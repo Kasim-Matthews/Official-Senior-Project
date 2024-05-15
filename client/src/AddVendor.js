@@ -3,6 +3,7 @@ import Axios from 'axios';
 import Vendor from "./models/Vendor";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 
 function AddVendor() {
@@ -70,6 +71,14 @@ function AddVendor() {
     return(
         <div>
           <Navbar />
+          <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+            <h2>Add Vendor</h2>
             <form onSubmit={validate}>
                 <TextField variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
@@ -84,6 +93,9 @@ function AddVendor() {
                 <Button variant="contained" type="submit" value="Submit" />
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
+            </CardContent>
+            </Card>
+            </Grid>
         </div>
     )
 }

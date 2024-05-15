@@ -1,85 +1,71 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import Axios from 'axios';
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
-function EditLocation() {
+function EditLocation(){
+    
+    const {id} = useParams();
+    const [formData, setFormData] = React.useState({})
+    
 
-  const { id } = useParams();
-  const [formData, setFormData] = React.useState({})
-  const [formErrors, setFormErrors] = useState({})
+    
+        
+        function handleChange(event){
+            setFormData(prevFormData => {
+              return{
+                ...prevFormData,
+                [event.target.name]: event.target.value
+              }
+            })
+          }
 
-  function handleCancel() {
-    if (window.confirm("Are you sure you want to cancel") == true) {
-        window.location.href = "/location";
-    }
-}
+          useEffect(() => {
+            Axios.get(`http://localhost:3306/location/${id}/edit`).then((response) => {
+            response.data.map((key, value) => {setFormData(key)});
+            })
+          }, [])
 
+          
 
-  function handleChange(event) {
-    setFormData(prevFormData => {
-      return {
-        ...prevFormData,
-        [event.target.name]: event.target.value
-      }
-    })
-  }
-
-  useEffect(() => {
-    Axios.get(`http://localhost:3001/location/${id}/edit`).then((response) => {
-      response.data.map((key, value) => { setFormData(key) });
-    })
-  }, [])
-
-
-  const validate = (e) => {
-    e.preventDefault();
-    const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
-    const regex_address = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]|[0-9]).*$/;
-
-
-    if (!regex_name.test(formData.Name)) {
-      errors.Name = "The name contains an SQL keyword or a special character!"
-    }
-
-    if (!regex_address.test(formData.Address)) {
-        errors.Address = "The address contains an SQL keyword !"
-      }
-    setFormErrors(errors)
-    if (!errors.Name && !errors.Address) {
-        handleSubmit()
-    }
-    return;
-}
-
-
-  function handleSubmit() {
-
-    Axios.put(`http://localhost:3001/location/${id}/update`, {
-      name: formData.Name,
-      Address: formData.Address
-    }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
-    window.location.href = "/location";
-
-  }
-  return (
-    <form id="edit location Form" onSubmit={validate}>
-      <label htmlFor="Name">Name</label>
-      <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} />
-      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-
-      <label htmlFor="Adress">Address</label>
-      <input type="text" name="Address" defaultValue={formData.Address} id="Address" required onChange={handleChange} />
-      {formErrors.Address ? <p>{formErrors.Address}</p> : null}
+          function handleSubmit(e){
+            e.preventDefault();
+            
+            Axios.put(`http://localhost:3306/location/${id}/update`, {name:formData.Name,
+            Address:formData.Address},{
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+          });
+            window.location.href = "/location";
       
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
-    </form>
-  )
+          }
+          return(
+            <>
+            <Navbar />
+            <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+            <h2>Edit Location</h2>
+            <form id="edit location Form" onSubmit={handleSubmit}>
+                <TextField variant="outlined" label="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange}/>
+
+                <TextField variant="outlined" label="Address" defaultValue={formData.Address} id="Address" required onChange={handleChange}/>
+    
+                <Button variant="contained" type="submit" value="Submit"/>
+            </form>
+            </CardContent>
+            </Card>
+            </Grid>
+            </>
+          )
 }
 
 export default EditLocation;

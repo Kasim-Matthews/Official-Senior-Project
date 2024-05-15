@@ -16,6 +16,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
+import Grid from '@mui/material/Grid';
 
 function EditOrder() {
 
@@ -185,6 +186,14 @@ function EditOrder() {
   return (
     <>
     <Navbar/>
+    <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+            <h2>Edit Order</h2>
     <form id="edit distribution" onSubmit={validate}>
     <FormControl size="small">
             <InputLabel id="partner">Partner</InputLabel>
@@ -286,6 +295,9 @@ function EditOrder() {
       <Button variant="contained" type="submit" value="Submit" />
       <Button varaint="outlined" type="button" onClick={handleCancel}>Cancel</Button>
     </form>
+    </CardContent>
+    </Card>
+    </Grid>
     </>
   )
 }

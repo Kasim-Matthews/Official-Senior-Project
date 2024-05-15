@@ -15,6 +15,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 
 
@@ -176,6 +177,14 @@ function AddTransfer() {
     return (
         <>
         <Navbar />
+        <Grid container justifyContent="center" >
+        <Card 
+        sx={{ minWidth: 275 }}
+        display="flex"
+        alignItems="center"
+        justifyContent="center">
+        <CardContent>
+            <h2>Add Transfer</h2>
         <form onSubmit={validate}>
         <FormControl size="small">
             <InputLabel id="from">From</InputLabel>
@@ -245,6 +254,9 @@ function AddTransfer() {
             <input type="submit" value="Submit" />
             <button type="button" onClick={handleCancel}>Cancel</button>
         </form>
+        </CardContent>
+        </Card>
+        </Grid>
         </>
     )
 }

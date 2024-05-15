@@ -6,11 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Pagination from "./components/Pagination";
 import OrderPosts from "./components/OrderPosts";
-import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
+import  AppBar  from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+import  IconButton  from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -21,24 +20,19 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Button from '@mui/material/Button';
-import './Order.css'; import { DateRangePicker } from 'react-date-range'
-import { addDays } from 'date-fns';
-import DialogTitle from '@mui/material/DialogTitle';
-import Dialog from '@mui/material/Dialog';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import Stack from '@mui/material/Stack';
+import './Order.css';import { DateRangePicker } from 'react-date-range'
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 
 
 function AddOrder() {
@@ -58,9 +52,6 @@ function AddOrder() {
 
     }
   ])
-
-
-
 
   const handleItem = (e, index) => {
     const values = [...items];
@@ -165,7 +156,7 @@ function AddOrder() {
   const handleSubmit = async () => {
 
     try {
-      Axios.post("http://localhost:3001/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
+      Axios.post("http://localhost:3306/distribution/new", { Comments: formData.Comments, Status: formData.status, DeliveryMethod: formData.DeliveryMethod, RequestDate: formData.RequestDate, CompletedDate: formData.CompletedDate, Partner_id: formData.Partner, Items: items, Location_id: formData.Location }, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -197,91 +188,100 @@ function AddOrder() {
 
   return (
     <div className="dashboard-container">
-      <Navbar />
-      <form id="distribution" onSubmit={validate}>
-        <div className='partner'>
-          <TextField
-            id="outlined-select-partner"
-            select
-            label="Partner"
-            defaultValue="Partner"
-            helperText="Please select a partner"
-            value={formData.Partner}
-            onChange={handleChange}
-          >
-            {partners.map((option) => (
-              <MenuItem key={option.Partner_id} value={option.Partner_id}>
-                {option.Name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
-        <div className='location'>
-          <TextField
-            id="outlined-select-location"
-            select
-            label="Location"
-            defaultValue="Location"
-            helperText="Please select a location"
-            value={formData.Location}
-            onChange={handleChange}
-          >
-            {locations.map((option) => (
-              <MenuItem key={option.Location_id} value={option.Location_id}>
-                {option.Name}
-              </MenuItem>
-            ))}
-          </TextField>
-        </div>
-        <div className='requestDate'>
-          <label htmlFor="Purchase_date">Purchase date</label>
-          <input type="date" name="Purchase_date" id="Purchase_date" value={formData.RequestDate} onChange={handleChange} />
-        </div>
-        <div className='completeDate'>
-        <label htmlFor="Purchase_date">Purchase date</label>
-          <input type="date" name="Purchase_date" id="Purchase_date" value={formData.CompletedDate} min={formData.RequestDate} onChange={handleChange} />
-        </div>
-        <div className='delivery'>
-          <FormControl>
-            <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
-            <RadioGroup
-              row
-              aria-labelledby="delivery-method-label"
-              name="delivery-method-group"
-            >
-              <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange} />
-              <FormControlLabel value="Shipped" control={<Radio />} label="Shipped" checked={formData.DeliveryMethod === "Shipped"} onChange={handleChange} />
-              <FormControlLabel value="Pick-up" control={<Radio />} label="Pick-up" checked={formData.DeliveryMethod === "Pick-up"} onChange={handleChange} />
-            </RadioGroup>
+    <Navbar />
+    <Grid container justifyContent="center" >
+    <Card 
+    sx={{ minWidth: 275 }}
+    display="flex"
+          alignItems="center"
+          justifyContent="center">
+      <CardContent>
+        <h2>Add Order</h2>
+    <form id="distribution" onSubmit={validate}>
+          <FormControl size="small">
+            <InputLabel id="partner">Partner</InputLabel>
+            <NativeSelect
+              placeholder="Partner"
+              inputProps={{
+                name: 'partner',
+                id: 'partner',
+              }}>
+              <option disabled></option>
+              {partners.map((val) => {
+                return (
+                  <option value={val.Partner_id}>{val.Name}</option>
+                )
+              })}
+            </NativeSelect>
           </FormControl>
-        </div>
-        <TextField
-          id="outlined-Comments-static"
-          label="Comments"
-          multiline
-          rows={4}
-          onChange={handleChange}
-          placeholder="Comments"
-        />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+          <FormControl size="small">
+            <InputLabel id="location">Locations</InputLabel>
+            <NativeSelect
+              placeholder="Locations"
+              inputProps={{
+                name: 'location',
+                id: 'location',
+              }}>
+              <option disabled></option>
+              {locations.map((val) => {
+                return (
+                  <option value={val.Location_id}>{val.Name}</option>
+                )
+              })}
+            </NativeSelect>
+          </FormControl>
+            <div className='requestDate'>
+              <label htmlFor="Request_date">Request date</label>
+                    <input type="date" name="Request_date" id="Request_date" value={formData.RequestDate} required onChange={handleChange} />
+            </div> 
+            <div className='completeDate'>
+              <label htmlFor="Complete_date">Complete date</label>
+                    <input type="date" name="Complete_date" id="Complete_date" value={formData.Complete_date} required onChange={handleChange} />
+            </div> 
+            <div className='delivery'>
+            <FormControl>
+              <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="delivery-method-label"
+                name="delivery-method-group"
+              >
+                <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off"  checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange}/>
+                <FormControlLabel value="other" control={<Radio />} label="Other"  checked={formData.DeliveryMethod === "Other"} onChange={handleChange}/>
+              </RadioGroup>
+            </FormControl>
+            </div>
+            <TextField
+              id="outlined-Comments-static"
+              label="Comments"
+              multiline
+              rows={4}
+              defaultValue="Comments"
+              onChange={handleChange} 
+              placeholder="Comments"
+            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
-        <h2>Items</h2>
-        {items.map((obj, index) => (
-          <ItemInput
-            key={index}
-            objName={obj.name}
-            handleItem={handleItem}
-            handleQuantity={handleQuantity}
-            index={index}
-            deleteField={handleDeleteField}
-          />
-        ))}
-        <button name="add-btn" onClick={handleAddField}>
-          Add
-        </button>
+      <h2>Items</h2>
+      {items.map((obj, index) => (
+        <ItemInput
+          key={index}
+          objName={obj.name}
+          handleItem={handleItem}
+          handleQuantity={handleQuantity}
+          index={index}
+          deleteField={handleDeleteField}
+        />
+      ))}
+      <button name="add-btn" onClick={handleAddField}>
+        Add
+      </button>
 
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
-      </form>
+      <input type="submit" value="Submit" />
+      <button onClick={handleCancel}>Cancel</button>
+    </form>
+    </CardContent>
+    </Card>
+    </Grid>
     </div>
   )
 }

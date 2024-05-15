@@ -3,6 +3,7 @@ import Axios from 'axios';
 import DonationSite from './models/DonationSite';
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 function AddDonationSite(){
     const [formData, setFormData] = useState(DonationSite)
@@ -59,6 +60,14 @@ function AddDonationSite(){
     return(
         <div>
             <Navbar />
+            <Grid container justifyContent="center" >
+            <Card 
+            sx={{ minWidth: 275 }}
+            display="flex"
+          alignItems="center"
+          justifyContent="center">
+                <CardContent>
+                    <h2>Add Donation Site</h2>
             <form onSubmit={validate}>
                 <TextField id="outlined-basic" label="Name" variant="outlined" value={formData.Name} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
@@ -66,9 +75,12 @@ function AddDonationSite(){
                 <TextField id="outlined-basic" label="Address" variant="outlined" value={formData.Address} required onChange={handleChange}/>
                 {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
-                <input type="submit" value="Submit" />
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <Button variant="contained" type="submit" value="Submit" />
+                <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
+            </CardContent>
+            </Card>
+            </Grid>
         </div>
     )
 }

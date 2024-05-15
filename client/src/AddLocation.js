@@ -1,97 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Axios from 'axios';
-import Location from './models/Location'
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
-function AddLocation() {
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = React.useState(Location)
-  const [items, setItems] = React.useState([])
-  const [formErrors, setFormErrors] = useState({})
-
-
-
-  function handleCancel() {
-    if (window.confirm("Are you sure you want to cancel") == true) {
-        window.location.href = "/location";
-    }
-}
-
-  function handleChange(event) {
-    setFormData(prevFormData => {
-      return {
-        ...prevFormData,
-        [event.target.name]: event.target.value
-      }
-    })
-  }
-
-  const validate = (e) => {
-    e.preventDefault();
-    const errors = {};
-    const regex_name = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]).*$/;
-    const regex_address = /^(?!.*SELECT|.*FROM)(?=[a-zA-Z()\s]|[0-9]).*$/;
-
-
-    if (!regex_name.test(formData.Name)) {
-      errors.Name = "The name contains an SQL keyword or a special character!"
-    }
-
-    if (!regex_address.test(formData.Address)) {
-        errors.Address = "The address contains an SQL keyword !"
-      }
-    setFormErrors(errors)
-    if (!errors.Name && !errors.Address) {
-        handleSubmit()
-    }
-    return;
-}
-  
-  async function handleSubmit() {
-    try {
-      Axios.post("http://localhost:3001/location/new", {
-        name: formData.Name,
-        Address: formData.Address
-      }, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+function AddLocation(){
+    const navigate = useNavigate();
+    
+    const [formData, setFormData] = React.useState(
+        {
+          Name: "",
+          Address: "",
         }
-      });
-    }
-    catch (error) {
-      console.log(error.response.data);
-    }
+        )
+        
+        
+        function handleChange(event){
+            setFormData(prevFormData => {
+              return{
+                ...prevFormData,
+                [event.target.name]: event.target.value
+              }
+            })
+          }
 
-    
+        function handleSubmit(e){
+            e.preventDefault();
+            try{
+                Axios.post("http://localhost:3306/location/new", {name:formData.Name,
+                Address:formData.Address},{
+                    headers: {
+                      'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                });
+            }
+            catch(error){
+                console.log(error.response.data);
+            }
+            window.location.href = "/location";
+          }
 
+          return(
+            <>
+            <Navbar />
+            <Grid container justifyContent="center" >
+            <Card 
+            sx={{ minWidth: 275 }}
+            display="flex"
+          alignItems="center"
+          justifyContent="center">
+            <CardContent>
+              <h2>Add Location</h2>
+            <form id="locations" onSubmit={handleSubmit}>
+                <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
 
-    await Axios.post("http://localhost:3001/location/partner", {name: formData.Name, address: formData.Address})
-    await Axios.post("http://localhost:3001/location/pair", {Items: items}).then(window.location.href ="/location")
+                <TextField variant="outlined" name="Address" value={formData.Address} id="Address" required onChange={handleChange}/>
 
-
-    
-  }
-
-  React.useEffect(() => {
-    Axios.get("http://localhost:3001/item").then((response) => {
-        setItems(response.data);
-    })
-}, [])
-
-  return (
-    <form id="locations" onSubmit={validate}>
-      <label htmlFor="Name">Name</label>
-      <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange} />
-      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-      <label htmlFor="Address">Address</label>
-      <input type="text" name="Address" value={formData.Address} id="Address" required onChange={handleChange} />
-      {formErrors.Address ? <p>{formErrors.Address}</p> : null}
-
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
-    </form>
-  )
+                <Button variant="contained" type="submit" value="Submit"/>
+            </form>
+            </CardContent>
+            </Card>
+            </Grid>
+          </>
+          )
 }
 
 export default AddLocation;

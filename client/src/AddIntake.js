@@ -9,7 +9,7 @@ import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-
+import Grid from '@mui/material/Grid';
 
 function AddIntake() {
 
@@ -79,7 +79,14 @@ function AddIntake() {
   return (
     <div>
       <Navbar />
-      <h2>Intake</h2>
+      <Grid container justifyContent="center" >
+      <Card 
+      sx={{ minWidth: 275 }}
+      display="flex"
+          alignItems="center"
+          justifyContent="center">
+      <CardContent>
+      <h2>Add Intake</h2>
       <form id="intake" onSubmit={submitPurchase}>
         <Box sx={{ minWidth: 120 }}>
           <FormControl size="small">
@@ -149,8 +156,11 @@ function AddIntake() {
         <Button variant="contained" type="submit" value="Submit" />
 
       </form>
+      </CardContent>
+      </Card>
+      </Grid>
     </div>
-
+        
   );
 }
 

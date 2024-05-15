@@ -5,11 +5,14 @@ import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import NativeSelect from '@mui/material/NativeSelect';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 
 function AddPurchase() {
@@ -28,12 +31,6 @@ function AddPurchase() {
 
         }
     ])
-
-    function handleCancel() {
-        if (window.confirm("Are you sure you want to cancel") == true) {
-            window.location.href = "/purchase";
-        }
-    }
 
     function handleChange(event) {
         setFormData(prevFormData => {
@@ -89,9 +86,9 @@ function AddPurchase() {
     };
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/vendor/list").then((response) => {
+        Axios.get("http://localhost:3306/vendor/list").then((response) => {
             if (response.data.status === 'complete') {
-                setVendors(response.data.data);
+                setVendors(response.data);
             }
 
             else if (response.data.status === 'error in query'){
@@ -129,10 +126,10 @@ function AddPurchase() {
     }
 
     const handleSubmit = async () => {
-        await Axios.post("http://localhost:3001/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
-        let IL_response = await Axios.post("http://localhost:3001/purchase/location", { Items: items, Location_id: formData.Location })
-        await Axios.post("http://localhost:3001/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
-        await Axios.put("http://localhost:3001/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
+        await Axios.post("http://localhost:3306/purchase/new", { Comments: formData.Comments, Purchase_date: formData.Purchase_date, Total: formData.Total, Vendor: formData.Vendor })
+        let IL_response = await Axios.post("http://localhost:3306/purchase/location", { Items: items, Location_id: formData.Location })
+        await Axios.post("http://localhost:3306/purchase/track", { Items: items, Total: formData.Total, FKItemLocation: IL_response.data });
+        await Axios.put("http://localhost:3306/purchase/update_item", { Items: items, ItemLocationFK: IL_response.data});
         window.location.href = "/purchase";
 
 
@@ -142,26 +139,51 @@ function AddPurchase() {
     return (
         <div>
             <Navbar />
-            <h2>Purchase</h2>
+            <Grid container justifyContent="center" >
+            <Card 
+            sx={{ minWidth: 275 }}
+            display="flex"
+          alignItems="center"
+          justifyContent="center">
+            <CardContent>
+            <h2>Add Purchase</h2>
             <form onSubmit={validate}>
-                <TextField select defaultValue="Vendor" helperText="Please select a vendor" id="Vendor" label="Vendor" value={formData.Vendor} onChange={handleChange}/>
-                    {vendor.map((val) => {
+            <FormControl size="small">
+            <InputLabel id="vendor">Vendor</InputLabel>
+            <NativeSelect
+              placeholder="Vendor"
+              inputProps={{
+                name: 'vendor',
+                id: 'vendor',
+              }}>
+              {vendor.map((val) => {
                         return (
                             <option value={val.Partner_id}>{val.Name}</option>
                         )
                     })}
+            </NativeSelect>
+          </FormControl>
                 <br />
 
-                <TextField select defaultValue="Location" helperText="Please select a location"  id="Location" name="Location" value={formData.Location} onChange={handleChange}/>
+                <FormControl size="small">
+                    <InputLabel id="location">Locations</InputLabel>
+                    <NativeSelect
+                    placeholder="Locations"
+                    inputProps={{
+                        name: 'location',
+                        id: 'location',
+                    }}>
+                    <option disabled></option>
                     {locations.map((val) => {
                         return (
-                            <option value={val.Location_id}>{val.Name}</option>
+                        <option value={val.Location_id}>{val.Name}</option>
                         )
                     })}
-                <br />
+                    </NativeSelect>
+                </FormControl>
 
                 <div>
-                <label htmlFor="Purchase_date">Purchase date</label>
+                    <label htmlFor="Purchase_date">Purchase date</label>
                     <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
                 </div>
 
@@ -199,9 +221,11 @@ function AddPurchase() {
                 </Button>
 
 
-                <input type="submit" value="Submit" />
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <Button variant="contained" type="submit" value="Submit" />
             </form>
+            </CardContent>
+            </Card>
+            </Grid>
         </div>
     )
 }

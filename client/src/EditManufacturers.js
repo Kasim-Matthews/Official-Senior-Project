@@ -1,70 +1,67 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import {useParams} from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
-function EditManufacturers() {
+function EditManufacturers(){
+    
+    const {id} = useParams();
+    const [formData, setFormData] = React.useState({})
+    
 
-  const { id } = useParams();
-  const [formData, setFormData] = React.useState({})
-  const navigate = useNavigate();
+    
+        
+        function handleChange(event){
+            setFormData(prevFormData => {
+              return{
+                ...prevFormData,
+                [event.target.name]: event.target.value
+              }
+            })
+          }
 
+          useEffect(() => {
+            Axios.get(`http://localhost:3306/manufacturers/${id}/edit`).then((response) => {
+            response.data.map((key, value) => {setFormData(key)});
+            })
+          }, [])
 
-  function handleCancel() {
-    if (window.confirm("Are you sure you want to cancel") == true) {
-        window.location.href = "/manufacturers";
-    }
-}
+          
 
-
-  function handleChange(event) {
-    setFormData(prevFormData => {
-      return {
-        ...prevFormData,
-        [event.target.name]: event.target.value
-      }
-    })
-  }
-
-  useEffect(() => {
-    Axios.get(`http://localhost:3001/manufacturers/${id}/edit`).then((response) => {
-      if (response.data.status === 'complete') {
-        response.data.data.map((key, value) => { setFormData(key) });
-      }
-
-      else if (response.data.status === 'error in query') {
-        navigate('/query')
-        console.error("Fail in the query")
-        console.error(response.data.message)
-    }
-
-    }).catch(error => {
-      navigate('/error')
-      console.error(error.response.data.message)
-  })
-  }, [])
-
-
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    Axios.put(`http://localhost:3001/manufacturers/${id}/update`, { name: formData.Name, }, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
-    });
-    window.location.href = "/manufacturers";
-
-  }
-  return (
-    <form id="edit location Form" onSubmit={handleSubmit}>
-      <label htmlFor="Name">Name</label>
-      <input type="text" name="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} />
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
-    </form>
-  )
+          function handleSubmit(e){
+            e.preventDefault();
+            
+            Axios.put(`http://localhost:3306/manufacturers/${id}/update`, {name:formData.Name,},{
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              }
+          });
+            window.location.href = "/manufacturers";
+      
+          }
+          return(
+            <>
+            <Navbar />
+            <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+            <h2>Edit Manufacturer</h2>
+            <form id="edit location Form" onSubmit={handleSubmit}>
+                <TextField variant="outlined" label="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange}/>
+                <Button variant="contained" type="submit" value="Submit"/>
+            </form>
+            </CardContent>
+            </Card>
+            </Grid>
+          </>
+          )
 }
 
 export default EditManufacturers;

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 
 function EditVendor() {
@@ -92,6 +93,14 @@ function EditVendor() {
   return (
     <div>
       <Navbar/>
+      <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+            <h2>Edit Vendor</h2>
       <form onSubmit={validate}>
         <TextField  variant="outlined" name="BusinessName" id="BusinessName" defaultValue={formData.BusinessName} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
@@ -106,6 +115,9 @@ function EditVendor() {
         <Button variant="contained" type="submit" value="Submit" />
         <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>
+      </CardContent>
+      </Card>
+      </Grid>
     </div>
   )
 }

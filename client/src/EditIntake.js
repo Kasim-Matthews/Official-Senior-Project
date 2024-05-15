@@ -14,6 +14,7 @@ import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 function EditIntake() {
 
@@ -203,7 +204,14 @@ function EditIntake() {
   return (
     <div>
       <Navbar />
-      <h2>Intake</h2>
+      <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+      <h2>Edit Intake</h2>
       <form id="intake" onSubmit={typechecker}>
 
       <FormControl size="small">
@@ -287,6 +295,9 @@ function EditIntake() {
         <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
 
       </form>
+      </CardContent>
+      </Card>
+      </Grid>
     </div>
   )
 }

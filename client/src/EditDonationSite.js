@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 
 function EditDonationSite() {
@@ -79,6 +80,14 @@ function EditDonationSite() {
   return (
     <div>
       <Navbar />
+      <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+            <h2>Edit Donation Site</h2>
       <form onSubmit={validate}>
         <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
@@ -89,6 +98,9 @@ function EditDonationSite() {
         <Button variant="contained" type="submit" value="Submit" />
         <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>
+      </CardContent>
+      </Card>
+      </Grid>
     </div>
   )
 }

@@ -7,6 +7,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Grid from '@mui/material/Grid';
 
 
 
@@ -44,6 +45,14 @@ function AddAudit() {
     return (
         <div>
             <Navbar />
+            <Grid container justifyContent="center" >
+            <Card 
+            sx={{ minWidth: 275 }}
+            display="flex"
+          alignItems="center"
+          justifyContent="center">
+                <CardContent>
+                    <h2>Add Audit</h2>
             <form onSubmit={handleSubmit}>
                 {inventory.map((val, index) => {
                     return(
@@ -54,9 +63,12 @@ function AddAudit() {
                     )
                 })}
 
-                <input type="submit" value="Submit" />
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <Button variant="contained" type="submit" value="Submit" />
+                <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
+            </CardContent>
+            </Card>
+            </Grid>
         </div>
     )
 }

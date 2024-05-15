@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import Button from '@mui/material/Button';
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
 
 function AddPartner(){
     const navigate = useNavigate();
@@ -85,6 +86,13 @@ function AddPartner(){
       return(
         <div>
         <Navbar />
+        <Grid container justifyContent="center" >
+        <Card 
+        sx={{ minWidth: 275 }}
+        display="flex"
+          alignItems="center"
+          justifyContent="center">
+        <CardContent>
         <h2>Add Partner</h2>
         <form id="partnerForm" onSubmit={handleSubmit}>
           <TextField id="name" label="Name" variant="outlined" value={formData.Name} onChange={handleChange} required/><br></br>
@@ -94,6 +102,9 @@ function AddPartner(){
             <Button type="button" onClick={handleCancel}>Cancel</Button>
         
         </form>
+        </CardContent>
+        </Card>
+        </Grid>
         </div>
       );
 }

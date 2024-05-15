@@ -11,6 +11,7 @@ import Select from '@mui/material/Select';
 import NativeSelect from '@mui/material/NativeSelect';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
 
 function EditPurchase() {
     const { id } = useParams();
@@ -156,7 +157,14 @@ function EditPurchase() {
     return (
         <div>
             <Navbar />
-            <h2>Purchase</h2>
+            <Grid container justifyContent="center" >
+          <Card 
+          sx={{ minWidth: 275 }} 
+          display="flex"
+          alignItems="center"
+          justifyContent="center">
+          <CardContent>
+            <h2>Edit Purchase</h2>
             <form onSubmit={validate}>
             <FormControl size="small">
             <InputLabel id="vendor">Vendor</InputLabel>
@@ -247,6 +255,9 @@ function EditPurchase() {
                 <Button variant="contained" type="submit" value="Submit" />
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
+            </CardContent>
+            </Card>
+            </Grid>
         </div>
     )
 }
