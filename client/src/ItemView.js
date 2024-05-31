@@ -9,9 +9,10 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { TableFooter } from '@mui/material';
 import Button from '@mui/material/Button';
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
+import Paper from '@mui/material/Paper';
+
 
 function ItemView() {
     const navigate = useNavigate();
@@ -21,6 +22,16 @@ function ItemView() {
     const [tab2, setTab2] = React.useState([])
     const [locationList, setLocationList] = React.useState([])
     const [nonActive, setNonActive] = React.useState(false)
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
 
     useEffect(() => {
         Axios.get("http://localhost:3001/location/use").then((response) => {
@@ -175,8 +186,8 @@ function ItemView() {
                     {row2.map((val) => {
                         return (
                             <TableRow>
-                                <TableCell>{row[0].Item}</TableCell>
-                                {row.map((val) => {
+                                <TableCell>{val[0].Item}</TableCell>
+                                {row2.map((val) => {
                                             return (
                                                 <TableCell>{val.Quantity}</TableCell>
                                             )

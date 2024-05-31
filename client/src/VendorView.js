@@ -168,9 +168,6 @@ function VendorView() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
-                    </TableRow>
-                    <TableRow>
                         <TableCell>Business Name</TableCell>
                         <TableCell>Contact Name</TableCell>
                         <TableCell>Phone</TableCell>

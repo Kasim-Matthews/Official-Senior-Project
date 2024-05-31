@@ -242,7 +242,7 @@ function Intake() {
         </Dialog>
       </React.Fragment>
 
-            <Button variant="contained"><Link to="/intake/new">Add</Link></Button>
+            <Button variant="contained"><Link to="/donation/new">Add</Link></Button>
 
             <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />

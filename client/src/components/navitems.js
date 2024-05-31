@@ -51,7 +51,7 @@ export const collectionsDropdown = [
     {
         id: 2,
         title: "Donation",
-        path: "/intake",
+        path: "/donation",
         cName: "collections-menu-item",
     },
 ]

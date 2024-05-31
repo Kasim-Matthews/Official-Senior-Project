@@ -11,6 +11,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableFooter } from '@mui/material';
 import Button from '@mui/material/Button';
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import TextField from "@mui/material/TextField";
+
 
 
 function TransferView() {
@@ -18,6 +21,15 @@ function TransferView() {
 
     const [partners, setPartners] = React.useState([])
     const [locations, setLocations] = React.useState([])
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
 
     const [transferList, setTransferList] = React.useState([])
     const [records, setRecords] = React.useState([])
@@ -189,9 +201,6 @@ function TransferView() {
             <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
-                    <TableRow>
-                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
-                    </TableRow>
                     <TableRow>
                         <TableCell>From</TableCell>
                         <TableCell>To</TableCell>

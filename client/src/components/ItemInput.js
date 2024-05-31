@@ -31,13 +31,13 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
                 name: 'item',
                 id: 'item',
               }}>
-             {partners.map((val) => {
+
            {item.map((val) => {
             return (
                 <option value={val.Item_id}>{val.Name}</option>
             )
         })}
-        })}
+
             </NativeSelect>
           </FormControl>
 

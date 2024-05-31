@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { TableFooter } from '@mui/material';
 import Button from '@mui/material/Button';
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 
 function ProductDriveView() {
     const navigate = useNavigate();
@@ -18,6 +19,16 @@ function ProductDriveView() {
     const [driveList, setDriveList] = React.useState([])
     const [records, setRecords] = React.useState([])
     const [nonActive, setNonActive] = React.useState(false)
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
 
 
     const handleRemove = (id, Name) => {
@@ -132,7 +143,7 @@ function ProductDriveView() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
+                     <h3>{`Transfer from ${records.Taken} to ${records.Given} on ${records.Date}`}</h3>
                     </TableRow>
                     <TableRow>
                         <TableCell>Product Drive Name</TableCell>
@@ -167,7 +178,7 @@ function ProductDriveView() {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
+                     <h3>{`Transfer from ${records.Taken} to ${records.Given} on ${records.Date}`}</h3>
                     </TableRow>
                     <TableRow>
                         <TableCell>Product Drive Name</TableCell>
