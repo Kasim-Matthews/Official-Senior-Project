@@ -9,10 +9,12 @@ import  IconButton  from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import { Link } from "react-router-dom";
-import Button from '@mui/material/Button';
 import Navbar from "./components/navbar";
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 
 function AddPartner(){
     const navigate = useNavigate();

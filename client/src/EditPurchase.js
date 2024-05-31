@@ -12,6 +12,9 @@ import NativeSelect from '@mui/material/NativeSelect';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
 
 function EditPurchase() {
     const { id } = useParams();

@@ -2,6 +2,15 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Navbar from './components/navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import Button from '@mui/material/Button';
 
 function ViewManufacturer() {
 
@@ -37,30 +46,28 @@ function ViewManufacturer() {
     return (
         <div>
             <Navbar />
-            <table>
-                <thead>
-                    <tr>
-                        <h3>{`Past Donations from ${record[0].Manufacturer}`}</h3>
-                    </tr>
-                    <tr>
-                        <th>Date</th>
-                        <th>Volume</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Date</TableCell>
+                      <TableCell>Volume</TableCell>
+                      <TableCell>Details</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                     {record.map((val) => {
                         return (
-                            <tr>
-                                <td>{val.Date}</td>
-                                <td>{val.Volume}</td>
-                                <td><button onClick={() => handleView(val.Intake_id)}> View donation details</button></td>
-                            </tr>
+                            <TableRow>
+                                <TableCell>{val.Date}</TableCell>
+                                <TableCell>{val.Volume}</TableCell>
+                                <TableCell><Button variant="outlined" onClick={() => handleView(val.Intake_id)}> View donation details</Button></TableCell>
+                            </TableRow>
                         )
                     })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
+                </TableBody>
+            </Table>
+            </TableContainer>
         </div>
     )
 }

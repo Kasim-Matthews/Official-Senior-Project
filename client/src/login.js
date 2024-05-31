@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import useAuth from './hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Navbar from './components/navbar';
-
+import './login.css';
 import Axios from 'axios';
 
 const Login = () => {

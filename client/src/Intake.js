@@ -18,6 +18,30 @@ import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { te } from "date-fns/locale";
 import Navbar from './components/navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import TextField from '@mui/material/TextField';
 
 function Intake() {
     const navigate = useNavigate();
@@ -134,56 +158,91 @@ function Intake() {
         })
     }, [])
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
 
     return (
         <div>
             <Navbar />
-
+            <React.Fragment>
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Filters</Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          }}
+        >
+          <DialogTitle>Filters</DialogTitle>
+          <DialogContent>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="PartnerType">
-                    Partner
-                    <select id="PartnerType" name="PartnerType" value={filters.PartnerType} onChange={handleChange}>
-                        <option value=""></option>
-                        {partners.map((val) => {
-                            return (
-                                <option value={val.PartnerType_id}>{val.Type}</option>
-                            )
-                        })}
-
-                    </select>
-
-                </label>
-
-                <label htmlFor="Location">
-                    Location
-                    <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
-                        <option value=""></option>
-                        {locations.map((val) => {
-                            return (
-                                <option value={val.Name}>{val.Name}</option>
-                            )
-                        })}
-
-                    </select>
-
-                </label>
-
-                <label>
-                    Date Range
-                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
-                </label>
-
-
-
-                <input type="submit" value="Filter" />
-                <button onClick={clearFilters}>Clear</button>
-
-
-
+              <div className='partner'>
+                <TextField
+                  id="outlined-select-partner"
+                  select
+                  label="Partner"
+                  defaultValue="Partner"
+                  helperText="Please select a partner"
+                >
+                  <MenuItem className="Partner" onChange={handleChange}>
+                  </MenuItem>
+                  {partners.map((option) => (
+                    <MenuItem value={option.Name}>
+                      {option.Name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+              <div className='delivery'>
+                <FormControl>
+                  <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="delivery-method-label"
+                    name="delivery-method-group"
+                    value={filters.DeliveryMethod}
+                  >
+                    <FormControlLabel value="" control={<Radio />} label="All" />
+                    <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" />
+                    <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className='date'>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker']}>
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+              <div className='submit'>
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <Button type="submit">Submit</Button>
+                </DialogActions>
+              </div>
             </form>
+          </DialogContent>
+        </Dialog>
+      </React.Fragment>
 
-
-            <button><Link to="/intake/new">Add</Link></button>
+            <Button variant="contained"><Link to="/intake/new">Add</Link></Button>
 
             <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />

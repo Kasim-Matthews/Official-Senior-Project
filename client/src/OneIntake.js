@@ -2,6 +2,15 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useParams, Link } from "react-router-dom";
 import Navbar from './components/navbar';
+import { TableFooter } from "@mui/material";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
 function ViewIntake() {
 
@@ -22,50 +31,53 @@ function ViewIntake() {
     return (
         <div>
             <Navbar />
-            <table>
-                <thead>
-                    <tr>
-                        <th>Source</th>
-                        <th>Received Date</th>
-                        <th>Storage Location</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{record.Partner}</td>
-                        <td>{record.RecievedDate}</td>
-                        <td>{record.Location}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item Name</th>
-                        <th>Inkind Value</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {itemList.map((val) => {
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Source</TableCell>
+                      <TableCell>Received Date</TableCell>
+                      <TableCell>Storage Location</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                        <TableCell>{record.Partner}</TableCell>
+                        <TableCell>{record.RecievedDate}</TableCell>
+                        <TableCell>{record.Location}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            </TableContainer>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Item Name</TableCell>
+                      <TableCell>Inkind Value</TableCell>
+                      <TableCell>Quantity</TableCell>
+                    </TableRow>
+                </TableHead>
+            <TableBody>
+                {itemList.map((val) => {
                         return (
-                            <tr>
-                                <td>{val.Item}</td>
-                                <td>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
-                                <td>{val.Quantity}</td>
-                            </tr>
+                            <TableRow>
+                                <TableCell>{val.Item}</TableCell>
+                                <TableCell>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</TableCell>
+                                <TableCell>{val.Quantity}</TableCell>
+                            </TableRow>
                         )
                     })}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th>Total</th>
-                        <td>${total}</td>
-                        <td>{totalQuantity}</td>
-                    </tr>
-                </tfoot>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
+            </TableBody>
+            <TableFooter>
+                    <TableRow>
+                        <TableCell>Total</TableCell>
+                        <TableCell>${total}</TableCell>
+                        <TableCell>{totalQuantity}</TableCell>
+                    </TableRow>
+            </TableFooter>
+            </Table>
+            </TableContainer>
         </div>
     )
 }

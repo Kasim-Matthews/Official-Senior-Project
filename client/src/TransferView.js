@@ -2,6 +2,15 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from './components/navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import Button from '@mui/material/Button';
 
 
 function TransferView() {
@@ -106,10 +115,35 @@ function TransferView() {
     return (
         <div>
             <Navbar />
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="From">
-                    From
-                    <select id="From" name="From" value={filters.From} onChange={handleChange}>
+            <React.Fragment>
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    Filters</Button>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                        component: 'form',
+                        onSubmit: (event) => {
+                            event.preventDefault();
+                            const formData = new FormData(event.currentTarget);
+                            const formJson = Object.fromEntries(formData.entries());
+                            const email = formJson.email;
+                            console.log(email);
+                            handleClose();
+                        },
+                    }}
+                >
+                    <DialogTitle>Filters</DialogTitle>
+                    <DialogContent>
+                        <form onSubmit={handleSubmit}>
+                            <div className='from'>
+                            <TextField
+                                    id="outlined-select-from"
+                                    select
+                                    label="From"
+                                    defaultValue="From"
+                                    helperText="Please select a partner"
+                                >
                         <option value=""></option>
                         {partners.map((val) => {
                             return (
@@ -117,64 +151,75 @@ function TransferView() {
                             )
                         })}
 
-                    </select>
-
-                </label>
-
-                <label htmlFor="To">
-                    To
-                    <select id="To" name="To" value={filters.To} onChange={handleChange}>
-                        <option value=""></option>
-                        {locations.map((val) => {
+                    </TextField>
+                            </div>
+                            <div className='to'>
+                                <TextField
+                                    id="outlined-select-to"
+                                    select
+                                    label="To"
+                                    defaultValue="To"
+                                    helperText="Please select a location"
+                                >
+                                    <option value=""></option>
+                                    {locations.map((val) => {
+                                        return (
+                                            <option value={val.Name}>{val.Name}</option>
+                                        )
+                                    })}
+                                </TextField>
+                            </div>
+                            <div className='date'>
+                            <label>
+                                Date Range
+                                <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
+                            </label>
+                            </div>
+                            <div className='submit'>
+                                <DialogActions>
+                                    <input type="submit" value="Filter" />
+                                    <button onClick={clearFilters}>Clear</button>
+                                </DialogActions>
+                            </div>
+                        </form>
+                    </DialogContent>
+                </Dialog>
+            </React.Fragment>
+            <Button variant="contained"><Link to="/transfer/new">Add</Link></Button>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>From</TableCell>
+                        <TableCell>To</TableCell>
+                        <TableCell>Date</TableCell>
+                        <TableCell>Comments</TableCell>
+                        <TableCell>Total Moved</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                {records.map((val) => {
                             return (
-                                <option value={val.Name}>{val.Name}</option>
-                            )
+                                <TableRow>
+                                    <TableCell>{val.Taken}</TableCell>
+                                    <TableCell>{val.Given}</TableCell>
+                                    <TableCell>{val.Date}</TableCell>
+                                    <TableCell>{val.Comments}</TableCell>
+                                    <TableCell>{val.TotalMoved}</TableCell>
+                                    <TableCell>
+                                        <Button variant="outlined" onClick={() => handleRemove(val.Intake_id, val.Taken, val.Location)}>Delete</Button>
+                                        <Button variant="outlined" onClick={() => handleView(val.Intake_id)}>View</Button>
+                                    </TableCell>
+                                </TableRow>
+                            );
                         })}
-
-                    </select>
-
-                </label>
-                <label>
-                    Date Range
-                    <input type="date" name="Date" value={filters.Date} onChange={handleChange} />
-                </label>
-
-
-
-                <input type="submit" value="Filter" />
-                <button onClick={clearFilters}>Clear</button>
-            </form>
-            <button><Link to="/transfer/new">Add</Link></button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Date</th>
-                        <th>Comments</th>
-                        <th>Total Moved</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {records.map((val) => {
-                        return (
-                            <tr>
-                                <td>{val.Taken}</td>
-                                <td>{val.Given}</td>
-                                <td>{val.Date}</td>
-                                <td>{val.Comments}</td>
-                                <td>{val.TotalMoved}</td>
-                                <td>
-                                    <button onClick={() => handleRemove(val.Intake_id, val.Taken, val.Location)}>Delete</button>
-                                    <button onClick={() => handleView(val.Intake_id)}>View</button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
+                </TableBody>
+            </Table>
+            </TableContainer>
         </div>
     );
 }

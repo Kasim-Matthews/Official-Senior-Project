@@ -4,6 +4,10 @@ import {
     Unstable_NumberInput as BaseNumberInput,
     numberInputClasses,
   } from '@mui/base/Unstable_NumberInput';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+
 
 export default function ItemInput({ objName, handleItem, handleQuantity, index, deleteField }) {
 

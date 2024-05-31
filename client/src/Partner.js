@@ -11,6 +11,15 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Navbar from "./components/navbar";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import Button from '@mui/material/Button';
 
 function Partner(){
     const navigate = useNavigate();
@@ -37,34 +46,39 @@ function Partner(){
 
     return(
         <div>
-            <button><Link to="/partner/new">Add</Link></button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {partnerList.map((val) => {
+            <Navbar />
+            <Button variant="contained"><Link to="/partner/new">Add</Link></Button>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Email</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                {partnerList.map((val) => {
                         return(
-                            <tr>
-                                <td>{val.Name}</td>
-                                <td>{val.Email}</td>
-                                <td>
-                                    <button onClick={() => handleRemove(val.Partner_id)}>Delete</button>
-                                    <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                    <button onClick={() => handleView(val.Partner_id)}>View</button>
-                                </td>
+                            <TableRow>
+                                <TableCell>{val.Name}</TableCell>
+                                <TableCell>{val.Email}</TableCell>
+                                <TableCell>
+                                    <Button variant="outlined" onClick={() => handleRemove(val.Partner_id)}>Delete</Button>
+                                    <Button variant="outlined" onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
+                                    <Button variant="outlined" onClick={() => handleView(val.Partner_id)}>View</Button>
+                                </TableCell>
 
-                            </tr>
+                            </TableRow>
                         );
                     })}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
+            </TableContainer>
             <p style={{display: "none"}}>Make sure when doing input validation you give an error if email is already used and don't allow submit, can cause some weird errors</p>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }

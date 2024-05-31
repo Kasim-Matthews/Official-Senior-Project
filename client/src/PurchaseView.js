@@ -31,7 +31,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Navbar from './components/navbar';
 
-
 function Purchase() {
     const navigate = useNavigate();
 
@@ -244,12 +243,10 @@ function Purchase() {
                 </Dialog>
             </React.Fragment>
 
-            <button><Link to="/purchase/new">Add</Link></button>
+            <Button variant="contianed"><Link to="/purchase/new">Add</Link></Button>
 
             <PurchasePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
-
-            <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }

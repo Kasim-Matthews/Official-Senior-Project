@@ -2,6 +2,15 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Navbar from './components/navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import Button from '@mui/material/Button';
 
 function ViewDrive() {
 
@@ -55,81 +64,83 @@ function ViewDrive() {
         return (
             <div>
                 <Navbar />
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{record.Name}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th>Quantity</th>
-                            <th>Total Items</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                </table>
-                <button><Link to="/Dashboard">Dasboard</Link></button>
+                <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                      <TableCell>{record.Name}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            </TableContainer>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Location</TableCell>
+                      <TableCell>Total Iteams</TableCell>
+                      <TableCell>Details</TableCell>
+                    </TableRow>
+                </TableHead>
+            </Table>
+            </TableContainer>
             </div>
         )
     }
-
 
     else {
         return (
             <div>
                 <Navbar />
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{record.Name}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Location</th>
-                            <th>Quantity</th>
-                            <th>Total Items</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Donation Site</TableCell>
+                      <TableCell>Address</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                      <TableCell>{record.Name}</TableCell>
+                      <TableCell>{record.Address}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            </TableContainer>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Location</TableCell>
+                      <TableCell>Total Iteams</TableCell>
+                      <TableCell>Details</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                         {intakeList.map((val) => {
                             return (
-                                <tr>
-                                    <td>{val.Location}</td>
-                                    <td>{val.Quantity}</td>
-                                    <td>{val.TotalItems}</td>
-                                    <td>
-                                        <button onClick={() => handleView(val.Intake_id)}>View Details</button>
-                                    </td>
-                                </tr>
+                                <TableRow>
+                                    <TableCell>{val.Location}</TableCell>
+                                    <TableCell>{val.Quantity}</TableCell>
+                                    <TableCell>{val.TotalItems}</TableCell>
+                                    <TableCell>
+                                        <Button variant="outined" onClick={() => handleView(val.Intake_id)}>View Details</Button>
+                                    </TableCell>
+                                </TableRow>
                             )
                         })}
-                    </tbody>
-                </table>
-                <button><Link to="/Dashboard">Dasboard</Link></button>
+                    </TableBody>
+            </Table>
+            </TableContainer>
             </div>
         )
     }
-
 }
 /*Cannot edit till the purchase functionality is a thing*/
 

@@ -1,7 +1,7 @@
 .navbar{
     height: 10vh;
     width: 100%;
-    background: #03045E;
+    background: #2196f3;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,6 +13,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    font-family: "Open Sans", sans-serif;
 }
 
 .nav-items{
@@ -40,5 +41,5 @@
 }
 
 .nav-item a:hover {
-    background: #00B4D8;
+    background: #1769aa;
 }

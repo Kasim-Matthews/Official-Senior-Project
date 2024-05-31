@@ -2,6 +2,15 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Navbar from './components/navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import Button from '@mui/material/Button';
 
 function ViewOrder() {
 
@@ -28,60 +37,62 @@ function ViewOrder() {
   return (
     <div>
       <Navbar />
-      <table>
-        <thead>
-          <tr>
-            <th>Partner</th>
-            <th>Requested Date</th>
-            <th>Completed Date</th>
-            <th>Delivery Method</th>
-            <th>Location</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{record.Name}</td>
-            <td>{record.RequestDate}</td>
-            <td>{record.CompletedDate}</td>
-            <td>{record.DeliveryMethod}</td>
-            <td>{record.Location}</td>
-            <td>{record.Status}</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Item Name</th>
-            <th>Value/item</th>
-            <th>In-kind Value</th>
-            <th>Quantity</th>
-          </tr>
-        </thead>
-        <tbody>
-          {itemList.map((val) => {
-            return (
-              <tr>
-                <td>{val.Item}</td>
-                <td>{val.FairMarketValue}</td>
-                <td>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</td>
-                <td>{val.Quantity}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>Total</td>
-            <td></td>
-            <td>${total}</td>
-            <td>{totalQuantity}</td>
-          </tr>
-        </tfoot>
-      </table>
-      <button><Link to="/Dashboard">Dasboard</Link></button>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Partner</TableCell>
+                      <TableCell>Requested Date</TableCell>
+                      <TableCell>Completed Date</TableCell>
+                      <TableCell>Delivery Method</TableCell>
+                      <TableCell>Location</TableCell>
+                      <TableCell>Status</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    <TableRow>
+                      <TableCell>{record.Name}</TableCell>
+                      <TableCell>{record.RequestDate}</TableCell>
+                      <TableCell>{record.CompletedDate}</TableCell>
+                      <TableCell>{record.DeliveryMethod}</TableCell>
+                      <TableCell>{record.Location}</TableCell>
+                      <TableCell>{record.Status}</TableCell>
+                    </TableRow>
+                </TableBody>
+            </Table>
+            </TableContainer>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                      <TableCell>Item Name</TableCell>
+                      <TableCell>Value/item</TableCell>
+                      <TableCell>In-kind Value</TableCell>
+                      <TableCell>Quantity</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                {itemList.map((val) => {
+                  return (
+                    <TableRow>
+                      <TableCell>{val.Item}</TableCell>
+                      <TableCell>{val.FairMarketValue}</TableCell>
+                      <TableCell>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</TableCell>
+                      <TableCell>{val.Quantity}</TableCell>
+                    </TableRow>
+                  )
+                })}
+                </TableBody>
+                <TableFooter>
+                <TableRow>
+                  <TableCell>Total</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell>${total}</TableCell>
+                  <TableCell>{totalQuantity}</TableCell>
+                </TableRow>
+              </TableFooter>
+            </Table>
+            </TableContainer>
     </div>
   )
 }

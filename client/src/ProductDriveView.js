@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from './components/navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import Button from '@mui/material/Button';
 
 function ProductDriveView() {
     const navigate = useNavigate();
@@ -74,7 +83,27 @@ function ProductDriveView() {
     if (records.length == 0) {
         <div>
             <Navbar />
-            <form onSubmit={handleSubmit}>
+            <React.Fragment>
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Filters</Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          }}
+        >
+          <DialogTitle>Filters</DialogTitle>
+          <DialogContent>
+          <form onSubmit={handleSubmit}>
                 <div style={{ display: "flex" }}>
 
                     <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
@@ -83,8 +112,10 @@ function ProductDriveView() {
                 </div>
                 <input type="Submit" />
             </form>
-
-            <button><Link to="/productdrive/new">Add</Link></button>
+          </DialogContent>
+        </Dialog>
+      </React.Fragment>
+            <Button variant="contained"><Link to="/productdrive/new">Add</Link></Button>
 
             <table>
                 <thead>
@@ -97,7 +128,22 @@ function ProductDriveView() {
                     </tr>
                 </thead>
             </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
+            <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Product Drive Name</TableCell>
+                        <TableCell>Quanitiy of Items</TableCell>
+                        <TableCell>Variety of Items</TableCell>
+                        <TableCell>In-kind Value</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+            </Table>
+            </TableContainer>
         </div>
     }
 
@@ -116,37 +162,40 @@ function ProductDriveView() {
                     <input type="Submit" />
                 </form>
 
-                <button><Link to="/productdrive/new">Add</Link></button>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product Drive Name</th>
-                            <th>Quantity of Items</th>
-                            <th>Variety of Items</th>
-                            <th>In-Kind Value</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {records.map((val) => {
+                <Button variant="contained"><Link to="/productdrive/new">Add</Link></Button>
+                <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                    <TableRow>
+                     <h3>{`Transfer from ${record.Taken} to ${record.Given} on ${record.Date}`}</h3>
+                    </TableRow>
+                    <TableRow>
+                        <TableCell>Product Drive Name</TableCell>
+                        <TableCell>Quanitiy of Items</TableCell>
+                        <TableCell>Variety of Items</TableCell>
+                        <TableCell>In-kind Value</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                {records.map((val) => {
                             return (
-                                <tr>
-                                    <td>{val.Drive}</td>
-                                    <td>{val.Quantity}</td>
-                                    <td>{val.Variety}</td>
-                                    <td>{val.Total}</td>
-                                    <td>
-                                        {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
-                                        <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                        <button onClick={() => handleView(val.Partner_id)}>View</button>
-                                    </td>
-                                </tr>
+                                <TableRow>
+                                    <TableCell>{val.Drive}</TableCell>
+                                    <TableCell>{val.Quantity}</TableCell>
+                                    <TableCell>{val.Variety}</TableCell>
+                                    <TableCell>{val.Total}</TableCell>
+                                    <TableCell>
+                                        {typeof val.DeletedAt == "object" ? <Button varaint="outlined" onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</Button> : <Button variant="outlined" onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</Button>}
+                                        <Button varaint="outlined" onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
+                                        <Button varaint="outlined" onClick={() => handleView(val.Partner_id)}>View</Button>
+                                    </TableCell>
+                                </TableRow>
                             );
                         })}
-                    </tbody>
-                </table>
-                <button><Link to="/Dashboard">Dasboard</Link></button>
+                </TableBody>
+            </Table>
+            </TableContainer>
             </div>
         );
     }
