@@ -9,7 +9,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 
 function DonationSiteView() {
 
@@ -58,7 +57,7 @@ function DonationSiteView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/donationsite").then((response) => {
+        Axios.get("http://localhost:3306/donationsite").then((response) => {
             if (response.data.status === 'complete') {
                 setDsiteList(response.data.data)
                 setRecords(response.data.data.filter(function (currentObject) {
@@ -92,7 +91,7 @@ function DonationSiteView() {
                     </div>
                     <input type="Submit" />
                 </form>
-                <button><Link to="/donationsite/new">Add</Link></button>
+                <Button variant="contained"><Link to="/donationsite/new">Add</Link></Button>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
@@ -122,32 +121,33 @@ function DonationSiteView() {
                     <input type="Submit" />
                 </form>
                 <Button variant="contained"><Link to="/donationsite/new">Add</Link></Button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Donation Site</th>
-                            <th>Address</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Donation Site</TableCell>
+                            <TableCell>Address</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         {records.map((val) => {
                             return (
-                                <tr>
-                                    <td>{val.Name}</td>
-                                    <td>{val.Address}</td>
-                                    <td>
-                                        {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
-                                        <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                        <button onClick={() => handleView(val.Partner_id)}>View</button>
-                                    </td>
+                                <TableRow>
+                                    <TableCell>{val.Name}</TableCell>
+                                    <TableCell>{val.Address}</TableCell>
+                                    <TableCell>
+                                        {typeof val.DeletedAt == "object" ? <Button variant="outlined" onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</Button> : <Button variant="outlined" onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</Button>}
+                                        <Button variant="outlined" onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
+                                        <Button variant="outlined" onClick={() => handleView(val.Partner_id)}>View</Button>
+                                    </TableCell>
 
-                                </tr>
+                                </TableRow>
                             );
                         })}
-                    </tbody>
-                </table>
-                <button><Link to="/Dashboard">Dasboard</Link></button>
+                    </TableBody>
+                </Table>
+                </TableContainer>
             </div>
         );
     }
