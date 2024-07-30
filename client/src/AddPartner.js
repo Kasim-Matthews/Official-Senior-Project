@@ -97,9 +97,10 @@ function AddPartner(){
         <CardContent>
         <h2>Add Partner</h2>
         <form id="partnerForm" onSubmit={handleSubmit}>
+          <div display="flex">
           <TextField id="name" label="Name" variant="outlined" value={formData.Name} onChange={handleChange} required/><br></br>
           <TextField id="email" label="Email" variant="outlined" value={formData.Email} onChange={handleChange} required/><br></br>
-          
+          </div>
             <Button type="submit">Submit</Button>
             <Button type="button" onClick={handleCancel}>Cancel</Button>
         

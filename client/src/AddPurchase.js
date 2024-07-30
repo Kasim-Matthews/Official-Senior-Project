@@ -150,6 +150,7 @@ function AddPurchase() {
             <CardContent>
             <h2>Add Purchase</h2>
             <form onSubmit={validate}>
+            <div display="flex">
             <FormControl size="small">
             <InputLabel id="vendor">Vendor</InputLabel>
             <NativeSelect
@@ -158,6 +159,7 @@ function AddPurchase() {
                 name: 'vendor',
                 id: 'vendor',
               }}>
+              <option disabled></option>
               {vendor.map((val) => {
                         return (
                             <option value={val.Partner_id}>{val.Name}</option>
@@ -183,13 +185,11 @@ function AddPurchase() {
                     })}
                     </NativeSelect>
                 </FormControl>
-
-                <div>
+                </div>
+                <div display="flex">
                     <label htmlFor="Purchase_date">Purchase date</label>
                     <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
-                </div>
-
-                <div>
+                
                     <label htmlFor="Total">Purchase Total</label>
                     <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} />
                 </div>

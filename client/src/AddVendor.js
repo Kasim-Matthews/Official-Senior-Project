@@ -82,7 +82,9 @@ function AddVendor() {
           justifyContent="center">
           <CardContent>
             <h2>Add Vendor</h2>
+            
             <form onSubmit={validate}>
+            <div display="flex">
                 <TextField variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
                 <TextField variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange}/>
@@ -91,7 +93,7 @@ function AddVendor() {
                 {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
                 <TextField variant="outlined" name="Email" id="Email" value={formData.Email} onChange={handleChange}/>
                 {formErrors.Email ? <p>{formErrors.Email}</p> : null}
-
+              </div>
 
                 <Button variant="contained" type="submit" value="Submit" />
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>

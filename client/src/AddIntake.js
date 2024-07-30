@@ -90,6 +90,7 @@ function AddIntake() {
       <CardContent>
       <h2>Add Intake</h2>
       <form id="intake" onSubmit={submitPurchase}>
+        <div display="flex">
         <Box sx={{ minWidth: 120 }}>
           <FormControl size="small">
             <InputLabel id="Partner">Partner</InputLabel>
@@ -115,7 +116,7 @@ function AddIntake() {
         <label htmlFor="Value">Value</label>
         <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment"></textarea><br></br>
-
+        </div>
         <h2>Items</h2>
         <div style={{ display: "flex" }}>
           <FormControl size="small">

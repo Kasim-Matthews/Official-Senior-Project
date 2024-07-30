@@ -195,6 +195,7 @@ function AddOrder() {
       <CardContent>
         <h2>Add Order</h2>
     <form id="distribution" onSubmit={validate}>
+      <div display="flex">
           <FormControl size="small">
             <InputLabel id="partner">Partner</InputLabel>
             <NativeSelect
@@ -227,6 +228,8 @@ function AddOrder() {
               })}
             </NativeSelect>
           </FormControl>
+          </div>
+          <div display="flex">
             <div className='requestDate'>
               <label htmlFor="Request_date">Request date</label>
                     <input type="date" name="Request_date" id="Request_date" value={formData.RequestDate} required onChange={handleChange} />
@@ -235,6 +238,8 @@ function AddOrder() {
               <label htmlFor="Complete_date">Complete date</label>
                     <input type="date" name="Complete_date" id="Complete_date" value={formData.Complete_date} required onChange={handleChange} />
             </div> 
+            </div>
+            <div display="flex">
             <div className='delivery'>
             <FormControl>
               <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
@@ -257,6 +262,7 @@ function AddOrder() {
               onChange={handleChange} 
               placeholder="Comments"
             />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+            </div>
 
       <h2>Items</h2>
       {items.map((obj, index) => (

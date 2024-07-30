@@ -59,7 +59,7 @@ function AddAudit() {
             <form onSubmit={handleSubmit}>
                 {inventory.map((val, index) => {
                     return(
-                        <div>
+                        <div display="flex">
                             <h4>{val.Item} + {val.Location}</h4>
                             <input type="Number" name="Changed" defaultValue={val.Past} min="0" onChange={(e) => handleChange(e, index)}/>
                         </div>

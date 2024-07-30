@@ -59,10 +59,12 @@ function AddItem(){
               <CardContent>
                 <h2>Add Item</h2>
             <form id="item" onSubmit={handleSubmit}>
+              <div display="flex">
                 <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
                 
                 <TextField variant="outlined" label="Fair Market Value" id="FairMarketValue" value={formData.FairMarketValue} step="0.01" required onChange={handleChange}/>
-
+                </div>
+                
                 <Button variant="contained" type="submit" value="Submit"/>
             </form>
             </CardContent>

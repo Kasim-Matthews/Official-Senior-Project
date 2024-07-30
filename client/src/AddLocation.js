@@ -56,10 +56,11 @@ function AddLocation(){
             <CardContent>
               <h2>Add Location</h2>
             <form id="locations" onSubmit={handleSubmit}>
+              <div display="flex">
                 <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
 
                 <TextField variant="outlined" name="Address" value={formData.Address} id="Address" required onChange={handleChange}/>
-
+                </div>
                 <Button variant="contained" type="submit" value="Submit"/>
             </form>
             </CardContent>

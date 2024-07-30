@@ -72,11 +72,13 @@ function AddDonationSite(){
                 <CardContent>
                     <h2>Add Donation Site</h2>
             <form onSubmit={validate}>
+              <div display="flex">
                 <TextField id="outlined-basic" label="Name" variant="outlined" value={formData.Name} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
                 <TextField id="outlined-basic" label="Address" variant="outlined" value={formData.Address} required onChange={handleChange}/>
                 {formErrors.Address ? <p>{formErrors.Address}</p> : null}
+              </div>
 
                 <Button variant="contained" type="submit" value="Submit" />
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>

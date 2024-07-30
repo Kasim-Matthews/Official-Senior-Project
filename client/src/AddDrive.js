@@ -61,9 +61,10 @@ function AddDrive(){
             <CardContent>
                 <h2>Add Drive</h2>
             <form onSubmit={validate}>
+            <div display="flex">
             <TextField id="name" label="Name" variant="outlined" type="text" value={formData.Name} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-
+            </div>
                 <Button variant="contained" type="submit" value="Submit" />
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>

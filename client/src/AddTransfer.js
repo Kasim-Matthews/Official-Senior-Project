@@ -188,6 +188,7 @@ function AddTransfer() {
         <CardContent>
             <h2>Add Transfer</h2>
         <form onSubmit={validate}>
+        <div display="flex">
         <FormControl size="small">
             <InputLabel id="from">From</InputLabel>
             <NativeSelect
@@ -214,6 +215,7 @@ function AddTransfer() {
                 name: 'to',
                 id: 'to',
               }}>
+                <option disabled></option>
               {to.map((val) => {
                     if(val.Location_id == formData.From.Location){
                         return(null);
@@ -226,6 +228,7 @@ function AddTransfer() {
                 })}
             </NativeSelect>
           </FormControl>
+          </div>
             <br />
 
             <TextField
