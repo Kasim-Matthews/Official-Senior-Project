@@ -1,16 +1,21 @@
 import { useRef, useState, useEffect } from 'react';
 import useAuth from './hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import Navbar from './components/navbar';
+
 import './login.css';
 import Axios from 'axios';
 
 const Login = () => {
-    //const { setAuth } = useAuth();
+
+    const { setAuth, persist, setPersist } = useAuth();
+
+    Axios.defaults.withCredentials = true
+
+
 
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/Dashboard"
 
     const userRef = useRef();
     const errRef = useRef();
@@ -31,23 +36,28 @@ const Login = () => {
         e.preventDefault();
 
         try {
-          const response = await Axios.post('http://localhost:3001/auth/login', {
-            user: user,
-            pwd: pwd,
-    }
+            const response = await Axios.post('http://localhost:3001/auth/login', JSON.stringify({ user, pwd }),
+                {
+                    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': 'http://localhost:3001, http://localhost:3000' },
+                }
             );
+
+
             console.log(JSON.stringify(response?.data));
-            //console.log(JSON.stringify(response));
+
             const accessToken = response?.data?.accessToken;
-            //setAuth({ user, pwd, accessToken });
-            localStorage.setItem("auth", response.data.accessToken)
-            console.log(accessToken)
+            const role = response?.data?.role;
+            const id = response?.data?.id;
+
+
+
+            setAuth({ user, pwd, role, accessToken, id });
             setUser('');
             setPwd('');
-            const redirectTo = from === "/" ? "/Dashboard" : from;
-            navigate(redirectTo, { replace: true });
+
+            navigate(from, { replace: true });
         } catch (err) {
-          console.log(err)
+            console.log(err)
             if (!err?.response) {
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 400) {
@@ -61,40 +71,50 @@ const Login = () => {
         }
     }
 
-    return (
-                <section>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h1>Sign In</h1>
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="username">Username:</label>
-                        <input
-                            type="text"
-                            id="username"
-                            ref={userRef}
-                            autoComplete="off"
-                            onChange={(e) => setUser(e.target.value)}
-                            value={user}
-                            required
-                        />
+    const togglePersist = () => {
+        setPersist(prev => !prev)
+    }
 
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            onChange={(e) => setPwd(e.target.value)}
-                            value={pwd}
-                            required
-                        />
-                        <button>Sign In</button>
-                    </form>
-                    <p>
-                        Need an Account?<br />
-                        <span className="line">
-                            {/*put router link here*/}
-                            <a href="#">Sign Up</a>
-                        </span>
-                    </p>
-                </section>
+    useEffect(() => {
+        localStorage.setItem("persist", persist)
+    }, [persist])
+
+    return (
+        <section>
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+            <h1>Sign In</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="username">Username:</label>
+                <input
+                    type="text"
+                    id="username"
+                    ref={userRef}
+                    autoComplete="off"
+                    onChange={(e) => setUser(e.target.value)}
+                    value={user}
+                    required
+                />
+
+                <label htmlFor="password">Password:</label>
+                <input
+                    type="password"
+                    id="password"
+                    onChange={(e) => setPwd(e.target.value)}
+                    value={pwd}
+                    required
+                />
+                <button>Sign In</button>
+                <div>
+                    <input
+                        type='checkbox'
+                        id='persist'
+                        onChange={togglePersist}
+                        checked={persist}
+                    />
+                    <label htmlFor='persist'>Trust this Device</label>
+                </div>
+            </form>
+        </section>
     )
 }
 

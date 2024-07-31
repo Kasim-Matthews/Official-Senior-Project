@@ -21,6 +21,7 @@ import Box from '@mui/material/Box';
 import ErrorHandler from "./ErrorHandler";
 import AppBar from '@mui/material/AppBar';
 import Navbar from './components/navbar';
+import useAxiosPrivate from './hooks/useAxiosPrivate';
 
 function PartnerView() {
 
@@ -29,10 +30,12 @@ function PartnerView() {
     const [nonActive, setNonActive] = React.useState(false)
     const navigate = useNavigate();
 
+    const axiosPrivate = useAxiosPrivate();
+
     const handleRemove = (id, Name) => {
         if (window.confirm(`Are you sure you want to delete ${Name} from the partner list?`) == true) {
             let date = new Date().toLocaleDateString();
-            Axios.put(`http://localhost:3001/partner/remove/${id}`, { date: date });
+            axiosPrivate.put(`http://localhost:3001/partner/remove/${id}`, { date: date });
             window.location.reload(false);
         }
 
@@ -63,13 +66,13 @@ function PartnerView() {
 
     const handleReactivate = (id, Name) => {
         if (window.confirm(`Are you sure you want to reactivate ${Name} from the partner list?`) == true) {
-            Axios.put(`http://localhost:3001/partner/reactivate/${id}`);
+            axiosPrivate.put(`http://localhost:3001/partner/reactivate/${id}`);
             window.location.reload(false);
         }
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/partner").then((response) => {
+        axiosPrivate.get("http://localhost:3001/partner").then((response) => {
             setPartnerList(response.data)
             setRecords(response.data.filter(function (currentObject) {
                 return typeof (currentObject.DeletedAt) == "object";

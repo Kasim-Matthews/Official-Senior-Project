@@ -1,6 +1,5 @@
 import React, { useState, useEffect }  from 'react';
-import {Link} from 'react-router-dom'
-import axios from 'axios';
+
 import './Dashboard.css';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,24 +14,14 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Menu from '@mui/material/Menu';
+
 import MenuItem from '@mui/material/MenuItem';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import ButtonGroup from '@mui/material/ButtonGroup';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Popper from '@mui/material/Popper';
-import MenuList from '@mui/material/MenuList';
-import Button from '@mui/material/Button';
+
 import Navbar from './components/navbar';
+import useAxiosPrivate from './hooks/useAxiosPrivate';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import useLogout from './hooks/useLogout';
 
 function Dashboard() {
 
@@ -42,18 +31,34 @@ function Dashboard() {
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+    const location = useLocation();
+    /*
+    This will be for the logout button
+    const logout = useLogout()
+
+    const signOut = async () => {
+        await logout();
+        navigate('/login')    
+    }
+    */
+
+
     useEffect(() => {
-        axios.get('http://localhost:3001/data')
+        axiosPrivate.get('http://localhost:3001/data')
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);
                     setLocations([...new Set(response.data.data.map(item => item.locationName))]);
                 } else {
                     console.error('Failed to fetch data');
+                    
                 }
             })
             .catch(error => {
                 console.error('Error fetching data', error);
+                navigate('/login', { state: { from: location }, replace: true });
             });
     }, []);
 
@@ -79,7 +84,7 @@ function Dashboard() {
 
     const totalQuantity = filteredItems.reduce((sum, item) => sum + item.Quantity, 0);
 
-    console.log(locations)
+
 
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
@@ -149,6 +154,7 @@ function Dashboard() {
                                                     <TableCell>{totalQuantity}</TableCell>
                                                 </TableRow>
                                             </TableFooter>
+                                            
                                         </Table>
                                     </TableContainer>
                                 </div>
@@ -160,6 +166,7 @@ function Dashboard() {
                     <Card>
                         <CardContent>
                             Pie chart goes here!
+                            <Button variant='contained'><Link to="/user">User Info</Link></Button>
                         </CardContent>
                     </Card>
                     </div>

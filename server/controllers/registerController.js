@@ -14,8 +14,8 @@ const sb = mysql.createPool({
 const bcrypt = require('bcrypt');
 
 const register = async (req, res) => {
-    const { user, pwd } = req.body;
-    if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
+    const { user, pwd, role, email } = req.body;
+    if (!user || !pwd || !role || !email) return res.status(400).json({ 'message': 'Username, password, email, and role are required.' });
 
     try {
         // Check for duplicate usernames in the database
@@ -24,11 +24,12 @@ const register = async (req, res) => {
 
         // Encrypt the password
         const hashedPwd = await bcrypt.hash(pwd, 10);
+        
 
         
 
         // Store the new user in the database
-        await sb.query('INSERT INTO claire.user (Username, Password) VALUES (?, ?)', [user, hashedPwd]);
+        await sb.query('INSERT INTO claire.user (Username, Password, Email, Role) VALUES (?, ?, ?, ?)', [user, hashedPwd, email, role]);
 
         console.log(`New user ${user} created!`);
         res.status(201).json({ 'success': `New user ${user} created!` });

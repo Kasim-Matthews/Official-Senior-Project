@@ -1,4 +1,5 @@
-const mysql =  require('mysql2/promise');
+
+const mysql = require('mysql2/promise');
 const sb = mysql.createPool({
     host: "localhost",
     user: "root",
@@ -9,14 +10,18 @@ const sb = mysql.createPool({
     multipleStatements: true
 });
 
+
+
 const bcrypt = require('bcrypt');
+
 
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const path = require('path');
+
 
 const login = async (req, res) => {
     const { user, pwd } = req.body;
+
     if (!user || !pwd) return res.status(400).json({ 'message': 'Username and password are required.' });
 
     try {
@@ -28,14 +33,17 @@ const login = async (req, res) => {
 
         const match = await bcrypt.compare(pwd, foundUser.Password);
         if (match) {
+            const role = foundUser.Role
+            const id = foundUser.User_id
             const accessToken = jwt.sign(
-                { 
+                {
                     "UserInfo": {
                         "username": foundUser.Username,
-                }
-            },
+                        "role": role
+                    }
+                },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '10m' }
+                { expiresIn: '5m' }
             );
             const refreshToken = jwt.sign(
                 { "username": foundUser.Username },
@@ -48,8 +56,9 @@ const login = async (req, res) => {
             //why isnt it storing in application storage
             //name refresh token
             res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: 'None', secure: true, maxAge: 24 * 60 * 60 * 1000 });
+
             //name access token
-            res.json({ accessToken });
+            res.json({ role, accessToken, id });
         } else {
             res.sendStatus(401); // Unauthorized
         }

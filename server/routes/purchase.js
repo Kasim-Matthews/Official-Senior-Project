@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const purchaseController = require('../controllers/purchaseController')
 
-const cors = require('cors')
-router.use(cors())
+
 
 router.get('/', purchaseController.data);
 router.post('/new', purchaseController.create);

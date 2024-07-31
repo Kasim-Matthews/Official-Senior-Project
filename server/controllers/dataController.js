@@ -12,7 +12,6 @@ const sb = mysql.createPool({
 
 
 
-const bcrypt = require('bcrypt');
 
 
 
@@ -25,7 +24,6 @@ const data = (req, res) => {
 
     sb.query(query, (err, result) => {
 
-        console.log(result)
 
         if (err) {
             res.send({ status: 'error', message: err.message });

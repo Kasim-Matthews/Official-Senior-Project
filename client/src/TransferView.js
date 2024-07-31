@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from './components/navbar';
 import Table from '@mui/material/Table';
@@ -13,6 +12,7 @@ import { TableFooter } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import TextField from "@mui/material/TextField";
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
 
 
 
@@ -22,6 +22,8 @@ function TransferView() {
     const [partners, setPartners] = React.useState([])
     const [locations, setLocations] = React.useState([])
     const [open, setOpen] = React.useState(false);
+
+    const axiosPrivate = useAxiosPrivate();
 
     const handleClickOpen = () => {
       setOpen(true);
@@ -42,7 +44,7 @@ function TransferView() {
 
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/transfer").then((response) => {
+        axiosPrivate.get("http://localhost:3001/transfer").then((response) => {
             setTransferList(response.data);
             setRecords(response.data);
         })
@@ -51,17 +53,17 @@ function TransferView() {
     const handleRemove = async (id, Name, Location) => {
         if (window.confirm(`Are you sure you want to delete ${Name}'s transfer from the transfer list?`) == true) {
             let GetData = async function (id) {
-                return await Axios.get(`http://localhost:3001/transfer/${id}/cleanup`).then((response) => {
+                return await axiosPrivate.get(`http://localhost:3001/transfer/${id}/cleanup`).then((response) => {
                     return response
                 });
             }
             let data = GetData(id)
             data.then(async (response) => {
-                await Axios.put("http://localhost:3001/transfer/reclaim", { records: response.data })
-                await Axios.put("http://localhost:3001/transfer/renounce", { records: response.data, Location: Location })
+                await axiosPrivate.put("http://localhost:3001/transfer/reclaim", { records: response.data })
+                await axiosPrivate.put("http://localhost:3001/transfer/renounce", { records: response.data, Location: Location })
             })
 
-            await Axios.delete(`http://localhost:3001/intake/remove/${id}`);
+            await axiosPrivate.delete(`http://localhost:3001/intake/remove/${id}`);
 
             window.location.reload(false);
         }
@@ -72,13 +74,13 @@ function TransferView() {
     }
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/transfer/adjustment").then((response) => {
+        axiosPrivate.get("http://localhost:3001/transfer/adjustment").then((response) => {
             setPartners(response.data);
         })
     }, [])
 
     useEffect(() => {
-        Axios.get("http://localhost:3001/location/use").then((response) => {
+        axiosPrivate.get("http://localhost:3001/location/use").then((response) => {
             setLocations(response.data);
         })
     }, [])

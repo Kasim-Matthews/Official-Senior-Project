@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const manufacturersController = require('../controllers/manufacturersController')
-const cors = require('cors')
 
-router.use(cors())
 
 
 router.get('/', manufacturersController.manu_index)
