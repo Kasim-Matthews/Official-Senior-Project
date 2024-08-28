@@ -76,7 +76,7 @@ function AddVendor() {
           <Navbar />
           <Grid container justifyContent="center" >
           <Card 
-          sx={{ minWidth: 275 }} 
+          sx={{ padding:"10px" }} 
           display="flex"
           padding="10px"
           alignItems="center"
@@ -85,14 +85,14 @@ function AddVendor() {
             <h2>Add Vendor</h2>
             
             <form onSubmit={validate}>
-            <div display="flex" padding="10px">
-                <TextField variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
+            <div display="flex" style={{paddingBottom: "10px"}}>
+                <TextField variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange} sx={{paddingRight:"10px"}}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-                <TextField variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange}/>
+                <TextField variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange} sx={{paddingRight:"10px"}}/>
                 {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
-                <TextField variant="outlined" label="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange}/>
+                <TextField variant="outlined" label="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} sx={{paddingRight:"10px"}}/>
                 {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
-                <TextField variant="outlined" name="Email" id="Email" value={formData.Email} onChange={handleChange}/>
+                <TextField variant="outlined" name="Email" id="Email" value={formData.Email} onChange={handleChange} sx={{paddingRight:"10px"}}/>
                 {formErrors.Email ? <p>{formErrors.Email}</p> : null}
               </div>
 
