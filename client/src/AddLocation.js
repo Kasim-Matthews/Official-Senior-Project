@@ -61,7 +61,7 @@ function AddLocation(){
 
                 <TextField variant="outlined" name="Address" value={formData.Address} id="Address" required onChange={handleChange}/>
                 </div>
-                <Button variant="contained" type="submit" value="Submit"/>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
             </form>
             </CardContent>
             </Card>

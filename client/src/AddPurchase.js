@@ -223,7 +223,7 @@ function AddPurchase() {
                 </Button>
 
 
-                <Button variant="contained" type="submit" value="Submit" />
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
             </form>
             </CardContent>
             </Card>

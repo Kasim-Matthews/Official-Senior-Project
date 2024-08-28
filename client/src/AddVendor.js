@@ -78,6 +78,7 @@ function AddVendor() {
           <Card 
           sx={{ minWidth: 275 }} 
           display="flex"
+          padding="10px"
           alignItems="center"
           justifyContent="center">
           <CardContent>
@@ -95,7 +96,7 @@ function AddVendor() {
                 {formErrors.Email ? <p>{formErrors.Email}</p> : null}
               </div>
 
-                <Button variant="contained" type="submit" value="Submit" />
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
             </CardContent>

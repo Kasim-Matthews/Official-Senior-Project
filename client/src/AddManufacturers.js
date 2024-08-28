@@ -53,7 +53,7 @@ function AddManufacturers(){
               <h2>Add Manufacturer</h2>
             <form id="locations" onSubmit={handleSubmit}>
                 <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
-                <Button variant="contained" type="submit" value="Submit"/>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
             </form>
             </CardContent>
             </Card>

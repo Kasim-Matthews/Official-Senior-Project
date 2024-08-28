@@ -101,8 +101,8 @@ function AddPartner(){
           <TextField id="name" label="Name" variant="outlined" value={formData.Name} onChange={handleChange} required/><br></br>
           <TextField id="email" label="Email" variant="outlined" value={formData.Email} onChange={handleChange} required/><br></br>
           </div>
-            <Button type="submit">Submit</Button>
-            <Button type="button" onClick={handleCancel}>Cancel</Button>
+            <Button variant="contained" type="submit">Submit</Button>
+            <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
         
         </form>
         </CardContent>

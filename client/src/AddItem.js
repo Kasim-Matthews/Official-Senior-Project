@@ -65,7 +65,7 @@ function AddItem(){
                 <TextField variant="outlined" label="Fair Market Value" id="FairMarketValue" value={formData.FairMarketValue} step="0.01" required onChange={handleChange}/>
                 </div>
                 
-                <Button variant="contained" type="submit" value="Submit"/>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
             </form>
             </CardContent>
             </Card>

@@ -279,8 +279,8 @@ function AddOrder() {
         Add
       </button>
 
-      <input type="submit" value="Submit" />
-      <button onClick={handleCancel}>Cancel</button>
+      <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
+      <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
     </form>
     </CardContent>
     </Card>

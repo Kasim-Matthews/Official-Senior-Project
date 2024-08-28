@@ -256,8 +256,8 @@ function AddTransfer() {
                 Add
             </Button>
 
-            <input type="submit" value="Submit" />
-            <button type="button" onClick={handleCancel}>Cancel</button>
+            <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
+            <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
         </form>
         </CardContent>
         </Card>
