@@ -188,10 +188,10 @@ function AddPurchase() {
                 </div>
                 <div display="flex" >
                     <label htmlFor="Purchase_date">Purchase date</label>
-                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} sx={{paddingRight:"10px"}}/>
+                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} style={{paddingRight:"10px", paddingBottom: "10px"}}/>
                 
                     <label htmlFor="Total">Purchase Total</label>
-                    <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} sx={{paddingRight:"10px"}}/>
+                    <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} style={{paddingRight:"10px"}}/>
                 </div>
 
                 <div>
