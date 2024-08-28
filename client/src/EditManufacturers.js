@@ -56,8 +56,8 @@ function EditManufacturers(){
           <CardContent>
             <h2>Edit Manufacturer</h2>
             <form id="edit location Form" onSubmit={handleSubmit}>
-                <TextField variant="outlined" label="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange}/>
-                <Button variant="contained" type="submit" value="Submit"/>
+                <TextField variant="outlined" label="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} sx={{padding:"10px"}}/>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
             </form>
             </CardContent>
             </Card>

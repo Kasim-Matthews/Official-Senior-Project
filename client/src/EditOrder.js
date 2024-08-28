@@ -198,7 +198,7 @@ function EditOrder() {
             <h2>Edit Order</h2>
     <form id="edit distribution" onSubmit={validate}>
     <div display="flex" padding="10px">
-    <FormControl size="small">
+    <FormControl size="small" sx={{padding:"10px"}}>
             <InputLabel id="partner">Partner</InputLabel>
             <NativeSelect
               placeholder="Partner"
@@ -223,7 +223,7 @@ function EditOrder() {
           </FormControl>
         <br />
 
-        <FormControl size="small">
+        <FormControl size="small" sx={{padding:"10px"}}>
             <InputLabel id="location">Location</InputLabel>
             <NativeSelect
               placeholder="Location"
@@ -247,14 +247,14 @@ function EditOrder() {
             </NativeSelect>
           </FormControl>
           <br />
-
-      <label htmlFor="RequestDate">RequestDate</label>
+      <div style={{padding:"10px"}}></div>
+      <label htmlFor="RequestDate" style={{padding:"5px"}}>RequestDate</label>
       <input type="date" name="RequestDate" id="RequestDate" defaultValue={formData.RequestDate} min="2023-09-01" required onChange={handleChange} />
 
-      <label htmlFor="CompletedDate">CompleteDate</label>
+      <label htmlFor="CompletedDate" style={{padding:"5px"}}>CompleteDate</label>
       <input type="date" name="CompletedDate" id="CompletedDate" defaultValue={formData.CompletedDate} min="2023-09-01" required onChange={handleChange} />
-
-      <FormControl>
+      </div>
+      <FormControl sx={{padding:"10px"}}>
               <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
               <RadioGroup
                 row
@@ -274,6 +274,7 @@ function EditOrder() {
               defaultValue="Comments"
               onChange={handleChange} 
               placeholder={formData.Comments}
+              sx={{padding:"10px"}}
             />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
       <h2>Items</h2>
@@ -286,17 +287,18 @@ function EditOrder() {
             index={index}
             record={record}
             deleteField={handleDeleteField}
+            sx={{padding:"10px"}}
           />
         </div>
 
       ))}
-      <button name="add-btn" onClick={handleAddField}>
+      <Button variant="outlined" name="add-btn" onClick={handleAddField}>
         Add
-      </button>
+      </Button>
 
-      </div>
-      <Button variant="contained" type="submit" value="Submit" />
-      <Button varaint="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+      
+      <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{padding:"10px"}}>Submit</Button>
+      <Button varaint="outlined" type="button" onClick={handleCancel} sx={{padding:"10px"}}>Cancel</Button>
     </form>
     </CardContent>
     </Card>

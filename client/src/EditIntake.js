@@ -216,7 +216,7 @@ function EditIntake() {
       <h2>Edit Intake</h2>
       <form id="intake" onSubmit={typechecker}>
       <div display="flex" padding="10px">
-      <FormControl size="small">
+      <FormControl size="small" sx={{paddingRight:"20px"}}>
             <InputLabel id="type">Type</InputLabel>
             <NativeSelect
               placeholder="Type"
@@ -242,7 +242,7 @@ function EditIntake() {
 
         {sourceType != "" ? listtype() : null}
 
-        <FormControl size="small">
+        <FormControl size="small" sx={{paddingRight:"20px"}}>
             <InputLabel id="location">Location</InputLabel>
             <NativeSelect
               placeholder="Location"
@@ -266,13 +266,14 @@ function EditIntake() {
             </NativeSelect>
           </FormControl>
           <br />
-
-        <label htmlFor="RecievedDate">Issued On</label>
+        <div style={{padding:"10px"}}>
+        <label htmlFor="RecievedDate" style={{padding:"5px"}} >Issued On</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
 
-        <label htmlFor="Value">Money Raised</label>
+        <label htmlFor="Value" style={{padding:"5px"}}>Money Raised</label>
         <input type="number" name="Value" id="Value" step="0.01" defaultValue={formData.Value == null ? 0.00 : formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
+        </div>
         {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
         <h2>Items</h2>
         {items.map((record, index) => (
@@ -284,17 +285,18 @@ function EditIntake() {
               index={index}
               record={record}
               deleteField={handleDeleteField}
+              sx={{paddingRight:"10px"}}
             />
           </div>
 
         ))}
-        <button name="add-btn" onClick={handleAddField}>
+        <Button variant="outlined" name="add-btn" onClick={handleAddField} sx={{paddingRight:"10px"}}>
           Add
-        </button>
+        </Button>
 
         </div>
-        <Button variant="contained" type="submit" value="Submit" />
-        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+        <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
+        <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
 
       </form>
       </CardContent>

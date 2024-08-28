@@ -105,17 +105,17 @@ function EditVendor() {
             <h2>Edit Vendor</h2>
       <form onSubmit={validate}>
       <div display="flex" padding="10px">
-        <TextField  variant="outlined" name="BusinessName" id="BusinessName" defaultValue={formData.BusinessName} required onChange={handleChange} />
+        <TextField  variant="outlined" name="BusinessName" id="BusinessName" defaultValue={formData.BusinessName} required onChange={handleChange} sx={{padding:"10px"}}/>
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-        <TextField  variant="outlined" name="ContactName" id="ContactName" defaultValue={formData.ContactName} onChange={handleChange} />
+        <TextField  variant="outlined" name="ContactName" id="ContactName" defaultValue={formData.ContactName} onChange={handleChange} sx={{padding:"10px"}}/>
         {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
-        <TextField  variant="outlined" name="Phone" id="Phone" defaultValue={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} />
+        <TextField  variant="outlined" name="Phone" id="Phone" defaultValue={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} sx={{padding:"10px"}}/>
         {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
-        <TextField  variant="outlined" name="Email" id="Email" defaultValue={formData.Email} onChange={handleChange} />
+        <TextField  variant="outlined" name="Email" id="Email" defaultValue={formData.Email} onChange={handleChange} sx={{padding:"10px"}}/>
         {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
       </div>
-        <Button variant="contained" type="submit" value="Submit" />
+        <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{padding:"10px"}}>Submit</Button>
         <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>
       </CardContent>
