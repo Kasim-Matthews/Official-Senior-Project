@@ -169,7 +169,7 @@ function AddPurchase() {
           </FormControl>
                 <br />
 
-                <FormControl size="small">
+                <FormControl size="small" sx={{paddingRight:"20px"}}>
                     <InputLabel id="location">Locations</InputLabel>
                     <NativeSelect
                     placeholder="Locations"
@@ -186,12 +186,12 @@ function AddPurchase() {
                     </NativeSelect>
                 </FormControl>
                 </div>
-                <div display="flex">
+                <div display="flex" >
                     <label htmlFor="Purchase_date">Purchase date</label>
-                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
+                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} sx={{paddingRight:"10px"}}/>
                 
                     <label htmlFor="Total">Purchase Total</label>
-                    <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} />
+                    <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} sx={{paddingRight:"10px"}}/>
                 </div>
 
                 <div>
@@ -204,6 +204,7 @@ function AddPurchase() {
                     value={formData.Comments}
                     onChange={handleChange} 
                     placeholder="Comments"
+                    sx={{paddingRight:"10px"}}
                     />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
                 </div>
 
@@ -216,14 +217,15 @@ function AddPurchase() {
                         handleQuantity={handleQuantity}
                         index={index}
                         deleteField={handleDeleteField}
+                        sx={{paddingRight:"20px"}}
                     />
                 ))}
-                <Button variant='outline' name="add-btn" onClick={handleAddField}>
+                <Button variant='outline' name="add-btn" onClick={handleAddField} sx={{paddingRight:"10px"}}>
                     Add
                 </Button>
 
 
-                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
             </form>
             </CardContent>
             </Card>

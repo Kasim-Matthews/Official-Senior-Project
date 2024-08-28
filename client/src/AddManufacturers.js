@@ -52,8 +52,8 @@ function AddManufacturers(){
             <CardContent>
               <h2>Add Manufacturer</h2>
             <form id="locations" onSubmit={handleSubmit}>
-                <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
-                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
+                <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
             </form>
             </CardContent>
             </Card>

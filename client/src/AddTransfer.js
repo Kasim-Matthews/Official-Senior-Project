@@ -189,7 +189,7 @@ function AddTransfer() {
             <h2>Add Transfer</h2>
         <form onSubmit={validate}>
         <div display="flex" padding="10px">
-        <FormControl size="small">
+        <FormControl size="small" sx={{paddingRight:"20px"}}>
             <InputLabel id="from">From</InputLabel>
             <NativeSelect
               placeholder="From"
@@ -207,7 +207,7 @@ function AddTransfer() {
           </FormControl>
             <br />
 
-            <FormControl size="small">
+            <FormControl size="small" sx={{paddingRight:"20px"}}>
             <InputLabel id="to">To</InputLabel>
             <NativeSelect
               placeholder="To"
@@ -239,6 +239,7 @@ function AddTransfer() {
               defaultValue="Comments"
               onChange={handleChange} 
               placeholder="Comments"
+              sx={{paddingRight:"10px"}}
             />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
             <h2>Items</h2>
@@ -250,14 +251,14 @@ function AddTransfer() {
                     handleQuantity={handleQuantity}
                     index={index}
                     deleteField={handleDeleteField}
-                />
+                    sx={{paddingRight:"20px"}}/>
             ))}
-            <Button variant="outlined" name="add-btn" onClick={handleAddField}>
+            <Button variant="outlined" name="add-btn" onClick={handleAddField} sx={{paddingRight:"10px"}}>
                 Add
             </Button>
 
-            <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
-            <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+            <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
+            <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
         </form>
         </CardContent>
         </Card>

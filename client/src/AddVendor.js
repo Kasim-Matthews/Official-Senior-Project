@@ -96,7 +96,7 @@ function AddVendor() {
                 {formErrors.Email ? <p>{formErrors.Email}</p> : null}
               </div>
 
-                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
             </CardContent>

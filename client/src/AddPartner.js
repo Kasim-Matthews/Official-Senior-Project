@@ -98,11 +98,11 @@ function AddPartner(){
         <h2>Add Partner</h2>
         <form id="partnerForm" onSubmit={handleSubmit}>
           <div display="flex" padding="10px">
-          <TextField id="name" label="Name" variant="outlined" value={formData.Name} onChange={handleChange} required/><br></br>
-          <TextField id="email" label="Email" variant="outlined" value={formData.Email} onChange={handleChange} required/><br></br>
+          <TextField id="name" label="Name" variant="outlined" value={formData.Name} onChange={handleChange} required sx={{paddingRight:"10px"}}/>
+          <TextField id="email" label="Email" variant="outlined" value={formData.Email} onChange={handleChange} required sx={{paddingRight:"10px"}}/><br></br>
           </div>
-            <Button variant="contained" type="submit">Submit</Button>
-            <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+            <Button variant="contained" type="submit" sx={{paddingRight:"10px"}}>Submit</Button>
+            <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
         
         </form>
         </CardContent>
