@@ -68,7 +68,7 @@ app.use('/refresh', refreshRoute);
 app.use('/logout', logoutRoute);
 
 
-app.use(verifyJWT)
+
 app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
 app.use('/item', itemRoute);

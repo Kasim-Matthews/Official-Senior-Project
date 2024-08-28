@@ -204,7 +204,7 @@ function AddOrder() {
                 name: 'partner',
                 id: 'partner',
               }}>
-              <option disabled></option>
+              <option disabled selected></option>
               {partners.map((val) => {
                 return (
                   <option value={val.Partner_id}>{val.Name}</option>
@@ -220,7 +220,7 @@ function AddOrder() {
                 name: 'location',
                 id: 'location',
               }}>
-              <option disabled></option>
+              <option disabled selected></option>
               {locations.map((val) => {
                 return (
                   <option value={val.Location_id}>{val.Name}</option>

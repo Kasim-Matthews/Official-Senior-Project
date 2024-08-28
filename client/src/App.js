@@ -71,8 +71,8 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/unauthorized' element={<Unauthorized />} />
 
-        <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={["Admin", "Volunteer"]} />}>
+
+
             <Route path="/Dashboard" element={<Dashboard />} />
             <Route path="/distribution" element={<Order />} />
             <Route path='/distribution/:id' element={<ViewOrder />} />
@@ -125,7 +125,7 @@ function App() {
             <Route path='/donationsite/:id/edit' element={<EditDonationSite />} />
             <Route path='/donationsite/:id' element={<ViewDonationSite />} />
             <Route path='/user' element={<ProfileDashboard />}></Route>
-          </Route>
+
 
           <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
             <Route path='/transfer' element={<TransferView />} />
@@ -143,7 +143,7 @@ function App() {
           {/* Remember to move this junk back  */}
           {/* We want to protect these wrotes */}
 
-        </Route>
+
         {/* also want to add a "add new user" page that only the admin can access */}
 
       {/* catch all/404 */}

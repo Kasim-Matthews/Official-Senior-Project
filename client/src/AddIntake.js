@@ -100,7 +100,7 @@ function AddIntake() {
                 name: 'partner',
                 id: 'partner',
               }}>
-              <option disabled></option>
+              <option disabled selected></option>
               {partners.map((val) => {
                 return (
                   <option value={val.Partner_id}>{val.Name}</option>
@@ -127,7 +127,7 @@ function AddIntake() {
                 name: 'item',
                 id: 'item',
               }}>
-              <option disabled></option>
+              <option disabled selected></option>
               {items.map((val) => {
                 return (
                   <option value={val.Item_id}>{val.Name}</option>
@@ -144,7 +144,7 @@ function AddIntake() {
                 name: 'location',
                 id: 'location',
               }}>
-              <option disabled></option>
+              <option disabled selected></option>
               {locations.map((val) => {
                 return (
                   <option value={val.Location_id}>{val.Name}</option>

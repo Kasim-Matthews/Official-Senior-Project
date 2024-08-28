@@ -159,7 +159,7 @@ function AddPurchase() {
                 name: 'vendor',
                 id: 'vendor',
               }}>
-              <option disabled></option>
+              <option disabled selected></option>
               {vendor.map((val) => {
                         return (
                             <option value={val.Partner_id}>{val.Name}</option>
@@ -177,7 +177,7 @@ function AddPurchase() {
                         name: 'location',
                         id: 'location',
                     }}>
-                    <option disabled></option>
+                    <option disabled selected></option>
                     {locations.map((val) => {
                         return (
                         <option value={val.Location_id}>{val.Name}</option>
