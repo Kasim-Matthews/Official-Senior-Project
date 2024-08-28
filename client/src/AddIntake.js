@@ -156,7 +156,7 @@ function AddIntake() {
           <input type="number" name="Quantity" id="Quantity" required onChange={handleChange} value={formData.Quantity} />
         </div>
 
-        <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
+        <Button variant="contained" type="submit" value="Submit">Submit</Button>
 
       </form>
       </CardContent>

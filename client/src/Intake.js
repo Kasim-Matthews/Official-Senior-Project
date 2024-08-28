@@ -244,6 +244,7 @@ function Intake() {
 
             <Button variant="contained"><Link to="/donation/new">Add</Link></Button>
 
+            <div 
             <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
             <button><Link to="/Dashboard">Dasboard</Link></button>
