@@ -230,13 +230,13 @@ function AddOrder() {
           </FormControl>
           </div>
           <div display="flex">
-            <div className='requestDate'>
-              <label htmlFor="Request_date">Request date</label>
-                    <input type="date" name="Request_date" id="Request_date" value={formData.RequestDate} required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+            <div className='requestDate' style={{paddingRight:"10px", paddingBottom: "10px"}}>
+              <label htmlFor="Request_date" style={{paddingRight: "16px"}}>Request date</label>
+                    <input type="date" name="Request_date" id="Request_date" value={formData.RequestDate} required onChange={handleChange} />
             </div> 
             <div className='completeDate'>
-              <label htmlFor="Complete_date">Complete date</label>
-                    <input type="date" name="Complete_date" id="Complete_date" value={formData.Complete_date} required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+              <label htmlFor="Complete_date" style={{paddingRight: "5px"}}>Complete date</label>
+                    <input type="date" name="Complete_date" id="Complete_date" value={formData.Complete_date} required onChange={handleChange}/>
             </div> 
             </div>
             <div display="flex">
