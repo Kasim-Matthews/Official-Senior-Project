@@ -197,7 +197,7 @@ function AddTransfer() {
                 name: 'from',
                 id: 'from',
               }}>
-              <option disabled></option>
+              <option disabled selected></option>
               {from.map((val, index) => {
                     return (
                         <option value={index}>{val.Name}</option>
@@ -215,7 +215,7 @@ function AddTransfer() {
                 name: 'to',
                 id: 'to',
               }}>
-                <option disabled></option>
+                <option disabled selected></option>
               {to.map((val) => {
                     if(val.Location_id == formData.From.Location){
                         return(null);
