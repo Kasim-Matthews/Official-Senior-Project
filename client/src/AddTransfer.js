@@ -188,7 +188,7 @@ function AddTransfer() {
         <CardContent>
             <h2>Add Transfer</h2>
         <form onSubmit={validate}>
-        <div display="flex">
+        <div display="flex" padding="10px">
         <FormControl size="small">
             <InputLabel id="from">From</InputLabel>
             <NativeSelect

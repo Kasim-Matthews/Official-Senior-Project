@@ -56,7 +56,7 @@ function AddLocation(){
             <CardContent>
               <h2>Add Location</h2>
             <form id="locations" onSubmit={handleSubmit}>
-              <div display="flex">
+              <div display="flex" padding="10px">
                 <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange}/>
 
                 <TextField variant="outlined" name="Address" value={formData.Address} id="Address" required onChange={handleChange}/>

@@ -195,7 +195,7 @@ function AddOrder() {
       <CardContent>
         <h2>Add Order</h2>
     <form id="distribution" onSubmit={validate}>
-      <div display="flex">
+      <div display="flex" padding="10px">
           <FormControl size="small">
             <InputLabel id="partner">Partner</InputLabel>
             <NativeSelect

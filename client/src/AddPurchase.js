@@ -150,7 +150,7 @@ function AddPurchase() {
             <CardContent>
             <h2>Add Purchase</h2>
             <form onSubmit={validate}>
-            <div display="flex">
+            <div display="flex" padding="10px">
             <FormControl size="small">
             <InputLabel id="vendor">Vendor</InputLabel>
             <NativeSelect

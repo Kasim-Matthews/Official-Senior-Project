@@ -84,7 +84,7 @@ function AddVendor() {
             <h2>Add Vendor</h2>
             
             <form onSubmit={validate}>
-            <div display="flex">
+            <div display="flex" padding="10px">
                 <TextField variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange}/>
                 {formErrors.Name ? <p>{formErrors.Name}</p> : null}
                 <TextField variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange}/>

@@ -118,7 +118,7 @@ function AddIntake() {
         <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment"></textarea><br></br>
         </div>
         <h2>Items</h2>
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", padding: "10px"}}>
           <FormControl size="small">
             <InputLabel id="items">Items</InputLabel>
             <NativeSelect
