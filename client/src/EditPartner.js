@@ -58,10 +58,11 @@ function EditPartner(){
           <CardContent>
             <h2>Edit Partner</h2>
             <form id="edit partnerForm" onSubmit={handleSubmit}>
+            <div display="flex" padding="10px">
               <TextField varaint="outlined" name="Name" id="Name" defaultValue={formData.Name} onChange={handleChange} required/>
 
               <TextField variant="outlined" type="text" name="Email" defaultValue={formData.Email} id="Email" onChange={handleChange} required/>
-    
+            </div>
                 <Button varaint="contained" type="submit" value="Submit"/>
             </form>
             </CardContent>

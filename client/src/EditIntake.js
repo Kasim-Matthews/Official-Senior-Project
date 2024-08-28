@@ -215,7 +215,7 @@ function EditIntake() {
           <CardContent>
       <h2>Edit Intake</h2>
       <form id="intake" onSubmit={typechecker}>
-
+      <div display="flex" padding="10px">
       <FormControl size="small">
             <InputLabel id="type">Type</InputLabel>
             <NativeSelect
@@ -292,7 +292,7 @@ function EditIntake() {
           Add
         </button>
 
-
+        </div>
         <Button variant="contained" type="submit" value="Submit" />
         <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
 

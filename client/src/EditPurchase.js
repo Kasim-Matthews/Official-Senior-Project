@@ -169,6 +169,7 @@ function EditPurchase() {
           <CardContent>
             <h2>Edit Purchase</h2>
             <form onSubmit={validate}>
+            <div display="flex" padding="10px">
             <FormControl size="small">
             <InputLabel id="vendor">Vendor</InputLabel>
             <NativeSelect
@@ -254,7 +255,7 @@ function EditPurchase() {
                     Add
                 </button>
 
-
+                </div>
                 <Button variant="contained" type="submit" value="Submit" />
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>

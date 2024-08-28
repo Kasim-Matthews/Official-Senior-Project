@@ -57,10 +57,11 @@ function EditLocation(){
           <CardContent>
             <h2>Edit Location</h2>
             <form id="edit location Form" onSubmit={handleSubmit}>
+            <div display="flex" padding="10px">
                 <TextField variant="outlined" label="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange}/>
 
                 <TextField variant="outlined" label="Address" defaultValue={formData.Address} id="Address" required onChange={handleChange}/>
-    
+            </div>
                 <Button variant="contained" type="submit" value="Submit"/>
             </form>
             </CardContent>

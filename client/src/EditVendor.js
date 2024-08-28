@@ -104,6 +104,7 @@ function EditVendor() {
           <CardContent>
             <h2>Edit Vendor</h2>
       <form onSubmit={validate}>
+      <div display="flex" padding="10px">
         <TextField  variant="outlined" name="BusinessName" id="BusinessName" defaultValue={formData.BusinessName} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
         <TextField  variant="outlined" name="ContactName" id="ContactName" defaultValue={formData.ContactName} onChange={handleChange} />
@@ -113,7 +114,7 @@ function EditVendor() {
         <TextField  variant="outlined" name="Email" id="Email" defaultValue={formData.Email} onChange={handleChange} />
         {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
-
+      </div>
         <Button variant="contained" type="submit" value="Submit" />
         <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>

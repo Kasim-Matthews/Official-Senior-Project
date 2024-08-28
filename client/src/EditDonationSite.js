@@ -91,12 +91,13 @@ function EditDonationSite() {
           <CardContent>
             <h2>Edit Donation Site</h2>
       <form onSubmit={validate}>
+      <div display="flex" padding="10px">
         <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
         <TextField variant="outlined" label="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} />
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
-
+      </div>
         <Button variant="contained" type="submit" value="Submit" />
         <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
       </form>

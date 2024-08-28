@@ -197,6 +197,7 @@ function EditOrder() {
           <CardContent>
             <h2>Edit Order</h2>
     <form id="edit distribution" onSubmit={validate}>
+    <div display="flex" padding="10px">
     <FormControl size="small">
             <InputLabel id="partner">Partner</InputLabel>
             <NativeSelect
@@ -293,7 +294,7 @@ function EditOrder() {
         Add
       </button>
 
-
+      </div>
       <Button variant="contained" type="submit" value="Submit" />
       <Button varaint="outlined" type="button" onClick={handleCancel}>Cancel</Button>
     </form>
