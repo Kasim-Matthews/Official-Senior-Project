@@ -275,9 +275,9 @@ function AddOrder() {
           deleteField={handleDeleteField}
         />
       ))}
-      <button name="add-btn" onClick={handleAddField}>
+      <Button variant="outlinted" name="add-btn" onClick={handleAddField}>
         Add
-      </button>
+      </Button>
 
       <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
       <Button variant="outlined" onClick={handleCancel}>Cancel</Button>
