@@ -170,7 +170,7 @@ function EditPurchase() {
             <h2>Edit Purchase</h2>
             <form onSubmit={validate}>
             <div display="flex" padding="10px">
-            <FormControl size="small">
+            <FormControl size="small" sx={{padding:"10px"}}>
             <InputLabel id="vendor">Vendor</InputLabel>
             <NativeSelect
               placeholder="Vendor"
@@ -195,7 +195,7 @@ function EditPurchase() {
           </FormControl>
                 <br />
 
-                <FormControl size="small">
+                <FormControl size="small" sx={{padding:"10px"}}>
                     <InputLabel id="location">Location</InputLabel>
                     <NativeSelect
                     placeholder="Location"
@@ -220,13 +220,11 @@ function EditPurchase() {
                 </FormControl>
                     <br />
 
-                <div>
-                    <label htmlFor="Purchase_date">Purchase date</label>
+                <div style={{padding:"10px"}}>
+                    <label htmlFor="Purchase_date" style={{padding:"5px"}}>Purchase date</label>
                     <input type="date" name="Purchase_date" id="Purchase_date" defaultValue={formData.PurchaseDate} onChange={handleChange} />
-                </div>
-
-                <div>
-                    <label htmlFor="TotalValue">Purchase Total</label>
+        
+                    <label htmlFor="TotalValue" style={{padding:"5px"}}>Purchase Total</label>
                     <input type="number" name="TotalValue" id="TotalValue" defaultValue={formData.TotalValue} min="0.00" step="0.01" onChange={handleChange} />
                 </div>
 
@@ -249,14 +247,15 @@ function EditPurchase() {
                         index={index}
                         record={record}
                         deleteField={handleDeleteField}
+                        sx={{padding:"10px"}}
                     />
                 ))}
-                <button name="add-btn" onClick={handleAddField}>
+                <Button variant="outlined" name="add-btn" onClick={handleAddField} sx={{padding:"10px"}}>
                     Add
-                </button>
+                </Button>
 
                 </div>
-                <Button variant="contained" type="submit" value="Submit" />
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{padding:"10px"}}>Submit</Button>
                 <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
             </form>
             </CardContent>

@@ -60,11 +60,11 @@ function EditItem(){
             <h2>Edit Item</h2>
             <form id="edit item" onSubmit={handleSubmit}>
             <div display="flex" padding="10px">
-                <TextField variant="outlined" label="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange}/>
+                <TextField variant="outlined" label="Name" defaultValue={formData.Name} id="Name" required onChange={handleChange} sx={{padding:"10px"}}/>
 
-                <TextField variant="outlined" name="FairMarketValue" id="FairMarketValue" defaultValue={formData.FairMarketValue} step="0.01" required onChange={handleChange}/>
+                <TextField variant="outlined" name="FairMarketValue" id="FairMarketValue" defaultValue={formData.FairMarketValue} step="0.01" required onChange={handleChange} sx={{padding:"10px"}} />
             </div>
-                <Button variant="contained" type="submit" value="Submit"/>
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
             </form>
             </CardContent>
             </Card>

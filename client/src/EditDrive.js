@@ -88,11 +88,11 @@ function EditDrive() {
           <CardContent>
             <h2>Edit Drive</h2>
       <form onSubmit={validate}>
-        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} sx={{paddingRight:"10px"}} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-        <Button varirant="contained" type="submit" value="Submit" />
-        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+        <Button varirant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
+        <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
       </form>
       </CardContent>
       </Card>

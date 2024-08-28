@@ -92,14 +92,14 @@ function EditDonationSite() {
             <h2>Edit Donation Site</h2>
       <form onSubmit={validate}>
       <div display="flex" padding="10px">
-        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} sx={{paddingRight:"10px"}} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-        <TextField variant="outlined" label="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} />
+        <TextField variant="outlined" label="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} sx={{paddingRight:"10px"}}/>
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
       </div>
-        <Button variant="contained" type="submit" value="Submit" />
-        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+        <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}/>
+        <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
       </form>
       </CardContent>
       </Card>

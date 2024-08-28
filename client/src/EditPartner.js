@@ -59,11 +59,11 @@ function EditPartner(){
             <h2>Edit Partner</h2>
             <form id="edit partnerForm" onSubmit={handleSubmit}>
             <div display="flex" padding="10px">
-              <TextField varaint="outlined" name="Name" id="Name" defaultValue={formData.Name} onChange={handleChange} required/>
+              <TextField varaint="outlined" name="Name" id="Name" defaultValue={formData.Name} onChange={handleChange} required sx={{padding:"10px"}}/>
 
-              <TextField variant="outlined" type="text" name="Email" defaultValue={formData.Email} id="Email" onChange={handleChange} required/>
+              <TextField variant="outlined" type="text" name="Email" defaultValue={formData.Email} id="Email" onChange={handleChange} required sx={{padding:"10px"}}/>
             </div>
-                <Button varaint="contained" type="submit" value="Submit"/>
+                <Button varaint="contained" type="submit" value="Submit" onClick={handleSubmit}>Submit</Button>
             </form>
             </CardContent>
             </Card>
