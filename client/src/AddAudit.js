@@ -50,7 +50,7 @@ function AddAudit() {
             <Navbar />
             <Grid container justifyContent="center" >
             <Card 
-            sx={{ minWidth: 275 }}
+            sx={{ paddingtop:"10px"}}
             display="flex"
           alignItems="center"
           justifyContent="center">

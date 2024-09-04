@@ -57,7 +57,7 @@ function AddDrive(){
         <div>
             <Navbar />
             <Grid container justifyContent="center" >
-            <Card sx={{ minWidth: 275 }}>
+            <Card sx={{ paddingtop:"10px"}}>
             <CardContent>
                 <h2>Add Drive</h2>
             <form onSubmit={validate}>

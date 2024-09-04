@@ -36,6 +36,8 @@ import Stack from '@mui/material/Stack';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import Navbar from './components/navbar';
+import TablePagination from '@mui/material/TablePagination';
+import * as React from 'react';
 
 
 
@@ -184,6 +186,7 @@ function Order() {
     setOpen(false);
   };
 
+
   return (
     <div>
       <Navbar />
@@ -260,7 +263,14 @@ function Order() {
       <h2 style={{ display: 'none' }}>Change ifs to == rather than include</h2>
       <Button variant="contained"><Link to="/distribution/new" style={{ textDecoration: 'none', color: 'white' }}>Add</Link></Button>
       <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
-      <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
+      <TablePagination
+      component="div"
+      count={100}
+      page={page}
+      postsPerPage={postsPerPage} 
+      totalPosts={records.length} 
+      paginate={paginate}
+    />
     </div>
 
   );

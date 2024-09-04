@@ -76,7 +76,7 @@ function AddVendor() {
           <Navbar />
           <Grid container justifyContent="center" >
           <Card 
-          sx={{ padding:"10px" }} 
+          sx={{ paddingtop:"10px" }} 
           display="flex"
           padding="10px"
           alignItems="center"
