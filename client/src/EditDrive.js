@@ -81,10 +81,8 @@ function EditDrive() {
       <Navbar />
       <Grid container justifyContent="center" >
           <Card 
-          sx={{ minWidth: 275 }} 
-          display="flex"
-          alignItems="center"
-          justifyContent="center">
+          sx={{ paddingtop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}} 
+          >
           <CardContent>
             <h2>Edit Drive</h2>
       <form onSubmit={validate}>

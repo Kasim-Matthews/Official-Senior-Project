@@ -50,10 +50,8 @@ function EditLocation(){
             <Navbar />
             <Grid container justifyContent="center" >
           <Card 
-          sx={{ minWidth: 275 }} 
-          display="flex"
-          alignItems="center"
-          justifyContent="center">
+          sx={{ paddingtop: "50px", display: "flex", alignItems: "center", justifyContent: "center" }} 
+          >
           <CardContent>
             <h2>Edit Location</h2>
             <form id="edit location Form" onSubmit={handleSubmit}>
