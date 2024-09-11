@@ -6,10 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Pagination from "./components/Pagination";
 import OrderPosts from "./components/OrderPosts";
-import  AppBar  from '@mui/material/AppBar';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import  IconButton  from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -19,7 +19,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import Button from '@mui/material/Button';
-import './Order.css';import { DateRangePicker } from 'react-date-range'
+import './Order.css'; import { DateRangePicker } from 'react-date-range'
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import Navbar from "./components/navbar";
@@ -185,108 +185,105 @@ function AddOrder() {
 
   return (
     <div className="dashboard-container">
-    <Navbar />
-    <Grid container justifyContent="center" >
-    <Card 
-    sx={{ paddingtop:"10px" }}
-    display="flex"
-          alignItems="center"
-          justifyContent="center">
-      <CardContent>
-        <h2>Add Order</h2>
-    <form id="distribution" onSubmit={validate}>
-      <div display="flex" style={{paddingBottom:"10px"}}>
-          <FormControl size="small" sx={{paddingRight:"20px"}}>
-            <InputLabel id="partner">Partner</InputLabel>
-            <NativeSelect
-              placeholder="Partner"
-              inputProps={{
-                name: 'partner',
-                id: 'partner',
-              }}>
-              <option disabled selected></option>
-              {partners.map((val) => {
-                return (
-                  <option value={val.Partner_id}>{val.Name}</option>
-                )
-              })}
-            </NativeSelect>
-          </FormControl>
-          <FormControl size="small" sx={{paddingRight:"20px"}}>
-            <InputLabel id="location">Locations</InputLabel>
-            <NativeSelect
-              placeholder="Locations"
-              inputProps={{
-                name: 'location',
-                id: 'location',
-              }}>
-              <option disabled selected></option>
-              {locations.map((val) => {
-                return (
-                  <option value={val.Location_id}>{val.Name}</option>
-                )
-              })}
-            </NativeSelect>
-          </FormControl>
-          </div>
-          <div display="flex">
-            <div className='requestDate' style={{paddingRight:"10px", paddingBottom: "10px"}}>
-              <label htmlFor="Request_date" style={{paddingRight: "16px"}}>Request date</label>
-                    <input type="date" name="Request_date" id="Request_date" value={formData.RequestDate} required onChange={handleChange} />
-            </div> 
-            <div className='completeDate'>
-              <label htmlFor="Complete_date" style={{paddingRight: "5px"}}>Complete date</label>
-                    <input type="date" name="Complete_date" id="Complete_date" value={formData.Complete_date} required onChange={handleChange}/>
-            </div> 
-            </div>
-            <div display="flex">
-            <div className='delivery'>
-            <FormControl sx={{paddingRight:"10px"}}>
-              <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
-              <RadioGroup
-                row
-                aria-labelledby="delivery-method-label"
-                name="delivery-method-group"
-              >
-                <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off"  checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange}/>
-                <FormControlLabel value="other" control={<Radio />} label="Other"  checked={formData.DeliveryMethod === "Other"} onChange={handleChange}/>
-              </RadioGroup>
-            </FormControl>
-            </div>
-            <TextField
-              id="outlined-Comments-static"
-              label="Comments"
-              multiline
-              rows={4}
-              defaultValue="Comments"
-              onChange={handleChange} 
-              placeholder="Comments"
-              sx={{paddingRight:"10px"}}
-            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
-            </div>
+      <Navbar />
+      <Grid container justifyContent="center" >
+        <Card
+          sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+          <CardContent>
+            <h2>Add Order</h2>
+            <form id="distribution" onSubmit={validate}>
+              <div display="flex" style={{ paddingBottom: "10px" }}>
+                <FormControl size="small" sx={{ paddingRight: "20px" }}>
+                  <InputLabel id="partner">Partner</InputLabel>
+                  <NativeSelect
+                    placeholder="Partner"
+                    inputProps={{
+                      name: 'partner',
+                      id: 'partner',
+                    }}>
+                    <option disabled selected></option>
+                    {partners.map((val) => {
+                      return (
+                        <option value={val.Partner_id}>{val.Name}</option>
+                      )
+                    })}
+                  </NativeSelect>
+                </FormControl>
+                <FormControl size="small" sx={{ paddingRight: "20px" }}>
+                  <InputLabel id="location">Locations</InputLabel>
+                  <NativeSelect
+                    placeholder="Locations"
+                    inputProps={{
+                      name: 'location',
+                      id: 'location',
+                    }}>
+                    <option disabled selected></option>
+                    {locations.map((val) => {
+                      return (
+                        <option value={val.Location_id}>{val.Name}</option>
+                      )
+                    })}
+                  </NativeSelect>
+                </FormControl>
+              </div>
+              <div display="flex">
+                <div className='requestDate' style={{ paddingRight: "10px", paddingBottom: "10px" }}>
+                  <label htmlFor="Request_date" style={{ paddingRight: "16px" }}>Request date</label>
+                  <input type="date" name="Request_date" id="Request_date" value={formData.RequestDate} required onChange={handleChange} />
+                </div>
+                <div className='completeDate'>
+                  <label htmlFor="Complete_date" style={{ paddingRight: "5px" }}>Complete date</label>
+                  <input type="date" name="Complete_date" id="Complete_date" value={formData.Complete_date} required onChange={handleChange} />
+                </div>
+              </div>
+              <div display="flex">
+                <div className='delivery'>
+                  <FormControl sx={{ paddingRight: "10px" }}>
+                    <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="delivery-method-label"
+                      name="delivery-method-group"
+                    >
+                      <FormControlLabel value="drop-off" control={<Radio />} label="Drop-off" checked={formData.DeliveryMethod === "Drop-off"} onChange={handleChange} />
+                      <FormControlLabel value="other" control={<Radio />} label="Other" checked={formData.DeliveryMethod === "Other"} onChange={handleChange} />
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+                <TextField
+                  id="outlined-Comments-static"
+                  label="Comments"
+                  multiline
+                  rows={4}
+                  defaultValue="Comments"
+                  onChange={handleChange}
+                  placeholder="Comments"
+                  sx={{ paddingRight: "10px" }}
+                />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+              </div>
 
-      <h2>Items</h2>
-      {items.map((obj, index) => (
-        <ItemInput
-          key={index}
-          objName={obj.name}
-          handleItem={handleItem}
-          handleQuantity={handleQuantity}
-          index={index}
-          deleteField={handleDeleteField}
-          sx={{paddingRight:"20px"}}
-        />
-      ))}
-      <Button variant="outlinted" name="add-btn" onClick={handleAddField} sx={{paddingRight:"10px"}}>
-        Add
-      </Button>
+              <h2>Items</h2>
+              {items.map((obj, index) => (
+                <ItemInput
+                  key={index}
+                  objName={obj.name}
+                  handleItem={handleItem}
+                  handleQuantity={handleQuantity}
+                  index={index}
+                  deleteField={handleDeleteField}
+                  sx={{ paddingRight: "20px" }}
+                />
+              ))}
+              <Button variant="outlinted" name="add-btn" onClick={handleAddField} sx={{ paddingRight: "10px" }}>
+                Add
+              </Button>
 
-      <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
-      <Button variant="outlined" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
-    </form>
-    </CardContent>
-    </Card>
-    </Grid>
+              <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{ paddingRight: "10px" }}>Submit</Button>
+              <Button variant="outlined" onClick={handleCancel} sx={{ paddingRight: "10px" }}>Cancel</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
     </div>
   )
 }

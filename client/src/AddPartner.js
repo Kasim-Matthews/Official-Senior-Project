@@ -90,10 +90,7 @@ function AddPartner(){
         <Navbar />
         <Grid container justifyContent="center" >
         <Card 
-        sx={{ paddingtop:"10px" }}
-        display="flex"
-          alignItems="center"
-          justifyContent="center">
+        sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
         <CardContent>
         <h2>Add Partner</h2>
         <form id="partnerForm" onSubmit={handleSubmit}>

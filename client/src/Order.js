@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import Pagination from "./components/Pagination";
@@ -266,7 +266,7 @@ function Order() {
       <TablePagination
       component="div"
       count={100}
-      page={page}
+      page={1}
       postsPerPage={postsPerPage} 
       totalPosts={records.length} 
       paginate={paginate}

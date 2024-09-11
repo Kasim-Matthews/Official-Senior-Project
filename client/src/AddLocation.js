@@ -49,10 +49,7 @@ function AddLocation(){
             <Navbar />
             <Grid container justifyContent="center" >
             <Card 
-            sx={{ paddingtop:"10px" }}
-            display="flex"
-          alignItems="center"
-          justifyContent="center">
+            sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
             <CardContent>
               <h2>Add Location</h2>
             <form id="locations" onSubmit={handleSubmit}>

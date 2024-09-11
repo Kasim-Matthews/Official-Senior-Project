@@ -52,10 +52,7 @@ function AddItem(){
             <Navbar />
             <Grid container justifyContent="center" >
             <Card 
-            sx={{ paddingtop:"10px" }}
-            display="flex"
-          alignItems="center"
-          justifyContent="center">
+            sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
               <CardContent>
                 <h2>Add Item</h2>
             <form id="item" onSubmit={handleSubmit}>

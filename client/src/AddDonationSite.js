@@ -65,10 +65,7 @@ function AddDonationSite(){
             <Navbar />
             <Grid container justifyContent="center" >
             <Card 
-            sx={{ paddingtop:"10px" }}
-            display="flex"
-          alignItems="center"
-          justifyContent="center">
+            sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
                 <CardContent>
                     <h2>Add Donation Site</h2>
             <form onSubmit={validate}>
