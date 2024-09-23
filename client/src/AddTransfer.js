@@ -10,6 +10,7 @@ import NativeSelect from '@mui/material/NativeSelect';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Navbar from "./components/navbar";
 
 
 function AddTransfer() {

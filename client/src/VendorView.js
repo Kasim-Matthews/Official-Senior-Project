@@ -111,6 +111,16 @@ function VendorView() {
 
     }, [])
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     // if (records.length == 0) {
     //     return (
     //         <div>

@@ -156,65 +156,67 @@ function ViewOrder() {
   //     </div>
   //   )
   // }
+  const totalQuantity = itemList.reduce((sum, val) => sum + parseInt(val.Quantity), 0);
+  const total = itemList.reduce((sum, val) => sum + (parseFloat(val.Quantity) * parseFloat(val.FairMarketValue)), 0);
   return (
     <div>
       <Navbar />
-            <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                      <TableCell>Partner</TableCell>
-                      <TableCell>Requested Date</TableCell>
-                      <TableCell>Completed Date</TableCell>
-                      <TableCell>Delivery Method</TableCell>
-                      <TableCell>Location</TableCell>
-                      <TableCell>Status</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    <TableRow>
-                      <TableCell>{record.Name}</TableCell>
-                      <TableCell>{record.RequestDate}</TableCell>
-                      <TableCell>{record.CompletedDate}</TableCell>
-                      <TableCell>{record.DeliveryMethod}</TableCell>
-                      <TableCell>{record.Location}</TableCell>
-                      <TableCell>{record.Status}</TableCell>
-                    </TableRow>
-                </TableBody>
-            </Table>
-            </TableContainer>
-            <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                      <TableCell>Item Name</TableCell>
-                      <TableCell>Value/item</TableCell>
-                      <TableCell>In-kind Value</TableCell>
-                      <TableCell>Quantity</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                {itemList.map((val) => {
-                  return (
-                    <TableRow>
-                      <TableCell>{val.Item}</TableCell>
-                      <TableCell>{val.FairMarketValue}</TableCell>
-                      <TableCell>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</TableCell>
-                      <TableCell>{val.Quantity}</TableCell>
-                    </TableRow>
-                  )
-                })}
-                </TableBody>
-                <TableFooter>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Partner</TableCell>
+              <TableCell>Requested Date</TableCell>
+              <TableCell>Completed Date</TableCell>
+              <TableCell>Delivery Method</TableCell>
+              <TableCell>Location</TableCell>
+              <TableCell>Status</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell>{record.Name}</TableCell>
+              <TableCell>{record.RequestDate}</TableCell>
+              <TableCell>{record.CompletedDate}</TableCell>
+              <TableCell>{record.DeliveryMethod}</TableCell>
+              <TableCell>{record.Location}</TableCell>
+              <TableCell>{record.Status}</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Item Name</TableCell>
+              <TableCell>Value/item</TableCell>
+              <TableCell>In-kind Value</TableCell>
+              <TableCell>Quantity</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {itemList.map((val) => {
+              return (
                 <TableRow>
-                  <TableCell>Total</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell>${total}</TableCell>
-                  <TableCell>{totalQuantity}</TableCell>
+                  <TableCell>{val.Item}</TableCell>
+                  <TableCell>{val.FairMarketValue}</TableCell>
+                  <TableCell>${Math.round((val.FairMarketValue * val.Quantity) * 100) / 100}</TableCell>
+                  <TableCell>{val.Quantity}</TableCell>
                 </TableRow>
-              </TableFooter>
-            </Table>
-            </TableContainer>
+              )
+            })}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell>Total</TableCell>
+              <TableCell></TableCell>
+              <TableCell>${total}</TableCell>
+              <TableCell>{totalQuantity}</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </TableContainer>
     </div>
   )
 

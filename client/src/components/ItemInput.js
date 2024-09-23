@@ -1,6 +1,8 @@
-<<<<<<< HEAD
 import React, { useEffect } from "react";
 import Axios from 'axios';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
 
 export default function ItemInput({ objName, handleItem, handleQuantity, index, deleteField }) {
 
@@ -13,44 +15,22 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
     }, [])
 
 
-    return (
-        <div style={{ display: "flex" }}>
-            <select name={objName} onChange={(e) => handleItem(e, index)}>
-                <option value="">--Please choose an option--</option>
-                {item.map((val) => {
-                    return (
-                        <option value={val.Item_id}>{val.Name}</option>
-                    )
-                })}
-            </select>
+    // return (
+    //     <div style={{ display: "flex" }}>
+    //         <select name={objName} onChange={(e) => handleItem(e, index)}>
+    //             <option value="">--Please choose an option--</option>
+    //             {item.map((val) => {
+    //                 return (
+    //                     <option value={val.Item_id}>{val.Name}</option>
+    //                 )
+    //             })}
+    //         </select>
 
-            <input type="number" name={objName} min="0" required onChange={(e) => handleQuantity(e, index)} />
+    //         <input type="number" name={objName} min="0" required onChange={(e) => handleQuantity(e, index)} />
 
-            <div onClick={(e) => deleteField(e, index)}>X</div>
-        </div>
-    )
-=======
-import React, { useEffect } from "react";
-import Axios from 'axios';
-import {
-    Unstable_NumberInput as BaseNumberInput,
-    numberInputClasses,
-} from '@mui/base/Unstable_NumberInput';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import NativeSelect from '@mui/material/NativeSelect';
-
-
-export default function ItemInput({ objName, handleItem, handleQuantity, index, deleteField }) {
-
-    const [item, setItem] = React.useState([])
-
-    useEffect(() => {
-        Axios.get("http://localhost:3001/item/use").then((response) => {
-            setItem(response.data);
-        })
-    }, [])
-
+    //         <div onClick={(e) => deleteField(e, index)}>X</div>
+    //     </div>
+    // )
 
     return (
         <div style={{ display: "flex", paddingBottom: "10px" }}>
@@ -73,12 +53,11 @@ export default function ItemInput({ objName, handleItem, handleQuantity, index, 
                 </NativeSelect>
             </FormControl>
 
-            <div style={{display: "flex"}}>
-                <input type="number" name={objName} min="0" required onChange={(e) => handleQuantity(e, index)} style={{width: "80px", height: "20px", marginTop: "18px"}} />
+            <div style={{ display: "flex" }}>
+                <input type="number" name={objName} min="0" required onChange={(e) => handleQuantity(e, index)} style={{ width: "80px", height: "20px", marginTop: "18px" }} />
 
-                <div onClick={(e) => deleteField(e, index)} style={{marginTop: "24px", paddingLeft:"8px", color: "red"}}>X</div>
+                <div onClick={(e) => deleteField(e, index)} style={{ marginTop: "24px", paddingLeft: "8px", color: "red" }}>X</div>
             </div>
         </div>
     )
->>>>>>> presentation
 }

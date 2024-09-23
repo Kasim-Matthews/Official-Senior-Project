@@ -144,6 +144,15 @@ function ItemView() {
             }))
         }
     }
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     // return (
     //     <div>
@@ -308,13 +317,13 @@ function ItemView() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {row2.map((val) => {
+                                {tab2.map((val) => {
                                     return (
                                         <TableRow>
-                                            <TableCell>{val[0].Item}</TableCell>
-                                            {row2.map((val) => {
+                                            <TableCell>{val.Item}</TableCell>
+                                            {val.Quantities.map((quantity) => {
                                                 return (
-                                                    <TableCell>{val.Quantity}</TableCell>
+                                                    <TableCell>{quantity}</TableCell>
                                                 )
                                             })}
                                         </TableRow>
