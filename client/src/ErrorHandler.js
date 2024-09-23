@@ -1,4 +1,6 @@
+
 import React, { useEffect } from "react";
+import Navbar from "./components/navbar";
 
 function ErrorHandler() {
     return (

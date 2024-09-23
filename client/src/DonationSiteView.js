@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from "./components/navbar";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
 
 function DonationSiteView() {
@@ -100,9 +109,80 @@ function DonationSiteView() {
     }, [])
 
 
+    // if (records.length === 0) {
+    //     return (
+    //         <div>
+    //             <form onSubmit={handleSubmit}>
+    //                 <div style={{ display: "flex" }}>
+
+    //                     <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+    //                     <label htmlFor="non-active" >Also include inactive items</label>
+
+    //                 </div>
+    //                 <input type="Submit" />
+    //             </form>
+    //             <button><Link to="/donationsite/new">Add</Link></button>
+    //             <table>
+    //                 <thead>
+    //                     <tr>
+    //                         <th>Donation Site</th>
+    //                         <th>Address</th>
+    //                         <th>Actions</th>
+    //                     </tr>
+    //                 </thead>
+    //             </table>
+    //             <button><Link to="/Dashboard">Dasboard</Link></button>
+    //         </div>
+    //     )
+    // }
+
+    // else {
+    //     return (
+    //         <div>
+    //             <form onSubmit={handleSubmit}>
+    //                 <div style={{ display: "flex" }}>
+
+    //                     <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+    //                     <label htmlFor="non-active" >Also include inactive items</label>
+
+    //                 </div>
+    //                 <input type="Submit" />
+    //             </form>
+    //             <button><Link to="/donationsite/new">Add</Link></button>
+    //             <table>
+    //                 <thead>
+    //                     <tr>
+    //                         <th>Donation Site</th>
+    //                         <th>Address</th>
+    //                         <th>Actions</th>
+    //                     </tr>
+    //                 </thead>
+    //                 <tbody>
+    //                     {records.map((val) => {
+    //                         return (
+    //                             <tr>
+    //                                 <td>{val.Name}</td>
+    //                                 <td>{val.Address}</td>
+    //                                 <td>
+    //                                     {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
+    //                                     <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
+    //                                     <button onClick={() => handleView(val.Partner_id)}>View</button>
+    //                                 </td>
+
+    //                             </tr>
+    //                         );
+    //                     })}
+    //                 </tbody>
+    //             </table>
+    //             <button><Link to="/Dashboard">Dasboard</Link></button>
+    //         </div>
+    //     );
+    // }
+
     if (records.length === 0) {
         return (
             <div>
+                <Navbar/>
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 
@@ -112,17 +192,18 @@ function DonationSiteView() {
                     </div>
                     <input type="Submit" />
                 </form>
-                <button><Link to="/donationsite/new">Add</Link></button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Donation Site</th>
-                            <th>Address</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                </table>
-                <button><Link to="/Dashboard">Dasboard</Link></button>
+                <Button variant="contained"><Link to="/donationsite/new">Add</Link></Button>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableRow>Donation Site</TableRow>
+                            <TableRow>Address</TableRow>
+                            <TableRow>Actions</TableRow>
+                        </TableRow>
+                    </TableHead>
+                </Table>
+                </TableContainer>
             </div>
         )
     }
@@ -130,6 +211,7 @@ function DonationSiteView() {
     else {
         return (
             <div>
+                <Navbar/>
                 <form onSubmit={handleSubmit}>
                     <div style={{ display: "flex" }}>
 
@@ -139,33 +221,34 @@ function DonationSiteView() {
                     </div>
                     <input type="Submit" />
                 </form>
-                <button><Link to="/donationsite/new">Add</Link></button>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Donation Site</th>
-                            <th>Address</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                <Button variant="contained"><Link to="/donationsite/new">Add</Link></Button>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Donation Site</TableCell>
+                            <TableCell>Address</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
                         {records.map((val) => {
                             return (
-                                <tr>
-                                    <td>{val.Name}</td>
-                                    <td>{val.Address}</td>
-                                    <td>
-                                        {typeof val.DeletedAt == "object" ? <button onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</button>}
-                                        <button onClick={() => handleEdit(val.Partner_id)}>Edit</button>
-                                        <button onClick={() => handleView(val.Partner_id)}>View</button>
-                                    </td>
+                                <TableRow>
+                                    <TableCell>{val.Name}</TableCell>
+                                    <TableCell>{val.Address}</TableCell>
+                                    <TableCell>
+                                        {typeof val.DeletedAt == "object" ? <Button variant="outlined" onClick={() => handleRemove(val.Partner_id, val.Name)}>Delete</Button> : <Button variant="outlined" onClick={() => handleReactivate(val.Partner_id, val.Name)}>Reactivate</Button>}
+                                        <Button variant="outlined" onClick={() => handleEdit(val.Partner_id)}>Edit</Button>
+                                        <Button variant="outlined" onClick={() => handleView(val.Partner_id)}>View</Button>
+                                    </TableCell>
 
-                                </tr>
+                                </TableRow>
                             );
                         })}
-                    </tbody>
-                </table>
-                <button><Link to="/Dashboard">Dasboard</Link></button>
+                    </TableBody>
+                </Table>
+                </TableContainer>
             </div>
         );
     }

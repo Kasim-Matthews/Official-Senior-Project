@@ -15,15 +15,13 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Menu from '@mui/material/Menu';
-import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
+
+import Navbar from './components/navbar';
+import useAxiosPrivate from './hooks/useAxiosPrivate';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import useLogout from './hooks/useLogout';
 
 function Dashboard() {
 
@@ -33,6 +31,20 @@ function Dashboard() {
     const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
+    const axiosPrivate = useAxiosPrivate();
+    const navigate = useNavigate();
+    const location = useLocation();
+    /*
+    This will be for the logout button
+    const logout = useLogout()
+
+    const signOut = async () => {
+        await logout();
+        navigate('/login')    
+    }
+    */
+
+
     useEffect(() => {
         axios.get(`${process.env.REACT_APP_BACKEND_URL}/data`)
             .then(response => {
@@ -41,10 +53,12 @@ function Dashboard() {
                     setLocations([...new Set(response.data.data.map(item => item.locationName[0]))]);
                 } else {
                     console.error('Failed to fetch data');
+                    
                 }
             })
             .catch(error => {
                 console.error('Error fetching data', error);
+                navigate('/login', { state: { from: location }, replace: true });
             });
     }, []);
 
@@ -70,42 +84,32 @@ function Dashboard() {
 
     const totalQuantity = filteredItems.reduce((sum, item) => sum + item.Quantity, 0);
 
-    console.log(locations)
+
+
+    const [open, setOpen] = React.useState(false);
+    const anchorRef = React.useRef(null);
+    const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+  const handleMenuItemClick = (event, index) => {
+    setSelectedIndex(index);
+    setOpen(false);
+  };
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleMenuClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
 
     return (
         <div className="dashboard-container">
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0'}}>
-                    <Toolbar>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/donation" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                    </Typography>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
-                    </Typography>
-                        <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-                </Box>
+            <Navbar />
             <div className="main-content">
                     <h1>Welcome, DBNF Admin!</h1>
                 <div className="boxes">
@@ -150,6 +154,7 @@ function Dashboard() {
                                                     <TableCell>{totalQuantity}</TableCell>
                                                 </TableRow>
                                             </TableFooter>
+                                            
                                         </Table>
                                     </TableContainer>
                                 </div>
@@ -161,6 +166,7 @@ function Dashboard() {
                     <Card>
                         <CardContent>
                             Pie chart goes here!
+                            <Button variant='contained'><Link to="/user">User Info</Link></Button>
                         </CardContent>
                     </Card>
                     </div>
@@ -168,7 +174,9 @@ function Dashboard() {
             </div>
         </div>
     </div>
+
     );
 }
+
 
 export default Dashboard;

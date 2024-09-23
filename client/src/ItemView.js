@@ -2,6 +2,16 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import Navbar from './components/navbar';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Button from '@mui/material/Button';
+import { Dialog, DialogTitle, DialogContent } from "@mui/material";
+import Paper from '@mui/material/Paper';
 
 function ItemView() {
     const navigate = useNavigate();
@@ -26,7 +36,7 @@ function ItemView() {
         }).catch(error => {
             navigate('/error')
             console.error(error.response.data.message)
-        })    
+        })
     }, [])
 
     useEffect(() => {
@@ -135,17 +145,120 @@ function ItemView() {
         }
     }
 
+    // return (
+    //     <div>
+    //         <form onSubmit={handleSubmit}>
+    //             <div style={{ display: "flex" }}>
+
+    //                 <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+    //                 <label htmlFor="non-active" >Also include inactive items</label>
+
+    //             </div>
+    //             <input type="Submit" />
+    //         </form>
+    //         <Tabs>
+    //             <TabList>
+    //                 <Tab>tab 1</Tab>
+    //                 <Tab>tab 2</Tab>
+    //             </TabList>
+
+    //             <TabPanel>
+    //                 <button><Link to="/item/new">Add</Link></button>
+    //                 <table>
+    //                     <thead>
+    //                         <tr>
+    //                             <th>Name</th>
+    //                             <th>FairMarketValue</th>
+    //                             <th>Actions</th>
+    //                         </tr>
+    //                     </thead>
+    //                     <tbody>
+    //                         {records.map((val) => {
+    //                             return (
+    //                                 <tr>
+    //                                     <td onClick={() => handleView(val.Item_id)}>{val.Name}</td>
+    //                                     <td>${val.FairMarketValue}</td>
+    //                                     <td>
+    //                                         {typeof (val.DeletedAt) == "object" ? <button onClick={() => handleRemove(val.Item_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Item_id, val.Name)}>Reactivate</button>}
+    //                                         <button onClick={() => handleEdit(val.Item_id)}>Edit</button>
+    //                                     </td>
+    //                                 </tr>
+    //                             );
+    //                         })}
+    //                     </tbody>
+    //                 </table>
+    //             </TabPanel>
+    //             <TabPanel>
+    //                 <button><Link to="/item/new">Add</Link></button>
+    //                 <table>
+    //                     <thead>
+    //                         <tr>
+    //                             <th>Name</th>
+    //                             {locationList.map((val) => {
+    //                                 return (
+    //                                     <th>{val.Name}</th>
+    //                                 )
+    //                             })}
+    //                         </tr>
+    //                     </thead>
+
+    //                     <tbody>
+    //                         {tab2.map((val) => {
+    //                             return (
+    //                                 <tr>
+    //                                     <td>{val.Item}</td>
+    //                                     {val.Quantities.map((quantity) => {
+    //                                         return(
+    //                                             <td>{quantity}</td>
+    //                                         )
+    //                                     })}
+    //                                 </tr>
+    //                             )
+    //                         })}
+    //                     </tbody>
+    //                 </table>
+    //             </TabPanel>
+    //         </Tabs>
+
+    //         <button><Link to="/Dashboard">Dasboard</Link></button>
+    //     </div>
+    // );
+
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div style={{ display: "flex" }}>
+            <Navbar />
+            <React.Fragment>
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    Filters</Button>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    PaperProps={{
+                        component: 'form',
+                        onSubmit: (event) => {
+                            event.preventDefault();
+                            const formData = new FormData(event.currentTarget);
+                            const formJson = Object.fromEntries(formData.entries());
+                            const email = formJson.email;
+                            console.log(email);
+                            handleClose();
+                        },
+                    }}
+                >
+                    <DialogTitle>Filters</DialogTitle>
+                    <DialogContent>
+                        <form onSubmit={handleSubmit}>
+                            <div style={{ display: "flex" }}>
 
-                    <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
-                    <label htmlFor="non-active" >Also include inactive items</label>
+                                <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
+                                <label htmlFor="non-active" >Also include inactive items</label>
 
-                </div>
-                <input type="Submit" />
-            </form>
+                            </div>
+                            <input type="Submit" />
+                        </form>
+                    </DialogContent>
+                </Dialog>
+            </React.Fragment>
             <Tabs>
                 <TabList>
                     <Tab>tab 1</Tab>
@@ -153,64 +266,65 @@ function ItemView() {
                 </TabList>
 
                 <TabPanel>
-                    <button><Link to="/item/new">Add</Link></button>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>FairMarketValue</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {records.map((val) => {
-                                return (
-                                    <tr>
-                                        <td onClick={() => handleView(val.Item_id)}>{val.Name}</td>
-                                        <td>${val.FairMarketValue}</td>
-                                        <td>
-                                            {typeof (val.DeletedAt) == "object" ? <button onClick={() => handleRemove(val.Item_id, val.Name)}>Delete</button> : <button onClick={() => handleReactivate(val.Item_id, val.Name)}>Reactivate</button>}
-                                            <button onClick={() => handleEdit(val.Item_id)}>Edit</button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
+                    <Button variant="contained"><Link to="/item/new">Add</Link></Button>
+                    <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Fair Market Value</TableCell>
+                                    <TableCell>Actions</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {records.map((val) => {
+                                    return (
+                                        <TableRow>
+                                            <TableCell onClick={() => handleView(val.Item_id)}>{val.Name}</TableCell>
+                                            <TableCell>${val.FairMarketValue}</TableCell>
+                                            <TableCell>
+                                                {typeof (val.DeletedAt) == "object" ? <Button variant="outlined" onClick={() => handleRemove(val.Item_id, val.Name)}>Delete</Button> : <Button variaint="outlined" onClick={() => handleReactivate(val.Item_id, val.Name)}>Reactivate</Button>}
+                                                <Button variant="outlined" onClick={() => handleEdit(val.Item_id)}>Edit</Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </TabPanel>
                 <TabPanel>
-                    <button><Link to="/item/new">Add</Link></button>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                {locationList.map((val) => {
+                    <Button variant="contained "><Link to="/item/new">Add</Link></Button>
+                    <TableContainer component={Paper}>
+                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Name</TableCell>
+                                    {locationList.map((val) => {
+                                        return (
+                                            <th>{val.Name}</th>
+                                        )
+                                    })}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {row2.map((val) => {
                                     return (
-                                        <th>{val.Name}</th>
-                                    )
+                                        <TableRow>
+                                            <TableCell>{val[0].Item}</TableCell>
+                                            {row2.map((val) => {
+                                                return (
+                                                    <TableCell>{val.Quantity}</TableCell>
+                                                )
+                                            })}
+                                        </TableRow>
+                                    );
                                 })}
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            {tab2.map((val) => {
-                                return (
-                                    <tr>
-                                        <td>{val.Item}</td>
-                                        {val.Quantities.map((quantity) => {
-                                            return(
-                                                <td>{quantity}</td>
-                                            )
-                                        })}
-                                    </tr>
-                                )
-                            })}
-                        </tbody>
-                    </table>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </TabPanel>
             </Tabs>
-
-            <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
 }

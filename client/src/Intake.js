@@ -3,20 +3,24 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import IntakePosts from "./components/IntakePosts";
 import Pagination from "./components/Pagination";
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import Menu from '@mui/material/Menu';
-import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
-import { DateRangePicker } from 'react-date-range'
-import { addDays } from 'date-fns';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { te } from "date-fns/locale";
+import Navbar from './components/navbar';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import TextField from '@mui/material/TextField';
 
 function Intake() {
     const navigate = useNavigate();
@@ -185,92 +189,174 @@ function Intake() {
     }, [])
 
 
+    // return (
+    //     <div>
+    //         <Box sx={{ flexGrow: 1 }}>
+    //             <AppBar position="static" sx={{ bgcolor: '#065AB0' }}>
+    //                 <Toolbar>
+    //                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //                         <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
+    //                     </Typography>
+    //                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //                         <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
+    //                     </Typography>
+    //                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //                         <Link to="/donation" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
+    //                     </Typography>
+    //                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //                         <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
+    //                     </Typography>
+    //                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+    //                         <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
+    //                     </Typography>
+    //                     <div>
+    //                         <IconButton
+    //                             size="large"
+    //                             aria-label="account of current user"
+    //                             aria-controls="menu-appbar"
+    //                             aria-haspopup="true"
+    //                             color="inherit"
+    //                         >
+    //                             <AccountCircle />
+    //                         </IconButton>
+    //                     </div>
+    //                 </Toolbar>
+    //             </AppBar>
+    //         </Box>
+
+    //         <form onSubmit={handleSubmit}>
+    //             <label htmlFor="PartnerType">
+    //                 Partner
+    //                 <select id="PartnerType" name="PartnerType" value={filters.PartnerType} onChange={handleChange}>
+    //                     <option value=""></option>
+    //                     {partners.map((val) => {
+    //                         return (
+    //                             <option value={val.PartnerType_id}>{val.Type}</option>
+    //                         )
+    //                     })}
+
+    //                 </select>
+
+    //             </label>
+
+    //             <label htmlFor="Location">
+    //                 Location
+    //                 <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
+    //                     <option value=""></option>
+    //                     {locations.map((val) => {
+    //                         return (
+    //                             <option value={val.Name}>{val.Name}</option>
+    //                         )
+    //                     })}
+
+    //                 </select>
+
+    //             </label>
+
+    //             <label>
+    //                 Date Range
+    //                 <div>
+    //                     <input type="date" name="start" value={filters.start} onChange={handleChange} />
+    //                     -
+    //                     <input type="date" name="end" value={filters.end} onChange={handleChange} />
+    //                 </div>
+    //             </label>
+
+
+
+
+    //             <input type="submit" value="Filter" />
+    //             <button onClick={clearFilters}>Clear</button>
+
+
+
+    //         </form>
+
+
+    //         <button><Link to="/donation/new">Add</Link></button>
+
+    //         <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
+    //         <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
+    //         <button><Link to="/Dashboard">Dasboard</Link></button>
+    //     </div>
+    // );
+
     return (
         <div>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ bgcolor: '#065AB0' }}>
-                    <Toolbar>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/Dashboard" style={{ textDecoration: 'none', color: 'white' }}>{'Dashboard'}</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/distribution" style={{ textDecoration: 'none', color: 'white' }}>Distributions</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/donation" style={{ textDecoration: 'none', color: 'white' }}>Collections</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="#" style={{ textDecoration: 'none', color: 'white' }}>Inventory</Link>
-                        </Typography>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link to="/partner" style={{ textDecoration: 'none', color: 'white' }}>Partner</Link>
-                        </Typography>
-                        <div>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                color="inherit"
-                            >
-                                <AccountCircle />
-                            </IconButton>
-                        </div>
-                    </Toolbar>
-                </AppBar>
-            </Box>
-
+            <Navbar />
+            <React.Fragment>
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Filters</Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          }}
+        >
+          <DialogTitle>Filters</DialogTitle>
+          <DialogContent>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="PartnerType">
-                    Partner
-                    <select id="PartnerType" name="PartnerType" value={filters.PartnerType} onChange={handleChange}>
-                        <option value=""></option>
-                        {partners.map((val) => {
-                            return (
-                                <option value={val.PartnerType_id}>{val.Type}</option>
-                            )
-                        })}
-
-                    </select>
-
-                </label>
-
-                <label htmlFor="Location">
-                    Location
-                    <select id="Location" name="Location" value={filters.Location} onChange={handleChange}>
-                        <option value=""></option>
-                        {locations.map((val) => {
-                            return (
-                                <option value={val.Name}>{val.Name}</option>
-                            )
-                        })}
-
-                    </select>
-
-                </label>
-
-                <label>
-                    Date Range
-                    <div>
-                        <input type="date" name="start" value={filters.start} onChange={handleChange} />
-                        -
-                        <input type="date" name="end" value={filters.end} onChange={handleChange} />
-                    </div>
-                </label>
-
-
-
-
-                <input type="submit" value="Filter" />
-                <button onClick={clearFilters}>Clear</button>
-
-
-
+              <div className='partner'>
+                <TextField
+                  id="outlined-select-partner"
+                  select
+                  label="Partner"
+                  defaultValue="Partner"
+                  helperText="Please select a partner"
+                >
+                  <MenuItem className="Partner" onChange={handleChange}>
+                  </MenuItem>
+                  {partners.map((option) => (
+                    <MenuItem value={option.Name}>
+                      {option.Name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </div>
+              <div className='delivery'>
+                <FormControl>
+                  <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="delivery-method-label"
+                    name="delivery-method-group"
+                    value={filters.DeliveryMethod}
+                  >
+                    <FormControlLabel value="" control={<Radio />} label="All" />
+                    <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" />
+                    <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+              <div className='date'>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DatePicker']}>
+                  </DemoContainer>
+                </LocalizationProvider>
+              </div>
+              <div className='submit'>
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <Button type="submit">Submit</Button>
+                </DialogActions>
+              </div>
             </form>
+          </DialogContent>
+        </Dialog>
+      </React.Fragment>
 
+            <Button variant="contained"><Link to="/donation/new">Add</Link></Button>
 
-            <button><Link to="/donation/new">Add</Link></button>
-
+    
             <IntakePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
             <button><Link to="/Dashboard">Dasboard</Link></button>

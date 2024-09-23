@@ -1,4 +1,5 @@
-/* General Styles */
+/* Old styling if necessary*/
+/* General Styles
 .dashboard-container {
     margin: 0;
     font-family: 'Open Sans', sans-serif;
@@ -41,6 +42,58 @@
 .navbar ul li a:hover {
   color: black;
 }
+
+h1{
+  text-align: center;
+  padding: 70px;
+  color: #373a41;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.boxes{
+  display: flex;
+}
+
+.box{
+  padding: 0px 0px 0px 60px;
+}
+
+.box2{
+  padding: 0px 0px 0px 60px;
+  display: flex;
+}
+
+.content{
+  width: 500px;
+  padding: 10px;
+}
+
+h2{
+  text-align: center;
+  color: #373a41;
+}
+
+Select{
+  padding: 10px 10px 10px 10px;
+}
+
+.item-table{
+  padding: 10px 0px 10px 0px;
+}
+  
+.pie-chart{
+  display: flex; */
+
+/* General Styles */
+
+.header{
+  background-color: white;
+  width: 120%;
+  padding: 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+}
+  
 
 h1{
   text-align: center;

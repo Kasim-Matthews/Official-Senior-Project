@@ -1,10 +1,15 @@
 import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
-import { DateRangePicker } from 'react-date-range'
-import { addDays } from 'date-fns';
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import Navbar from "./components/navbar";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import Pagination from "./components/Pagination";
 
 function AuditView() {
@@ -14,8 +19,8 @@ function AuditView() {
     const [auditList, setAuditList] = React.useState([])
     const [records, setRecords] = React.useState([])
     const [filters, setFilters] = React.useState({
-        start:"",
-        end:""
+        start: "",
+        end: ""
 
     })
 
@@ -65,7 +70,7 @@ function AuditView() {
         e.preventDefault();
 
         setFilters({
-            Date: {start:"", end:""}
+            Date: { start: "", end: "" }
         })
         setRecords(auditList)
     }
@@ -92,15 +97,15 @@ function AuditView() {
 
     return (
         <div>
-
+            <Navbar />
             <form onSubmit={handleSubmit}>
 
                 <label>
                     Date Range
                     <div>
-                    <input type="date" name="start" value={filters.start} onChange={handleChange} />
-                    -
-                    <input type="date" name="end" value={filters.end} onChange={handleChange} />
+                        <input type="date" name="start" value={filters.start} onChange={handleChange} />
+                        -
+                        <input type="date" name="end" value={filters.end} onChange={handleChange} />
                     </div>
                 </label>
 
@@ -109,30 +114,31 @@ function AuditView() {
                 <input type="submit" value="Filter" />
                 <button onClick={clearFilters}>Clear</button>
             </form>
-            <button><Link to="/audit/new">Add</Link></button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Inventory Affected</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {currentPosts.map((val) => {
-                        return (
-                            <tr>
-                                <td>{new Date(val.Date).toISOString().slice(0, 10)}</td>
-                                <td>{val.Affected}</td>
-                                <td>
-                                    <button onClick={() => handleView(val.Audit_id)}>View</button>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-            <button><Link to="/Dashboard">Dasboard</Link></button>
+            <Button variant="contained"><Link to="/audit/new">Add</Link></Button>
+            <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Date</TableCell>
+                            <TableCell>Inventory Affected</TableCell>
+                            <TableCell>Actions</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {records.map((val) => {
+                            return (
+                                <TableRow>
+                                    <TableCell>{val.Date}</TableCell>
+                                    <TableCell>{val.Affected}</TableCell>
+                                    <TableCell>
+                                        <Button variant="outlined" onClick={() => handleView(val.Audit_id)}>View</Button>
+                                    </TableCell>
+                                </TableRow>
+                            );
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
             <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
         </div>
     );

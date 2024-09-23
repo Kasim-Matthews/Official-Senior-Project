@@ -3,6 +3,15 @@ import Axios from 'axios';
 import Purchase from "./models/Purchase";
 import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 function AddPurchase() {
     const [formData, setFormData] = useState(Purchase)
@@ -149,46 +158,135 @@ function AddPurchase() {
 
     }
 
+    // return (
+    //     <div>
+    //         <h2>Purchase</h2>
+    //         <form onSubmit={validate}>
+    //             <label htmlFor="Vendor">Vendor</label>
+    //             <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
+    //                 <option value="">--Please choose an option--</option>
+    //                 {vendor.map((val) => {
+    //                     return (
+    //                         <option value={val.Partner_id}>{val.Name}</option>
+    //                     )
+    //                 })}
+    //             </select>
+    //             <br />
+
+    //             <label htmlFor="Location">Location</label>
+    //             <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+    //                 <option value="">--Please choose an option--</option>
+    //                 {locations.map((val) => {
+    //                     return (
+    //                         <option value={val.Location_id}>{val.Name}</option>
+    //                     )
+    //                 })}
+
+    //             </select><br />
+
+    //             <div>
+    //                 <label htmlFor="Purchase_date">Purchase date</label>
+    //                 <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
+    //             </div>
+
+    //             <div>
+    //                 <label htmlFor="Total">Purchase Total</label>
+    //                 <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} />
+    //             </div>
+
+    //             <div>
+    //                 <label htmlFor="Comments">Comments</label><br />
+    //                 <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
+    //                 {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+    //             </div>
+
+    //             <h2>Items</h2>
+    //             {items.map((obj, index) => (
+    //                 <ItemInput
+    //                     key={index}
+    //                     objName={obj.name}
+    //                     handleItem={handleItem}
+    //                     handleQuantity={handleQuantity}
+    //                     index={index}
+    //                     deleteField={handleDeleteField}
+    //                 />
+    //             ))}
+    //             <button name="add-btn" onClick={handleAddField}>
+    //                 Add
+    //             </button>
+
+
+    //             <input type="submit" value="Submit" />
+    //             <button type="button" onClick={handleCancel}>Cancel</button>
+    //         </form>
+    //     </div>
+    // )
+
     return (
         <div>
-            <h2>Purchase</h2>
+            <Navbar />
+            <Grid container justifyContent="center" >
+            <Card 
+            sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+            <CardContent>
+            <h2>Add Purchase</h2>
             <form onSubmit={validate}>
-                <label htmlFor="Vendor">Vendor</label>
-                <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
-                    {vendor.map((val) => {
+            <div display="flex" padding="10px">
+            <FormControl size="small">
+            <InputLabel id="vendor">Vendor</InputLabel>
+            <NativeSelect
+              placeholder="Vendor"
+              inputProps={{
+                name: 'vendor',
+                id: 'vendor',
+              }} id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
+              <option disabled selected></option>
+              {vendor.map((val) => {
                         return (
                             <option value={val.Partner_id}>{val.Name}</option>
                         )
                     })}
-                </select>
+            </NativeSelect>
+          </FormControl>
                 <br />
 
-                <label htmlFor="Location">Location</label>
-                <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
+                <FormControl size="small" sx={{paddingRight:"20px"}}>
+                    <InputLabel id="location">Locations</InputLabel>
+                    <NativeSelect
+                    placeholder="Locations"
+                    inputProps={{
+                        name: 'location',
+                        id: 'location',
+                    }} id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+                    <option disabled selected></option>
                     {locations.map((val) => {
                         return (
-                            <option value={val.Location_id}>{val.Name}</option>
+                        <option value={val.Location_id}>{val.Name}</option>
                         )
                     })}
-
-                </select><br />
-
-                <div>
+                    </NativeSelect>
+                </FormControl>
+                </div>
+                <div display="flex" >
                     <label htmlFor="Purchase_date">Purchase date</label>
-                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} />
-                </div>
-
-                <div>
+                    <input type="date" name="Purchase_date" id="Purchase_date" value={formData.Purchase_date} onChange={handleChange} style={{paddingRight:"10px", paddingBottom: "10px"}}/>
+                
                     <label htmlFor="Total">Purchase Total</label>
-                    <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} />
+                    <input type="number" name="Total" id="Total" value={formData.Total} min="0.00" step="0.01" onChange={handleChange} style={{paddingRight:"10px"}}/>
                 </div>
 
                 <div>
-                    <label htmlFor="Comments">Comments</label><br />
-                    <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
-                    {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+                <TextField
+                    id="outlined-Comments-static"
+                    label="Comments"
+                    multiline
+                    rows={4}
+                    defaultValue="Comments"
+                    value={formData.Comments}
+                    onChange={handleChange} 
+                    placeholder="Comments"
+                    sx={{paddingRight:"10px"}}
+                    />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
                 </div>
 
                 <h2>Items</h2>
@@ -200,16 +298,20 @@ function AddPurchase() {
                         handleQuantity={handleQuantity}
                         index={index}
                         deleteField={handleDeleteField}
+                        sx={{paddingRight:"20px"}}
                     />
                 ))}
-                <button name="add-btn" onClick={handleAddField}>
+                <Button variant='outline' name="add-btn" onClick={handleAddField} sx={{paddingRight:"10px"}}>
                     Add
-                </button>
+                </Button>
 
 
-                <input type="submit" value="Submit" />
-                <button type="button" onClick={handleCancel}>Cancel</button>
+                <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
+                <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
             </form>
+            </CardContent>
+            </Card>
+            </Grid>
         </div>
     )
 }

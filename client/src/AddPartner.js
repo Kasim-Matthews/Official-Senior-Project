@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import Axios from 'axios';
 import Partner from './models/Partner'
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 
 function AddPartner() {
   const navigate = useNavigate();
@@ -70,23 +76,49 @@ function AddPartner() {
   }
 
 
-  return (
+  // return (
+  //   <form id="partnerForm" onSubmit={validate}>
+  //     <div>
+  //       <label htmlFor="Name">Name</label>
+  //       <input type="text" name="Name" id="Name" value={formData.Name} onChange={handleChange} required />
+
+  //     </div>
+  //     {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+  //     <div>
+  //       <label htmlFor="Email">Email</label>
+  //       <input type="text" name="Email" value={formData.Email} id="Email" onChange={handleChange} required />
+  //     </div>
+  //     {formErrors.Email ? <p>{formErrors.Email}</p> : null}
+
+  //     <button type="submit">Submit</button>
+  //     <button type="button" onClick={handleCancel}>Cancel</button>
+  //   </form>
+  // );
+
+  return(
+    <div>
+    <Navbar />
+    <Grid container justifyContent="center" >
+    <Card 
+    sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+    <CardContent>
+    <h2>Add Partner</h2>
     <form id="partnerForm" onSubmit={validate}>
-      <div>
-        <label htmlFor="Name">Name</label>
-        <input type="text" name="Name" id="Name" value={formData.Name} onChange={handleChange} required />
-
-      </div>
+      <div display="flex" padding="10px">
+      <TextField id="name" label="Name" variant="outlined" value={formData.Name} onChange={handleChange} required sx={{paddingRight:"10px"}}/>
       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-      <div>
-        <label htmlFor="Email">Email</label>
-        <input type="text" name="Email" value={formData.Email} id="Email" onChange={handleChange} required />
-      </div>
+      <TextField id="email" label="Email" variant="outlined" value={formData.Email} onChange={handleChange} required sx={{paddingRight:"10px"}}/>
       {formErrors.Email ? <p>{formErrors.Email}</p> : null}
-
-      <button type="submit">Submit</button>
-      <button type="button" onClick={handleCancel}>Cancel</button>
+      <br></br>
+      </div>
+        <Button variant="contained" type="submit" sx={{paddingRight:"10px"}}>Submit</Button>
+        <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
+    
     </form>
+    </CardContent>
+    </Card>
+    </Grid>
+    </div>
   );
 }
 

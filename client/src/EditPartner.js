@@ -2,6 +2,12 @@ import React, { useEffect } from "react";
 import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 function EditPartner() {
 
@@ -12,9 +18,9 @@ function EditPartner() {
 
   function handleCancel() {
     if (window.confirm("Are you sure you want to cancel") == true) {
-        window.location.href = "/partner";
+      window.location.href = "/partner";
     }
-}
+  }
 
 
   function handleChange(event) {
@@ -89,25 +95,51 @@ function EditPartner() {
       alert("Server side error/Contact developer")
     }
   }
+  // return (
+  //   <form id="edit partnerForm" onSubmit={validate}>
+  //     <div>
+  //       <label htmlFor="Name">Name</label>
+  //       <input type="text" name="Name" id="Name" defaultValue={formData.Name} onChange={handleChange} required />
+  //     </div>
+
+  //     {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+
+  //     <div>
+  //       <label htmlFor="Email">Email</label>
+  //       <input type="text" name="Email" defaultValue={formData.Email} id="Email" onChange={handleChange} required />
+  //     </div>
+
+  //     {formErrors.Email ? <p>{formErrors.Email}</p> : null}
+
+  //     <input type="submit" value="Submit" />
+  //     <button type="button" onClick={handleCancel}>Cancel</button>
+  //   </form>
+  // )
+
   return (
-    <form id="edit partnerForm" onSubmit={validate}>
-      <div>
-        <label htmlFor="Name">Name</label>
-        <input type="text" name="Name" id="Name" defaultValue={formData.Name} onChange={handleChange} required />
-      </div>
+    <>
+      <Navbar />
+      <Grid container justifyContent="center" >
+        <Card
+          sx={{ paddingtop: "50px", display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <CardContent>
+            <h2>Edit Partner</h2>
+            <form id="edit partnerForm" onSubmit={validate}>
+              <div display="flex" padding="10px">
+                <TextField varaint="outlined" name="Name" id="Name" defaultValue={formData.Name} onChange={handleChange} required sx={{ padding: "10px" }} />
+                {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+                <TextField variant="outlined" type="text" name="Email" defaultValue={formData.Email} id="Email" onChange={handleChange} required sx={{ padding: "10px" }} />
+                {formErrors.Email ? <p>{formErrors.Email}</p> : null}
 
-      <div>
-        <label htmlFor="Email">Email</label>
-        <input type="text" name="Email" defaultValue={formData.Email} id="Email" onChange={handleChange} required />
-      </div>
-      
-      {formErrors.Email ? <p>{formErrors.Email}</p> : null}
-      
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
-    </form>
+              </div>
+              <Button varaint="contained" type="submit" value="Submit">Submit</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
+    </>
   )
 }
 

@@ -52,7 +52,10 @@ import Register from './register';
 import Missing from './components/Missing';
 import Layout from './components/Layout';
 import RequireAuth from './components/RequireAuth';
-
+import Unauthorized from './components/Unauthorized';
+import AdminDashboard from './AdminDashboard';
+import ProfileDashboard from './ProfileDashboard';
+import PersistLogin from './components/PersistLogin';
 
 import { Routes, Route } from 'react-router-dom';
 
@@ -62,79 +65,90 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* public routes */}
-        <Route path="/Dashboard" element={<Dashboard />} />
+
         <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
+
         <Route path='/' element={<Home />} />
+        <Route path='/unauthorized' element={<Unauthorized />} />
 
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth allowedRoles={["Admin", "Volunteer"]} />}>
+            <Route path="/Dashboard" element={<Dashboard />} />
+            <Route path="/distribution" element={<Order />} />
+            <Route path='/distribution/:id' element={<ViewOrder />} />
+            <Route path='/distribution/:id/edit' element={<EditOrder />} />
+            <Route path="/distribution/new" element={<AddOrder />} />
+            <Route path='/distribution/:id/print.pdf' element={<PDFView />} />
 
+            <Route path="/partner/new" element={<AddPartner />} />
+            <Route path='/partner/:id/edit' element={<EditPartner />} />
+            <Route path='/partner/:id' element={<ViewPartner />} />
+            <Route path="/partner" element={<PartnerView />} />
 
-        <Route path="/distribution" element={<Order />} />
-        <Route path='/distribution/:id' element={<ViewOrder />} />
-        <Route path='/distribution/:id/edit' element={<EditOrder />} />
-        <Route path="/distribution/new" element={<AddOrder />} />
-        <Route path='/distribution/:id/print.pdf' element={<PDFView />} />
+            <Route path='/item' element={<ItemView />} />
+            <Route path='/item/:id' element={<ViewItem />} />
+            <Route path='/item/:id/edit' element={<EditItem />} />
+            <Route path='/item/new' element={<AddItem />} />
 
-        <Route path="/partner/new" element={<AddPartner />} />
-        <Route path='/partner/:id/edit' element={<EditPartner />} />
-        <Route path='/partner/:id' element={<ViewPartner />} />
-        <Route path="/partner" element={<PartnerView />} />
+            <Route path='/location' element={<LocationView />} />
+            <Route path='/location/:id/edit' element={<EditLocation />} />
+            <Route path='/location/new' element={<AddLocation />} />
+            <Route path="/location/:id" element={<ViewLocation />} />
 
-        <Route path='/item' element={<ItemView />} />
-        <Route path='/item/:id' element={<ViewItem />} />
-        <Route path='/item/:id/edit' element={<EditItem />} />
-        <Route path='/item/new' element={<AddItem />} />
+            <Route path='/manufacturers' element={<Manufacturers />} />
+            <Route path='/manufacturers/:id/edit' element={<EditManufacturers />} />
+            <Route path='/manufacturers/new' element={<AddManufacturers />} />
+            <Route path='/manufacturers/:id' element={<ViewManufacturer />} />
 
-        <Route path='/location' element={<LocationView />} />
-        <Route path='/location/:id/edit' element={<EditLocation />} />
-        <Route path='/location/new' element={<AddLocation />} />
-        <Route path="/location/:id" element={<ViewLocation />} />
+            <Route path="/donation" element={<Intake />} />
+            <Route path="/donation/new" element={<AddIntake />} />
+            <Route path='/donation/:id/edit' element={<EditIntake />} />
+            <Route path="/donation/:id" element={<ViewIntake />} />
 
-        <Route path='/manufacturers' element={<Manufacturers />} />
-        <Route path='/manufacturers/:id/edit' element={<EditManufacturers />} />
-        <Route path='/manufacturers/new' element={<AddManufacturers />} />
-        <Route path='/manufacturers/:id' element={<ViewManufacturer />} />
+            <Route path="/purchase" element={<Purchase />} />
+            <Route path="/purchase/new" element={<AddPurchase />} />
+            <Route path="/purchase/:id" element={<ViewPurchase />} />
+            <Route path="/purchase/:id/edit" element={<EditPurchase />} />
 
-        <Route path="/donation" element={<Intake />} />
-        <Route path="/donation/new" element={<AddIntake />} />
-        <Route path='/donation/:id/edit' element={<EditIntake />} />
-        <Route path="/donation/:id" element={<ViewIntake />} />
+            <Route path='/vendor' element={<VendorView />} />
+            <Route path='/vendor/new' element={<AddVendor />} />
+            <Route path='/vendor/:id/edit' element={<EditVendor />} />
+            <Route path='/vendor/:id' element={<ViewVendor />} />
 
-        <Route path="/purchase" element={<Purchase />} />
-        <Route path="/purchase/new" element={<AddPurchase />} />
-        <Route path="/purchase/:id" element={<ViewPurchase />} />
-        <Route path="/purchase/:id/edit" element={<EditPurchase />} />
+            <Route path='/productdrive' element={<ProductDriveView />} />
+            <Route path='/productdrive/new' element={<AddDrive />} />
+            <Route path='/productdrive/:id/edit' element={<EditDrive />} />
+            <Route path='/productdrive/:id' element={<ViewDrive />} />
 
-        <Route path='/vendor' element={<VendorView />} />
-        <Route path='/vendor/new' element={<AddVendor />} />
-        <Route path='/vendor/:id/edit' element={<EditVendor />} />
-        <Route path='/vendor/:id' element={<ViewVendor />} />
+            <Route path='/donationsite' element={<DonationSiteView />} />
+            <Route path='/donationsite/new' element={<AddDonationSite />} />
+            <Route path='/donationsite/:id/edit' element={<EditDonationSite />} />
+            <Route path='/donationsite/:id' element={<ViewDonationSite />} />
+            <Route path='/user' element={<ProfileDashboard />}></Route>
+          </Route>
 
-        <Route path='/productdrive' element={<ProductDriveView />} />
-        <Route path='/productdrive/new' element={<AddDrive />} />
-        <Route path='/productdrive/:id/edit' element={<EditDrive />} />
-        <Route path='/productdrive/:id' element={<ViewDrive />} />
+          <Route element={<RequireAuth allowedRoles={["Admin"]} />}>
+            <Route path='/transfer' element={<TransferView />} />
+            <Route path='/transfer/new' element={<AddTransfer />} />
+            <Route path='/transfer/:id' element={<ViewTransfer />} />
 
-        <Route path='/donationsite' element={<DonationSiteView />} />
-        <Route path='/donationsite/new' element={<AddDonationSite />} />
-        <Route path='/donationsite/:id/edit' element={<EditDonationSite />} />
-        <Route path='/donationsite/:id' element={<ViewDonationSite />} />
-        <Route path='/transfer' element={<TransferView />} />
-        <Route path='/transfer/new' element={<AddTransfer />} />
-        <Route path='/transfer/:id' element={<ViewTransfer />} />
+            <Route path='/audit' element={<AuditView />} />
+            <Route path='/audit/new' element={<AddAudit />} />
+            <Route path='/audit/:id' element={<ViewAudit />} />
 
-        <Route path='/audit' element={<AuditView />} />
-        <Route path='/audit/new' element={<AddAudit />} />
-        <Route path='/audit/:id' element={<ViewAudit />} />
-{/* Remember to move this junk back  */}
-        {/* We want to protect these wrotes */}
+            <Route path='/admin' element={<AdminDashboard />} />
+            <Route path='/user/new' element={<Register />} />
 
+          </Route>
+          {/* Remember to move this junk back  */}
+          {/* We want to protect these wrotes */}
 
+        </Route>
         {/* also want to add a "add new user" page that only the admin can access */}
 
-      </Route>
       {/* catch all/404 */}
       <Route path="*" element={<Missing />} />
+     </Route>
 
     </Routes>
   );

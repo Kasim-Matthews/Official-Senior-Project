@@ -1,10 +1,17 @@
 import { useRef, useState, useEffect } from "react";
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Axios from 'axios';
+import useAxiosPrivate from "./hooks/useAxiosPrivate";
+import './register.css';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
 const Register = () => {
     const userRef = useRef();
@@ -22,8 +29,16 @@ const Register = () => {
     const [validMatch, setValidMatch] = useState(false);
     const [matchFocus, setMatchFocus] = useState(false);
 
+    const [email, setEmail] = useState('');
+    const [validEmail, setValidEmail] = useState(false);
+    const [emailFocus, setEmailFocus] = useState(false);
+
+    const [role, setRole] = useState('');
+
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+
+    const axiosPrivate = useAxiosPrivate();
 
     useEffect(() => {
         userRef.current.focus();
@@ -32,6 +47,10 @@ const Register = () => {
     useEffect(() => {
         setValidName(USER_REGEX.test(user));
     }, [user])
+
+    useEffect(() => {
+        setValidEmail(EMAIL_REGEX.test(email));
+    }, [email])
 
     useEffect(() => {
         setValidPwd(PWD_REGEX.test(pwd));
@@ -47,25 +66,29 @@ const Register = () => {
         // if button enabled with JS hack
         const v1 = USER_REGEX.test(user);
         const v2 = PWD_REGEX.test(pwd);
-        if (!v1 || !v2) {
+        const v3 = EMAIL_REGEX.test(email)
+        if (!v1 || !v2 || !v3) {
             setErrMsg("Invalid Entry");
             return;
         }
+
+
         try {
-            const response = await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/register', {
+            const response = await axiosPrivate.post('https://diaper-bank-inventory-management-system.onrender.com/register', {
                 user: user,
                 pwd: pwd,
-        }
+                role: role,
+                email: email
+            }
             );
-            console.log(response?.data);
-            console.log(response?.accessToken);
-            console.log(JSON.stringify(response))
             setSuccess(true);
             //clear state and controlled inputs
             //need value attrib on inputs for this
             setUser('');
             setPwd('');
             setMatchPwd('');
+            setEmail('')
+            setRole('')
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -73,6 +96,7 @@ const Register = () => {
                 setErrMsg('Username Taken');
             } else {
                 setErrMsg('Registration Failed')
+                console.log(err)
             }
             errRef.current.focus();
         }
@@ -84,7 +108,7 @@ const Register = () => {
                 <section>
                     <h1>Success!</h1>
                     <p>
-                        <a href="#">Sign In</a>
+                        <a href="/">Return to Home</a>
                     </p>
                 </section>
             ) : (
@@ -92,10 +116,30 @@ const Register = () => {
                     <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
                     <h1>Register</h1>
                     <form onSubmit={handleSubmit}>
+
+                        <label htmlFor="email">
+                            Email:
+                        </label>
+                        <input
+                            type="text"
+                            id="email"
+                            autoComplete="on"
+                            onChange={(e) => setEmail(e.target.value)}
+                            value={email}
+                            required
+                            aria-invalid={validName ? "false" : "true"}
+                            aria-describedby="uidnote"
+                            onFocus={() => setEmailFocus(true)}
+                            onBlur={() => setEmailFocus(false)}
+                        />
+                        <p id="uidnote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                            Must be a valid email address.<br />
+                            Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+                        </p>
+
                         <label htmlFor="username">
                             Username:
-                            <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
-                            <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                         </label>
                         <input
                             type="text"
@@ -118,10 +162,11 @@ const Register = () => {
                         </p>
 
 
+
+
                         <label htmlFor="password">
                             Password:
-                            <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
-                            <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
+
                         </label>
                         <input
                             type="password"
@@ -144,8 +189,7 @@ const Register = () => {
 
                         <label htmlFor="confirm_pwd">
                             Confirm Password:
-                            <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
-                            <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
+
                         </label>
                         <input
                             type="password"
@@ -163,15 +207,22 @@ const Register = () => {
                             Must match the first password input field.
                         </p>
 
-                        <button disabled={!validName || !validPwd || !validMatch ? true : false}>Sign Up</button>
+                        <div className='role'>
+                            <FormControl>
+                                <FormLabel id="role">Please select a role</FormLabel>
+                                <RadioGroup
+                                    row
+                                    aria-labelledby="role-label"
+                                    name="role-group"
+                                >
+                                    <FormControlLabel value="Admin" control={<Radio />} label="Admin" onChange={(e) => setRole(e.target.value)} />
+                                    <FormControlLabel value="Volunteer" control={<Radio />} label="Volunteer" onChange={(e) => setRole(e.target.value)} />
+                                </RadioGroup>
+                            </FormControl>
+                        </div>
+
+                        <button disabled={!validName || !validPwd || !validMatch || !validEmail ? true : false}>Create User</button>
                     </form>
-                    <p>
-                        Already registered?<br />
-                        <span className="line">
-                            {/*put router link here*/}
-                            <a href="/login">Sign In</a>
-                        </span>
-                    </p>
                 </section>
             )}
         </>

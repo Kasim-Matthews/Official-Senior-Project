@@ -2,15 +2,20 @@ import { useRef, useState, useEffect } from 'react';
 import useAuth from './hooks/useAuth';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-
+import './login.css';
 import Axios from 'axios';
 
 const Login = () => {
-    const { setAuth } = useAuth();
+
+    const { setAuth, persist, setPersist } = useAuth();
+
+    Axios.defaults.withCredentials = true
+
+
 
     const navigate = useNavigate();
     const location = useLocation();
-    const from = location.state?.from?.pathname || "/";
+    const from = location.state?.from?.pathname || "/Dashboard"
 
     const userRef = useRef();
     const errRef = useRef();
@@ -31,18 +36,28 @@ const Login = () => {
         e.preventDefault();
 
         try {
-          const response = await Axios.post('https://diaper-bank-inventory-management-system.onrender.com/auth/login', {
-            user: user,
-            pwd: pwd,
-    }
+            const response = await Axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/login`, JSON.stringify({ user, pwd }),
+                {
+                    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': `${process.env.REACT_APP_BACKEND_URL}, https://diaper-bank-inventory-management-system-3ktm.onrender.com` },
+                }
             );
-            navigate("/dashboard"); 
-            //console.log(JSON.stringify(response?.data));
-            //setUser('');
-            //setPwd('');
 
+
+            console.log(JSON.stringify(response?.data));
+
+            const accessToken = response?.data?.accessToken;
+            const role = response?.data?.role;
+            const id = response?.data?.id;
+
+
+
+            setAuth({ user, pwd, role, accessToken, id });
+            setUser('');
+            setPwd('');
+
+            navigate(from, { replace: true });
         } catch (err) {
-          console.log(err)
+            console.log(err)
             if (!err?.response) {
                 setErrMsg('No Server Response');
             } else if (err.response?.status === 400) {
@@ -56,40 +71,50 @@ const Login = () => {
         }
     }
 
-    return (
-                <section>
-                    <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                    <h1>Sign In</h1>
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="username">Username:</label>
-                        <input
-                            type="text"
-                            id="username"
-                            ref={userRef}
-                            autoComplete="off"
-                            onChange={(e) => setUser(e.target.value)}
-                            value={user}
-                            required
-                        />
+    const togglePersist = () => {
+        setPersist(prev => !prev)
+    }
 
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            onChange={(e) => setPwd(e.target.value)}
-                            value={pwd}
-                            required
-                        />
-                        <button>Sign In</button>
-                    </form>
-                    <p>
-                        Need an Account?<br />
-                        <span className="line">
-                            {/*put router link here*/}
-                            <a href="/register">Sign Up</a>
-                        </span>
-                    </p>
-                </section>
+    useEffect(() => {
+        localStorage.setItem("persist", persist)
+    }, [persist])
+
+    return (
+        <section>
+            <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+            <h1>Sign In</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="username">Username:</label>
+                <input
+                    type="text"
+                    id="username"
+                    ref={userRef}
+                    autoComplete="off"
+                    onChange={(e) => setUser(e.target.value)}
+                    value={user}
+                    required
+                />
+
+                <label htmlFor="password">Password:</label>
+                <input
+                    type="password"
+                    id="password"
+                    onChange={(e) => setPwd(e.target.value)}
+                    value={pwd}
+                    required
+                />
+                <button>Sign In</button>
+                <div>
+                    <input
+                        type='checkbox'
+                        id='persist'
+                        onChange={togglePersist}
+                        checked={persist}
+                    />
+                    <label htmlFor='persist'>Trust this Device</label>
+                </div>
+            </form>
+        </section>
     )
 }
 

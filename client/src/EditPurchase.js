@@ -3,6 +3,15 @@ import Axios from 'axios';
 import { useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
 import { useNavigate, Link } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 function EditPurchase() {
     const { id } = useParams();
@@ -76,7 +85,7 @@ function EditPurchase() {
     };
 
     useEffect(() => {
-        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor/list`).then((response) => { 
+        Axios.get(`${process.env.REACT_APP_BACKEND_URL}/vendor/list`).then((response) => {
             if (response.data.status === 'complete') {
                 setVendors(response.data.data);
             }
@@ -186,83 +195,188 @@ function EditPurchase() {
 
     }
 
+    // return (
+    //     <div>
+    //         <h2>Purchase</h2>
+    //         <form onSubmit={validate}>
+    //             <label htmlFor="Vendor">Vendor</label>
+    //             <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
+    //                 <option value="">--Please choose an option--</option>
+    //                 {vendor.map((val) => {
+    //                     if (val.Partner_id == formData.Vendor) {
+
+    //                         return (
+    //                             <option value={val.Partner_id} selected>{val.Name}</option>
+    //                         )
+    //                     }
+    //                     else {
+    //                         return (
+    //                             <option value={val.Partner_id}>{val.Name}</option>
+    //                         )
+    //                     }
+    //                 })}
+    //             </select>
+    //             <br />
+
+    //             <label htmlFor="Location">Location</label>
+    //             <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+    //                 <option value="">--Please choose an option--</option>
+    //                 {locations.map((val) => {
+    //                     if (val.Location_id == formData.Location) {
+
+    //                         return (
+    //                             <option value={val.Location_id} selected>{val.Name}</option>
+    //                         )
+    //                     }
+    //                     else {
+    //                         return (
+    //                             <option value={val.Location_id}>{val.Name}</option>
+    //                         )
+    //                     }
+    //                 })}
+
+    //             </select><br />
+
+    //             <div>
+    //                 <label htmlFor="Purchase_date">Purchase date</label>
+    //                 <input type="date" name="Purchase_date" id="Purchase_date" defaultValue={formData.PurchaseDate} onChange={handleChange} />
+    //             </div>
+
+    //             <div>
+    //                 <label htmlFor="TotalValue">Purchase Total</label>
+    //                 <input type="number" name="TotalValue" id="TotalValue" defaultValue={formData.TotalValue} min="0.00" step="0.01" onChange={handleChange} />
+    //             </div>
+
+    //             <div>
+    //                 <label htmlFor="Comments">Comments</label><br />
+    //                 <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
+    //                 {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+    //             </div>
+
+    //             <h2>Items</h2>
+    //             {items.map((record, index) => (
+    //                 <EditItemInput
+    //                     key={index}
+    //                     handleItem={handleItem}
+    //                     handleQuantity={handleQuantity}
+    //                     index={index}
+    //                     record={record}
+    //                     deleteField={handleDeleteField}
+    //                 />
+    //             ))}
+    //             <button name="add-btn" onClick={handleAddField}>
+    //                 Add
+    //             </button>
+
+
+    //             <input type="submit" value="Submit" />
+    //             <button type="button" onClick={handleCancel}>Cancel</button>
+    //         </form>
+    //     </div>
+    // )
+
     return (
         <div>
-            <h2>Purchase</h2>
-            <form onSubmit={validate}>
-                <label htmlFor="Vendor">Vendor</label>
-                <select id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
-                    {vendor.map((val) => {
-                        if (val.Partner_id == formData.Vendor) {
+            <Navbar />
+            <Grid container justifyContent="center" >
+                <Card
+                    sx={{ paddingtop: "50px", display: "flex", alignItems: "center", justifyContent: "center" }}
+                >
+                    <CardContent>
+                        <h2>Edit Purchase</h2>
+                        <form onSubmit={validate}>
+                            <div display="flex" padding="10px">
+                                <FormControl size="small" sx={{ padding: "10px" }}>
+                                    <InputLabel id="vendor">Vendor</InputLabel>
+                                    <NativeSelect
+                                        placeholder="Vendor"
+                                        inputProps={{
+                                            name: 'vendor',
+                                            id: 'vendor',
+                                        }} id="Vendor" name="Vendor" value={formData.Vendor} onChange={handleChange}>
+                                        {vendor.map((val) => {
+                                            if (val.Partner_id == formData.Vendor) {
 
-                            return (
-                                <option value={val.Partner_id} selected>{val.Name}</option>
-                            )
-                        }
-                        else {
-                            return (
-                                <option value={val.Partner_id}>{val.Name}</option>
-                            )
-                        }
-                    })}
-                </select>
-                <br />
+                                                return (
+                                                    <option value={val.Partner_id} selected>{val.Name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={val.Partner_id}>{val.Name}</option>
+                                                )
+                                            }
+                                        })}
+                                    </NativeSelect>
+                                </FormControl>
+                                <br />
 
-                <label htmlFor="Location">Location</label>
-                <select id="Location" name="Location" value={formData.Location} onChange={handleChange}>
-                    <option value="">--Please choose an option--</option>
-                    {locations.map((val) => {
-                        if (val.Location_id == formData.Location) {
+                                <FormControl size="small" sx={{ padding: "10px" }}>
+                                    <InputLabel id="location">Location</InputLabel>
+                                    <NativeSelect
+                                        placeholder="Location"
+                                        inputProps={{
+                                            name: 'location',
+                                            id: 'location',
+                                        }} id="Location" name="Location" value={formData.Location} onChange={handleChange}>
+                                        {locations.map((val) => {
+                                            if (val.Location_id == formData.Location) {
 
-                            return (
-                                <option value={val.Location_id} selected>{val.Name}</option>
-                            )
-                        }
-                        else {
-                            return (
-                                <option value={val.Location_id}>{val.Name}</option>
-                            )
-                        }
-                    })}
+                                                return (
+                                                    <option value={val.Location_id} selected>{val.Name}</option>
+                                                )
+                                            }
+                                            else {
+                                                return (
+                                                    <option value={val.Location_id}>{val.Name}</option>
+                                                )
+                                            }
+                                        })}
+                                    </NativeSelect>
+                                </FormControl>
+                                <br />
 
-                </select><br />
+                                <div style={{ padding: "10px" }}>
+                                    <label htmlFor="Purchase_date" style={{ padding: "5px" }}>Purchase date</label>
+                                    <input type="date" name="Purchase_date" id="Purchase_date" defaultValue={formData.PurchaseDate} onChange={handleChange} />
 
-                <div>
-                    <label htmlFor="Purchase_date">Purchase date</label>
-                    <input type="date" name="Purchase_date" id="Purchase_date" defaultValue={formData.PurchaseDate} onChange={handleChange} />
-                </div>
+                                    <label htmlFor="TotalValue" style={{ padding: "5px" }}>Purchase Total</label>
+                                    <input type="number" name="TotalValue" id="TotalValue" defaultValue={formData.TotalValue} min="0.00" step="0.01" onChange={handleChange} />
+                                </div>
 
-                <div>
-                    <label htmlFor="TotalValue">Purchase Total</label>
-                    <input type="number" name="TotalValue" id="TotalValue" defaultValue={formData.TotalValue} min="0.00" step="0.01" onChange={handleChange} />
-                </div>
+                                <TextField
+                                    id="outlined-Comments-static"
+                                    label="Comments"
+                                    multiline
+                                    rows={4}
+                                    defaultValue={formData.Comments}
+                                    onChange={handleChange}
+                                    placeholder="Comments"
+                                />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
-                <div>
-                    <label htmlFor="Comments">Comments</label><br />
-                    <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder="Comments"></textarea><br />
-                    {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
-                </div>
+                                <h2>Items</h2>
+                                {items.map((record, index) => (
+                                    <EditItemInput
+                                        key={index}
+                                        handleItem={handleItem}
+                                        handleQuantity={handleQuantity}
+                                        index={index}
+                                        record={record}
+                                        deleteField={handleDeleteField}
+                                        sx={{ padding: "10px" }}
+                                    />
+                                ))}
+                                <Button variant="outlined" name="add-btn" onClick={handleAddField} sx={{ padding: "10px" }}>
+                                    Add
+                                </Button>
 
-                <h2>Items</h2>
-                {items.map((record, index) => (
-                    <EditItemInput
-                        key={index}
-                        handleItem={handleItem}
-                        handleQuantity={handleQuantity}
-                        index={index}
-                        record={record}
-                        deleteField={handleDeleteField}
-                    />
-                ))}
-                <button name="add-btn" onClick={handleAddField}>
-                    Add
-                </button>
-
-
-                <input type="submit" value="Submit" />
-                <button type="button" onClick={handleCancel}>Cancel</button>
-            </form>
+                            </div>
+                            <Button variant="contained" type="submit" value="Submit" sx={{ padding: "10px" }}>Submit</Button>
+                            <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+                        </form>
+                    </CardContent>
+                </Card>
+            </Grid>
         </div>
     )
 }

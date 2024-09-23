@@ -1,22 +1,29 @@
 const express = require('express')
 const app = express()
-const mysql = require('mysql')
-const cors = require('cors')
-const bodyParser = require('body-parser')
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const verifyJWT = require('./middleware/verifyJWT')
+const corsOptions = require('./config/corsOptions');
+const credentials = require('./middleware/credentials');
+
+
+app.use(credentials)
+app.use(cors(corsOptions));
+
+app.use(express.json());
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 
-app.use(cors())
-app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true}));
-
-
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "https://diaper-bank-inventory-management-system.onrender.com, https://diaper-bank-inventory-management-system-3ktm.onrender.com");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With, Origin");
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
     next();
-    });
+});
 
 
 const distributionRoute = require('./routes/distribution');
@@ -35,22 +42,23 @@ const dirveRoute = require('./routes/productdrive')
 const transferRoute = require('./routes/transfer')
 const auditRoute = require('./routes/audit')
 const refreshRoute = require('./routes/refresh')
+const logoutRoute = require('./routes/logout');
+const adminRoute = require('./routes/admin')
+const userRoute = require('./routes/user')
 
-app.use(cors())
-app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    next();
-});
+
+
+app.use('/', registerRoute);
+app.use('/auth', authRoute);
+app.use('/refresh', refreshRoute);
+app.use('/logout', logoutRoute);
+
+app.use(verifyJWT)
 
 app.use('/distribution', distributionRoute);
 app.use('/partner', partnerRoute);
 app.use('/item', itemRoute);
 app.use('/location', locationRoute);
-app.use('/', registerRoute);
-app.use('/auth', authRoute);
 app.use('/data', dataRoute);
 app.use('/donation', donationRoute)
 app.use('/donationsite', donationSiteRoute)
@@ -60,7 +68,8 @@ app.use('/purchase', purchaseRoute)
 app.use('/productdrive', dirveRoute)
 app.use('/transfer', transferRoute)
 app.use('/audit', auditRoute)
-app.use('/refresh', refreshRoute)
+app.use('/admin', adminRoute)
+app.use('/user', userRoute)
 
 
 
@@ -75,3 +84,4 @@ app.get('/Dashboard', (req, res) => res.render('Dashboard'));
 app.listen('3306', () => {
     console.log("running on port 3306");
 })
+

@@ -4,7 +4,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import EditItemInput from "./components/EditItemInput";
 import EditDriveList from "./components/EditDriveList";
 import EditDonationSiteList from './components/EditDonationSiteList';
-import EditManufacturerList from './components/EditManufacturerList'
+import EditManufacturerList from './components/EditManufacturerList';
+import Navbar from "./components/navbar";
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 function EditIntake() {
 
@@ -214,17 +222,106 @@ function EditIntake() {
     listtype(event.target.value)
   }
 
-  console.log(parseFloat(formData.TotalValue))
+ 
+
+  // return (
+  //   <div>
+  //     <h2>Intake</h2>
+  //     <form id="intake" onSubmit={typechecker}>
+
+  //       <label htmlFor="Source">Source</label>
+  //       <select id="Source" onChange={sourceChange}>
+  //         <option value="" disabled></option>
+  //         {Types.map((type) => {
+  //           if (formData.Type == type) {
+  //             return (
+  //               <option value={type} selected>{type}</option>
+  //             )
+  //           }
+  //           else {
+  //             return (
+  //               <option value={type}>{type}</option>
+  //             )
+  //           }
+  //         })}
+  //       </select>
+  //       <br />
+
+  //       {sourceType != "" ? listtype() : null}
+
+
+
+  //       <label htmlFor="Location">Location</label>
+  //       <select id="Location_id" name="Location_id" value={formData.Location_id} onChange={handleChange}>
+  //         <option value="">--Please choose an option--</option>
+  //         {locations.map((val) => {
+  //           if (val.Location_id == formData.Location_id) {
+
+  //             return (
+  //               <option value={val.Location_id} selected>{val.Name}</option>
+  //             )
+  //           }
+  //           else {
+  //             return (
+  //               <option value={val.Location_id}>{val.Name}</option>
+  //             )
+  //           }
+  //         })}
+
+  //       </select><br />
+
+  //       <label htmlFor="RecievedDate">Issued On</label>
+  //       <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
+
+  //       <label htmlFor="Value">Money Raised</label>
+  //       <input type="number" name="TotalValue" id="TotalValue" step="0.01" value={parseFloat(formData.TotalValue) == null ? 0.00 : parseFloat(formData.TotalValue)} onChange={handleChange} />
+  //       <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
+  //       {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+  //       <h2>Items</h2>
+  //       {items.map((record, index) => (
+  //         <div>
+  //           <EditItemInput
+  //             key={index}
+  //             handleItem={handleItem}
+  //             handleQuantity={handleQuantity}
+  //             index={index}
+  //             record={record}
+  //             deleteField={handleDeleteField}
+  //           />
+  //         </div>
+
+  //       ))}
+  //       <button name="add-btn" onClick={handleAddField}>
+  //         Add
+  //       </button>
+
+
+  //       <input type="submit" value="Submit" />
+  //       <button type="button" onClick={handleCancel}>Cancel</button>
+  //     </form>
+  //   </div>
+  // )
 
   return (
     <div>
-      <h2>Intake</h2>
+      <Navbar />
+      <Grid container justifyContent="center" >
+          <Card 
+          sx={{ paddingtop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}} 
+          >
+          <CardContent>
+      <h2>Edit Intake</h2>
       <form id="intake" onSubmit={typechecker}>
-
-        <label htmlFor="Source">Source</label>
-        <select id="Source" onChange={sourceChange}>
-          <option value="" disabled></option>
-          {Types.map((type) => {
+      <div display="flex" padding="10px">
+      <FormControl size="small" sx={{paddingRight:"20px"}}>
+            <InputLabel id="type">Type</InputLabel>
+            <NativeSelect
+              placeholder="Type"
+              inputProps={{
+                name: 'type',
+                id: 'type',
+              }} id="Source" onChange={sourceChange}>
+              {Types.map((type) => {
             if (formData.Type == type) {
               return (
                 <option value={type} selected>{type}</option>
@@ -236,17 +333,21 @@ function EditIntake() {
               )
             }
           })}
-        </select>
+            </NativeSelect>
+          </FormControl>
         <br />
 
         {sourceType != "" ? listtype() : null}
 
-
-
-        <label htmlFor="Location">Location</label>
-        <select id="Location_id" name="Location_id" value={formData.Location_id} onChange={handleChange}>
-          <option value="">--Please choose an option--</option>
-          {locations.map((val) => {
+        <FormControl size="small" sx={{paddingRight:"20px"}}>
+            <InputLabel id="location">Location</InputLabel>
+            <NativeSelect
+              placeholder="Location"
+              inputProps={{
+                name: 'location',
+                id: 'location',
+              }} id="Location_id" name="Location_id" value={formData.Location_id} onChange={handleChange}>
+            {locations.map((val) => {
             if (val.Location_id == formData.Location_id) {
 
               return (
@@ -259,15 +360,17 @@ function EditIntake() {
               )
             }
           })}
-
-        </select><br />
-
-        <label htmlFor="RecievedDate">Issued On</label>
+            </NativeSelect>
+          </FormControl>
+          <br />
+        <div style={{padding:"10px"}}>
+        <label htmlFor="RecievedDate" style={{padding:"5px"}} >Issued On</label>
         <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" defaultValue={formData.RecievedDate} onChange={handleChange} /><br></br>
 
-        <label htmlFor="Value">Money Raised</label>
-        <input type="number" name="TotalValue" id="TotalValue" step="0.01" value={parseFloat(formData.TotalValue) == null ? 0.00 : parseFloat(formData.TotalValue)} onChange={handleChange} />
+        <label htmlFor="Value" style={{padding:"5px"}}>Money Raised</label>
+        <input type="number" name="Value" id="Value" step="0.01" defaultValue={formData.Value == null ? 0.00 : formData.Value} onChange={handleChange} />
         <textarea name="Comments" rows="4" cols="50" defaultValue={formData.Comments} onChange={handleChange} placeholder={formData.Comments}></textarea><br></br>
+        </div>
         {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
         <h2>Items</h2>
         {items.map((record, index) => (
@@ -279,18 +382,23 @@ function EditIntake() {
               index={index}
               record={record}
               deleteField={handleDeleteField}
+              sx={{paddingRight:"10px"}}
             />
           </div>
 
         ))}
-        <button name="add-btn" onClick={handleAddField}>
+        <Button variant="outlined" name="add-btn" onClick={handleAddField} sx={{paddingRight:"10px"}}>
           Add
-        </button>
+        </Button>
 
+        </div>
+        <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
+        <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
 
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
       </form>
+      </CardContent>
+      </Card>
+      </Grid>
     </div>
   )
 }

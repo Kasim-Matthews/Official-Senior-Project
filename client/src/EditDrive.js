@@ -83,18 +83,41 @@ function EditDrive() {
     }
   }
 
+  // return (
+  //   <div>
+  //     <form onSubmit={validate}>
+  //       <label htmlFor="Name">Name</label>
+  //       <input type="text" name="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+  //       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+
+  //       <input type="submit" value="Submit" />
+  //       <button type="button" onClick={handleCancel}>Cancel</button>
+  //     </form>
+  //   </div>
+  // )
+
   return (
     <div>
+      <Navbar />
+      <Grid container justifyContent="center" >
+          <Card 
+          sx={{ paddingtop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}} 
+          >
+          <CardContent>
+            <h2>Edit Drive</h2>
       <form onSubmit={validate}>
-        <label htmlFor="Name">Name</label>
-        <input type="text" name="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} sx={{paddingRight:"10px"}} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+        <Button varirant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
+        <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
       </form>
+      </CardContent>
+      </Card>
+      </Grid>
     </div>
   )
 }
+
 
 export default EditDrive;

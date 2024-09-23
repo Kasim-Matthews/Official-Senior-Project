@@ -1,15 +1,10 @@
-const express = require("express");
-const router = express.Router();
-
-const cors = require('cors')
-router.use(cors())
+const router = require("./router");
 const transferController = require('../controllers/transferController')
 
 
 
 router.get('/', transferController.transfer)
 router.get('/:id/view', transferController.transfer_view)
-router.get('/:id/info', transferController.transfer_info)
 router.get('/adjustment', transferController.adjustment)
 router.put('/give', transferController.give)
 router.put('/take', transferController.takeaway)

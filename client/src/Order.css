@@ -1,15 +1,35 @@
+h2{
+    text-align: center;
+    padding: 15px;
+    color: #373a41;
+    font-family: 'Open Sans', sans-serif;
+  }
+
 .partner{
     display: flex;
+    padding: 10px;
 }
 
 .delivery{
     display: flex;
+    padding: 10px;
 }
 
 .date{
     display: flex;
+    padding: 10px;
 }
 
 .submit{
     display: flex;
+    padding: 10px;
+}
+
+Button{
+    margin-right: auto;
+    padding: 10px;
+}
+
+.filters{
+    margin-left: 70px;
 }

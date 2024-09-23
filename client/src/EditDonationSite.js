@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate, useParams } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 
 function EditDonationSite() {
   const { id } = useParams();
@@ -86,20 +92,46 @@ function EditDonationSite() {
 
   }
 
+  // return (
+  //   <div>
+  //     <form onSubmit={validate}>
+  //       <label htmlFor="Name">Name</label>
+  //       <input type="text" name="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+  //       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+
+  //       <label htmlFor="Address">Address</label>
+  //       <input type="text" name="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} />
+  //       {formErrors.Address ? <p>{formErrors.Address}</p> : null}
+
+  //       <input type="submit" value="Submit" />
+  //       <button type="button" onClick={handleCancel}>Cancel</button>
+  //     </form>
+  //   </div>
+  // )
+
   return (
     <div>
+      <Navbar />
+      <Grid container justifyContent="center" >
+          <Card 
+          sx={{ paddingtop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}} 
+          >
+          <CardContent>
+            <h2>Edit Donation Site</h2>
       <form onSubmit={validate}>
-        <label htmlFor="Name">Name</label>
-        <input type="text" name="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} />
+      <div display="flex" padding="10px">
+        <TextField variant="outlined" label="Name" id="Name" defaultValue={formData.Name} required onChange={handleChange} sx={{paddingRight:"10px"}} />
         {formErrors.Name ? <p>{formErrors.Name}</p> : null}
 
-        <label htmlFor="Address">Address</label>
-        <input type="text" name="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} />
+        <TextField variant="outlined" label="Address" id="Address" defaultValue={formData.Address} required onChange={handleChange} sx={{paddingRight:"10px"}}/>
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
-
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
+      </div>
+        <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}/>
+        <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
       </form>
+      </CardContent>
+      </Card>
+      </Grid>
     </div>
   )
 }

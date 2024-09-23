@@ -78,28 +78,58 @@ function AddVendor() {
     }
   }
 
-  return (
+  // return (
+  //   <div>
+  //     <form onSubmit={validate}>
+  //       <label htmlFor="BusinessName">Business Name</label>
+  //       <input type="text" name="BusinessName" id="BusinessName" value={formData.BusinessName} required onChange={handleChange} />
+  //       {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+  //       <label htmlFor="ContactName">Contact Name</label>
+  //       <input type="text" name="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange} />
+  //       {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
+  //       <label htmlFor="Phone">Phone</label>
+  //       <input type="text" name="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} />
+  //       {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
+  //       <label htmlFor="Email">Email</label>
+  //       <input type="text" name="Email" id="Email" value={formData.Email} onChange={handleChange} />
+  //       {formErrors.Email ? <p>{formErrors.Email}</p> : null}
+
+
+  //       <input type="submit" value="Submit" />
+  //       <button type="button" onClick={handleCancel}>Cancel</button>
+  //     </form>
+  //   </div>
+  // )
+
+  return(
     <div>
-      <form onSubmit={validate}>
-        <label htmlFor="BusinessName">Business Name</label>
-        <input type="text" name="BusinessName" id="BusinessName" value={formData.BusinessName} required onChange={handleChange} />
-        {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-        <label htmlFor="ContactName">Contact Name</label>
-        <input type="text" name="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange} />
-        {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
-        <label htmlFor="Phone">Phone</label>
-        <input type="text" name="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} />
-        {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
-        <label htmlFor="Email">Email</label>
-        <input type="text" name="Email" id="Email" value={formData.Email} onChange={handleChange} />
-        {formErrors.Email ? <p>{formErrors.Email}</p> : null}
+      <Navbar />
+      <Grid container justifyContent="center" >
+      <Card 
+      sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+      <CardContent>
+        <h2>Add Vendor</h2>
+        
+        <form onSubmit={validate}>
+        <div display="flex" style={{paddingBottom: "10px"}}>
+            <TextField variant="outlined" label="Business Name" id="BusinessName" value={formData.BusinessName} required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+            {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+            <TextField variant="outlined" label="ContactName" id="ContactName" value={formData.ContactName} onChange={handleChange} sx={{paddingRight:"10px"}}/>
+            {formErrors.ContactName ? <p>{formErrors.ContactName}</p> : null}
+            <TextField variant="outlined" label="Phone" id="Phone" value={formData.Phone} placeholder="XXX-XXX-XXXX" onChange={handleChange} sx={{paddingRight:"10px"}}/>
+            {formErrors.Phone ? <p>{formErrors.Phone}</p> : null}
+            <TextField variant="outlined" name="Email" id="Email" value={formData.Email} onChange={handleChange} sx={{paddingRight:"10px"}}/>
+            {formErrors.Email ? <p>{formErrors.Email}</p> : null}
+          </div>
 
-
-        <input type="submit" value="Submit" />
-        <button type="button" onClick={handleCancel}>Cancel</button>
-      </form>
+            <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
+            <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+        </form>
+        </CardContent>
+        </Card>
+        </Grid>
     </div>
-  )
+)
 }
 
 export default AddVendor;

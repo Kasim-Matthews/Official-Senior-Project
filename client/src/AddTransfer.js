@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import ItemInput from "./components/ItemInput";
 import { useNavigate } from "react-router-dom";
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 
 
 function AddTransfer() {
@@ -190,37 +198,120 @@ function AddTransfer() {
     }
 
 
+    // return (
+    //     <form onSubmit={validate}>
+    //         <label htmlFor="From">From storage location</label>
+    //         <select id="From" name="From" onChange={handleFrom}>
+    //             <option value="">--Please choose an option--</option>
+    //             {from.map((val, index) => {
+    //                 return (
+    //                     <option value={index}>{val.Name}</option>
+    //                 )
+    //             })}
+
+    //         </select><br />
+
+    //         <label htmlFor="To">To storage location</label>
+    //         <select id="To" name="To" onChange={handleChange}>
+    //             <option value="" >--Please choose an option--</option>
+    //             {to.map((val) => {
+    //                 if (val.Location_id == formData.From.Location) {
+    //                     return (null);
+    //                 }
+    //                 else {
+    //                     return (
+    //                         <option value={val.Location_id}>{val.Name}</option>
+    //                     )
+    //                 }
+    //             })}
+
+    //         </select><br />
+
+    //         <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
+    //         {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+
+    //         <h2>Items</h2>
+    //         {items.map((obj, index) => (
+    //             <ItemInput
+    //                 key={index}
+    //                 objName={obj.name}
+    //                 handleItem={handleItem}
+    //                 handleQuantity={handleQuantity}
+    //                 index={index}
+    //                 deleteField={handleDeleteField}
+    //             />
+    //         ))}
+    //         <button name="add-btn" onClick={handleAddField}>
+    //             Add
+    //         </button>
+
+    //         <input type="submit" value="Submit" />
+    //         <button type="button" onClick={handleCancel}>Cancel</button>
+    //     </form>
+    // )
+
     return (
+        <>
+        <Navbar />
+        <Grid container justifyContent="center" >
+        <Card 
+        sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+        <CardContent>
+            <h2>Add Transfer</h2>
         <form onSubmit={validate}>
-            <label htmlFor="From">From storage location</label>
-            <select id="From" name="From" onChange={handleFrom}>
-                <option value="">--Please choose an option--</option>
-                {from.map((val, index) => {
+        <div display="flex" padding="10px">
+        <FormControl size="small" sx={{paddingRight:"20px"}}>
+            <InputLabel id="from">From</InputLabel>
+            <NativeSelect
+              placeholder="From"
+              inputProps={{
+                name: 'from',
+                id: 'from',
+              }} id="From" name="From" onChange={handleFrom}>
+              <option disabled selected></option>
+              {from.map((val, index) => {
                     return (
                         <option value={index}>{val.Name}</option>
                     )
                 })}
+            </NativeSelect>
+          </FormControl>
+            <br />
 
-            </select><br />
-
-            <label htmlFor="To">To storage location</label>
-            <select id="To" name="To" onChange={handleChange}>
-                <option value="" >--Please choose an option--</option>
-                {to.map((val) => {
-                    if (val.Location_id == formData.From.Location) {
-                        return (null);
+            <FormControl size="small" sx={{paddingRight:"20px"}}>
+            <InputLabel id="to">To</InputLabel>
+            <NativeSelect
+              placeholder="To"
+              inputProps={{
+                name: 'to',
+                id: 'to',
+              }} id="To" name="To" onChange={handleChange}>
+                <option disabled selected></option>
+              {to.map((val) => {
+                    if(val.Location_id == formData.From.Location){
+                        return(null);
                     }
-                    else {
+                    else{
                         return (
                             <option value={val.Location_id}>{val.Name}</option>
                         )
                     }
                 })}
+            </NativeSelect>
+          </FormControl>
+          </div>
+            <br />
 
-            </select><br />
-
-            <textarea name="Comments" rows="4" cols="50" onChange={handleChange} placeholder="Comments"></textarea>
-            {formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
+            <TextField
+              id="outlined-Comments-static"
+              label="Comments"
+              multiline
+              rows={4}
+              defaultValue="Comments"
+              onChange={handleChange} 
+              placeholder="Comments"
+              sx={{paddingRight:"10px"}}
+            />{formErrors.Comments ? <p>{formErrors.Comments}</p> : null}
 
             <h2>Items</h2>
             {items.map((obj, index) => (
@@ -231,15 +322,19 @@ function AddTransfer() {
                     handleQuantity={handleQuantity}
                     index={index}
                     deleteField={handleDeleteField}
-                />
+                    sx={{paddingRight:"20px"}}/>
             ))}
-            <button name="add-btn" onClick={handleAddField}>
+            <Button variant="outlined" name="add-btn" onClick={handleAddField} sx={{paddingRight:"10px"}}>
                 Add
-            </button>
+            </Button>
 
-            <input type="submit" value="Submit" />
-            <button type="button" onClick={handleCancel}>Cancel</button>
+            <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
+            <Button variant="outlined" type="button" onClick={handleCancel} sx={{paddingRight:"10px"}}>Cancel</Button>
         </form>
+        </CardContent>
+        </Card>
+        </Grid>
+        </>
     )
 }
 

@@ -3,7 +3,31 @@ import Axios from 'axios';
 import { useNavigate, Link } from "react-router-dom";
 import PurchasePosts from "./components/PurchasePosts";
 import Pagination from "./components/Pagination";
-import ErrorHandler from "./ErrorHandler";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { TableFooter } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import PersonIcon from '@mui/icons-material/Person';
+import AddIcon from '@mui/icons-material/Add';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import Navbar from './components/navbar';
 
 
 function Purchase() {
@@ -308,6 +332,82 @@ function Purchase() {
             <button><Link to="/Dashboard">Dasboard</Link></button>
         </div>
     );
+
+    // return (
+    //     <div>
+    //         <Navbar />
+    //         <h2>Purchases</h2>
+    //         <React.Fragment>
+    //             <Button variant="outlined" onClick={handleClickOpen}>
+    //                 Filters</Button>
+    //             <Dialog
+    //                 open={open}
+    //                 onClose={handleClose}
+    //                 PaperProps={{
+    //                     component: 'form',
+    //                     onSubmit: (event) => {
+    //                         event.preventDefault();
+    //                         const formData = new FormData(event.currentTarget);
+    //                         const formJson = Object.fromEntries(formData.entries());
+    //                         const email = formJson.email;
+    //                         console.log(email);
+    //                         handleClose();
+    //                     },
+    //                 }}
+    //             >
+    //                 <DialogTitle>Filters</DialogTitle>
+    //                 <DialogContent>
+    //                     <form onSubmit={handleSubmit}>
+    //                         <div className='vendor'>
+    //                             <TextField
+    //                                 id="outlined-select-vendor"
+    //                                 select
+    //                                 label="Vendor"
+    //                                 defaultValue="Vendor"
+    //                                 helperText="Please select a vendor"
+    //                             >
+    //                                 {partners.map((option) => (
+    //                                     <MenuItem key={option.value} value={option.value}>
+    //                                         {option.label}
+    //                                     </MenuItem>
+    //                                 ))}
+    //                             </TextField>
+    //                         </div>
+    //                         <div className='location'>
+    //                             <TextField
+    //                                 id="outlined-select-location"
+    //                                 select
+    //                                 label="Location"
+    //                                 defaultValue="Location"
+    //                                 helperText="Please select a location"
+    //                             >
+    //                                 {locations.map((option) => (
+    //                                     <MenuItem key={option.value} value={option.value}>
+    //                                         {option.label}
+    //                                     </MenuItem>
+    //                                 ))}
+    //                             </TextField>
+    //                         </div>
+    //                         <div className='date'>
+
+    //                         </div>
+    //                         <div className='submit'>
+    //                             <DialogActions>
+    //                                 <Button onClick={handleClose}>Cancel</Button>
+    //                                 <Button type="submit">Submit</Button>
+    //                             </DialogActions>
+    //                         </div>
+    //                     </form>
+    //                 </DialogContent>
+    //             </Dialog>
+    //         </React.Fragment>
+
+    //         <Button variant="contianed"><Link to="/purchase/new">Add</Link></Button>
+
+    //         <PurchasePosts posts={currentPosts} handleView={handleView} handleEdit={handleEdit} handleRemove={handleRemove} />
+    //         <Pagination postsPerPage={postsPerPage} totalPosts={records.length} paginate={paginate} />
+    //     </div>
+    // );
 }
 
 export default Purchase;

@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import Location from './models/Location'
 import { useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 
 function AddLocation() {
   const navigate = useNavigate();
@@ -74,18 +80,29 @@ function AddLocation() {
   }
 
 
-  return (
-    <form id="locations" onSubmit={validate}>
-      <label htmlFor="Name">Name</label>
-      <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange} />
-      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-      <label htmlFor="Address">Address</label>
-      <input type="text" name="Address" value={formData.Address} id="Address" required onChange={handleChange} />
-      {formErrors.Address ? <p>{formErrors.Address}</p> : null}
 
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
+  return(
+    <>
+    <Navbar />
+    <Grid container justifyContent="center" >
+    <Card 
+    sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+    <CardContent>
+      <h2>Add Location</h2>
+    <form id="locations" onSubmit={validate}>
+      <div display="flex" padding="10px">
+        <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+        {formErrors.Name ? <p>{formErrors.Name}</p> : null}
+
+        <TextField variant="outlined" name="Address" value={formData.Address} id="Address" required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+        {formErrors.Address ? <p>{formErrors.Address}</p> : null}
+        </div>
+        <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
     </form>
+    </CardContent>
+    </Card>
+    </Grid>
+  </>
   )
 }
 

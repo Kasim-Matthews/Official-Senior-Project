@@ -1,8 +1,4 @@
-const express = require("express");
-const router = express.Router();
-
-const cors = require('cors')
-router.use(cors())
+const router = require("./router");
 const distributionController = require('../controllers/distributionController')
 
 
@@ -27,4 +23,5 @@ router.delete('/:id/edit_delete', distributionController.distribution_update_del
 router.get('/:id/print', distributionController.distribution_print)
 router.post('/validation', distributionController.validation)
 router.post('/edit_validation', distributionController.edit_validation)
+
 module.exports = router;

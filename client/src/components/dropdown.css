@@ -1,0 +1,29 @@
+.collectionsSubmenu{
+    width: 10rem;
+    position: absolute;
+    top: 70px;
+    left: 912px;
+    list-style: none;
+    text-align: start;
+}
+
+.collectionsSubmenu li{
+    background: #00B4D8;
+    cursor: pointer;
+}
+
+.collectionsSubmenu.clicked{
+    display: none;
+}
+
+.collections-menu-item{
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    color: white;
+    padding: 16px;
+}
+
+.collections-menu-item:hover{
+    background: #0077B6;
+}
