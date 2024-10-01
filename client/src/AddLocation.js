@@ -98,6 +98,7 @@ function AddLocation() {
         {formErrors.Address ? <p>{formErrors.Address}</p> : null}
         </div>
         <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
+        <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
     </form>
     </CardContent>
     </Card>
