@@ -244,3 +244,89 @@ function AddIntake() {
 
 export default AddIntake;
 
+/* 
+  return (
+    <div>
+      <Navbar />
+      <Grid container justifyContent="center" >
+      <Card 
+      sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+      <CardContent>
+      <h2>Add Intake</h2>
+      <form id="intake" onSubmit={submitPurchase}>
+        <div display="flex">
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl size="small" sx={{paddingRight:"10px"}}>
+            <InputLabel id="Partner">Partner</InputLabel>
+            <NativeSelect
+              placeholder="Partner"
+              inputProps={{
+                name: 'partner',
+                id: 'partner',
+              }}>
+              <option disabled selected></option>
+              {partners.map((val) => {
+                return (
+                  <option value={val.Partner_id}>{val.Name}</option>
+                )
+              })}
+            </NativeSelect>
+          </FormControl>
+        </Box>
+
+        <label htmlFor="RecievedDate">Recieved Date</label>
+        <input type="date" name="RecievedDate" id="RecievedDate" min="2023-09-01" value={formData.RecievedDate} onChange={handleChange} sx={{paddingRight:"10px"}}/><br></br>
+
+        <label htmlFor="Value">Value</label>
+        <input type="number" name="Value" id="Value" step="0.01" value={formData.Value} onChange={handleChange} sx={{paddingRight:"10px"}} />
+        <textarea name="Comments" rows="4" cols="50" value={formData.Comments} onChange={handleChange} placeholder="Comment" sx={{paddingRight:"10px"}}></textarea><br></br>
+        </div>
+        <h2>Items</h2>
+        <div style={{ display: "flex", padding: "10px"}}>
+          <FormControl size="small" sx={{paddingRight:"10px"}}>
+            <InputLabel id="items">Items</InputLabel>
+            <NativeSelect
+              placeholder="Items"
+              inputProps={{
+                name: 'item',
+                id: 'item',
+              }}>
+              <option disabled selected></option>
+              {items.map((val) => {
+                return (
+                  <option value={val.Item_id}>{val.Name}</option>
+                )
+              })}
+            </NativeSelect>
+          </FormControl>
+
+          <FormControl size="small" sx={{paddingRight:"10px"}}>
+            <InputLabel id="location">Locations</InputLabel>
+            <NativeSelect
+              placeholder="Locations"
+              inputProps={{
+                name: 'location',
+                id: 'location',
+              }}>
+              <option disabled selected></option>
+              {locations.map((val) => {
+                return (
+                  <option value={val.Location_id}>{val.Name}</option>
+                )
+              })}
+            </NativeSelect>
+          </FormControl>
+
+          <input type="number" name="Quantity" id="Quantity" required onChange={handleChange} value={formData.Quantity} sx={{paddingRight:"10px"}}/>
+        </div>
+
+        <Button variant="contained" type="submit" value="Submit" sx={{paddingRight:"10px"}}>Submit</Button>
+
+      </form>
+      </CardContent>
+      </Card>
+      </Grid>
+    </div>
+        
+  );
+*/
