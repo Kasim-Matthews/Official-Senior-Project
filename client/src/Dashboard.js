@@ -45,7 +45,7 @@ function Dashboard() {
 
 
     useEffect(() => {
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/data`)
+        axiosPrivate.get(`${process.env.REACT_APP_BACKEND_URL}/data`)
             .then(response => {
                 if (response.data.status === 'ok') {
                     setItems(response.data.data);
