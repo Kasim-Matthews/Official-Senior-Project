@@ -91,6 +91,29 @@ function AddItem() {
     
   )
 }
-
+/* 
+          return(
+            <>
+            <Navbar />
+            <Grid container justifyContent="center" >
+            <Card 
+            sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center"}}>
+              <CardContent>
+                <h2>Add Item</h2>
+            <form id="item" onSubmit={handleSubmit}>
+              <div display="flex" padding="10px">
+                <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+                
+                <TextField variant="outlined" label="Fair Market Value" id="FairMarketValue" value={formData.FairMarketValue} step="0.01" required onChange={handleChange} sx={{paddingRight:"10px"}}/>
+                </div>
+                
+                <Button variant="contained" type="submit" value="Submit" onClick={handleSubmit} sx={{paddingRight:"10px"}}>Submit</Button>
+            </form>
+            </CardContent>
+            </Card>
+            </Grid>
+            </>
+          )
+*/
 
 export default AddItem;
