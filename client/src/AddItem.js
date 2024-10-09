@@ -21,9 +21,9 @@ function AddItem() {
 
   function handleCancel() {
     if (window.confirm("Are you sure you want to cancel") == true) {
-        window.location.href = "/item";
+      window.location.href = "/item";
     }
-}
+  }
 
   const validate = (e) => {
     e.preventDefault();
@@ -36,10 +36,10 @@ function AddItem() {
     }
     setFormErrors(errors)
     if (!errors.Name) {
-        handleSubmit()
+      handleSubmit()
     }
     return;
-}
+  }
 
   async function handleSubmit() {
     try {
@@ -52,13 +52,13 @@ function AddItem() {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      
 
-      if(response.status == 400){
+
+      if (response.status == 400) {
         alert("Check the values you input. One of the values are not of the correct type.")
       }
 
-      else if (response.status == 200){
+      else if (response.status == 200) {
         window.location.href = "/item"
       }
     }
@@ -66,29 +66,38 @@ function AddItem() {
     catch (error) {
       alert("Server side error/Contact developer")
     }
-    
+
 
   }
 
 
-
   return (
-    <form id="item" onSubmit={validate}>
-      <label htmlFor="Name">Name</label>
-      <input type="text" name="Name" value={formData.Name} id="Name" required onChange={handleChange} />
-      {formErrors.Name ? <p>{formErrors.Name}</p> : null}
-      <label htmlFor="FairMarketValue">Fair Market Value</label>
-      <input type="number" name="FairMarketValue" id="FairMarketValue" value={formData.FairMarketValue} step="0.01" required onChange={handleChange} />
+    <>
+      <Navbar />
+      <Grid container justifyContent="center" >
+        <Card
+          sx={{ marginTop: "50px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <CardContent>
+            <h2>Add Item</h2>
+            <form id="item" onSubmit={validate}>
+              <div display="flex" padding="10px">
+                <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange} sx={{ paddingRight: "10px" }} />
 
-      <label htmlFor="PackageCount">Package Count</label>
-      <input type="number" name="PackageCount" id="PackageCount" value={formData.PackageCount} step="1" onChange={handleChange} />
+                <TextField variant="outlined" label="Fair Market Value" id="FairMarketValue" value={formData.FairMarketValue} step="0.01" required onChange={handleChange} sx={{ paddingRight: "10px" }} />
+
+                <TextField variant="outlined" label="PackageCount" id="PackageCount" value={formData.PackageCount} step="1" required onChange={handleChange} sx={{ paddingRight: "10px" }} />
+
+              </div>
 
 
-      <input type="submit" value="Submit" />
-      <button type="button" onClick={handleCancel}>Cancel</button>
-      
-    </form>
-    
+
+              <Button variant="contained" type="submit" value="Submit" sx={{ paddingRight: "10px" }}>Submit</Button>
+              <Button variant="outlined" type="button" onClick={handleCancel}>Cancel</Button>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
+    </>
   )
 }
 /* 

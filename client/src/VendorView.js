@@ -259,7 +259,7 @@ function VendorView() {
                     <div style={{ display: "flex" }}>
 
                         <input type="checkbox" id="non-active" name="non-active" onChange={() => setNonActive(!nonActive)} />
-                        <label htmlFor="non-active" >Also include inactive items</label>
+                        <label htmlFor="non-active" >Also include inactive Vendors</label>
 
                     </div>
                     <input type="Submit" />

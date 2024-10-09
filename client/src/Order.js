@@ -230,11 +230,11 @@ function Order() {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
-      setOpen(true);
+    setOpen(true);
   };
 
   const handleClose = () => {
-      setOpen(false);
+    setOpen(false);
   };
 
 
@@ -381,16 +381,16 @@ function Order() {
               </div>
               <div className='delivery'>
                 <FormControl>
-                  <FormLabel id="delivery-method">Please select a delivery method</FormLabel>
+                  <FormLabel id="status">Please select a status</FormLabel>
                   <RadioGroup
                     row
-                    aria-labelledby="delivery-method-label"
-                    name="delivery-method-group"
-                    value={filters.DeliveryMethod}
+                    aria-labelledby="status-label"
+                    name="status-group"
+                    value={filters.Status}
                   >
                     <FormControlLabel value="" control={<Radio />} label="All" />
-                    <FormControlLabel value="Drop-off" control={<Radio />} label="Drop-off" />
-                    <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                    <FormControlLabel value="Draft" control={<Radio />} label="Draft" />
+                    <FormControlLabel value="Submitted" control={<Radio />} label="Submitted"/>
                   </RadioGroup>
                 </FormControl>
               </div>
@@ -404,6 +404,7 @@ function Order() {
                 <DialogActions>
                   <Button onClick={handleClose}>Cancel</Button>
                   <Button type="submit">Submit</Button>
+                  <Button onClick={clearFilters}>Clear</Button>
                 </DialogActions>
               </div>
             </form>
@@ -414,13 +415,13 @@ function Order() {
       <Button variant="contained"><Link to="/distribution/new" style={{ textDecoration: 'none', color: 'white' }}>Add</Link></Button>
       <OrderPosts posts={currentPosts} handleView={handleView} handleComplete={handleComplete} handleIncomplete={handleIncomplete} handleEdit={handleEdit} handleRemove={handleRemove} handleprint={handleprint} />
       <TablePagination
-      component="div"
-      count={100}
-      page={1}
-      postsPerPage={postsPerPage} 
-      totalPosts={records.length} 
-      paginate={paginate}
-    />
+        component="div"
+        count={100}
+        page={1}
+        postsPerPage={postsPerPage}
+        totalPosts={records.length}
+        paginate={paginate}
+      />
     </div>
 
   );
