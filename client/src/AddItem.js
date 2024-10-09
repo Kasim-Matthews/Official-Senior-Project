@@ -2,6 +2,12 @@ import React, { useState, useEffect } from "react";
 import Axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import Item from "./models/Item";
+import Navbar from "./components/navbar";
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
 
 function AddItem() {
   const navigate = useNavigate();
@@ -82,7 +88,7 @@ function AddItem() {
             <form id="item" onSubmit={validate}>
               <div display="flex" padding="10px">
                 <TextField variant="outlined" label="Name" value={formData.Name} id="Name" required onChange={handleChange} sx={{ paddingRight: "10px" }} />
-
+                {formErrors.Name ? <p>{formErrors.Name}</p> : null}
                 <TextField variant="outlined" label="Fair Market Value" id="FairMarketValue" value={formData.FairMarketValue} step="0.01" required onChange={handleChange} sx={{ paddingRight: "10px" }} />
 
                 <TextField variant="outlined" label="PackageCount" id="PackageCount" value={formData.PackageCount} step="1" required onChange={handleChange} sx={{ paddingRight: "10px" }} />
